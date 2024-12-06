@@ -27,7 +27,7 @@ const Header: React.FC = () => {
         isScrolled ? "py-2" : "py-4"
       }`}
     >
-      {/* Верхняя часть с контактами */}
+  
 
       {/* Основная часть */}
       <div className="container mx-auto px-4 lg:px-16 flex justify-between items-center transition-all duration-300">
@@ -125,7 +125,7 @@ const Header: React.FC = () => {
 
       {/* Menu Links */}
       <div className="flex flex-col px-6 space-y-4 mt-6 text-lg">
-        <a href="/porducts" className="hover:text-blue-400 flex items-center space-x-2 transition duration-300">
+        <a href="/products" className="hover:text-blue-400 flex items-center space-x-2 transition duration-300">
           <Menu />
           <span>Каталог</span>
         </a>
