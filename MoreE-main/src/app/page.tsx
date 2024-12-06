@@ -57,9 +57,9 @@ export default function Home() {
 
           {/* Hero Button */}
           <div className="mt-10">
-            <button className="px-8 py-3 bg-black hover:bg-gray-800 text-white font-bold text-3xl rounded-full transition duration-300">
+            <a href='/products'><button className="px-8 py-3 bg-black hover:bg-gray-800 text-white font-bold text-3xl rounded-full transition duration-300">
               Перейти в каталог
-            </button>
+            </button></a>
           </div>
         </div>
       </div>

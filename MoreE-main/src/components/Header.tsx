@@ -56,14 +56,8 @@ const Header: React.FC = () => {
 
         {/* Поиск, корзина, избранное */}
         <div className="flex items-center space-x-6">
-          {/* Поиск */}
-          <div className="relative hidden md:block">
-            <input
-              type="text"
-              placeholder="Поиск..."
-              className="border rounded-full px-5 py-2 w-72 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-            />
-          </div>
+    
+        
 
           {/* Избранное */}
           <a href="/liked" className="relative">
@@ -73,9 +67,9 @@ const Header: React.FC = () => {
           {/* Корзина */}
           <div className="relative group">
   <a href="/cart" >
-    <div className="flex items-center border rounded-lg px-4 py-2 hover:shadow-lg cursor-pointer transition">
+    <div className="flex items-center border rounded-lg px-2 py-2 hover:shadow-lg cursor-pointer transition">
       <BiSolidBasket size={24} className="text-gray-800" />
-      <span className="ml-2 text-black font-medium">Корзина</span>
+      <span className="ml-2 text-black max-md:hidden font-medium">Корзина</span>
       {cartCount > 0 && (
         <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
           {cartCount}
@@ -88,13 +82,13 @@ const Header: React.FC = () => {
           {/* Авторизация */}
           <div className="hidden md:flex items-center space-x-4">
             <a
-              href="/login"
+              href="auth/login"
               className="border px-4 py-2 rounded-lg bg-red-950  font-semibold hover:bg-red-800 hover:text-white transition"
             >
               Войти
             </a>
             <a
-              href="/register"
+              href="auth/register"
               className="bg-red-950 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-800 transition"
             >
               Регистрация
@@ -131,7 +125,7 @@ const Header: React.FC = () => {
 
       {/* Menu Links */}
       <div className="flex flex-col px-6 space-y-4 mt-6 text-lg">
-        <a href="/catalog" className="hover:text-blue-400 flex items-center space-x-2 transition duration-300">
+        <a href="/porducts" className="hover:text-blue-400 flex items-center space-x-2 transition duration-300">
           <Menu />
           <span>Каталог</span>
         </a>
@@ -148,7 +142,7 @@ const Header: React.FC = () => {
         <a href="/orders" className="hover:text-blue-400 transition duration-300">
           Мои заказы
         </a>
-        <a href="/login" className="hover:text-blue-400 transition duration-300">
+        <a href="auth/register" className="hover:text-blue-400 transition duration-300">
           Войти
         </a>
       </div>
