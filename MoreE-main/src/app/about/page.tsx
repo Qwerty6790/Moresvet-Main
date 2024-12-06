@@ -159,36 +159,8 @@ const About = () => {
         </motion.a>
       </div>
 
-      {/* Новый раздел: Сантехника */}
-      <div className="container max-w-7xl mx-auto mt-20">
-        <motion.h2
-          className="text-3xl font-bold text-gray-800 mb-6"
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-        >
-          Сантехника
-        </motion.h2>
-        <motion.p
-          className="text-lg text-gray-600 mb-6"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.7, delay: 0.3 }}
-        >
-          Мы также предлагаем широкий выбор продукции для ванной комнаты и
-          кухни, включая сантехнику, смесители и аксессуары. Откройте для себя
-          новые решения для вашего дома.
-        </motion.p>
-        <motion.a
-          href="#"
-          className="inline-block bg-green-500 text-white px-6 py-3 rounded-lg text-lg font-bold shadow-md hover:bg-green-600 transition"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7, delay: 0.5 }}
-        >
-          Откройте коллекцию сантехники
-        </motion.a>
-      </div>
+  
+    
 
       {/* Новый раздел: Галерея изображений */}
       <div className="container max-w-7xl mx-auto mt-20">
