@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, SearchIcon, X } from "lucide-react";
 import { FaHeart, FaFacebook, FaInstagram, FaTelegram, FaMapMarkerAlt } from "react-icons/fa";
 import { BiSolidBasket } from "react-icons/bi";
 import { AnimatePresence, motion } from "framer-motion";
@@ -57,7 +57,7 @@ const Header: React.FC = () => {
         {/* Поиск, корзина, избранное */}
         <div className="flex items-center space-x-6">
     
-        
+        <a href="/search"><SearchIcon color="black"  /></a>
 
           {/* Избранное */}
           <a href="/liked" className="relative">
@@ -122,6 +122,8 @@ const Header: React.FC = () => {
           <X size={30} />
         </button>
       </div>
+
+     
 
       {/* Menu Links */}
       <div className="flex flex-col px-6 space-y-4 mt-6 text-lg">

@@ -1,13 +1,12 @@
 'use client';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Toaster } from 'sonner';
-import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import { ProductI } from '../../types/interfaces';
 import { CatalogOfProducts } from '../../components/CatalogOfProducts';
 import Pagination from '../../components/PaginationComponents';
 import { ClipLoader } from 'react-spinners';
-import { ChevronDownIcon, SearchIcon } from 'lucide-react';
+import { SearchIcon } from 'lucide-react';
 
 type Category = {
   label: string;
@@ -32,7 +31,7 @@ const brands: Brand[] = [
       { label: 'Настенный Светильник', searchName: 'Настенный Светильник' },
       { label: 'Напольный Светильник', searchName: 'Напольный Светильник' },
       { label: 'Настольный Светильник', searchName: 'Настольный Светильник' },
-      { label: 'Подвес', searchName: 'Подвес' }, 
+      { label: 'Подвес', searchName: 'Подвес' },
       { label: 'Уличный светильник', searchName: 'Уличный светильник' },
     ],
   },
@@ -47,21 +46,37 @@ const brands: Brand[] = [
       { label: 'Светильник уличный', href: '/office-lamps', searchName: 'Светильник уличный' },
       { label: 'Подвес', href: '/decorative-lamps', searchName: 'Подвес' },
       { label: 'Бра', href: '/decorative-lamps', searchName: 'Бра' },
-      { label: 'Светильник', href: '/decorative-lamps', searchName: 'Светильник' },
-      { label: 'Трековый светильник', href: '/decorative-lamps', searchName: 'трековый светильник' },
-      { label: 'Настенный светильник', href: '/decorative-lamps', searchName: 'настенный светильник' },
-      { label: 'Шнур с перекл', href: '/decorative-lamps', searchName: 'Шнур с перекл' },
     ],
   },
   {
-    name: 'EksMarket',
+    name: 'Stluce',
     categories: [
+      { label: 'Подвес', searchName: 'Подвес' },
       { label: 'Люстра', searchName: 'Люстра' },
-      { label: 'Лампа', searchName: 'Лампа' },
-      { label: 'Подвес', searchName: 'Подвес' }, 
-      { label: 'Светильник', searchName: 'Светильник' },
-      { label: 'Пульт', searchName: 'Пульт' },
-      { label: 'Блок питания', searchName: 'Блок питания' },
+      { label: 'Подвесной светильник', searchName: 'Подвесной светильник' }, 
+      { label: 'Потолочный светильник', searchName: 'Потолочный светильник' },
+    ],
+    
+  },
+  {
+    name: 'Maytoni',
+    categories: [
+      { label: 'Настольный светильник', searchName: 'Настольный светильник' },
+      { label: 'Подвесной светильник', searchName: 'Подвесной светильник' }, 
+      { label: 'Потолочный светильник', searchName: 'Потолочный светильник' },
+    ],
+  },
+  {
+    name: 'Artelamp',
+    categories: [
+      { label: 'Подвесной светильник', searchName: 'Подвесной светильник' },
+      { label: 'Люстра на штанге', searchName: 'Люстра на штанге' },
+      { label: 'Бра', searchName: 'Бра' },
+      { label: 'Подвесная люстра', searchName: 'Подвесная люстра' },
+      { label: 'Декоративная настольная лампа', searchName: 'Декоративная настольная лампа' },
+      { label: 'Торшер', searchName: 'Торшер' },
+      { label: 'Трековый светильник', searchName: 'Трековый светильник' },
+      { label: 'Точечный встраиваемый светильник', searchName: 'Точечный встраиваемый светильник' }, 
     ],
   },
   {
@@ -78,32 +93,6 @@ const brands: Brand[] = [
     ],
   },
   {
-    name: 'ElektroStandart',
-    categories: [
-      { label: 'Потолочный', searchName: 'Потолочный' },
-      { label: 'Подвесной', searchName: 'Подвесной' },
-      { label: 'Подвес', searchName: 'Подвес' }, 
-      { label: 'Уличный светильник', searchName: 'Уличный светильник' },
-      { label: 'Лампа', searchName: 'Лампа' },
-      { label: 'Настольный', searchName: 'Настольный' },
-      { label: 'Лента', searchName: 'Лента' },
-      { label: 'Неон', searchName: 'Неон' },
-      { label: 'Настенный', searchName: 'Настенный' },
-      { label: 'Датчик', searchName: 'Датчик' },
-      { label: 'Ландшафт', searchName: 'Ландшафт' },
-    ],
-  },
-  {
-    name: 'Denkirs',
-    categories: [
-      { label: 'Светильник', searchName: 'Светильник' },
-      { label: 'Подвесной светильник', searchName: 'Подвесной светильник' },
-      { label: 'Бра', searchName: 'Бра' },
-      { label: 'Уличный светильник', searchName: 'Уличный светильник' },
-      { label: 'Встраиваемый', searchName: 'Встраиваемый' },
-    ],
-  },
-  {
     name: 'Werkel',
     categories: [
       { label: 'Выключатель', searchName: 'Выключатель' },
@@ -113,6 +102,7 @@ const brands: Brand[] = [
     ],
   },
 ];
+ 
 
 const Search: React.FC = () => {
   const [selectedBrand, setSelectedBrand] = useState<Brand>(brands[0]);
@@ -122,17 +112,22 @@ const Search: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<Category>(selectedBrand.categories[0]);
   const [minPrice, setMinPrice] = useState<number>(10);
   const [maxPrice, setMaxPrice] = useState<number>(1000000);
-  const [showBrandDropdown, setShowBrandDropdown] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
-  const brandDropdownRef = useRef<HTMLDivElement>(null);
-
-  const fetchProducts = async (page: number, name: string) => {
+  const fetchProducts = async (page: number) => {
     setLoading(true);
     try {
       const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${selectedBrand.name}`, {
-        params: { page, limit: 12, name: searchTerm, minPrice, maxPrice },
+        params: {
+          page,
+          limit: 100,
+          name: searchTerm,
+          minPrice,
+          maxPrice,
+          categories: selectedCategories.join(','),
+        },
       });
       setProducts(res.data.products);
       setTotalPages(res.data.totalPages);
@@ -145,44 +140,33 @@ const Search: React.FC = () => {
 
   useEffect(() => {
     if (searchTerm !== '') {
-      fetchProducts(currentPage, selectedCategory.searchName);
+      fetchProducts(currentPage);
     } else {
       setProducts([]);
-      setTotalPages(1);  // Reset pagination when there's no search term
+      setTotalPages(1);
     }
-  }, [currentPage, selectedCategory, minPrice, maxPrice, selectedBrand, searchTerm]);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (brandDropdownRef.current && !brandDropdownRef.current.contains(event.target as Node)) {
-        setShowBrandDropdown(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+  }, [currentPage, selectedCategory, minPrice, maxPrice, selectedBrand, searchTerm, selectedCategories]);
 
   return (
-    <div className="flex flex-col items-center bg-gradient-to-b from-black via-black to-black py-32 min-h-screen">
+    <div className="flex flex-col items-center bg-gradient-to-b bg-white py-32 min-h-screen">
   <Toaster position="top-center" richColors />
 
-  {/* Заголовок страницы */}
+  {/* Page Header */}
   <div className="w-full text-center mb-12 px-4">
-    <h1 className="text-5xl lg:text-6xl font-extrabold text-white">Поиск</h1>
-    <p className="text-lg lg:text-2xl text-gray-300 mt-4">
-      Найдите лучшие товары, выбрав бренд и используя поиск.
+    <h1 className="text-5xl lg:text-6xl font-extrabold text-black">
+      Найдите лучшее c системой поиска 2.0
+    </h1>
+    <p className="text-lg lg:text-2xl text-black mt-4">
+      Выбирайте из популярных брендов и фильтруйте товары.
     </p>
   </div>
 
-  {/* Поле поиска */}
+  {/* Search Field */}
   <div className="mb-12 w-full px-4">
     <div className="relative w-full max-w-2xl mx-auto">
       <input
         type="text"
-        className="bg-black text-white text-lg py-3 pl-14 pr-4 rounded-full shadow-lg w-full border-2 border-white focus:border-gray-500 focus:outline-none"
+        className="bg-white text-black text-lg py-3 pl-14 pr-4 rounded-full shadow-xl w-full border-2 border-gray-600 focus:ring-4 focus:ring-gray-500 focus:border-gray-500 transition"
         placeholder="Поиск товаров..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
@@ -194,86 +178,51 @@ const Search: React.FC = () => {
     </div>
   </div>
 
-  {/* Основное содержимое */}
-  <div className="flex flex-col lg:flex-row w-full items-start justify-between px-4 lg:px-10">
-    {/* Сайдбар */}
-    <div className="w-full lg:w-1/4 bg-black rounded-xl shadow-lg p-6 mb-8 lg:mb-0">
-      <h2 className="text-2xl lg:text-3xl font-bold text-white mb-4">Фильтры</h2>
-      <p className="text-gray-400 text-base lg:text-lg mb-6">
-        Выберите бренд, чтобы найти подходящие товары.
+  {/* Main Content */}
+  <div className="flex flex-col lg:flex-row w-full items-start justify-between px-4 lg:px-10 gap-8">
+    {/* Sidebar */}
+    <div className="w-full lg:w-1/4 bg-white rounded-2xl shadow-lg p-8">
+      <h2 className="text-2xl lg:text-3xl font-bold text-black mb-6">
+        Поиск по бренду
+      </h2>
+      <p className="text-black text-2xl lg:text-lg mb-8">
+        Выберите бренд для персонализированного поиска.
       </p>
 
-      {/* Бренды */}
-      <div className="relative mb-6">
-        <button
-          onClick={() => setShowBrandDropdown((prev) => !prev)}
-          className="bg-neutral-900 text-lg text-white py-3 px-4 rounded-lg shadow-lg w-full flex justify-between items-center hover:bg-neutral-800"
-        >
-          {selectedBrand.name}
-          <ChevronDownIcon size={20} />
-        </button>
-        <AnimatePresence>
-          {showBrandDropdown && (
-            <motion.div
-              className="absolute z-10 w-full bg-black text-white shadow-lg rounded-lg mt-2 max-h-64 overflow-y-auto border border-gray-700"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              ref={brandDropdownRef}
-            >
-              {brands.map((brand) => (
-                <button
-                  key={brand.name}
-                  className="block w-full px-4 py-3 text-left hover:bg-neutral-700 border-b last:border-b-0 border-gray-700"
-                  onClick={() => {
-                    setSelectedBrand(brand);
-                    setSelectedCategory(brand.categories[0]);
-                    setShowBrandDropdown(false);
-                  }}
-                >
-                  {brand.name}
-                </button>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* Мотивационная фраза */}
-      <div className="bg-gradient-to-r from-neutral-950 to-neutral-900 text-center py-6 px-4 rounded-lg shadow-md text-white">
-        <p className="text-xl font-semibold">
-          Используйте фильтры для быстрого поиска!
-        </p>
+      {/* Brand Selection using Radio Buttons */}
+      <div className="mb-8">
+        <h3 className="text-xl font-semibold text-black mb-4">Выберите Бренд</h3>
+        {brands.map((brand) => (
+          <div key={brand.name} className="mb-4">
+            <label className="text-gray-300 text-lg">
+              <input
+                type="radio"
+                name="brand"
+                value={brand.name}
+                checked={selectedBrand.name === brand.name}
+                onChange={() => {
+                  setSelectedBrand(brand);
+                  setSelectedCategory(brand.categories[0]);
+                }}
+                className="mr-2"
+              />
+              {brand.name}
+            </label>
+          </div>
+        ))}
       </div>
     </div>
 
-    {/* Секция товаров */}
-    <div className="w-full lg:w-3/4">
-      {searchTerm ? (
-        <div className="grid grid-cols-1 sm:grid-cols- md:grid-cols-1 gap-6">
-          {loading ? (
-            <div className="col-span-full flex justify-center items-center">
-              <ClipLoader size={60} color="#fff" />
-            </div>
-          ) : (
-            <CatalogOfProducts products={products} />
-          )}
+    {/* Product Listings */}
+    <div className="w-full lg:w-3/4 bg-white rounded-2xl shadow-lg p-8">
+      {loading ? (
+        <div className="flex justify-center">
+          <ClipLoader color="#fff" size={50} />
         </div>
       ) : (
-        <div className="text-center text-gray-400 text-lg lg:text-xl">
-          Пожалуйста, введите запрос для поиска товаров.
-        </div>
-      )}
-
-      {/* Пагинация */}
-      {searchTerm && (
-        <div className="mt-10  flex justify-center">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
-        </div>
+        <>
+          <CatalogOfProducts products={products} />
+        </>
       )}
     </div>
   </div>
