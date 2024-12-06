@@ -142,7 +142,7 @@ const Catalog: React.FC = () => {
       const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${selectedBrand.name}`, {
         params: {
           page,
-          limit: 14,
+          limit: 32,
           name,
           minPrice,
           maxPrice,
