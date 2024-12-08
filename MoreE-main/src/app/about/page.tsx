@@ -148,45 +148,9 @@ const About = () => {
           Сделайте выбор в пользу качества, стиля и надежности. Мы освещаем ваш
           мир!
         </motion.p>
-        <motion.a
-          href="#"
-          className="mt-8 inline-block bg-blue-500 text-white px-6 py-3 rounded-lg text-lg font-bold shadow-md hover:bg-blue-600 transition"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7, delay: 0.5 }}
-        >
-          Узнать больше
-        </motion.a>
       </div>
 
-  
-    
-
-      {/* Новый раздел: Галерея изображений */}
-      <div className="container max-w-7xl mx-auto mt-20">
-        <motion.h2
-          className="text-3xl font-bold text-gray-800 mb-6"
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-        >
-          Наши работы
-        </motion.h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div className="bg-gray-300 h-64 rounded-lg overflow-hidden">
-            {/* Replace with your images */}
-          </div>
-          <div className="bg-gray-300 h-64 rounded-lg overflow-hidden">
-            {/* Replace with your images */}
-          </div>
-          <div className="bg-gray-300 h-64 rounded-lg overflow-hidden">
-            {/* Replace with your images */}
-          </div>
-          <div className="bg-gray-300 h-64 rounded-lg overflow-hidden">
-            {/* Replace with your images */}
-          </div>
-        </div>
-      </div>
+      
     </section>
   );
 };

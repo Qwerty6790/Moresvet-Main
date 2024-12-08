@@ -81,7 +81,6 @@ const LightStar: React.FC = () => {
       {/* If page is loading, show skeleton loaders */}
       {isPageLoading ? (
         <div className="grid grid-cols-3 gap-4">
-          <Skeleton count={12} height={200} /> {/* Adjust skeleton size as needed */}
         </div>
       ) : (
         <CatalogOfLightStar products={products} />

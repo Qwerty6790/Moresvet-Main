@@ -213,7 +213,7 @@ const Search: React.FC = () => {
       </div>
   
       {/* Product Listings */}
-      <div className="w-full lg:w-3/4 bg-white rounded-2xl shadow-lg p-8">
+      <div className="w-full lg:w-3/4 bg-white rounded-2xl  p-8">
         {loading ? (
           <div className="flex justify-center">
             <ClipLoader color="#2563EB" size={50} />
