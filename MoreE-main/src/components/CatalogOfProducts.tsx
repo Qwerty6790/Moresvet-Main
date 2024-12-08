@@ -84,7 +84,7 @@ export const CatalogOfProducts: React.FC<CatalogOfProductsProps> = ({ products }
             <div
               key={product._id}
               id={`product-${index}`}
-              className={`relative shadow-lg transition duration-500 cursor-pointer hover:shadow-yellow-50 bg-black rounded-lg overflow-hidden transform ${
+              className={`relative shadow-lg transition duration-500 cursor-pointer hover:shadow-yellow-50  rounded-lg overflow-hidden transform ${
                 isInView[index] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
               }`}
               style={{ transition: 'opacity 0.5s, transform 0.5s' }}
