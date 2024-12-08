@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import { ProductI } from '../types/interfaces'; // Импорт интерфейса ProductI
+import { ProductI } from '../types/interfaces';
 
 interface CatalogOfProductsProps {
   products: ProductI[];
@@ -13,7 +13,9 @@ const getStockCount = (stock: string): number => {
 };
 
 export const CatalogOfProducts: React.FC<CatalogOfProductsProps> = ({ products }) => {
+  const [isInView, setIsInView] = useState<boolean[]>(new Array(products.length).fill(false));
 
+  // Функция для добавления товара в корзину
   const addToCart = (article: string, source: string, name: string) => {
     const cart = JSON.parse(localStorage.getItem('cart') || '{"products": []}');
     const existingProductIndex = cart.products.findIndex((item: any) => item.article === article);
@@ -28,75 +30,106 @@ export const CatalogOfProducts: React.FC<CatalogOfProductsProps> = ({ products }
     toast.success('Товар добавлен в корзину');
   };
 
+  // Логика для отслеживания появления элемента в зоне видимости
+  const observeElement = (index: number) => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsInView((prevState) => {
+              const newState = [...prevState];
+              newState[index] = true;
+              return newState;
+            });
+          }
+        });
+      },
+      {
+        threshold: 0.2, // Анимация срабатывает, когда элемент на 20% виден
+      }
+    );
+
+    return observer;
+  };
+
+  useEffect(() => {
+    const observers = products.map((_, index) => {
+      const element = document.getElementById(`product-${index}`);
+      if (element) {
+        const observer = observeElement(index);
+        observer.observe(element);
+        return observer;
+      }
+      return null;
+    });
+
+    // Очищаем наблюдатели, когда компонент будет размонтирован
+    return () => {
+      observers.forEach((observer) => observer && observer.disconnect());
+    };
+  }, [products]);
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-4">
-    {products
-      .filter((product) => getStockCount(product.stock) > 0) // Фильтруем товары с нулевым остатком
-      .map((product) => {
-        const stockCount = getStockCount(product.stock);
-        const stockClass = stockCount > 0 ? 'text-green-500' : 'text-red-500';
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 lg:gap-5">
+      {products
+        .filter((product) => getStockCount(product.stock) > 0) // Оставляем товары, у которых есть остаток
+        .map((product, index) => {
+          const stockCount = getStockCount(product.stock);
+          const stockClass = stockCount > 0 ? 'text-green-500' : 'text-red-500';
 
-        // Заменяем слэш на %2F в артикуле
-        const encodedArticle = product.article.replace(/\//g, '%2F');
+          // Заменяем слэши на %2F в статье
+          const encodedArticle = product.article.replace(/\//g, '%2F');
 
-        return (
-          <div key={product._id} className="relative shadow-md transition duration-500 cursor-pointer hover:shadow-lg bg-white rounded-lg overflow-hidden">
-            <Link href={`/products/${product.source}/${encodedArticle}`} passHref>
-              <div className="relative w-full h-40 sm:h-48 md:h-56">
-                {product.imageAddress ? (
-                  <img
-                    className="w-full h-full object-contain"
-                    src={product.imageAddress}
-                    alt={product.name}
-                    loading="lazy"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gray-300 flex items-center justify-center relative">
-                    <span className="absolute text-white text-lg font-semibold">Изображение отсутствует</span>
-                    <div className="absolute top-2 left-2 text-white text-2xl">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-8 h-8">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v3m0 3v3m-3-6h6M12 3c4.418 0 8 3.582 8 8s-3.582 8-8 8-8-3.582-8-8 3.582-8 8-8z" />
-                      </svg>
+          return (
+            <div
+              key={product._id}
+              id={`product-${index}`}
+              className={`relative shadow-lg transition duration-500 cursor-pointer hover:shadow-yellow-50 bg-black rounded-lg overflow-hidden transform ${
+                isInView[index] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+              }`}
+              style={{ transition: 'opacity 0.5s, transform 0.5s' }}
+            >
+              <Link href={`/products/${product.source}/${encodedArticle}`} passHref>
+                <div className="relative w-full h-48 sm:h-56 md:h-64">
+                  {isInView[index] ? (
+                    <img
+                      className="w-full h-full object-cover"
+                      src={`${product.imageAddress}?q=50&width=300&height=300&fit=scale`} // Принудительное уменьшение качества и размеров
+                      alt={product.name}
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gray-300 flex items-center justify-center">
+                      <span className="text-sm text-gray-500">Загрузка...</span>
                     </div>
-                  </div>
-                )}
-              </div>
-            </Link>
-            <div className="p-4 bg-white">
-              <h2 className="text-black text-lg font-semibold truncate">{product.name}</h2>
-              <p className="font-bold text-black text-xl mt-2">{product.price} ₽</p>
-              <div className="flex justify-between items-center mt-3">
-                <div className={`text-sm flex items-center space-x-2 ${stockClass}`}>
-                <svg
-xmlns="http://www.w3.org/2000/svg"
-fill="currentColor"
-viewBox="0 0 24 24"
-stroke="none"
-className={`w-6 h-6 ${stockCount > 0 ? 'text-green-500' : 'text-red-500'} rounded-full `}
->
-<circle cx="12" cy="12" r="10" />
-</svg>
-
-                  <p className="text-black">Остаток: {stockCount} шт.</p>
-                  {/* Add Kinklight label next to the stock count */}
-                 
+                  )}
                 </div>
-                <button
-                  className={`border transition duration-500 py-2 rounded-md w-full ${stockCount === 0 ? 'bg-white text-neutral-600 cursor-not-allowed' : 'hover:bg-neutral-500 hover:text-white'}`}
-                  onClick={() => {
-                    if (stockCount > 0) {
-                      addToCart(product.article, product.source, product.name); // Pass the product name
-                    }
-                  }}
-                  disabled={stockCount === 0}
-                >
-                  <p className="text-black text-xs text-center">Купить</p>
-                </button>
+              </Link>
+              <div className="p-4 bg-white">
+                <h2 className="text-black text-lg font-semibold truncate">{product.name}</h2>
+                <p className="font-bold text-black text-xl mt-1">
+                  {product.price} ₽
+                </p>
+                <div className="flex justify-between items-center mt-4">
+                  <div className={`text-sm ${stockClass}`}>
+                    <p className="text-black">Остаток: {stockCount} шт.</p>
+                  </div>
+                  <button
+                    className={`border transition duration-500 py-1 rounded-md w-24 ${stockCount === 0 ? 'bg-gray-300 text-neutral-600 cursor-not-allowed' : 'hover:bg-neutral-500 hover:text-white'}`}
+                    onClick={() => {
+                      if (stockCount > 0) {
+                        addToCart(product.article, product.source, product.name); // Передаем имя товара
+                      }
+                    }}
+                    disabled={stockCount === 0}
+                  >
+                    <p className="text-black">Купить</p>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        );
-      })}
-  </div>
+          );
+        })}
+    </div>
   );
 };

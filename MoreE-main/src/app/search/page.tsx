@@ -149,84 +149,83 @@ const Search: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center bg-gradient-to-b bg-white py-32 min-h-screen">
-  <Toaster position="top-center" richColors />
-
-  {/* Page Header */}
-  <div className="w-full text-center mb-12 px-4">
-    <h1 className="text-5xl lg:text-6xl font-extrabold text-black">
-      Найдите лучшее c системой поиска 2.0
-    </h1>
-    <p className="text-lg lg:text-2xl text-black mt-4">
-      Выбирайте из популярных брендов и фильтруйте товары.
-    </p>
-  </div>
-
-  {/* Search Field */}
-  <div className="mb-12 w-full px-4">
-    <div className="relative w-full max-w-2xl mx-auto">
-      <input
-        type="text"
-        className="bg-white text-black text-lg py-3 pl-14 pr-4 rounded-full shadow-xl w-full border-2 border-gray-600 focus:ring-4 focus:ring-gray-500 focus:border-gray-500 transition"
-        placeholder="Поиск товаров..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-      <SearchIcon
-        className="absolute top-1/2 left-5 transform -translate-y-1/2 text-gray-400"
-        size={24}
-      />
-    </div>
-  </div>
-
-  {/* Main Content */}
-  <div className="flex flex-col lg:flex-row w-full items-start justify-between px-4 lg:px-10 gap-8">
-    {/* Sidebar */}
-    <div className="w-full lg:w-1/4 bg-white rounded-2xl shadow-lg p-8">
-      <h2 className="text-2xl lg:text-3xl font-bold text-black mb-6">
-        Поиск по бренду
-      </h2>
-      <p className="text-black text-2xl lg:text-lg mb-8">
-        Выберите бренд для персонализированного поиска.
+    <Toaster position="top-center" richColors />
+  
+    {/* Page Header */}
+    <div className="w-full text-center mb-12 px-4">
+      <h1 className="text-5xl lg:text-6xl font-extrabold text-black">
+        Найдите лучшее c системой поиска 2.0
+      </h1>
+      <p className="text-lg lg:text-2xl text-black mt-4">
+        Выбирайте из популярных брендов и фильтруйте товары.
       </p>
-
-      {/* Brand Selection using Radio Buttons */}
-      <div className="mb-8">
-        <h3 className="text-xl font-semibold text-black mb-4">Выберите Бренд</h3>
-        {brands.map((brand) => (
-          <div key={brand.name} className="mb-4">
-            <label className="text-gray-300 text-lg">
-              <input
-                type="radio"
-                name="brand"
-                value={brand.name}
-                checked={selectedBrand.name === brand.name}
-                onChange={() => {
-                  setSelectedBrand(brand);
-                  setSelectedCategory(brand.categories[0]);
-                }}
-                className="mr-2"
-              />
-              {brand.name}
-            </label>
-          </div>
-        ))}
+    </div>
+  
+    {/* Search Field */}
+    <div className="mb-12 w-full px-4">
+      <div className="relative w-full max-w-2xl mx-auto">
+        <input
+          type="text"
+          className="bg-white text-black text-lg py-3 pl-14 pr-4 rounded-full shadow-xl w-full border-2 border-gray-600 focus:ring-4 focus:ring-gray-500 focus:border-gray-500 transition"
+          placeholder="Поиск товаров..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <SearchIcon
+          className="absolute top-1/2 left-5 transform -translate-y-1/2 text-gray-400"
+          size={24}
+        />
       </div>
     </div>
-
-    {/* Product Listings */}
-    <div className="w-full lg:w-3/4 bg-white rounded-2xl shadow-lg p-8">
-      {loading ? (
-        <div className="flex justify-center">
-          <ClipLoader color="#fff" size={50} />
+  
+    {/* Main Content */}
+    <div className="flex flex-col lg:flex-row w-full items-start justify-between px-4 lg:px-10 gap-8">
+      {/* Sidebar */}
+      <div className="w-full lg:w-1/4 bg-white rounded-2xl shadow-lg p-8">
+        <h2 className="text-2xl lg:text-3xl font-bold text-black mb-6">
+          Поиск по бренду
+        </h2>
+        <p className="text-black text-lg mb-8">
+          Выберите бренд для персонализированного поиска.
+        </p>
+  
+        {/* Brand Pyramid */}
+        <div className="flex flex-col items-center  text-center space-y-4">
+          {brands.map((brand, index) => (
+            <div
+              key={brand.name}
+              className={`text-lg lg:text-xl font-medium border rounded-full p-2 cursor-pointer transition ${
+                selectedBrand.name === brand.name
+                  ? "text-blue-600 font-bold"
+                  : "text-gray-800 hover:text-blue-600"
+              } ${
+                index % 2 === 0 ? "self-start" : "self-end"
+              }`}
+              onClick={() => {
+                setSelectedBrand(brand);
+                setSelectedCategory(brand.categories[0]);
+              }}
+            >
+              {brand.name}
+            </div>
+          ))}
         </div>
-      ) : (
-        <>
+      </div>
+  
+      {/* Product Listings */}
+      <div className="w-full lg:w-3/4 bg-white rounded-2xl shadow-lg p-8">
+        {loading ? (
+          <div className="flex justify-center">
+            <ClipLoader color="#2563EB" size={50} />
+          </div>
+        ) : (
           <CatalogOfProducts products={products} />
-        </>
-      )}
+        )}
+      </div>
     </div>
   </div>
-</div>
+  
+  
 
   );
 };

@@ -82,13 +82,13 @@ const Header: React.FC = () => {
           {/* Авторизация */}
           <div className="hidden md:flex items-center space-x-4">
             <a
-              href="auth/login"
+              href="/auth/login"
               className="border px-4 py-2 rounded-lg bg-red-950  font-semibold hover:bg-red-800 hover:text-white transition"
             >
               Войти
             </a>
             <a
-              href="auth/register"
+              href="/auth/register"
               className="bg-red-950 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-800 transition"
             >
               Регистрация
