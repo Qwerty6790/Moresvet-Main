@@ -37,16 +37,16 @@ const Recover: React.FC = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-cover bg-center">
-      <div className="bg-black bg-opacity-80 p-8 lg:mt-40 rounded shadow-md w-full max-w-md">
-        <h1 className="text-3xl font-bold text-white text-center mb-6">PalermoLight</h1>
-        <p className="text-3xl font-bold text-white text-center mb-6">Восстановить пароль по почте</p>
+      <div className="bg-white bg-opacity-80 p-8 lg:mt-40 rounded shadow-md w-full max-w-md">
+        <h1 className="text-3xl font-bold text-black text-center mb-6">MoreElectriki</h1>
+        <p className="text-3xl font-bold text-black text-center mb-6">Восстановить пароль по почте</p>
         
         {errorMessage && <p className="text-red-900 text-center">{errorMessage}</p>}
         {successMessage && <p className="text-green-900 text-center">{successMessage}</p>}
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium text-white">
+            <label htmlFor="email" className="block text-sm font-medium text-black">
               Email
             </label>
             <input
