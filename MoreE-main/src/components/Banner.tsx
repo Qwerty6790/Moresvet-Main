@@ -1,62 +1,84 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
+import LightStar from '@/app/cardproducts/LightStar/page';
+import KinkLight from '@/app/cardproducts/KinkLight/page';
 
 export default function ImageHoverEffect() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [fade, setFade] = useState(true);
-  const [showOverlayText, setShowOverlayText] = useState(false);
-
   const slides = [
-    { beforeImage: './images/105.png' },
-    { beforeImage: './images/106.png' },
-    { beforeImage: './images/107.png' },
-    { beforeImage: './images/108.png' },
-    { beforeImage: './images/109.png' },
+    { image: './images/105.png' },
+    { image: './images/106.png' },
+    { image: './images/107.png' },
   ];
-  
- 
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [slides.length]);
 
   return (
-    <div className="relative  w-full h-[690px] flex flex-col items-center justify-center overflow-hidden">
-      {/* Slides Row */}
-      <div className="flex justify-center space-x-6 w-full  px-10">
-        {slides.map((slide, index) => (
-          <motion.div
-            key={index}
-            className={`relative hover:scale-110 w-1/4 max-w-[300px] aspect-square overflow-hidden rounded-xl shadow-lg transition-transform duration-700 ease-in-out ${
-              fade ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
-            }`}
-          >
-            <img
-              src={slide.beforeImage}
+    <div className="flex flex-col lg:flex-row w-full mt-20 lg:mt-44 h-auto lg:h-[600px] bg-white">
+      {/* Левый блок: Слайдер */}
+      <div className="w-full lg:w-1/2 h-[300px] lg:h-full p-4">
+        <div className="w-full h-full bg-white rounded-lg overflow-hidden relative shadow-lg">
+          {slides.map((slide, index) => (
+            <motion.img
+              key={index}
+              src={slide.image}
               alt={`Slide ${index}`}
-              className="w-full h-full object-cover rounded-xl"
+              className={`absolute w-full h-full object-cover ${
+                currentSlide === index ? 'opacity-100' : 'opacity-0'
+              }`}
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: currentSlide === index ? 1 : 0,
+              }}
+              transition={{ duration: 0.8 }}
             />
+          ))}
+
+          {/* Текст на баннере */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 1 }}
+            className="absolute top-2/3 left-2/3 transform -translate-x-1/2 text-neutral-950 text-2xl sm:text-4xl lg:text-6xl backdrop-blur-sm bg-transparent font-bold text-center"
+          >
+            Подробнее
           </motion.div>
-        ))}
+        </div>
       </div>
 
-      
-
-      {/* Overlay Text */}
-      <AnimatePresence>
-        {showOverlayText && (
+      {/* Правый блок: Товары */}
+      <div className="w-full lg:w-1/2 h-auto lg:h-full flex flex-col justify-between p-4 overflow-y-scroll">
+        <h2 className="text-black font-bold text-2xl sm:text-3xl lg:text-5xl">Подборка товаров</h2>
+        <div className="flex flex-col gap-6">
+          {/* KinkLight */}
           <motion.div
-            className="absolute bottom-16 right-16 flex items-center justify-center z-30"
-            initial={{ y: '100%', opacity: 0 }}
-            animate={{ y: '0%', opacity: 1 }}
-            exit={{ y: '50%', opacity: 0 }}
-            transition={{ type: 'spring', stiffness: 120, damping: 20 }}
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1.5, ease: 'easeOut' }}
+            className="w-full bg-white text-black rounded-lg p-4 shadow-md"
           >
-            {/* Add your overlay text here */}
+            <KinkLight />
           </motion.div>
-        )}
-      </AnimatePresence>
 
-      {/* Centered Button */}
-    
+          {/* LightStar */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1.5, ease: 'easeOut' }}
+            className="w-full bg-white text-black rounded-lg p-4 shadow-md"
+          >
+            <LightStar />
+          </motion.div>
+        </div>
+      </div>
     </div>
   );
 }

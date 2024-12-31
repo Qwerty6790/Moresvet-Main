@@ -29,7 +29,7 @@ export const CatalogOfLightStar: React.FC<CatalogOfProductsProps> = ({ products 
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-4 md:gap-6 lg:gap-4">
       {products
         .filter((product) => getStockCount(product.stock) > 0) // Фильтруем товары с нулевым остатком
         .map((product) => {
@@ -40,12 +40,12 @@ export const CatalogOfLightStar: React.FC<CatalogOfProductsProps> = ({ products 
           const encodedArticle = product.article.replace(/\//g, '%2F');
 
           return (
-            <div key={product._id} className="relative shadow-md transition duration-500 cursor-pointer hover:shadow-lg bg-white rounded-lg overflow-hidden">
+            <div key={product._id} className="relative  transition duration-500 cursor-pointer hover:shadow-lg bg-white rounded-lg overflow-hidden">
               <Link href={`/products/${product.source}/${encodedArticle}`} passHref>
-                <div className="relative w-full h-40 sm:h-48 md:h-56">
+                <div className="relative w-full h-full sm:h-full md:h-full">
                   {product.imageAddress ? (
                     <img
-                      className="w-full h-full object-contain"
+                      className="w-full h-full object-cover"
                       src={product.imageAddress}
                       alt={product.name}
                       loading="lazy"
@@ -64,7 +64,7 @@ export const CatalogOfLightStar: React.FC<CatalogOfProductsProps> = ({ products 
               </Link>
               <div className="p-4 bg-white">
                 <h2 className="text-black text-lg hidden font-semibold truncate">{product.name}</h2>
-                <p className="font-bold hidden text-black text-xl mt-2">{product.price} ₽</p>
+                <p className="font-bold  text-black text-xl mt-2">{product.price} ₽</p>
                 <div className="flex justify-between items-center mt-3">
                   <div className={`text-sm flex items-center space-x-2 ${stockClass}`}>
                   <svg
@@ -81,6 +81,7 @@ export const CatalogOfLightStar: React.FC<CatalogOfProductsProps> = ({ products 
                     {/* Add Kinklight label next to the stock count */}
                     
                   </div>
+                  
                   <button
                     className={`border transition duration-500 py-2 hidden rounded-md w-full ${stockCount === 0 ? 'bg-white text-neutral-600 cursor-not-allowed' : 'hover:bg-neutral-500 hover:text-white'}`}
                     onClick={() => {

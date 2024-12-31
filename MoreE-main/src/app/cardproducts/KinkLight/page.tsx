@@ -48,8 +48,8 @@ const KinkLight: React.FC = () => {
       const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${selectedBrand.name}`, {
         params: {
           page,
-          limit: 31,
-          name: 'Подвес',
+          limit: 50,
+          name: '071',
           minPrice,
           maxPrice,
         },

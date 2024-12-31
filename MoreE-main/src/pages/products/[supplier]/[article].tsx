@@ -4,21 +4,20 @@ import { useRouter } from 'next/router';
 import 'tailwindcss/tailwind.css';
 import Header from '@/components/Header';
 import { Toaster, toast } from 'sonner';
-import { Heart, Facebook, Twitter, Send } from 'lucide-react';
-import ClipLoader from 'react-spinners/ClipLoader'; // Import the spinner
+import { Heart, Facebook, Send, ChevronLeft, ChevronRight } from 'lucide-react';
+import ClipLoader from 'react-spinners/ClipLoader';
 import { FaWhatsapp } from "react-icons/fa";
 
 interface ProductI {
-  _id: string; 
+  imageAddress: any;
+  _id: string;
   article: string;
   name: string;
   price: number;
   stock: string;
-  imageAddress: string;
-  images?: string[]; // Поле для дополнительных изображений
+  imageAddresses: string[] | string;
   source: string;
 }
-
 
 const ProductDetail: React.FC = () => {
   const router = useRouter();
@@ -27,11 +26,11 @@ const ProductDetail: React.FC = () => {
   const [product, setProduct] = useState<ProductI | null>(null);
   const [loading, setLoading] = useState(true);
   const [isLiked, setIsLiked] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     const fetchProduct = async () => {
       if (!supplier || !article) return;
-
       setLoading(true);
       try {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/product/${supplier}?productArticle=${article}`);
@@ -43,12 +42,10 @@ const ProductDetail: React.FC = () => {
         setLoading(false);
       }
     };
-
     fetchProduct();
   }, [supplier, article]);
 
   useEffect(() => {
-    // Проверяем, есть ли этот товар в избранном, и устанавливаем статус "лайкнут"
     const liked = JSON.parse(localStorage.getItem('liked') || '{"products": []}');
     const isProductLiked = liked.products.some((item: any) => item.article === product?.article);
     setIsLiked(isProductLiked);
@@ -94,14 +91,12 @@ const ProductDetail: React.FC = () => {
     const existingProductIndex = liked.products.findIndex((item: any) => item.article === product.article);
 
     if (existingProductIndex > -1) {
-      // Если товар уже есть в избранном, удаляем его
       liked.products.splice(existingProductIndex, 1);
-      setIsLiked(false);  // Обновляем статус лайка
+      setIsLiked(false);
       toast.success('Товар удален из избранного');
     } else {
-      // Добавляем товар в избранное
       liked.products.push({ article: product.article, source: product.source, quantity: 1 });
-      setIsLiked(true);  // Обновляем статус лайка
+      setIsLiked(true);
       toast.success('Товар добавлен в избранное');
     }
 
@@ -129,10 +124,23 @@ const ProductDetail: React.FC = () => {
     }
   };
 
+  const goToPrevImage = () => {
+    const images = Array.isArray(product?.imageAddresses) ? product?.imageAddresses : [product?.imageAddresses];
+    if (images?.length > 0) {
+      setCurrentImageIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
+    }
+  };
+
+  const goToNextImage = () => {
+    const images = Array.isArray(product?.imageAddresses) ? product?.imageAddresses : [product?.imageAddresses];
+    if (images?.length > 0) {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen bg-black text-white">
-        {/* Show spinner when loading */}
         <ClipLoader size={50} color="#ffffff" loading={loading} />
       </div>
     );
@@ -145,86 +153,85 @@ const ProductDetail: React.FC = () => {
       </div>
     );
   }
+  const images = Array.isArray(product?.imageAddresses) && product.imageAddresses.length > 0
+  ? product.imageAddresses
+  : product?.imageAddress
+  ? [product.imageAddress]
+  : []; // обработка imageAddress
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
-    <Toaster position="top-center" richColors />
-    <Header />
-    <div className="flex justify-center mt-20 items-center flex-1 p-6">
-      <div className="bg-gray-50 rounded-lg shadow-lg flex flex-col md:flex-row max-w-4xl w-full border border-gray-200">
-        <div className="w-full md:w-1/2 flex flex-col items-center">
-          {/* Главное изображение */}
-          <img
-            className="w-full h-auto object-cover rounded-t-lg md:rounded-l-lg md:rounded-tr-none"
-            src={product.imageAddress}
-            alt={product.name}
-          />
-          {/* Дополнительные изображения */}
-          {product.images && product.images.length > 0 && (
-            <div className="flex mt-4 space-x-2">
-              {product.images.map((img, index) => (
-                <img
-                  key={index}
-                  className="w-16 h-16 object-cover rounded-lg border border-gray-200"
-                  src={img}
-                  alt={`${product.name} - изображение ${index + 1}`}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-        <div className="w-full md:w-1/2 flex flex-col justify-between p-8">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-800">{product.name}</h1>
-            <p className="text-xl text-blue-600 font-semibold mt-4">{product.price} ₽</p>
-            <p className="text-sm text-gray-500 mt-2">Артикул: {product.article}</p>
-            <p className="text-sm text-gray-500 mt-1">Остаток: {product.stock} шт.</p>
+    <div className="flex flex-col min-h-screen bg-black">
+      <Toaster position="top-center" richColors />
+      <Header />
+      <div className="flex justify-center mt-40 items-center flex-1 p-6">
+        <div className="bg-black rounded-lg shadow-lg flex flex-col md:flex-row max-w-4xl w-full">
+          <div className="w-full md:w-2/3 relative">
+            {images.length > 1 && (
+              <>
+                <button onClick={goToPrevImage} className="absolute left-2 top-1/2 transform -translate-y-1/2 text-white z-10">
+                  <ChevronLeft size={32} />
+                </button>
+                <button onClick={goToNextImage} className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white z-10">
+                  <ChevronRight size={32} />
+                </button>
+              </>
+            )}
+
+            {images.length > 0 ? (
+              <img className="w-full h-auto object-cover rounded-lg" src={images[currentImageIndex]} alt={product.name} />
+            ) : (
+              <div className="w-full h-full bg-gray-200">No Image</div>
+            )}
+
+            {images.length > 1 && (
+              <div className="flex overflow-x-auto py-4 space-x-2 mt-4 scrollbar-none">
+                {images.map((image, index) => (
+                  <img
+                    key={index}
+                    src={image}
+                    alt={`Thumbnail ${index}`}
+                    className={`w-20 h-20 object-cover rounded-md cursor-pointer transition transform hover:scale-110 ${currentImageIndex === index ? 'border-4 ' : ''}`}
+                    onClick={() => setCurrentImageIndex(index)}
+                  />
+                ))}
+              </div>
+            )}
           </div>
-          <div className="mt-6">
-            <button
-              onClick={addToCart}
-              className="bg-blue-600 text-white py-3 px-6 rounded-lg transition duration-300 hover:bg-blue-700 w-full"
-            >
-              В корзину
-            </button>
-            <div className="flex items-center justify-between mt-6">
-              <button
-                onClick={addToLiked}
-                className="flex items-center space-x-2 text-blue-500 hover:text-blue-700 transition-colors"
-              >
-                <Heart
-                  fill={isLiked ? 'blue' : 'none'}
-                  className="w-6 h-6"
-                />
-                <span>{isLiked ? 'Удалить из избранного' : 'Добавить в избранное'}</span>
+          <div className="w-full md:w-1/2 flex flex-col justify-between p-6">
+            <div>
+              <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500 py-4">
+                {product.name}
+              </h1>
+              <p className="text-xl text-gray-300 font-semibold mt-2">{product.price} ₽</p>
+              <p className="text-sm text-white mt-2">Артикул: {product.article}</p>
+              <p className="text-sm text-white mt-2">Остаток: {product.stock} шт.</p>
+            </div>
+            <div className="mt-4">
+              <button onClick={addToCart} className="bg-white text-black py-3 px-6 rounded-md transition duration-500 hover:bg-blue-700 w-full">
+                В Корзину
               </button>
-              <div className="flex space-x-4">
-                <button
-                  onClick={shareOnFacebook}
-                  className="text-gray-500 hover:text-blue-600 transition-colors"
-                >
-                  <Facebook size={24} />
+              <div className="flex items-center justify-between mt-4 space-x-4">
+                <button onClick={addToLiked} className="flex items-center space-x-2 text-gray-400 hover:text-red-500 transition-colors">
+                  <Heart fill={isLiked ? 'red' : 'none'} className="w-6 h-6" />
+                  <span>{isLiked ? 'Удалить из избранного' : 'В избранное'}</span>
                 </button>
-                <button
-                  onClick={shareOnTelegram}
-                  className="text-gray-500 hover:text-blue-600 transition-colors"
-                >
-                  <Send size={24} />
-                </button>
-                <button
-                  onClick={shareOnWhatsApp}
-                  className="text-gray-500 hover:text-green-600 transition-colors"
-                >
-                  <FaWhatsapp size={24} />
-                </button>
+                <div className="flex space-x-4">
+                  <button onClick={shareOnFacebook}>
+                    <Facebook color="white" size={24} />
+                  </button>
+                  <button onClick={shareOnTelegram}>
+                    <Send color="white" size={24} />
+                  </button>
+                  <button onClick={shareOnWhatsApp}>
+                    <FaWhatsapp color="white" size={24} />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  
   );
 };
 
