@@ -6,12 +6,11 @@ import LightStar from '@/app/cardproducts/LightStar/page';
 import KinkLight from '@/app/cardproducts/KinkLight/page';
 import Maytoni from '@/app/cardproducts/Maytoni/page';
 
-export default function ImageHoverEffect() {
+export default function VideoHoverEffect() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const slides = [
-    { image: './images/105.png' },
-    { image: './images/106.png' },
-    { image: './images/107.png' },
+    { video: './images/1.mp4' },
+    { video: './images/2.mp4' },
   ];
 
   useEffect(() => {
@@ -30,11 +29,13 @@ export default function ImageHoverEffect() {
         <div className="w-full lg:w-1/2 h-[300px] lg:h-full p-4">
           <div className="w-full h-full bg-white rounded-lg overflow-hidden relative shadow-lg">
             {slides.map((slide, index) => (
-              <motion.img
+              <motion.video
                 key={index}
-                src={slide.image}
-                alt={`Slide ${index}`}
-                className={`absolute w-full h-full object-cover ${
+                src={slide.video}
+                autoPlay
+                loop
+                muted
+                className={`absolute w-full h-full scale-105 object-cover ${
                   currentSlide === index ? 'opacity-100' : 'opacity-0'
                 }`}
                 initial={{ opacity: 0 }}
@@ -58,22 +59,20 @@ export default function ImageHoverEffect() {
         </div>
 
         {/* Right Block: Products */}
-         <div className="w-full lg:w-1/2 max-md:hidden h-auto lg:h-full flex flex-col justify-between p-4 overflow-y-scroll">
-          <h2 className="text-black  font-bold text-2xl sm:text-3xl lg:text-5xl">
+        <div className="w-full lg:w-1/2 max-md:hidden h-auto lg:h-full flex flex-col justify-between p-4 overflow-y-scroll">
+          <h2 className="text-black font-bold text-2xl sm:text-3xl lg:text-5xl">
             Подборка товаров
           </h2>
-          <div className="flex flex-col  gap-6">
+          <div className="flex flex-col gap-6">
             {/* KinkLight */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1.5, ease: 'easeOut' }}
-              className="w-full bg-white text-black rounded-lg p-4 "
+              className="w-full bg-white text-black rounded-lg p-4"
             >
               <LightStar />
-       
             </motion.div>
-            
           </div>
         </div>
       </div>
@@ -83,7 +82,7 @@ export default function ImageHoverEffect() {
         <h2 className="text-black text-2xl sm:text-4xl lg:text-5xl font-bold mb-8">
           Популярные люстры
         </h2>
-       <Maytoni />
+        <Maytoni />
       </div>
 
       {/* Additional Section: Other Categories */}
@@ -91,7 +90,7 @@ export default function ImageHoverEffect() {
         <h2 className="text-black text-2xl sm:text-4xl lg:text-5xl font-bold mb-8">
           Рекомендуемые Подвесы
         </h2>
-       <KinkLight />
+        <KinkLight />
       </div>
     </div>
   );
