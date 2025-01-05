@@ -70,7 +70,7 @@ export const CatalogOfProducts: React.FC<CatalogOfProductsProps> = ({ products }
   }, [products]);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 lg:gap-5">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-5">
       {products
         .filter((product) => getStockCount(product.stock) > 0) // Оставляем товары, у которых есть остаток
         .map((product, index) => {
@@ -93,7 +93,7 @@ export const CatalogOfProducts: React.FC<CatalogOfProductsProps> = ({ products }
                 <div className="relative w-full h-48 sm:h-56 md:h-64">
                   {isInView[index] ? (
                     <img
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain"
                       src={`${product.imageAddress}?q=50&width=300&height=300&fit=scale`} // Принудительное уменьшение качества и размеров
                       alt={product.name}
                       loading="lazy"
@@ -106,16 +106,16 @@ export const CatalogOfProducts: React.FC<CatalogOfProductsProps> = ({ products }
                 </div>
               </Link>
               <div className="p-4 bg-white">
-                <h2 className="text-black text-lg font-semibold truncate">{product.name}</h2>
-                <p className="font-bold text-black text-xl mt-1">
+                <h2 className="text-black text-[10px] font-semibold truncate">{product.name}</h2>
+                <p className="font-bold text-black text-2xl mt-1">
                   {product.price} ₽
                 </p>
                 <div className="flex justify-between items-center mt-4">
                   <div className={`text-sm ${stockClass}`}>
-                    <p className="text-black">Остаток: {stockCount} шт.</p>
+                    <p className="text-green-700">В наличие</p>
                   </div>
                   <button
-                    className={`border transition duration-500 py-1 rounded-md w-24 ${stockCount === 0 ? 'bg-gray-300 text-neutral-600 cursor-not-allowed' : 'hover:bg-neutral-500 hover:text-white'}`}
+                    className={`border bg-neutral-700    transition duration-500 p-3 rounded-md w-24 ${stockCount === 0 ? ' cursor-not-allowed' : 'hover:bg-neutral-500 hover:text-white'}`}
                     onClick={() => {
                       if (stockCount > 0) {
                         addToCart(product.article, product.source, product.name); // Передаем имя товара
@@ -123,7 +123,7 @@ export const CatalogOfProducts: React.FC<CatalogOfProductsProps> = ({ products }
                     }}
                     disabled={stockCount === 0}
                   >
-                    <p className="text-black">Купить</p>
+                    <p className="text-white">Купить</p>
                   </button>
                 </div>
               </div>

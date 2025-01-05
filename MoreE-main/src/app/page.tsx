@@ -23,7 +23,9 @@ export default function Home() {
           <p className="mt-4 font-bold text-4xl md:text-6xl text-black">
            10 000+ товаров
           </p>    
+          
         </div>
+        
       </div>
     </div>
   );

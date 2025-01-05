@@ -250,170 +250,191 @@ const Catalog: React.FC = () => {
   }, []);
 
   return (
-    <>
-    {/* Global Spinner */}
-    {isPageLoading && (
-      <div className="fixed inset-0 flex items-center justify-center bg-white text-black bg-opacity-75 z-50">
-        <ClipLoader color="#ffffff" loading={isPageLoading} size={100} />
-      </div>
-    )}
-  
-    <div
-      className={`flex flex-col items-center min-h-screen overflow-x-hidden ${
-        isPageLoading ? "pointer-events-none opacity-50" : ""
-      }`}
-    >
-      <Toaster position="top-center" richColors />
-  
-      {/* Main Container */}
-      <div className="w-full max-w-screen-xl px-6 py-44 ">
-        {/* Filters and Categories Layout */}
-        <div className="flex flex-col p-10 md:flex-row gap-6">
-          {/* Categories Section */}
-          <div className="w-full md:w-2/3 py-12 mt-20 flex flex-wrap gap-8">
-            <h2 className="text-5xl font-bold text-gray-800 mb-8">Каталог товаров</h2>
-            <div className="flex flex-wrap gap-6 w-full group">
-              {selectedBrand.categories?.map((category) => (
-                <div
-                  key={category.searchName}
-                  className="cursor-pointer hover:bg-gray-200 p-4 rounded-lg text-black transition-transform duration-300 transform hover:scale-105"
-                  onClick={() => handleCategoryChange(category)}
-                >
-                  <span className="text-lg font-semibold">{category.label}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-  
-          {/* Filters Section */}
-          <div className="w-full md:w-1/3 bg-white mt-16 md:mt-0 text-black p-6 rounded-lg shadow-xl space-y-6 sticky top-20">
-            <h2 className="text-3xl font-semibold mb-4">Фильтры</h2>
-  
-            {/* Brands (Radio buttons) */}
-            <div className="space-y-4">
-              <h3 className="text-sm font-medium text-gray-700">Бренды</h3>
-              <div className="flex flex-wrap gap-6">
-                {brands.map((brand) => (
-                  <label
-                    key={brand.name}
-                    className="flex items-center space-x-2 cursor-pointer p-4 rounded-lg border hover:bg-gray-100 transition-all duration-200"
-                  >
-                    <input
-                      type="radio"
-                      name="brand"
-                      value={brand.name}
-                      checked={selectedBrand.name === brand.name}
-                      onChange={() => handleBrandChange(brand)}
-                      className="form-radio text-blue-600"
-                    />
-                    <span className="text-sm text-gray-800">{brand.name}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-  
-            {/* Price Filters */}
-            <div className="space-y-4">
-              <h3 className="text-sm font-medium text-gray-700">Цена</h3>
-              <div className="flex space-x-4">
-                <input
-                  type="number"
-                  value={minPrice}
-                  onChange={(e) => handlePriceChange(setMinPrice, Number(e.target.value))}
-                  className="w-full px-4 py-2 bg-gray-100 border rounded-lg text-sm"
-                  placeholder="Мин."
-                  min="0"
-                  max="1000000"
-                />
-                <input
-                  type="number"
-                  value={maxPrice}
-                  onChange={(e) => handlePriceChange(setMaxPrice, Number(e.target.value))}
-                  className="w-full px-4 py-2 bg-gray-100 border rounded-lg text-sm"
-                  placeholder="Макс."
-                  min="0"
-                  max="1000000"
-                />
-              </div>
-              <div className="w-full mt-4">
-                <label className="text-xs font-semibold text-gray-700 mb-2 block">Диапазон цен:</label>
-                <input
-                  type="range"
-                  min="0"
-                  max="1000000"
-                  step="1000"
-                  value={minPrice}
-                  onChange={(e) => setMinPrice(Number(e.target.value))}
-                  className="w-full h-3 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full cursor-pointer focus:outline-none transition duration-300"
-                />
-                <div className="flex justify-between text-xs text-black mt-1">
-                  <span>{minPrice}</span>
-                  <span>{maxPrice}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-  
-        {/* Product List */}
-        <div className="flex flex-col space-y-6 pb-6">
-          {/* Product Grid */}
-          {isPageLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[...Array(4)].map((_, index) => (
-                <div
-                  key={index}
-                  className="w-[300px] h-[350px] bg-white rounded-lg animate-pulse shadow-xl"
-                />
-              ))}
-            </div>
-          ) : products.length === 0 ? (
-            <div className="flex items-center justify-center w-full text-center">
-              <h2 className="text-3xl font-bold text-gray-500">Нет товаров для отображения</h2>
-            </div>
-          ) : (
-            <CatalogOfProducts products={products} />
-          )}
-  
-          {/* Show More Button */}
-          {isPageLoading ? (
-            <div className="w-full text-center mt-6">
-              <div className="w-[200px] h-[50px] bg-neutral-800 rounded-md animate-pulse mx-auto" />
-            </div>
-          ) : (
-            hasMoreProducts && !isLoadingMore && (
-              <div className="text-center mt-6">
-                <button
-                  onClick={loadMoreProducts}
-                  className="bg-black text-white py-3 px-6 rounded-lg hover:bg-gray-800 transition duration-300"
-                >
-                  Показать еще
-                </button>
-              </div>
-            )
-          )}
-  
-          {/* Loading Spinner */}
-          {isLoadingMore && (
-            <div className="flex justify-center mt-6">
-              <ClipLoader color="#ffffff" loading={isLoadingMore} size={30} />
-            </div>
-          )}
-        </div>
-  
-        {/* Pagination */}
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={(page) => {
-            handlePageChange(page);
-            window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll up
-          }}
-        />
+<>
+  {/* Global Spinner */}
+  {isPageLoading && (
+    <div className="fixed inset-0 flex items-center justify-center bg-white text-black bg-opacity-75 z-50">
+      <ClipLoader color="#ffffff" loading={isPageLoading} size={100} />
+    </div>
+  )}
+
+  <div
+    className={`flex flex-col md:flex-row mt-32 min-h-screen overflow-x-hidden ${
+      isPageLoading ? "pointer-events-none opacity-50" : ""
+    }`}
+  >
+    <Toaster position="top-center" richColors />
+
+    {/* Filters and Categories Section (Left Sidebar) */}
+    <div className="w-full md:w-1/4  bg-white text-black p-20 space-y-2 sticky top-0 shadow-2xl rounded-full">
+  <h2 className="text-2xl font-semibold text-gray-800 mb-4">Фильтры</h2>
+
+  {/* Brands (Radio buttons) */}
+  <div className="space-y-2">
+    <h3 className="text-sm font-medium text-gray-600">Бренды</h3>
+    <div className="flex flex-col">
+      {brands.map((brand) => (
+        <label
+          key={brand.name}
+          className="flex items-center space-x-3 cursor-pointer p-4 rounded-lg hover:bg-gray-100 transition-all duration-200"
+        >
+          <input
+            type="checkbox"
+            name="brand"
+            value={brand.name}
+            checked={selectedBrand.name === brand.name}
+            onChange={() => handleBrandChange(brand)}
+            className=" "
+          />
+          <span className="text-sm text-gray-800">{brand.name}</span>
+        </label>
+      ))}
+    </div>
+  </div>
+
+  {/* Categories (Radio buttons) */}
+  <div className="space-y-4">
+    <h3 className="text-sm font-medium text-gray-600">Категории</h3>
+    <div className="flex flex-col gap-2">
+      {selectedBrand.categories?.map((category) => (
+        <label
+          key={category.searchName}
+          className="flex items-center space-x-3 cursor-pointer p-4 rounded-lg hover:bg-gray-100 transition-all duration-200"
+        >
+          <input
+            type="checkbox"
+            name="category"
+            value={category.searchName}
+           
+            onChange={() => handleCategoryChange(category)}
+            className=""
+          />
+          <span className="text-sm text-gray-800">{category.label}</span>
+        </label>
+      ))}
+    </div>
+  </div>
+
+  {/* Price Filters */}
+  <div className="space-y-4">
+    <h3 className="text-sm font-medium text-gray-600">Цена</h3>
+    <div className="flex space-x-4 mb-4">
+      <input
+        type="number"
+        value={minPrice}
+        onChange={(e) => handlePriceChange(setMinPrice, Number(e.target.value))}
+        className="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg text-sm"
+        placeholder="Мин."
+        min="0"
+        max="1000000"
+      />
+      <input
+        type="number"
+        value={maxPrice}
+        onChange={(e) => handlePriceChange(setMaxPrice, Number(e.target.value))}
+        className="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg text-sm"
+        placeholder="Макс."
+        min="0"
+        max="1000000"
+      />
+    </div>
+
+    {/* Price Range Slider */}
+    <div className="w-full mt-4">
+      <label className="text-xs font-semibold text-gray-600 mb-2 block">Диапазон цен:</label>
+      <input
+        type="range"
+        min="0"
+        max="1000000"
+        step="1000"
+        value={minPrice}
+        onChange={(e) => setMinPrice(Number(e.target.value))}
+        className="w-full h-3 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full cursor-pointer focus:outline-none transition-all duration-300"
+      />
+      <div className="flex justify-between text-xs text-gray-600 mt-1">
+        <span>{minPrice}</span>
+        <span>{maxPrice}</span>
       </div>
     </div>
-  </>
-  
+  </div>
+</div>
+
+
+    {/* Main Content Section (Right Side) */}
+    <div className="w-full md:w-3/4 px-6 py-44">
+      {/* Category and Catalog Header */}
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h2 className="text-5xl font-bold text-gray-800 mb-4">Каталог товаров</h2>
+          {selectedCategory && (
+            <p className="text-xl text-gray-500">{selectedCategory.label}</p>
+          )}
+        </div>
+        <div>
+          <span className="text-sm text-gray-600">
+            {products.length} товаров
+          </span>
+        </div>
+      </div>
+
+      {/* Product List */}
+      <div className="flex flex-col space-y-6 pb-6">
+        {/* Product Grid */}
+        {isPageLoading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[...Array(4)].map((_, index) => (
+              <div
+                key={index}
+                className="w-[300px] h-[350px] bg-white rounded-lg animate-pulse shadow-xl"
+              />
+            ))}
+          </div>
+        ) : products.length === 0 ? (
+          <div className="flex items-center justify-center w-full text-center">
+            <h2 className="text-3xl font-bold text-gray-500">Нет товаров для отображения</h2>
+          </div>
+        ) : (
+          <CatalogOfProducts products={products} />
+        )}
+
+        {/* Show More Button */}
+        {isPageLoading ? (
+          <div className="w-full text-center mt-6">
+            <div className="w-[200px] h-[50px] bg-neutral-800 rounded-md animate-pulse mx-auto" />
+          </div>
+        ) : (
+          hasMoreProducts && !isLoadingMore && (
+            <div className="text-center mt-6">
+              <button
+                onClick={loadMoreProducts}
+                className="bg-black text-white py-3 px-6 rounded-lg hover:bg-gray-800 transition duration-300"
+              >
+                Показать еще
+              </button>
+            </div>
+          )
+        )}
+
+        {/* Loading Spinner */}
+        {isLoadingMore && (
+          <div className="flex justify-center mt-6">
+            <ClipLoader color="#ffffff" loading={isLoadingMore} size={30} />
+          </div>
+        )}
+      </div>
+
+      {/* Pagination */}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={(page) => {
+          handlePageChange(page);
+          window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll up
+        }}
+      />
+    </div>
+  </div>
+</>
 
   
   );

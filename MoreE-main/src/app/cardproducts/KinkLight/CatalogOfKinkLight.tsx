@@ -45,7 +45,7 @@ export const CatalogOfKinkLight: React.FC<CatalogOfProductsProps> = ({ products 
                 <div className="relative w-full h-40 sm:h-full md:h-full">
                   {product.imageAddress ? (
                     <img
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain"
                       src={product.imageAddress}
                       alt={product.name}
                       loading="lazy"
