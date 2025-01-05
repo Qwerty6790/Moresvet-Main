@@ -89,22 +89,9 @@ export default function ImageHoverEffect() {
       {/* Additional Section: Other Categories */}
       <div className="mt-16 px-6 lg:px-20">
         <h2 className="text-black text-2xl sm:text-4xl lg:text-5xl font-bold mb-8">
-          Рекомендуемые категории
+          Рекомендуемые Подвесы
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-          {/* Placeholder for other categories */}
-          {[...Array(8)].map((_, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-lg shadow-md p-4 flex flex-col items-center justify-center"
-            >
-              <div className="w-32 h-32 bg-gray-200 rounded-full mb-4" />
-              <h3 className="text-lg font-semibold text-gray-800">
-                Категория {index + 1}
-              </h3>
-            </div>
-          ))}
-        </div>
+       <KinkLight />
       </div>
     </div>
   );
