@@ -4,6 +4,7 @@ import { FaHeart } from "react-icons/fa";
 import { BiBasket } from "react-icons/bi";
 import { AnimatePresence, motion } from "framer-motion";
 import { FiSearch } from "react-icons/fi";
+import DropdownMenu from "./CatalogDropdown";
 
 const Header = () => {
   const [cartCount, setCartCount] = useState(0);
@@ -51,13 +52,6 @@ const Header = () => {
         <a href="#" className="hover:text-blue-600 truncate">ОПЛАТА</a>
         <a href="#" className="hover:text-blue-600 truncate">ДОСТАВКА</a>
       </nav>
-  
-      <button
-        className="lg:hidden p-2 rounded-lg border text-gray-900 hover:bg-gray-200 transition"
-        onClick={() => setIsMenuOpen(!isMenuOpen)}
-      >
-        {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
-      </button>
     </div>
   
     <div className="container mx-auto flex items-center justify-between mt-2 md:mt-4 px-4">
@@ -71,10 +65,11 @@ const Header = () => {
           MORE ELECTRIKI
         </a>
   
-        <div className="flex items-center space-x-2 md:space-x-6">
-          <button className="bg-black flex text-xs md:text-sm lg:text-2xl text-white px-4 py-2 md:px-8 md:py-2 rounded truncate">
-            <Grid className="mt-1" color="white" /> <span className="hidden sm:block">Каталог</span>
-          </button>
+        <div className="flex items-center space-x-2 md:space-x-6 bg-black text-xs md:text-sm lg:text-2xl text-white px-4 py-2 md:px-8 md:py-2 rounded truncate>
+         className=">
+           
+            <DropdownMenu />
+       
         </div>
       </div>
   
@@ -117,36 +112,6 @@ const Header = () => {
         </div>
       </div>
     </div>
-  
-    <AnimatePresence>
-      {isMenuOpen && (
-        <motion.div
-          className="fixed top-0 left-0 w-3/4 sm:w-1/2 h-full bg-gray-100 shadow-lg z-40"
-          initial={{ x: "-100%" }}
-          animate={{ x: 0 }}
-          exit={{ x: "-100%" }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        >
-          <div className="p-4 border-b border-gray-300 flex justify-between items-center">
-            <span className="text-lg font-medium">Меню</span>
-            <button
-              className="text-gray-700 hover:text-gray-900"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <X size={24} />
-            </button>
-          </div>
-          <nav className="flex flex-col p-4 space-y-4 text-black">
-            <a href="#" className="hover:text-blue-600 truncate">Каталог</a>
-            <a href="#" className="hover:text-blue-600 truncate">ДИЗАЙНЕРАМ</a>
-            <a href="#" className="hover:text-blue-600 truncate">НАШИ ПРОЕКТЫ</a>
-            <a href="#" className="hover:text-blue-600 truncate">КОНТАКТЫ</a>
-            <a href="#" className="hover:text-blue-600 truncate">ОПЛАТА</a>
-            <a href="#" className="hover:text-blue-600 truncate">ДОСТАВКА</a>
-          </nav>
-        </motion.div>
-      )}
-    </AnimatePresence>
   </header>
   
   );

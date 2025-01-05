@@ -1,106 +1,83 @@
 'use client';
 import { AlignJustify, X } from 'lucide-react';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
 const DropdownMenu: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const categories = [
-    { links: [{ href: '/products', label: 'Товары' }] },
-    { links: [{ href: '/products', label: 'Категорий' }] },
+    { links: [{ href: '/products', label: 'Все товары' }] },
+    { links: [{ href: '/categories', label: 'Потолочные люстры' }] },
+    { links: [{ href: '/categories', label: 'Подвесные люстры' }] },{ links: [{ href: '/categories', label: 'Светильники ' }] },
+    { links: [{ href: '/categories', label: 'Бра ' }] },
   ];
 
-  const handleMouseEnter = (label: string): void => {
-    setHoveredCategory(label);
-    if (videoRef.current) {
-      videoRef.current.currentTime = 0;
-      videoRef.current.play();
-    }
-  };
-
-  const handleMouseLeave = (): void => {
-    setHoveredCategory(null);
-  };
-
-  // Hide the dropdown menu when scrolling
-  useEffect(() => {
-    const handleScroll = () => {
-      if (isOpen) {
-        setIsOpen(false);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [isOpen]);
-
-  const renderCategories = (): JSX.Element => {
-    return (
-      <div className="grid grid-cols-1 gap-2">
-        {categories.map((category, index) => (
-          <div
-            key={index}
-            onMouseEnter={() => handleMouseEnter(category.links[0].label)}
-            onMouseLeave={handleMouseLeave}
-            className="relative group"
-          >
-            <ul>
-              {category.links.map((link) => (
-                <li key={link.href} className="relative pl-8 text-4xl group">
-                  <span className="absolute left-0 top-1/2 transform -translate-y-1/2 w-2.5 h-2.5 bg-transparent rounded-full transition-all duration-300 group-hover:bg-orange-200"></span>
-                  <motion.a
-                    href={link.href}
-                    className="block p-2 hover:text-orange-200 transition duration-300"
-                    initial={{ x: 0 }}
-                    whileHover={{ x: 10 }} // Apply translate-x effect on hover
-                  >
-                    {link.label}
-                  </motion.a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-    );
-  };
+  const renderCategories = (): JSX.Element => (
+    <div className="grid grid-cols-1 gap-4">
+      {categories.map((category, index) => (
+        <div key={index} className="relative">
+          <ul>
+            {category.links.map((link) => (
+              <li key={link.href} className="relative p-10 max-md:text-4xl text-5xl">
+                <motion.a
+                  href={link.href}
+                  className="block p-2 hover:text-orange-500 transition duration-300"
+                  initial={{ x: 0 }}
+                  whileHover={{ x: 10 }}
+                >
+                  {link.label}
+                </motion.a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
 
   return (
     <div className="relative">
+      {/* Desktop menu toggle */}
       <div
-        className="lg:flex max-md:hidden relative w-full h-full"
-        onMouseEnter={() => setIsOpen(true)}  // Show menu on hover
-        onMouseLeave={() => setIsOpen(false)}  // Hide menu on mouse leave
+        className="hidden lg:flex items-center cursor-pointer"
+        onClick={() => setIsOpen(!isOpen)} // Toggle menu
       >
-        <div className="flex items-center font-medium transition duration-300">
-          <AlignJustify className="" size={30} />
-          Каталог
-        </div>
+        <AlignJustify size={30} />
+        <span className="ml-2 font-medium">Каталог</span>
       </div>
 
-      <ul
-        className={`fixed right-0 -left-0  h-screen w-screen bg-white text-white z-10 transition-opacity duration-300  ${
+      {/* Mobile menu toggle */}
+      <div
+        className="lg:hidden flex items-center cursor-pointer"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <AlignJustify size={30} />
+      </div>
+
+      {/* Dropdown menu */}
+      <motion.div
+        className={`fixed inset-0 bg-white text-black z-20 p-6 transition-all duration-300 ${
           isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isOpen ? 1 : 0 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       >
-        <div className="flex justify-between p-4">
-          <h2 className="text-5xl font-bold">Каталог</h2>
+        {/* Header with close button */}
+        <div className="flex justify-between items-center border-b border-gray-300 pb-4">
+          <h2 className="text-4xl font-bold">Каталог</h2>
           <button
-            onClick={() => setIsOpen(false)}
-            className="text-white"
+            onClick={() => setIsOpen(false)} // Close menu
+            className="text-black hover:text-gray-700"
           >
             <X size={24} />
           </button>
         </div>
-        <div className="p-4">
-          {renderCategories()}
-        </div>
-      </ul>
+
+        {/* Menu content */}
+        <div className="mt-4">{renderCategories()}</div>
+      </motion.div>
     </div>
   );
 };
