@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import { ProductI } from '../../../types/interfaces'; // Импорт интерфейса ProductI
+import { ProductI } from '../../../types/interfaces'; // Importing ProductI interface
 
 interface CatalogOfProductsProps {
   products: ProductI[];
@@ -13,6 +13,35 @@ const getStockCount = (stock: string): number => {
 };
 
 export const CatalogOfLightStar: React.FC<CatalogOfProductsProps> = ({ products }) => {
+  const [isInView, setIsInView] = useState<boolean[]>([]);
+
+  useEffect(() => {
+    const initialViewStates = products.map(() => false);
+    setIsInView(initialViewStates);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const index = parseInt(entry.target.id.replace('product-', ''), 10);
+          if (entry.isIntersecting) {
+            setIsInView((prevState) => {
+              const newState = [...prevState];
+              newState[index] = true;
+              return newState;
+            });
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    const items = document.querySelectorAll('[id^="product-"]');
+    items.forEach((item) => observer.observe(item));
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [products]);
 
   const addToCart = (article: string, source: string, name: string) => {
     const cart = JSON.parse(localStorage.getItem('cart') || '{"products": []}');
@@ -21,7 +50,7 @@ export const CatalogOfLightStar: React.FC<CatalogOfProductsProps> = ({ products 
     if (existingProductIndex > -1) {
       cart.products[existingProductIndex].quantity += 1;
     } else {
-      cart.products.push({ article, source, quantity: 1 });
+      cart.products.push({ article, source, name, quantity: 1 });
     }
 
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -29,69 +58,55 @@ export const CatalogOfLightStar: React.FC<CatalogOfProductsProps> = ({ products 
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-4 md:gap-6 lg:gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-8 lg:gap-5">
       {products
-        .filter((product) => getStockCount(product.stock) > 0) // Фильтруем товары с нулевым остатком
-        .map((product) => {
+        .filter((product) => getStockCount(product.stock) > 0) // Filter products with stock available
+        .map((product, index) => {
           const stockCount = getStockCount(product.stock);
           const stockClass = stockCount > 0 ? 'text-green-500' : 'text-red-500';
 
-          // Заменяем слэш на %2F в артикуле
+          // Encode article to handle special characters
           const encodedArticle = product.article.replace(/\//g, '%2F');
 
           return (
-            <div key={product._id} className="relative  transition duration-500 cursor-pointer hover:shadow-lg bg-white rounded-lg overflow-hidden">
+            <div
+              key={product._id}
+              id={`product-${index}`}
+              className={`relative shadow-lg transition-opacity duration-500 rounded-lg overflow-hidden transform ${
+                isInView[index] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+              }`}
+            >
               <Link href={`/products/${product.source}/${encodedArticle}`} passHref>
-                <div className="relative w-full h-full sm:h-full md:h-full">
-                  {product.imageAddress ? (
+                <div className="relative w-full h-48 sm:h-56 md:h-64">
+                  {isInView[index] ? (
                     <img
                       className="w-full h-full object-contain"
-                      src={product.imageAddress}
+                      src={`${product.imageAddress}?q=50&width=300&height=300&fit=scale`} // Optimize image size and quality
                       alt={product.name}
                       loading="lazy"
                     />
                   ) : (
-                    <div className="w-full h-full bg-gray-300 flex items-center justify-center relative">
-                      <span className="absolute text-white text-lg font-semibold">Изображение отсутствует</span>
-                      <div className="absolute top-2 left-2 text-white text-2xl">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-8 h-8">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v3m0 3v3m-3-6h6M12 3c4.418 0 8 3.582 8 8s-3.582 8-8 8-8-3.582-8-8 3.582-8 8-8z" />
-                        </svg>
-                      </div>
+                    <div className="w-full h-full bg-gray-300 flex items-center justify-center">
+                      <span className="text-sm text-gray-500">Загрузка...</span>
                     </div>
                   )}
                 </div>
               </Link>
               <div className="p-4 bg-white">
-                <h2 className="text-black text-lg hidden font-semibold truncate">{product.name}</h2>
-                <p className="font-bold  text-black text-xl mt-2">{product.price} ₽</p>
-                <div className="flex justify-between items-center mt-3">
-                  <div className={`text-sm flex items-center space-x-2 ${stockClass}`}>
-                  <svg
-  xmlns="http://www.w3.org/2000/svg"
-  fill="currentColor"
-  viewBox="0 0 24 24"
-  stroke="none"
-  className={`w-6 h-6 ${stockCount > 0 ? 'text-green-500 hidden' : 'text-red-500'} rounded-full `}
->
-  <circle cx="12" cy="12" r="10" />
-</svg>
-
-                    <p className="text-black hidden">Остаток: {stockCount} шт.</p>
-                    {/* Add Kinklight label next to the stock count */}
-                    
+                <h2 className="text-black text-sm font-semibold truncate">{product.name}</h2>
+                <p className="font-bold text-black text-2xl mt-1">{product.price} ₽</p>
+                <div className="flex justify-between items-center mt-4">
+                  <div className={`text-sm ${stockClass}`}>
+                    {stockCount > 0 ? <p className="text-green-700">В наличии</p> : <p>Нет в наличии</p>}
                   </div>
-                  
                   <button
-                    className={`border transition duration-500 py-2 hidden rounded-md w-full ${stockCount === 0 ? 'bg-white text-neutral-600 cursor-not-allowed' : 'hover:bg-neutral-500 hover:text-white'}`}
-                    onClick={() => {
-                      if (stockCount > 0) {
-                        addToCart(product.article, product.source, product.name); // Pass the product name
-                      }
-                    }}
+                    className={`border bg-neutral-700 text-white transition duration-500 p-3 rounded-md w-24 ${
+                      stockCount === 0 ? 'cursor-not-allowed' : 'hover:bg-neutral-500'
+                    }`}
+                    onClick={() => stockCount > 0 && addToCart(product.article, product.source, product.name)}
                     disabled={stockCount === 0}
                   >
-                    <p className="text-black text-xs text-center">Купить</p>
+                    Купить
                   </button>
                 </div>
               </div>
