@@ -10,7 +10,6 @@ export default function VideoHoverEffect() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const slides = [
     { video: './images/1.mp4' },
-    { video: './images/2.mp4' },
   ];
 
   useEffect(() => {
