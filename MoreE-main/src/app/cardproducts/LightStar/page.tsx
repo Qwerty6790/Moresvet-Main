@@ -48,7 +48,7 @@ const LightStar: React.FC = () => {
         params: {
           page,
           limit: 50,
-          name: '719',
+          name: '750',
           minPrice,
           maxPrice,
         },

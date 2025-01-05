@@ -47,14 +47,15 @@ export default function VideoHoverEffect() {
             ))}
 
             {/* Banner Text */}
-            <motion.div
+           <a href='/about'> <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1, delay: 1 }}
-              className="absolute top-2/3 left-2/3 transform -translate-x-1/2 text-neutral-950 text-2xl sm:text-4xl lg:text-6xl backdrop-blur-sm bg-transparent font-bold text-center"
+              className="absolute top-2/3 left-2/3 transform -translate-x-1/2 text-neutral-950 bg-white p-5 rounded-sm text-2xl sm:text-4xl lg:text-6xl  font-bold text-center"
             >
               Подробнее
             </motion.div>
+            </a>
           </div>
         </div>
 
