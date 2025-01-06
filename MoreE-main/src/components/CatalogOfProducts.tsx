@@ -70,7 +70,7 @@ export const CatalogOfProducts: React.FC<CatalogOfProductsProps> = ({ products }
   }, [products]);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-5">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-10">
       {products
         .filter((product) => getStockCount(product.stock) > 0) // Оставляем товары, у которых есть остаток
         .map((product, index) => {

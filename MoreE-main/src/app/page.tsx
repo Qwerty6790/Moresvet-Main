@@ -17,15 +17,7 @@ export default function Home() {
       {/* Background Products with Motion */}
      <ImageHoverEffect />
       {/* Content Container */}
-      <div className="relative w-full flex flex-col items-center px-6 lg:px-16 z-10 text-center">
-        {/* Hero Section */}
-        <div className="mt-40 space-y-5 relative">
-          <p className="mt-4 font-bold text-4xl md:text-6xl text-black">
-           10 000+ товаров
-          </p>    
-          
-        </div>
-        
+      <div className="relative w-full flex flex-col items-center px-6 lg:px-16 z-10 text-center">        
       </div>
     </div>
   );

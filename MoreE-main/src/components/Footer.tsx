@@ -75,6 +75,12 @@ const Footer: React.FC = () => {
           </a>
         </div>
       </div>
+      <div className=" absolute  space-y-5 ">
+          <p className="mt-4 font-bold text-4xl md:text-9xl text-neutral-400">
+           10 000+ товаров
+          </p>    
+          
+        </div>
     </footer>
   );
 };
