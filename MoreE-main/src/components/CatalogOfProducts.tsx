@@ -15,7 +15,6 @@ const getStockCount = (stock: string): number => {
 export const CatalogOfProducts: React.FC<CatalogOfProductsProps> = ({ products }) => {
   const [isInView, setIsInView] = useState<boolean[]>(new Array(products.length).fill(false));
 
-  // Функция для добавления товара в корзину
   const addToCart = (article: string, source: string, name: string) => {
     const cart = JSON.parse(localStorage.getItem('cart') || '{"products": []}');
     const existingProductIndex = cart.products.findIndex((item: any) => item.article === article);
@@ -23,14 +22,13 @@ export const CatalogOfProducts: React.FC<CatalogOfProductsProps> = ({ products }
     if (existingProductIndex > -1) {
       cart.products[existingProductIndex].quantity += 1;
     } else {
-      cart.products.push({ article, source, quantity: 1 });
+      cart.products.push({ article, source, name, quantity: 1 });
     }
 
     localStorage.setItem('cart', JSON.stringify(cart));
     toast.success('Товар добавлен в корзину');
   };
 
-  // Логика для отслеживания появления элемента в зоне видимости
   const observeElement = (index: number) => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -44,9 +42,7 @@ export const CatalogOfProducts: React.FC<CatalogOfProductsProps> = ({ products }
           }
         });
       },
-      {
-        threshold: 0.2, // Анимация срабатывает, когда элемент на 20% виден
-      }
+      { threshold: 0.2 }
     );
 
     return observer;
@@ -63,7 +59,6 @@ export const CatalogOfProducts: React.FC<CatalogOfProductsProps> = ({ products }
       return null;
     });
 
-    // Очищаем наблюдатели, когда компонент будет размонтирован
     return () => {
       observers.forEach((observer) => observer && observer.disconnect());
     };
@@ -71,65 +66,63 @@ export const CatalogOfProducts: React.FC<CatalogOfProductsProps> = ({ products }
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-10">
-      {products
-        .filter((product) => getStockCount(product.stock) > 0) // Оставляем товары, у которых есть остаток
-        .map((product, index) => {
-          const stockCount = getStockCount(product.stock);
-          const stockClass = stockCount > 0 ? 'text-green-500' : 'text-red-500';
+      {products.map((product, index) => {
+        const stockCount = getStockCount(product.stock);
+        const stockClass = stockCount > 0 ? 'text-green-500' : 'text-red-500';
+        const encodedArticle = product.article.replace(/\//g, '%2F');
 
-          // Заменяем слэши на %2F в статье
-          const encodedArticle = product.article.replace(/\//g, '%2F');
-
-          return (
-            <div
-              key={product._id}
-              id={`product-${index}`}
-              className={`relative shadow-lg transition duration-500 cursor-pointer hover:shadow-yellow-50  rounded-lg overflow-hidden transform ${
-                isInView[index] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-              }`}
-              style={{ transition: 'opacity 0.5s, transform 0.5s' }}
-            >
-              <Link href={`/products/${product.source}/${encodedArticle}`} passHref>
-                <div className="relative w-full h-48 sm:h-56 md:h-64">
-                  {isInView[index] ? (
-                    <img
-                      className="w-full h-full object-contain"
-                      src={`${product.imageAddress}?q=50&width=300&height=300&fit=scale`} // Принудительное уменьшение качества и размеров
-                      alt={product.name}
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-gray-300 flex items-center justify-center">
-                      <span className="text-sm text-gray-500">Загрузка...</span>
-                    </div>
-                  )}
-                </div>
-              </Link>
-              <div className="p-4 bg-white">
-                <h2 className="text-black text-[10px] font-semibold truncate">{product.name}</h2>
-                <p className="font-bold text-black text-2xl mt-1">
-                  {product.price} ₽
-                </p>
-                <div className="flex justify-between items-center mt-4">
-                  <div className={`text-sm ${stockClass}`}>
-                    <p className="text-green-700">В наличие</p>
+        return (
+          <div
+            key={product._id}
+            id={`product-${index}`}
+            className={`relative shadow-lg transition duration-500 cursor-pointer hover:shadow-yellow-50 rounded-lg overflow-hidden transform ${
+              isInView[index] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+            }`}
+            style={{ transition: 'opacity 0.5s, transform 0.5s' }}
+          >
+            <Link href={`/products/${product.source}/${encodedArticle}`} passHref>
+              <div className="relative w-full h-48 sm:h-56 md:h-64">
+                {isInView[index] ? (
+                  <img
+                    className="w-full h-full object-contain"
+                    src={`${product.imageAddress}?q=50&width=300&height=300&fit=scale`}
+                    alt={product.name}
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-300 flex items-center justify-center">
+                    <span className="text-sm text-gray-500">Загрузка...</span>
                   </div>
-                  <button
-                    className={`border bg-neutral-700    transition duration-500 p-3 rounded-md w-24 ${stockCount === 0 ? ' cursor-not-allowed' : 'hover:bg-neutral-500 hover:text-white'}`}
-                    onClick={() => {
-                      if (stockCount > 0) {
-                        addToCart(product.article, product.source, product.name); // Передаем имя товара
-                      }
-                    }}
-                    disabled={stockCount === 0}
-                  >
-                    <p className="text-white">Купить</p>
-                  </button>
+                )}
+              </div>
+            </Link>
+            <div className="p-4 bg-white">
+              <h2 className="text-black text-[10px] font-semibold truncate">{product.name}</h2>
+              <p className="font-bold text-black text-2xl mt-1">
+                {product.price} ₽
+              </p>
+              <div className="flex justify-between items-center mt-4">
+                <div className={`text-sm ${stockClass}`}>
+                  {stockCount > 0 ? <p className="text-green-700">В наличии</p> : <p>Нет в наличии</p>}
                 </div>
+                <button
+                  className={`border bg-neutral-700 text-white transition duration-500 p-3 rounded-md w-24 ${
+                    stockCount === 0 ? 'cursor-not-allowed opacity-50' : 'hover:bg-neutral-500'
+                  }`}
+                  onClick={() => {
+                    if (stockCount > 0) {
+                      addToCart(product.article, product.source, product.name);
+                    }
+                  }}
+                  disabled={stockCount === 0}
+                >
+                  Купить
+                </button>
               </div>
             </div>
-          );
-        })}
+          </div>
+        );
+      })}
     </div>
   );
 };

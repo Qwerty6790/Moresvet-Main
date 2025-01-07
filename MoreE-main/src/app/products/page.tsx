@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { Toaster } from 'sonner';
 import { ChevronDown, Search, SearchIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -26,7 +26,19 @@ interface Brand {
 
 // Brands and categories data
 const brands: Brand[] = [
-
+  {
+    name: 'LightStar',
+    categories: [
+      { label: 'Люстра подвесная', searchName: 'Люстра подвесная' },
+      { label: 'Люстра', searchName: 'Люстра' },
+      { label: 'Подвес', searchName: 'Подвес' }, 
+      { label: 'Бра', searchName: 'Бра' },
+      { label: 'Светильник', searchName: 'Светильник' },
+      { label: 'Настольная лампа', href: '/Catalog', searchName: 'Настольная лампа' },
+      { label: 'Торшер', href: '/web-1nashtange', searchName: 'Торшер' },
+      { label: 'Светильник уличный', href: '/office-lamps', searchName: 'Светильник уличный' },
+    ],
+  },
   {
     name: 'KinkLight',
     categories: [
@@ -89,19 +101,7 @@ const brands: Brand[] = [
       { label: 'Точечный встраиваемый светильник', searchName: 'Точечный встраиваемый светильник' }, 
     ],
   },
-  {
-    name: 'LightStar',
-    categories: [
-      { label: 'Люстра', searchName: 'Люстра' },
-      { label: 'Люстра подвесная', searchName: 'Люстра подвесная' },
-      { label: 'Подвес', searchName: 'Подвес' }, 
-      { label: 'Бра', searchName: 'Бра' },
-      { label: 'Светильник', searchName: 'Светильник' },
-      { label: 'Настольная лампа', href: '/Catalog', searchName: 'Настольная лампа' },
-      { label: 'Торшер', href: '/web-1nashtange', searchName: 'Торшер' },
-      { label: 'Светильник уличный', href: '/office-lamps', searchName: 'Светильник уличный' },
-    ],
-  },
+  
   {
     name: 'Werkel',
     categories: [
@@ -127,10 +127,29 @@ const Catalog: React.FC = () => {
   const [isPageLoading, setIsPageLoading] = useState<boolean>(false);
   const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
   const [hasMoreProducts, setHasMoreProducts] = useState<boolean>(true);
-  
+  const [showInStock, setShowInStock] = useState<boolean>(true);
+const [showOutOfStock, setShowOutOfStock] = useState<boolean>(true);
+
   const brandDropdownRef = useRef<HTMLDivElement>(null);
   const categoryDropdownRef = useRef<HTMLDivElement>(null);
 
+  const getStockCount = (stock: any) => {
+    // Replace this logic with how your stock is calculated
+    return stock ? stock.count || 0 : 0;
+  };
+  
+  const filteredProducts = useMemo(() => {
+    return products.filter((product) => {
+      const stockCount = getStockCount(product.stock);
+      // Условие фильтрации:
+      return (
+        (showInStock && stockCount > 0) || // Показывать товары "в наличии", если включен флажок
+        (showOutOfStock && stockCount === 0) // Показывать товары "не в наличии", если включен флажок
+      );
+    });
+  }, [products, showInStock, showOutOfStock]);
+  
+  
   const fetchProducts = async (page: number, name: string) => {
     setIsPageLoading(true);
     try {
@@ -160,6 +179,7 @@ const Catalog: React.FC = () => {
     }
   };
 
+
   useEffect(() => {
     if (sortOrder) {
       const sortedProducts = [...products].sort((a, b) =>
@@ -188,6 +208,8 @@ const Catalog: React.FC = () => {
     setHasMoreProducts(true);
   };
 
+  
+
   useEffect(() => {
     fetchProducts(currentPage, selectedCategory.searchName);
   }, [currentPage, selectedCategory, minPrice, maxPrice, selectedBrand]);
@@ -215,77 +237,81 @@ const Catalog: React.FC = () => {
     <div className="max-w-9xl mx-auto p-4">
       <div className="flex flex-col lg:flex-row gap-4">
         {/* Sidebar */}
-        <div className="w-ful  lg:w-1/4 bg-white text-black p-6 space-y-4 top-0 shadow-md">
-          {/* Brands */}
-          <div className="space-y-4">
-            <h3 className="text-2xl font-medium text-black">Бренды</h3>
-            <div className="flex flex-col">
-              {brands.map((brand) => (
-                <label
-                  key={brand.name}
-                  className="flex items-center space-x-3 cursor-pointer p-2 rounded-lg hover:bg-gray-100 transition-all duration-200"
-                >
-                  <input
-                    type="checkbox"
-                    name="brand"
-                    value={brand.name}
-                    checked={selectedBrand.name === brand.name}
-                    onChange={() => handleBrandChange(brand)}
-                    className="size-5"
-                  />
-                  <span className="text-sm text-gray-800">{brand.name}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-  
-          {/* Categories */}
-          <div className="space-y-4">
-            <h3 className="text-2xl font-medium text-black">Категории</h3>
-            <div className="flex flex-col gap-2">
-              {selectedBrand.categories?.map((category) => (
-                <label
-                  key={category.searchName}
-                  className="flex items-center space-x-3 cursor-pointer p-2 rounded-lg hover:bg-gray-100 transition-all duration-200"
-                >
-                  <input
-                    type="checkbox"
-                    name="category"
-                    value={category.searchName}
-                    onChange={() => handleCategoryChange(category)}
-                    className="size-5"
-                  />
-                  <span className="text-sm text-gray-800">{category.label}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-  
-          {/* Price Filters */}
-          <div className="space-y-4">
-            <h3 className="text-sm font-medium text-gray-600">Цена</h3>
-            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-4">
-              <input
-                type="number"
-                value={minPrice}
-                onChange={(e) => handlePriceChange(setMinPrice, Number(e.target.value))}
-                className="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg text-sm"
-                placeholder="Мин."
-                min="0"
-                max="1000000"
-              />
-              <input
-                type="number"
-                value={maxPrice}
-                onChange={(e) => handlePriceChange(setMaxPrice, Number(e.target.value))}
-                className="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg text-sm"
-                placeholder="Макс."
-                min="0"
-                max="1000000"
-              />
-            </div>
-          </div>
-        </div>
+        <div className="w-full lg:w-1/4 bg-white text-black p-6 space-y-4 top-0 shadow-md">
+  {/* Brands */}
+  <div className="space-y-4">
+    <h3 className="text-2xl font-medium text-black">Бренды</h3>
+    <div className="flex flex-col">
+      {brands.map((brand) => (
+        <label
+          key={brand.name}
+          className="flex items-center space-x-3 cursor-pointer p-2 rounded-lg hover:bg-gray-100 transition-all duration-200"
+        >
+          <input
+            type="checkbox"
+            name="brand"
+            value={brand.name}
+            checked={selectedBrand.name === brand.name}
+            onChange={() => handleBrandChange(brand)}
+            className="size-5"
+          />
+          <span className="text-sm text-gray-800">{brand.name}</span>
+        </label>
+      ))}
+    </div>
+  </div>
+
+  {/* Categories */}
+  <div className="space-y-4">
+    <h3 className="text-2xl font-medium text-black">Категории</h3>
+    <div className="flex flex-col gap-2">
+      {selectedBrand.categories?.map((category) => (
+        <label
+          key={category.searchName}
+          className="flex items-center space-x-3 cursor-pointer p-2 rounded-lg hover:bg-gray-100 transition-all duration-200"
+        >
+          <input
+            type="checkbox"
+            name="category"
+            value={category.searchName}
+            onChange={() => handleCategoryChange(category)}
+            className="size-5"
+          />
+          <span className="text-sm text-gray-800">{category.label}</span>
+        </label>
+      ))}
+    </div>
+  </div>
+
+  {/* Price Filters */}
+  <div className="space-y-4">
+    <h3 className="text-sm font-medium text-gray-600">Цена</h3>
+    <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-4">
+      <input
+        type="number"
+        value={minPrice}
+        onChange={(e) => handlePriceChange(setMinPrice, Number(e.target.value))}
+        className="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg text-sm"
+        placeholder="Мин."
+        min="0"
+        max="1000000"
+      />
+      <input
+        type="number"
+        value={maxPrice}
+        onChange={(e) => handlePriceChange(setMaxPrice, Number(e.target.value))}
+        className="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg text-sm"
+        placeholder="Макс."
+        min="0"
+        max="1000000"
+      />
+    </div>
+  </div>
+
+  {/* Availability */}
+
+</div>
+
   
         {/* Main Content */}
         <div className="flex w-full flex-col text-black space-y-6 pb-6">
@@ -330,22 +356,22 @@ const Catalog: React.FC = () => {
   
           {/* Product Grid */}
           {isPageLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[...Array(8)].map((_, index) => (
-                <div
-                  key={index}
-                  className="w-[300px] p-3 h-[350px] bg-white rounded-lg animate-pulse shadow-xl"
-                />
-              ))}
-            </div>
-          ) : products.length === 0 ? (
-            <div className="flex items-center justify-center w-full text-center">
-              <h2 className="text-3xl font-bold text-gray-500">Нет товаров для отображения</h2>
-            </div>
-          ) : (
-            <CatalogOfProducts products={products} />
-          )}
-  
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    {[...Array(8)].map((_, index) => (
+      <div
+        key={index}
+        className="w-[300px] p-3 h-[350px] bg-white rounded-lg animate-pulse shadow-xl"
+      />
+    ))}
+  </div>
+) : filteredProducts.length === 0 ? ( // Отображаем отфильтрованные товары
+  <div className="flex items-center justify-center w-full text-center">
+    <h2 className="text-3xl font-bold text-gray-500">Нет товаров для отображения</h2>
+  </div>
+) : (
+  <CatalogOfProducts products={filteredProducts} />
+)}
+
           {/* Show More Button */}
           {hasMoreProducts && !isPageLoading && (
             <div className="text-center mt-6">
@@ -366,3 +392,4 @@ const Catalog: React.FC = () => {
 };
 
 export default Catalog;
+

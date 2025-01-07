@@ -169,20 +169,20 @@ const Cart: React.FC = () => {
 
   return (
     <motion.section
-      className={`py-20 bg-gray-100 text-gray-800 ${isCartEmpty ? 'opacity-50' : ''}`}
+      className={`py-20 text-black ${isCartEmpty ? 'opacity-50' : ''}`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
       <Toaster position="top-center" richColors />
       
-      <h1 className="text-3xl mt-20 sm:text-5xl font-bold text-center mx-12 mb-12 text-gray-800">
+      <h1 className="text-3xl mt-20 sm:text-5xl font-bold  mx-12 mb-12 text-gray-800">
         Корзина
       </h1>
       
-      <div className="container mx-auto grid grid-cols-1 lg:grid-cols-3 gap-10">
+      <div className="container  mx-auto grid grid-cols-1 lg:grid-cols-3 gap-10">
         {/* Left Section: Cart Table */}
-        <div className="lg:col-span-2 bg-white rounded-lg shadow-md p-6">
+        <div className="lg:col-span-2 bg-white rounded-lg  p-6">
         {isLoading ? (
   <div className="flex justify-center items-center h-full">
     <ClipLoader color="#4A90E2" size={50} />
@@ -202,20 +202,20 @@ const Cart: React.FC = () => {
     <table className="w-full text-left border-collapse">
       <thead>
         <tr className="border-b border-gray-200">
-          <th className="p-4 text-sm font-semibold text-gray-600">Товар</th>
-          <th className="p-4 text-sm font-semibold text-center text-gray-600">Количество</th>
-          <th className="p-4 text-sm font-semibold text-center text-gray-600">Цена</th>
+          <th className="p-4 font-bold text-2xl text-black">Товар</th>
+          <th className="p-4  font-bold text-2xl text-center text-black">Количество</th>
+          <th className="p-4  text-2xl font-bold text-center text-black">Цена</th>
           <th className="p-4"></th>
         </tr>
       </thead>
       <tbody>
         {cartProducts.map((product) => (
-          <tr key={product._id} className="border-b border-gray-200">
+          <tr key={product._id} className="">
             <td className="p-4 flex items-center space-x-4">
               <img
                 src={product.imageAddress}
                 alt={product.name}
-                className="w-16 h-16 object-cover rounded-md"
+                className="w-24 h-24 object-cover rounded-md"
               />
               <Link href={`/products/${product.source}/${product.article}`}>
                 <h2 className="text-sm font-semibold text-gray-800">{product.name}</h2>
@@ -257,18 +257,18 @@ const Cart: React.FC = () => {
         
 
         {/* Right Section: Order Summary */}
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="bg-white rounded-lg p-6">
           <div className="mb-6">
             <h2 className="text-xl font-semibold text-gray-800">Итого</h2>
             <div className="flex justify-between text-sm text-gray-600 mt-4">
               <span>Товары</span>
               <span>{totalAmount} ₽</span>
             </div>
-            <div className="flex justify-between text-sm text-gray-600 mt-2">
+            <div className="flex justify-between text-2xl text-black font-sans mt-2">
               <span>Доставка</span>
               <span>{deliveryCost} ₽</span>
             </div>
-            <div className="flex justify-between text-lg font-semibold text-gray-800 mt-4">
+            <div className="flex justify-between text-2xl  font-semibold text-gray-800 mt-4">
               <span>Итого к оплате</span>
               <span>{totalToPay} ₽</span>
             </div>
@@ -278,14 +278,14 @@ const Cart: React.FC = () => {
             <button
               onClick={handleClearCart}
               disabled={isCartEmpty}
-              className={`w-full py-3 border text-black rounded-md ${isCartEmpty ? 'opacity-50 bg-red-400 cursor-not-allowed' : 'hover:bg-red-600'}`}
+              className={`w-full py-3 border text-2xl text-black rounded-md ${isCartEmpty ? 'opacity-50 bg-red-400 cursor-not-allowed' : 'hover:bg-red-600'}`}
             >
               Очистить корзину
             </button>
             <button
               onClick={handleOrder}
               disabled={isCartEmpty}
-              className={`w-full py-3 border text-black rounded-md ${isCartEmpty ? 'opacity-50 bg-green-700 cursor-not-allowed' : 'hover:bg-green-600'}`}
+              className={`w-full py-3 border text-2xl text-black rounded-md ${isCartEmpty ? 'opacity-50 bg-black cursor-not-allowed' : 'hover:bg-black hover:text-white'}`}
             >
               Оформить заказ
             </button>
@@ -295,7 +295,7 @@ const Cart: React.FC = () => {
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-96">
+          <div className="bg-white rounded-lg  p-6 w-96">
             <h2 className="text-xl font-semibold mb-4">Подтверждение заказа</h2>
             <p>Вы уверены, что хотите оформить заказ?</p>
             <div className="mt-4 space-x-4">
