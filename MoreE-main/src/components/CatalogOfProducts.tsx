@@ -5,6 +5,7 @@ import { ProductI } from '../types/interfaces';
 
 interface CatalogOfProductsProps {
   products: ProductI[];
+  viewMode: 'grid' | 'list';
 }
 
 const getStockCount = (stock: string): number => {
@@ -12,7 +13,7 @@ const getStockCount = (stock: string): number => {
   return match ? parseInt(match[0], 10) : 0;
 };
 
-export const CatalogOfProducts: React.FC<CatalogOfProductsProps> = ({ products }) => {
+export const CatalogOfProducts: React.FC<CatalogOfProductsProps> = ({ products, viewMode }) => {
   const [isInView, setIsInView] = useState<boolean[]>(new Array(products.length).fill(false));
 
   const addToCart = (article: string, source: string, name: string) => {

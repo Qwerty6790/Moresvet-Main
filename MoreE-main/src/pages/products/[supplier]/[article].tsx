@@ -166,7 +166,7 @@ const ProductDetail: React.FC = () => {
     <div className="flex flex-col min-h-screen bg-white">
       <Toaster position="top-center" richColors />
       <Header />
-      <div className="flex justify-center mt-32 items-center flex-1 p-6">
+      <div className="flex justify-center mt-52 items-center flex-1 p-6">
         <div className="bg-white rounded-lg  flex flex-col md:flex-row max-w-7xl w-full">
           {/* Левый блок с изображением */}
           <div className="w-full md:w-1/2 relative">
