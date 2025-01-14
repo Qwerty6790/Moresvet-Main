@@ -85,7 +85,7 @@ const Liked: React.FC = () => {
 
         <div className="relative max-w-7xl mx-auto px-4 h-full flex items-center">
           <div className="space-y-4">
-            <h1 className="text-5xl font-bold text-white tracking-tight">
+            <h1 className="text-8xl font-bold text-white tracking-tight">
               Избранное
             </h1>
             <div className="flex items-center text-black/60 text-sm">

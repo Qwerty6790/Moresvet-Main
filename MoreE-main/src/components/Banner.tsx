@@ -92,7 +92,7 @@ export default function ImageHoverEffect() {
       {/* Additional Section: Chandeliers */}
       <div className="mt-16 px-6 lg:px-20">
         <h2 className="text-black text-2xl sm:text-4xl lg:text-5xl font-bold mb-8">
-          Прочие товары от Maytoni
+     Maytoni
         </h2>
         <Maytoni />
       </div>

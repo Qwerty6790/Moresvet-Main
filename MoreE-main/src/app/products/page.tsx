@@ -557,7 +557,7 @@ const [searchQuery, setSearchQuery] = useState('');
                       <div className="relative flex-1">
                         <input type="number" value={minPrice}
                           onChange={(e) => handlePriceChange(setMinPrice, Number(e.target.value))}
-                          className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl
+                          className="w-full px-4 py-3 bg-gray-50 border-2 text-black border-gray-200 rounded-xl
                                    focus:border-black focus:ring-0 transition-colors"
                           placeholder="От"
                         />
@@ -566,7 +566,7 @@ const [searchQuery, setSearchQuery] = useState('');
                       <div className="relative flex-1">
                         <input type="number" value={maxPrice}
                           onChange={(e) => handlePriceChange(setMaxPrice, Number(e.target.value))}
-                          className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl
+                          className="w-full px-4 py-3 bg-gray-50 border-2 text-black border-gray-200 rounded-xl
                                    focus:border-black focus:ring-0 transition-colors"
                           placeholder="До"
                         />

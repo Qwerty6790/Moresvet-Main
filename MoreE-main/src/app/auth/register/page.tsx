@@ -39,80 +39,114 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen px-6 py-52">
-  <div className="bg-white py-12 px-8 lg:py-16 lg:px-24 rounded mx-auto max-w-screen-lg">
-    <h1 className="text-5xl font-bold text-gray-800 mb-10 text-left">
-      Авторизуйтесь в MoreElectriki
-    </h1>
-    {error && <div className="text-red-500 mb-6 text-lg">{error}</div>} {/* Сообщение об ошибке */}
-
-    <form onSubmit={handleSubmit}>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div className="min-h-screen  bg-gradient-to-br bg-black flex items-center justify-center px-6">
+    <div className="flex flex-col  md:flex-row w-full mt-20 bg-white shadow-2xl  overflow-hidden">
+      {/* Левая часть - изображение или декоративный блок */}
+      <div className=" md:block md:w-1/2 bg-gradient-to-br bg-black p-12 text-white flex items-center justify-center">
         <div>
-          <label htmlFor="username" className="block text-lg font-medium text-gray-800 mb-2">
-            Имя пользователя
-          </label>
-          <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm text-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Введите имя пользователя"
-            required
-          />
-        </div>
-
-        <div>
-          <label htmlFor="email" className="block text-lg font-medium text-gray-800 mb-2">
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm text-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            placeholder="example@mail.com"
-            required
-          />
-        </div>
-
-        <div className="lg:col-span-2">
-          <label htmlFor="password" className="block text-lg font-medium text-gray-800 mb-2">
-            Пароль
-          </label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm text-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Введите пароль"
-            required
-          />
+          <h2 className="text-7xl font-bold mb-4">
+            Добро пожаловать в MoreElectriki
+          </h2>
+          <p className="text-lg">
+            Зарегистрируйтесь, чтобы получить доступ к лучшим предложениям и
+            товарам.
+          </p>
         </div>
       </div>
-
-      <div className="mt-6 flex items-center justify-between">
-        <a href="/auth/reset-password" className="text-lg text-blue-600 hover:underline">
-          Восстановить пароль
-        </a>
-        <a href="/auth/login" className="text-lg text-blue-600 hover:underline">
-          Уже есть аккаунт? Войдите
-        </a>
+  
+      {/* Правая часть - форма авторизации */}
+      <div className="w-full bg-gradient-to-br bg-black   md:w-1/2 py-12 px-8 lg:py-16 lg:px-24">
+        <h1 className="text-4xl font-bold text-white mb-8 text-center">
+          Авторизация в систему
+        </h1>
+  
+        {error && (
+          <div className="text-red-500 mb-6 text-center text-lg font-medium">
+            {error}
+          </div>
+        )}
+  
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="relative">
+            <input
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="peer w-full px-4 py-3  bg-neutral-700  rounded-lg shadow-sm text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder=" "
+              required
+            />
+            <label
+              htmlFor="username"
+              className="absolute left-4 -top-6 text-sm text-gray-500 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-lg peer-placeholder-shown:text-gray-400 peer-focus:-top-0.5 peer-focus:text-sm peer-focus:text-blue-500"
+            >
+              Имя пользователя
+            </label>
+          </div>
+  
+          <div className="relative">
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="peer w-full px-4 py-3  bg-neutral-700  rounded-lg shadow-sm text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder=" "
+              required
+            />
+            <label
+              htmlFor="email"
+              className="absolute left-4 -top-6 text-sm text-gray-500 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-lg peer-placeholder-shown:text-gray-400 peer-focus:-top-0.5 peer-focus:text-sm peer-focus:text-blue-500"
+            >
+              Email
+            </label>
+          </div>
+  
+          <div className="relative">
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="peer w-full px-4 py-3  bg-neutral-700  rounded-lg shadow-sm text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder=" "
+              required
+            />
+            <label
+              htmlFor="password"
+              className="absolute left-4 -top-6 text-sm  text-gray-500 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-lg peer-placeholder-shown:text-gray-400 peer-focus:-top-0.5 peer-focus:text-sm peer-focus:text-blue-500"
+            >
+              Пароль
+            </label>
+          </div>
+  
+          <div className="flex justify-between items-center mt-6">
+            <a
+              href="/auth/reset-password"
+              className="text-blue-600 hover:underline text-sm font-medium"
+            >
+              Забыли пароль?
+            </a>
+            <a
+              href="/auth/login"
+              className="text-blue-600 hover:underline text-sm font-medium"
+            >
+              Уже есть аккаунт?
+            </a>
+          </div>
+  
+          <button
+            type="submit"
+            className="mt-8 w-full py-3 border bg-gradient-to-r from-black via-black/80 to-black text-white text-lg font-semibold rounded-lg shadow-md hover:from-neutral-600 hover:to-neutral-700 transition-all duration-300"
+          >
+            Зарегистрироваться
+          </button>
+        </form>
       </div>
-
-      <button
-        type="submit"
-        className="mt-8 w-full py-4 bg-blue-500 text-white text-xl font-bold rounded-md transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
-      >
-        Зарегистрироваться
-      </button>
-    </form>
+    </div>
   </div>
-</div>
-
+  
 
   );
 };

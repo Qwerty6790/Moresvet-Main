@@ -64,7 +64,7 @@ const Header = () => {
             isScrolled ? "text-lg sm:text-2xl" : "text-2xl sm:text-4xl"
           } text-black  transition truncate`}
         >
-          MORE ELECTRIKI
+         <span className="text-5xl">MORE</span>  ELECTRIKI
         </a>
   
         <div className="flex items-center   space-x-2 md:space-x-6 bg-black text-xs md:text-sm lg:text-2xl text-white px-3 py-2 md:px-4 md:py-2 rounded truncate>
