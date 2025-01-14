@@ -16,10 +16,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Head>
-        <title>palermolight</title>
-        <link rel="icon" href="https://palermolight.ru/favicon.ico" type="image/x-icon" />
+        <title>moreelecktiki</title>
         <meta name="description" content="Люстры и прочая электрика" />
-        <meta name="keywords" content="люстра потолочная, люстра подвесная купить, учильные светильники palermolight, palermolight" />
+        <meta name="keywords" content="люстра потолочная, люстра подвесная купить, учильные светильники moreelecktiki, moreelecktiki" />
       </Head>
 
       {/* Yandex.Metrika counter */}

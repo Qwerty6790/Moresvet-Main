@@ -18,7 +18,7 @@ const Liked: React.FC = () => {
     const fetchLikedProducts = async () => {
       setLoading(true);
       const liked = JSON.parse(localStorage.getItem('liked') || '{"products": []}');
-      
+
       if (liked.products.length > 0) {
         try {
           const response = await axios.post(
@@ -26,7 +26,14 @@ const Liked: React.FC = () => {
             { products: liked.products },
             { headers: { 'Content-Type': 'application/json' } }
           );
-          setLikedProducts(response.data.products);
+
+          // Преобразуем данные, чтобы убедиться, что цена является числом
+          setLikedProducts(
+            response.data.products.map((product: any) => ({
+              ...product,
+              price: parseFloat(product.price) || 0, // Убедимся, что это число
+            }))
+          );
         } catch (error) {
           setError('Произошла ошибка при загрузке продуктов из Избранного.');
           console.error(error);
@@ -70,12 +77,12 @@ const Liked: React.FC = () => {
       transition={{ duration: 0.5 }}
     >
       <Toaster position="top-center" richColors />
-      
+
       {/* Hero секция */}
       <div className="relative mt-32 h-[300px] bg-black overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-black"></div>
         <div className="absolute inset-0 bg-[url('/images/pattern.png')] opacity-5"></div>
-        
+
         <div className="relative max-w-7xl mx-auto px-4 h-full flex items-center">
           <div className="space-y-4">
             <h1 className="text-5xl font-bold text-white tracking-tight">
@@ -142,7 +149,9 @@ const Liked: React.FC = () => {
                       </h2>
                       <p className="text-sm text-black/60">Артикул: {product.article}</p>
                       <p className="text-xl font-bold text-black">
-                        {product.price.toLocaleString()} ₽
+                        {typeof product.price === 'number' && !isNaN(product.price)
+                          ? `${product.price.toLocaleString()} ₽`
+                          : 'Цена не указана'}
                       </p>
                     </div>
                   </div>
@@ -154,7 +163,7 @@ const Liked: React.FC = () => {
                         e.stopPropagation();
                         handleRemoveProduct(product._id);
                       }}
-                      className="w-full py-3 border-2 border-black text-black rounded-xl 
+                      className="w-full py-3 border-2 border-black bg-black text-white rounded-xl 
                                hover:bg-black hover:text-white transition-colors"
                     >
                       Удалить из избранного

@@ -37,9 +37,9 @@ export default function ImageHoverEffect() {
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <div className="flex flex-col lg:flex-row w-full h-auto lg:h-[600px] bg-white">
+      <div className="flex flex-col  max-md:mt-32 lg:flex-row w-full h-auto lg:h-[600px] bg-white">
         {/* Left Block: Slider */}
-        <div className="w-full h-screen lg:h-[610px] relative overflow-hidden">
+        <div className="w-full max-md:hidden h-screen lg:h-[610px] relative overflow-hidden">
           {slides.map((slide, index) => (
             <motion.img
               key={index}
@@ -92,7 +92,7 @@ export default function ImageHoverEffect() {
       {/* Additional Section: Chandeliers */}
       <div className="mt-16 px-6 lg:px-20">
         <h2 className="text-black text-2xl sm:text-4xl lg:text-5xl font-bold mb-8">
-          Freya
+          Прочие товары от Maytoni
         </h2>
         <Maytoni />
       </div>

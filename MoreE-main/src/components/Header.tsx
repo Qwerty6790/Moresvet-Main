@@ -27,7 +27,9 @@ const Header = () => {
 
   return (
     <header className={`bg-white py-4 md:py-6 border-b border-gray-300 fixed top-0 w-full z-50 ${isScrolled ? "shadow-lg" : ""}`}>
+
     <div className="container mx-auto flex flex-wrap items-center justify-between px-4">
+      
       <div className="flex text-sm font-semibold items-center space-x-2 md:space-x-4 w-full md:w-auto justify-between md:justify-start">
         <span className="text-xs sm:text-sm text-black truncate">
           Ваш город: <span className="font-medium">Москва</span>
@@ -65,15 +67,15 @@ const Header = () => {
           MORE ELECTRIKI
         </a>
   
-        <div className="flex items-center space-x-2 md:space-x-6 bg-black text-xs md:text-sm lg:text-2xl text-white px-4 py-2 md:px-8 md:py-2 rounded truncate>
-         className=">
+        <div className="flex items-center   space-x-2 md:space-x-6 bg-black text-xs md:text-sm lg:text-2xl text-white px-3 py-2 md:px-4 md:py-2 rounded truncate>
+        ">
            
             <DropdownMenu />
        
         </div>
       </div>
   
-      <form className="hidden md:flex items-center border border-gray-300 rounded-md overflow-hidden w-1/2">
+      <form className="hidden md:flex mx-5 items-center border border-gray-300 rounded-md overflow-hidden w-1/2">
         <input
           type="text"
           placeholder="Поиск"
@@ -106,8 +108,7 @@ const Header = () => {
             href="/auth/register"
             className="flex text-black rounded-lg transition"
           >
-            <User  size={24} />
-            Войдите
+            <User   size={24} />
           </a>
         </div>
       </div>

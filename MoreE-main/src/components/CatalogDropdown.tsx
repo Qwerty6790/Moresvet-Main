@@ -97,7 +97,7 @@ const DropdownMenu: React.FC = () => {
         className="lg:hidden flex items-center cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <AlignJustify size={30} />
+        <AlignJustify size={23} />
       </div>
 
       {/* Dropdown menu */}
