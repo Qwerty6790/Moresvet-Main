@@ -275,7 +275,7 @@ const [searchQuery, setSearchQuery] = useState('');
           <div className="absolute bottom-10 right-20 w-40 h-40 bg-white/5 rounded-full blur-3xl"></div>
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 h-full">
+        <div className="relative max-w-9xl mx-auto px-4 h-full">
           <div className="flex justify-between items-center h-full py-12">
             {/* Левая часть */}
             <div className="space-y-8">
@@ -330,7 +330,7 @@ const [searchQuery, setSearchQuery] = useState('');
                     <div className="absolute top-4 right-4 flex items-center space-x-2 bg-white/10 
                                   backdrop-blur-md px-3 py-1 rounded-full">
                       <div className="w-2 h-2 rounded-full bg-red-500/50"></div>
-                      <span className="text-xs text-white/60">Нет в наличии</span>
+          
                     </div>
                   )}
 
@@ -489,7 +489,7 @@ const [searchQuery, setSearchQuery] = useState('');
       </div>
 
       {/* Основной контент */}
-      <div className="max-w-7xl mx-auto px-4 py-8 relative z-10">
+      <div className="max-w-9xl mx-auto px-4 py-8 relative z-10">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Сайдбар с фильтрами */}
           <div className={`w-full lg:w-1/4 transition-all duration-300 ${

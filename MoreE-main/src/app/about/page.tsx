@@ -7,7 +7,7 @@ const About = () => {
     {
       title: "Качество",
       description:
-        "Мы предлагаем только проверенные светильники от лучших производителей, которые служат годами.",
+        "Я использую только проверенные инструменты и технологии, чтобы предоставлять высококачественные решения.",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -22,7 +22,7 @@ const About = () => {
     {
       title: "Индивидуальность",
       description:
-        "Мы поможем подобрать освещение, которое подчеркнет стиль вашего интерьера.",
+        "Я адаптирую свои решения под уникальные потребности каждого клиента, чтобы подчеркнуть их стиль.",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -37,7 +37,7 @@ const About = () => {
     {
       title: "Экологичность",
       description:
-        "Наша продукция поддерживает современные экологические стандарты и энергоэффективность.",
+        "Я использую энергоэффективные технологии и поддерживаю современные экологические стандарты.",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -52,7 +52,7 @@ const About = () => {
     {
       title: "Доверие",
       description:
-        "Тысячи довольных клиентов и надежные гарантии делают нас лидерами на рынке.",
+        "Я работаю с клиентами на основе взаимного доверия и надежности, что делает меня лидером в своей области.",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -67,14 +67,14 @@ const About = () => {
   ];
 
   const statistics = [
-    { label: "Довольных клиентов", value: "10,000+" },
-    { label: "Продуктов в каталоге", value: "500+" },
-    { label: "Лет на рынке", value: "15" },
-    { label: "Партнеров", value: "50+" },
+    { label: "Довольных клиентов", value: "100+" },
+    { label: "Реализованных проектов", value: "50+" },
+    { label: "Лет опыта", value: "5" },
+    { label: "Партнеров", value: "10+" },
   ];
 
   return (
-    <section className="bg-gray-50 text-gray-800 py-40">
+    <section className="bg-gray-50 text-gray-800 py-20 md:py-40">
       {/* Основной заголовок */}
       <div className="container max-w-5xl px-4 mx-auto text-center">
         <motion.h1
@@ -83,16 +83,15 @@ const About = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
         >
-          О компании
+          Обо мне
         </motion.h1>
         <motion.p
-          className="text-lg text-gray-600"
+          className="text-lg text-gray-600 max-w-3xl mx-auto"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.5 }}
         >
-          Мы создаем уют и комфорт в каждом уголке вашего дома, предлагая
-          современное и стильное освещение.
+          Я - профессиональный разработчик, который создает современные и эффективные решения для своих клиентов.
         </motion.p>
       </div>
 
@@ -101,14 +100,14 @@ const About = () => {
         {values.map((value, idx) => (
           <motion.div
             key={idx}
-            className="flex flex-col items-center text-center bg-white p-6 rounded-lg shadow-md"
+            className="flex flex-col items-center text-center bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: idx * 0.2 }}
           >
             <div className="mb-4">{value.icon}</div>
-            <h3 className="text-xl font-bold text-black">{value.title}</h3>
-            <p className="text-black mt-2">{value.description}</p>
+            <h3 className="text-xl font-bold text-gray-800">{value.title}</h3>
+            <p className="text-gray-600 mt-2">{value.description}</p>
           </motion.div>
         ))}
       </div>
@@ -118,7 +117,7 @@ const About = () => {
         {statistics.map((stat, idx) => (
           <motion.div
             key={idx}
-            className="flex flex-col items-center text-center p-6"
+            className="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: idx * 0.2 }}
@@ -132,25 +131,30 @@ const About = () => {
       {/* Завершающий блок */}
       <div className="container max-w-7xl mx-auto text-center mt-16">
         <motion.h2
-          className="text-3xl font-bold text-gray-800"
+          className="text-3xl font-bold text-gray-800 mb-4"
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
         >
-          Присоединяйтесь к нам
+          Готовы начать?
         </motion.h2>
         <motion.p
-          className="text-lg text-gray-600 mt-4"
+          className="text-lg text-gray-600 mt-4 max-w-3xl mx-auto"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.7, delay: 0.3 }}
         >
-          Сделайте выбор в пользу качества, стиля и надежности. Мы освещаем ваш
-          мир!
+          Свяжитесь со мной, и я помогу вам создать решение, которое превзойдет ваши ожидания.
         </motion.p>
+        <motion.button
+          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg mt-8 transition-colors duration-300"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.5 }}
+        >
+          Связаться со мной
+        </motion.button>
       </div>
-
-      
     </section>
   );
 };
