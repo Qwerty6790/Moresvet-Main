@@ -39,10 +39,10 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br bg-black flex items-center justify-center px-6">
-    <div className="flex flex-col md:flex-row w-full max-w-9xl mt-20 bg-white shadow-2xl overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br bg-white  flex items-center justify-center px-6">
+    <div className="flex flex-col md:flex-row w-full max-w-9xl mt-20 bg-white  overflow-hidden">
       {/* Левая часть - изображение или декоративный блок */}
-      <div className="hidden md:flex md:w-1/2 bg-gradient-to-br bg-black p-12 text-white items-center justify-center">
+      <div className="hidden md:flex md:w-1/2 b bg-white p-12 text-black items-center justify-center">
         <div className="text-center md:text-left">
           <h2 className="text-4xl md:text-5xl lg:text-7xl font-bold mb-4 leading-snug">
             Добро пожаловать в MoreElectriki
@@ -54,8 +54,8 @@ const Register: React.FC = () => {
       </div>
   
       {/* Правая часть - форма авторизации */}
-      <div className="w-full bg-gradient-to-br bg-black md:w-1/2 py-12 px-8 lg:py-16 lg:px-24">
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-8 text-center">
+      <div className="w-full bg-gradient-to-br bg-white md:w-1/2 py-12 px-8 lg:py-16 lg:px-24">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-8 text-center">
           Авторизация в систему
         </h1>
   
@@ -73,7 +73,7 @@ const Register: React.FC = () => {
               id="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="peer w-full px-4 py-3 bg-neutral-700 rounded-lg shadow-sm text-base md:text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="peer w-full px-4 py-3 bg-neutral-700 rounded-lg text-base md:text-lg focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent"
               placeholder=" "
               required
             />
@@ -92,7 +92,7 @@ const Register: React.FC = () => {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="peer w-full px-4 py-3 bg-neutral-700 rounded-lg shadow-sm text-base md:text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="peer w-full px-4 py-3 bg-neutral-700 rounded-lg shadow-sm text-base md:text-lg focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent"
               placeholder=" "
               required
             />
@@ -111,7 +111,7 @@ const Register: React.FC = () => {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="peer w-full px-4 py-3 bg-neutral-700 rounded-lg shadow-sm text-base md:text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="peer w-full px-4 py-3 bg-neutral-700 rounded-lg shadow-sm text-base md:text-lg focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent"
               placeholder=" "
               required
             />
@@ -126,13 +126,13 @@ const Register: React.FC = () => {
           <div className="flex flex-wrap justify-between items-center mt-6 text-center">
             <a
               href="/auth/reset-password"
-              className="text-white hover:underline text-sm md:text-base font-medium"
+              className="text-black hover:underline text-sm md:text-base font-medium"
             >
               Забыли пароль?
             </a>
             <a
               href="/auth/login"
-              className="text-white hover:underline text-sm md:text-base font-medium"
+              className="text-black hover:underline text-sm md:text-base font-medium"
             >
               Уже есть аккаунт?
             </a>
@@ -140,7 +140,7 @@ const Register: React.FC = () => {
   
           <button
             type="submit"
-            className="mt-8 w-full py-3 bg-gradient-to-r from-black via-black/80 to-gray-800 text-white text-lg font-semibold rounded-lg shadow-md hover:from-neutral-600 hover:to-neutral-700 transition-all duration-300"
+            className="mt-8 w-full py-3 bg-gradient-to-r bg-white text-black text-lg font-semibold rounded-lg shadow-md hover:from-neutral-600 hover:to-neutral-700 transition-all duration-300"
           >
             Зарегистрироваться
           </button>

@@ -13,16 +13,8 @@ const DropdownMenu: React.FC = () => {
       images: ['/images/p1.png', '/images/p3.png', '/images/p2.png'], // Убрана третья фотография
     },
     { 
-      links: [{ href: '/categories', label: 'Потолочные люстры' }],
+      links: [{ href: '/auth/register', label: 'Войти' }],
       images: ['/images/p4.png', '/images/p5.png'], // Убрана третья фотография
-    },
-    { 
-      links: [{ href: '/categories', label: 'Подвесные люстры' }],
-      images: ['/images/p6.png', '/images/p7.png'], // Убрана третья фотография
-    },
-    { 
-      links: [{ href: '/categories', label: 'Светильники' }],
-      images: ['/images/p8.png', '/images/p9.png'], // Убрана третья фотография
     },
   ];
 
