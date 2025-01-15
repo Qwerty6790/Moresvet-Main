@@ -96,7 +96,7 @@ const Header = () => {
           )}
         </a>
         <a href="/cart" className="relative flex items-center text-black hover:text-gray-700">
-          <BiBasket className="-ml-1" size={23} />
+          <BiBasket className="-ml-2" size={23} />
           {cartCount > 0 && (
             <span className="absolute -top-2 -right-2 bg-neutral-400 text-black text-xs font-bold rounded-full  w-5 h-5 flex items-center justify-center border border-gray-300 shadow-sm">
               {cartCount}
