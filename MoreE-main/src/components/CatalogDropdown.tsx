@@ -60,7 +60,7 @@ const DropdownMenu: React.FC = () => {
     const images = categories[hoveredCategoryIndex]?.images || [];
     return (
       <motion.div
-        className=" top-1/2 right-10 transform -translate-y-1/2 flex flex-col space-y-4"
+        className=" top-1/2 right-10 max-md:hidden transform -translate-y-1/2 flex flex-col space-y-4"
         initial={{ opacity: 0, x: 50 }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: 50 }}

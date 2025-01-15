@@ -64,7 +64,7 @@ const Header = () => {
             isScrolled ? "text-lg sm:text-2xl" : "text-2xl sm:text-4xl"
           } text-black  transition truncate`}
         >
-         <span className="text-5xl">MORE</span>  ELECTRIKI
+         <span className="text-4xl">MORE</span>  ELECTRIKI
         </a>
   
         <div className="flex items-center   space-x-2 md:space-x-6 bg-black text-xs md:text-sm lg:text-2xl text-white px-3 py-2 md:px-4 md:py-2 rounded truncate>
@@ -88,7 +88,7 @@ const Header = () => {
   
       <div className="flex items-center p-2 space-x-2 md:space-x-5">
         <a href="/liked" className="relative flex items-center text-black hover:text-gray-700">
-          <FaHeart size={24} />
+          <FaHeart size={23} />
           {wishlistCount > 0 && (
             <span className="absolute -top-2 -right-2 bg-white text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center border border-gray-300 shadow-sm">
               {wishlistCount}
@@ -96,9 +96,9 @@ const Header = () => {
           )}
         </a>
         <a href="/cart" className="relative flex items-center text-black hover:text-gray-700">
-          <BiBasket size={24} />
+          <BiBasket className="-ml-1" size={23} />
           {cartCount > 0 && (
-            <span className="absolute -top-2 -right-2 bg-neutral-400 text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center border border-gray-300 shadow-sm">
+            <span className="absolute -top-2 -right-2 bg-neutral-400 text-black text-xs font-bold rounded-full  w-5 h-5 flex items-center justify-center border border-gray-300 shadow-sm">
               {cartCount}
             </span>
           )}
@@ -108,7 +108,7 @@ const Header = () => {
             href="/auth/register"
             className="flex text-black rounded-lg transition"
           >
-            <User   size={24} />
+            <User   size={23} />
           </a>
         </div>
       </div>
