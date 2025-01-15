@@ -30,14 +30,33 @@ const brands: Brand[] = [
   {
     name: 'LightStar',
     categories: [
-      { label: 'Люстра подвесная', searchName: 'Люстра подвесная' },
-      { label: 'Люстра', searchName: 'Люстра' },
-      { label: 'Подвес', searchName: 'Подвес' }, 
-      { label: 'Бра', searchName: 'Бра' },
-      { label: 'Светильник', searchName: 'Светильник' },
-      { label: 'Настольная лампа', href: '/Catalog', searchName: 'Настольная лампа' },
-      { label: 'Торшер', href: '/web-1nashtange', searchName: 'Торшер' },
+      { label: 'Люстры подвесные', searchName: 'Люстра подвесная' },
+      { label: 'Люстры потолочные', searchName: 'Люстра' },
+      { label: 'Бра', searchName: 'Бра ' },
+      { label: 'Светильники', searchName: 'Светильник' },
+      { label: 'Настольные лампы', href: '/Catalog', searchName: 'Настольная лампа' },
+      { label: 'Торшеры', href: '/web-1nashtange', searchName: 'Торшер' },
+      { label: 'Соединители', href: '/web-1nashtange', searchName: 'Соединитель' },
+      { label: 'Светильники уличный', href: '/office-lamps', searchName: 'Светильник уличный' },
+    ],
+  },
+  {
+    name: 'ElektroStandard',
+    categories: [
+      { label: 'Светильники', searchName: 'Светильник' },
+      { label: 'Шинопроводы', searchName: 'Шинопровод' },
+      { label: 'Коннекторы', searchName: 'Коннектор' },
+      { label: 'Подвесной светильник', searchName: 'Подвесной св' }, 
+      { label: 'Лампы', searchName: 'Лампа' },
       { label: 'Светильник уличный', href: '/office-lamps', searchName: 'Светильник уличный' },
+    ],
+  },
+  {
+    name: 'Denkirs',
+    categories: [
+      { label: 'Подвесные светильники', searchName: 'Подвесной светильник' }, 
+      { label: 'Бра', searchName: 'Бра ' },
+      { label: 'Светильник', searchName: 'Светильник' },
     ],
   },
   {
