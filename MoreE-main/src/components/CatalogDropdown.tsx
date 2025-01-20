@@ -5,16 +5,24 @@ import { motion } from 'framer-motion';
 
 const DropdownMenu: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [hoveredCategoryIndex, setHoveredCategoryIndex] = useState<number | null>(null);
+  const [hoveredCategoryIndex, setHoveredCategoryIndex] = useState<number>(0); // Default to the first category
 
   const categories = [
     { 
       links: [{ href: '/products', label: 'Все товары' }],
-      images: ['/images/p1.png', '/images/p3.png', '/images/p2.png'], // Убрана третья фотография
+      images: ['/images/p1.png', '/images/p3.png', '/images/p2.png'],
     },
     { 
       links: [{ href: '/auth/register', label: 'Войти' }],
-      images: ['/images/p4.png', '/images/p5.png'], // Убрана третья фотография
+      images: ['/images/p4.png', '/images/p5.png'],
+    },
+    { 
+      links: [{ href: '/cart', label: 'Корзина' }],
+      images: ['/images/p6.png', '/images/p7.png'],
+    },
+    { 
+      links: [{ href: '/liked', label: 'Избранное' }],
+      images: ['/images/p8.png', '/images/p9.png'],
     },
   ];
 
@@ -26,13 +34,12 @@ const DropdownMenu: React.FC = () => {
             {category.links.map((link) => (
               <li
                 key={link.href}
-                className="relative p-10 max-md:text-4xl text-5xl"
-                onMouseEnter={() => setHoveredCategoryIndex(index)} // Track hovered category
-                onMouseLeave={() => setHoveredCategoryIndex(null)} // Reset on leave
+                className="relative p-10 max-md:text-4xl text-6xl"
+                onMouseEnter={() => setHoveredCategoryIndex(index)} // Update hovered category
               >
                 <motion.a
                   href={link.href}
-                  className="block p-2 hover:text-orange-500 transition duration-300"
+                  className="block p-2 hover:text-orange-500 text-neutral-500 transition duration-300"
                   initial={{ x: 0 }}
                   whileHover={{ x: 10 }}
                 >
@@ -46,13 +53,11 @@ const DropdownMenu: React.FC = () => {
     </div>
   );
 
-  const renderImages = (): JSX.Element | null => {
-    if (hoveredCategoryIndex === null) return null;
-  
+  const renderImages = (): JSX.Element => {
     const images = categories[hoveredCategoryIndex]?.images || [];
     return (
       <motion.div
-        className=" top-1/2 right-10 max-md:hidden transform -translate-y-1/2 flex flex-col space-y-4"
+        className="top-1/2 right-10 max-md:hidden transform -translate-y-1/2 flex space-y-4"
         initial={{ opacity: 0, x: 50 }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: 50 }}
@@ -63,7 +68,7 @@ const DropdownMenu: React.FC = () => {
             key={index}
             src={src}
             alt={`Category ${index}`}
-            className="rounded-lg shadow-lg w-[300px] h-[200px] object-cover"
+            className="rounded-lg shadow-lg w-[500px] h-[200px] object-contain"
             initial={{ scale: 0.9 }}
             animate={{ scale: 1 }}
             whileHover={{ scale: 1.05 }}
@@ -114,7 +119,11 @@ const DropdownMenu: React.FC = () => {
 
         {/* Menu content */}
         <div className="relative mt-4 flex">
-          <div className="w-3/4">{renderCategories()}</div>
+          <div
+            className="w-3/4 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent max-md:overflow-y-auto max-h-[70vh] pr-4"
+          >
+            {renderCategories()}
+          </div>
           <div className="relative">{renderImages()}</div>
         </div>
       </motion.div>

@@ -178,12 +178,11 @@ const Cart: React.FC = () => {
       
       {/* Hero секция */}
       <div className="relative mt-32 h-[300px] bg-black overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-black"></div>
-        <div className="absolute inset-0 bg-[url('/images/pattern.png')] opacity-5"></div>
+
         
         <div className="relative max-w-7xl mx-auto px-4 h-full flex items-center">
           <div className="space-y-4">
-            <h1 className="text-8xl font-bold text-white tracking-tight">
+            <h1 className="text-7xl font-bold text-white tracking-tight">
               Корзина
             </h1>
             <div className="flex items-center text-black/60 ">

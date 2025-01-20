@@ -47,16 +47,16 @@ const Header = () => {
       </div>
   
       <nav className="hidden lg:flex flex-wrap items-center space-x-2 lg:space-x-6 text-sm font-semibold text-black">
-        <a href="#" className="hover:text-blue-600 truncate">ДИЗАЙНЕРАМ</a>
+        <a href="/about" className="hover:text-blue-600 truncate">ДИЗАЙНЕРАМ</a>
         <a href="#" className="hover:text-blue-600 truncate">НАШИ ПРОЕКТЫ</a>
         <a href="#" className="hover:text-blue-600 truncate">КОНТАКТЫ</a>
-        <a href="#" className="hover:text-blue-600 truncate">3D МОДЕЛИ</a>
+        <a href="/3d" className="hover:text-blue-600 truncate">3D МОДЕЛИ</a>
         <a href="#" className="hover:text-blue-600 truncate">ОПЛАТА</a>
         <a href="#" className="hover:text-blue-600 truncate">ДОСТАВКА</a>
       </nav>
     </div>
   
-    <div className="container mx-auto flex items-center justify-between mt-2 md:mt-4 px-4">
+    <div className="container mx-auto flex items-center justify-between max-md:justify-center mt-2 md:mt-4 px-4">
       <div className="flex items-center space-x-4">
         <a
           href="/"
@@ -87,14 +87,6 @@ const Header = () => {
       </form>
   
       <div className="flex items-center p-2 space-x-2 md:space-x-5">
-        <a href="/liked" className="relative flex items-center text-black hover:text-gray-700">
-          <FaHeart size={23} />
-          {wishlistCount > 0 && (
-            <span className="absolute -top-2 -right-2 bg-white text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center border border-gray-300 shadow-sm">
-              {wishlistCount}
-            </span>
-          )}
-        </a>
         <a href="/cart" className="relative max-md:hidden flex items-center text-black hover:text-gray-700">
           <BiBasket className="-ml-2" size={23} />
           {cartCount > 0 && (

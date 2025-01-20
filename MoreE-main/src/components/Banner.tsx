@@ -6,6 +6,7 @@ import LightStar from '@/app/cardproducts/LightStar/page';
 import KinkLight from '@/app/cardproducts/KinkLight/page';
 import Maytoni from '@/app/cardproducts/Maytoni/page';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import SmartLightingBot from './ChatBot';
 
 export default function ImageHoverEffect() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -95,6 +96,9 @@ export default function ImageHoverEffect() {
      Maytoni
         </h2>
         <Maytoni />
+      </div>
+      <div className=''>
+      <SmartLightingBot />
       </div>
     </div>
   );

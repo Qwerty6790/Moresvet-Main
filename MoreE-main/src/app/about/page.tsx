@@ -1,161 +1,129 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { 
+  Sparkles, 
+  Star,
+  Award,
+  Shield, 
+  Clock,
+  MessageSquare,
+  Lightbulb,
+  Gem,
+  Zap,
+  Phone
+} from 'lucide-react';
 
 const About = () => {
-  const values = [
+  const [activeSection, setActiveSection] = useState('expertise');
+
+  const expertise = [
     {
-      title: "Качество",
-      description:
-        "Я использую только проверенные инструменты и технологии, чтобы предоставлять высококачественные решения.",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          className="w-12 h-12 text-blue-500"
-        >
-          <path d="M12 2a7 7 0 0 0-7 7c0 3.53 2.61 6.43 6 6.92V21h2v-5.08c3.39-.49 6-3.39 6-6.92a7 7 0 0 0-7-7Zm0 2a5 5 0 0 1 5 5c0 2.5-1.84 4.54-4.25 4.92L12 13l-.75-.08A5 5 0 0 1 7 9a5 5 0 0 1 5-5Z" />
-        </svg>
-      ),
+      icon: <Lightbulb className="w-8 h-8" />,
+      title: "Дизайнерские люстры",
+      description: "Эксклюзивные коллекции от ведущих европейских дизайнеров"
     },
     {
-      title: "Индивидуальность",
-      description:
-        "Я адаптирую свои решения под уникальные потребности каждого клиента, чтобы подчеркнуть их стиль.",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          className="w-12 h-12 text-green-500"
-        >
-          <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm-1 5h2v5h-2Zm0 6h2v2h-2Z" />
-        </svg>
-      ),
+      icon: <Sparkles className="w-8 h-8" />,
+      title: "Умное освещение",
+      description: "Современные системы управления светом для вашего комфорта"
     },
     {
-      title: "Экологичность",
-      description:
-        "Я использую энергоэффективные технологии и поддерживаю современные экологические стандарты.",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          className="w-12 h-12 text-teal-500"
-        >
-          <path d="M12 2a10 10 0 0 0-10 10c0 5.52 4.48 10 10 10s10-4.48 10-10A10 10 0 0 0 12 2Zm-.75 14.5V15H9.25a1.25 1.25 0 0 1 0-2.5H11V10h2v2.5h1.75a1.25 1.25 0 0 1 0 2.5H13v1.5Z" />
-        </svg>
-      ),
-    },
-    {
-      title: "Доверие",
-      description:
-        "Я работаю с клиентами на основе взаимного доверия и надежности, что делает меня лидером в своей области.",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          className="w-12 h-12 text-yellow-500"
-        >
-          <path d="M12 2a10 10 0 0 0-9.33 6.39L2 10h3l2-5h10l2 5h3l-.67-1.61A10 10 0 0 0 12 2Zm0 18a10 10 0 0 0 8.66-5H12a2 2 0 0 0-2 2v3H3.34A10 10 0 0 0 12 20Z" />
-        </svg>
-      ),
-    },
+      icon: <Shield className="w-8 h-8" />,
+      title: "Гарантия качества",
+      description: "5 лет гарантии на всю продукцию и профессиональный монтаж"
+    }
   ];
 
-  const statistics = [
-    { label: "Довольных клиентов", value: "100+" },
-    { label: "Реализованных проектов", value: "50+" },
-    { label: "Лет опыта", value: "5" },
-    { label: "Партнеров", value: "10+" },
+  const advantages = [
+    {
+      icon: <Star className="w-6 h-6" />,
+      title: "15+ лет опыта",
+      description: "Создаем уникальные световые решения с 2008 года"
+    },
+    {
+      icon: <Award className="w-6 h-6" />,
+      title: "1000+ проектов",
+      description: "Успешно реализованных дизайнерских проектов"
+    },
+    {
+      icon: <MessageSquare className="w-6 h-6" />,
+      title: "Консультации",
+      description: "Бесплатные консультации дизайнера по свету"
+    }
+  ];
+
+  const services = [
+    {
+      title: "Подбор освещения",
+      description: "Профессиональный подбор светильников под ваш интерьер",
+      items: ["Расчет освещенности", "3D-визуализация", "Подбор цветовой температуры"]
+    },
+    {
+      title: "Монтаж и установка",
+      description: "Квалифицированная установка любой сложности",
+      items: ["Профессиональный монтаж", "Настройка систем управления", "Гарантийное обслуживание"]
+    },
+    {
+      title: "Проектирование",
+      description: "Создание проекта освещения для вашего помещения",
+      items: ["Светотехнический расчет", "Схема размещения", "Спецификация оборудования"]
+    }
   ];
 
   return (
-    <section className="bg-gray-50 text-gray-800 py-20 md:py-40">
-      {/* Основной заголовок */}
-      <div className="container max-w-5xl px-4 mx-auto text-center">
-        <motion.h1
-          className="text-4xl font-extrabold text-gray-800 mb-6"
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-        >
-          Обо мне
-        </motion.h1>
-        <motion.p
-          className="text-lg text-gray-600 max-w-3xl mx-auto"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.5 }}
-        >
-          Я - профессиональный разработчик, который создает современные и эффективные решения для своих клиентов.
-        </motion.p>
-      </div>
-
-      {/* Преимущества */}
-      <div className="container max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
-        {values.map((value, idx) => (
+    <div className="min-h-screen mt-20 bg-gradient-to-b from-gray-50 to-white">
+      {/* Hero Section */}
+      <div className="relative overflow-hidden bg-black">
+        <div className="absolute inset-0 bg-[url('/api/placeholder/1920/1080')] opacity-50 bg-cover bg-center" />
+        <div className="relative container mx-auto px-4 py-32">
           <motion.div
-            key={idx}
-            className="flex flex-col items-center text-center bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: idx * 0.2 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="max-w-3xl mx-auto text-center text-white"
           >
-            <div className="mb-4">{value.icon}</div>
-            <h3 className="text-xl font-bold text-gray-800">{value.title}</h3>
-            <p className="text-gray-600 mt-2">{value.description}</p>
+            <Gem className="w-16 h-16 mx-auto mb-8 text-yellow-400" />
+            <h1 className="text-5xl font-black mb-6">
+              Искусство света
+            </h1>
+            <p className="text-xl text-gray-200 leading-relaxed mb-8">
+              Мы создаем неповторимую атмосферу в вашем доме с помощью эксклюзивных светильников и профессиональных решений по освещению
+            </p>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-yellow-400 text-black px-8 py-4 rounded-lg font-medium hover:bg-yellow-300 transition-colors"
+            >
+              Получить консультацию
+            </motion.button>
           </motion.div>
-        ))}
+        </div>
       </div>
 
-      {/* Статистика */}
-      <div className="container max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-16">
-        {statistics.map((stat, idx) => (
-          <motion.div
-            key={idx}
-            className="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: idx * 0.2 }}
-          >
-            <span className="text-3xl font-extrabold text-blue-500">{stat.value}</span>
-            <p className="text-gray-700 mt-2">{stat.label}</p>
-          </motion.div>
-        ))}
-      </div>
+   
 
-      {/* Завершающий блок */}
-      <div className="container max-w-7xl mx-auto text-center mt-16">
-        <motion.h2
-          className="text-3xl font-bold text-gray-800 mb-4"
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-        >
-          Готовы начать?
-        </motion.h2>
-        <motion.p
-          className="text-lg text-gray-600 mt-4 max-w-3xl mx-auto"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.7, delay: 0.3 }}
-        >
-          Свяжитесь со мной, и я помогу вам создать решение, которое превзойдет ваши ожидания.
-        </motion.p>
-        <motion.button
-          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg mt-8 transition-colors duration-300"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.5 }}
-        >
-          Связаться со мной
-        </motion.button>
+     
+      {/* CTA Section */}
+      <div className=" bg-black">
+        <div className="container mx-auto px-4 py-16">
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <h2 className="text-3xl font-bold mb-6">Готовы создать идеальное освещение?</h2>
+              <p className="text-lg mb-8">
+                Запишитесь на бесплатную консультацию с нашим дизайнером по свету
+              </p>
+              <button className="bg-black text-white px-8 py-4 rounded-lg font-medium hover:bg-gray-900 transition-colors inline-flex items-center">
+                <Phone className="w-5 h-5 mr-2" />
+                Записаться на консультацию
+              </button>
+            </motion.div>
+          </div>
+        </div>
       </div>
-    </section>
+    </div>
   );
 };
 

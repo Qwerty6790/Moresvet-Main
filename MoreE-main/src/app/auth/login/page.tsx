@@ -76,7 +76,7 @@ const Login: React.FC = () => {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-neutral-600 focus:border-neutral-50000 text-base"
               placeholder="example@mail.com"
               required
             />
@@ -94,7 +94,7 @@ const Login: React.FC = () => {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-neutral-600 focus:border-neutral-500 text-base"
               placeholder="Пароль"
               required
             />
@@ -103,12 +103,12 @@ const Login: React.FC = () => {
           <div className="flex items-center justify-between mb-6">
             <a
               href="/auth/reset-password"
-              className="text-sm text-blue-600 hover:underline"
+              className="text-sm text-black font-bold hover:underline"
             >
               Восстановить пароль
             </a>
             <a
-              className="text-sm text-blue-600 hover:underline"
+              className="text-sm text-black font-bold hover:underline"
               href="/auth/register"
             >
               Нет аккаунта?
@@ -117,7 +117,7 @@ const Login: React.FC = () => {
   
           <button
             type="submit"
-            className="w-full py-3 px-4 bg-blue-500 text-white font-medium rounded-md shadow-md transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+            className="w-full py-3 px-4 bg-white text-black font-medium rounded-md shadow-md transition duration-300 hover:bg-black hover:text-white focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
           >
             Войти
           </button>
