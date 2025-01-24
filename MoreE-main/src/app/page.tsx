@@ -1,10 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Analytics } from "@vercel/analytics/react";
-import KinkLight from './cardproducts/KinkLight/page';
-import LightStar from './cardproducts/LightStar/page';
-import { motion } from 'framer-motion';
+import { Analytics } from "@vercel/analytics/react";;
 import ImageHoverEffect from '@/components/Banner';
 
 export default function Home() {
