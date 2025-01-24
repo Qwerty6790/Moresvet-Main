@@ -48,7 +48,7 @@ const Header = () => {
   
       <nav className="hidden lg:flex flex-wrap items-center space-x-2 lg:space-x-6 text-sm font-semibold text-black">
         <a href="/about" className="hover:text-blue-600 truncate">ДИЗАЙНЕРАМ</a>
-        <a href="#" className="hover:text-blue-600 truncate">НАШИ ПРОЕКТЫ</a>
+        <a href="/project" className="hover:text-blue-600 truncate">НАШИ ПРОЕКТЫ</a>
         <a href="#" className="hover:text-blue-600 truncate">КОНТАКТЫ</a>
         <a href="/3d" className="hover:text-blue-600 truncate">3D МОДЕЛИ</a>
         <a href="#" className="hover:text-blue-600 truncate">ОПЛАТА</a>

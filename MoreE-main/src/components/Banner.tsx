@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import LightStar from '@/app/cardproducts/LightStar/page';
-import KinkLight from '@/app/cardproducts/KinkLight/page';
-import Maytoni from '@/app/cardproducts/Maytoni/page';
+import Maytoni from '@/app/cardproducts/LightStar2/page';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import SmartLightingBot from './ChatBot';
+import LightStar2 from '@/app/cardproducts/LightStar2/page';
 
 export default function ImageHoverEffect() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -92,12 +92,9 @@ export default function ImageHoverEffect() {
 
       {/* Additional Section: Chandeliers */}
       <div className="mt-16 px-6 lg:px-20">
-        <h2 className="text-black text-2xl sm:text-4xl lg:text-5xl font-bold mb-8">
-     Maytoni
-        </h2>
-        <Maytoni />
       </div>
-      <div className=''>
+      <div>
+        <LightStar2 />
       <SmartLightingBot />
       </div>
     </div>

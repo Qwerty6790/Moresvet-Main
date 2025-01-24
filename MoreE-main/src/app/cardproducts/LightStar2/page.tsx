@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import axios from 'axios'; // Импортируем axios
-import { CatalogOfMaytoni,   ProductI } from './CatalogOfMaytoni';
-import LightStar from '../LightStar/page';
+import { CatalogOfLightStar,   ProductI } from './CatalogLightStar';
+;
 
 interface Category {
   label: string;
@@ -17,29 +17,25 @@ interface Brand {
 }
 
 const selectedBrand: Brand = {
-    name: 'Maytoni',
-    categories: [
-        { label: 'Люстра', searchName: 'Люстра' },
-        { label: 'Настольная лампа', searchName: 'Настольная лампа' },
-        { label: 'Кресло', searchName: 'Кресло' },
-        { label: 'Торшер', searchName: 'Торшер' },
-        { label: 'Настенный Светильник', searchName: 'Настенный Светильник' },
-        { label: 'Светильник уличный', searchName: 'Светильник уличный' },
-        { label: 'Подвес', searchName: 'Подвес' },
-        { label: 'Бра', searchName: 'Бра' },
-        { label: 'Светильник', searchName: 'Светильник' },
-        { label: 'Трековый светильник', searchName: 'трековый светильник' },
-        { label: 'Настенный светильник', searchName: 'настенный светильник' },
-        { label: 'Шнур с перекл', searchName: 'Шнур с перекл' },
-    ],
-    collection: ''
-}
+  name: 'LightStar',
+  categories: [
+    { label: 'Люстра', searchName: 'Люстра' },
+    { label: 'Люстра подвесная', searchName: 'Люстра подвесная' },
+    { label: 'Подвес', searchName: 'Подвес' },
+    { label: 'Бра', searchName: 'Бра' },
+    { label: 'Светильник', searchName: 'Светильник' },
+    { label: 'Настольная лампа', searchName: 'Настольная лампа' },
+    { label: 'Торшер', searchName: 'Торшер' },
+    { label: 'Светильник уличный', searchName: 'Светильник уличный' },
+  ],
+  collection: ''
+};
 
 const minPrice = 0;
 const maxPrice = 1000000;
 const page = 1;
 
-const Maytoni: React.FC = () => {
+const LightStar2: React.FC = () => {
   const [products, setProducts] = useState<ProductI[]>([]);
   const [error, setError] = useState<string | null>(null); // Error state
 
@@ -48,8 +44,8 @@ const Maytoni: React.FC = () => {
       const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${selectedBrand.name}`, {
         params: {
           page,
-          limit: 11,
-          name: '99',
+          limit:3,
+          name: 'Faraone',
           minPrice,
           maxPrice,
         },
@@ -76,9 +72,9 @@ const Maytoni: React.FC = () => {
       transition={{ duration: 0.5 }}
     >
       {error && <div className="text-red-500">{error}</div>} {/* Display error if it exists */}
-      <CatalogOfMaytoni products={products} />
+      <CatalogOfLightStar products={products} />
     </motion.div>
   );
 };
 
-export default Maytoni;
+export default LightStar2;

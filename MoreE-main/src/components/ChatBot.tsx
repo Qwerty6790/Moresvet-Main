@@ -176,7 +176,7 @@ ${product.recommendations}
   return (
     <div>
       <div
-        className={`fixed bottom-6 right-0 max-md:w-full w-96 bg-white shadow-xl  rounded-lg overflow-hidden flex flex-col transition-all duration-300 transform ${
+        className={`fixed bottom-6 max-md:hidden right-0 max-md:w-full w-96  bg-white shadow-xl  rounded-lg overflow-hidden flex flex-col transition-all duration-300 transform ${
           isOpen ? 'h-[600px]' : 'h-[60px]'
         }`}
       >

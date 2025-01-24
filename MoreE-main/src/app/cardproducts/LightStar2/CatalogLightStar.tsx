@@ -12,7 +12,7 @@ const getStockCount = (stock: string): number => {
   return match ? parseInt(match[0], 10) : 0;
 };
 
-export const CatalogOfMaytoni: React.FC<CatalogOfProductsProps> = ({ products }) => {
+export const CatalogOfLightStar: React.FC<CatalogOfProductsProps> = ({ products }) => {
   const [isInView, setIsInView] = useState<boolean[]>([]);
 
   useEffect(() => {
@@ -72,7 +72,7 @@ export const CatalogOfMaytoni: React.FC<CatalogOfProductsProps> = ({ products })
             <div
               key={product._id}
               id={`product-${index}`}
-              className={`relative shadow-lg transition-opacity duration-500 rounded-lg overflow-hidden transform ${
+              className={`relative  transition-opacity duration-500 rounded-lg overflow-hidden transform ${
                 isInView[index] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
               }`}
             >
