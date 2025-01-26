@@ -29,11 +29,6 @@ const Header = () => {
     <header className={`bg-white py-4 md:py-6 border-b border-gray-300 fixed top-0 w-full z-50 ${isScrolled ? "shadow-lg" : ""}`}>
     {/* Repeated Banner */}
     <div className="w-full h-5 flex items-center overflow-hidden">
-        <img
-          src="/images/topheader.jpg"
-          alt="Top Banner"
-          className="w-full h-full object-contain bg-repeat-x"
-        />
       </div>
     <div className="container mx-auto flex flex-wrap items-center justify-between px-4">
     <p className="mt-4 absolute -z-10 font-bold opacity-30 text-4xl md:text-9xl text-neutral-400">
