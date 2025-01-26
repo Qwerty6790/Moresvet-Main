@@ -95,7 +95,7 @@ export default function ImageHoverEffect() {
       </div>
       <div>
         <LightStar2 />
-      <SmartLightingBot />
+     
       </div>
     </div>
   );

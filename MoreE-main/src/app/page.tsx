@@ -3,6 +3,7 @@
 import React from 'react';
 import { Analytics } from "@vercel/analytics/react";;
 import ImageHoverEffect from '@/components/Banner';
+import SmartLightingBot from '@/components/ChatBot';
 
 export default function Home() {
   return (
@@ -13,9 +14,7 @@ export default function Home() {
 
       {/* Background Products with Motion */}
      <ImageHoverEffect />
-      {/* Content Container */}
-      <div className="relative w-full flex flex-col items-center px-6 lg:px-16 z-10 text-center">        
-      </div>
+     <SmartLightingBot />
     </div>
   );
 }

@@ -189,7 +189,7 @@ ${product.recommendations}
         >
           <div className="flex items-center gap-2">
             <MessageCircle size={20} className="animate-pulse" />
-            <span className="font-semibold">Умный помощник по освещению</span>
+            <span className="font-semibold">Умный помощник</span>
           </div>
           <div className="flex items-center gap-2">
             {theme === 'light' ? (
