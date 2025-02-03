@@ -40,7 +40,7 @@ export default function ImageHoverEffect() {
       {/* Hero Section */}
       <div className="flex flex-col  max-md:mt-32 lg:flex-row w-full h-auto lg:h-[600px] bg-white">
         {/* Left Block: Slider */}
-        <div className="w-full max-md:hidden h-screen lg:h-[710px] relative overflow-hidden">
+        <div className="w-full max-md:hidden h-screen lg:h-full relative overflow-hidden">
           {slides.map((slide, index) => (
             <motion.img
               key={index}
@@ -55,6 +55,7 @@ export default function ImageHoverEffect() {
               }}
               transition={{ duration: 0.8 }}
             />
+            
           ))}
 
           {/* Left Arrow */}
@@ -62,7 +63,7 @@ export default function ImageHoverEffect() {
             onClick={handlePrevSlide}
             className="absolute left-4 top-1/2 transform -translate-y-1/2  p-3 rounded-full shadow-md "
           >
-            <ChevronLeft size={40} />
+            <ChevronLeft color='black' size={40} />
           </button>
 
           {/* Right Arrow */}
@@ -70,33 +71,22 @@ export default function ImageHoverEffect() {
             onClick={handleNextSlide}
             className="absolute right-4 top-1/2 transform -translate-y-1/2  p-3 rounded-full shadow-md "
           >
-            <ChevronRight size={40} />
+            <ChevronRight color='black' size={40} />
           </button>
 
           {/* Pagination Dots */}
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-3">
-            {slides.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentSlide(index)}
-                className={`w-4 h-4 rounded-full ${
-                  currentSlide === index ? 'bg-white' : 'bg-gray-400'
-                } border border-gray-300`}
-              ></button>
-            ))}
-          </div>
+        
         </div>
       </div>
 
     
       {/* Additional Section: Chandeliers */}
-      <div className="mt-16 px-6 lg:px-20">
+      <div className=" px-6 lg:px-20">
       </div>
       <div>
           <LightStar />
 
-       
-     
+  
       </div>
     </div>
   );

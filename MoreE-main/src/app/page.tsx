@@ -13,10 +13,8 @@ export default function Home() {
       <Analytics />
       {/* Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-b z-0" />
-
       {/* Background Products with Motion */}
      <ImageHoverEffect />
-   
     </div>
     </div>
   );
