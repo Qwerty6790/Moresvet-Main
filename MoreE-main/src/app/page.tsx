@@ -4,9 +4,11 @@ import React from 'react';
 import { Analytics } from "@vercel/analytics/react";;
 import ImageHoverEffect from '@/components/Banner';
 import SmartLightingBot from '@/components/ChatBot';
+import LightStar from './cardproducts/LightStar/page';
 
 export default function Home() {
   return (
+    <div>
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b  relative overflow-hidden">
       <Analytics />
       {/* Background Gradient */}
@@ -14,6 +16,8 @@ export default function Home() {
 
       {/* Background Products with Motion */}
      <ImageHoverEffect />
+   
+    </div>
     </div>
   );
 }

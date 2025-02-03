@@ -12,11 +12,6 @@ export default function ImageHoverEffect() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const slides = [
     { image: './images/1.png' },
-    { image: './images/2.png' },
-    { image: './images/3.png' },
-    { image: './images/4.png' },
-    { image: './images/5.png' },
-    { image: './images/6.png' },
   ];
 
   useEffect(() => {
@@ -88,13 +83,14 @@ export default function ImageHoverEffect() {
         </div>
       </div>
 
-      <LightStar />
-
+    
       {/* Additional Section: Chandeliers */}
       <div className="mt-16 px-6 lg:px-20">
       </div>
       <div>
-        <LightStar2 />
+          <LightStar />
+
+       
      
       </div>
     </div>
