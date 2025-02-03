@@ -14,7 +14,6 @@ export default function Home() {
 
       {/* Background Products with Motion */}
      <ImageHoverEffect />
-     <SmartLightingBot />
     </div>
   );
 }

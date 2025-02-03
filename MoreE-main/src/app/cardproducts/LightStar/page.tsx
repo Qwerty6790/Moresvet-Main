@@ -47,8 +47,8 @@ const LightStar: React.FC = () => {
       const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${selectedBrand.name}`, {
         params: {
           page,
-          limit: 7,
-          name: 'MARMARA',
+          limit: 5,
+          name: 'LODI',
           minPrice,
           maxPrice,
         },

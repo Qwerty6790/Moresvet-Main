@@ -49,6 +49,13 @@ const Header = () => {
         >
           s.roma86@mail.ru
         </a>
+        <a
+          href="mailto:s.roma86@mail.ru"
+          className="hidden sm:block text-xs sm:text-sm text-black hover:underline truncate"
+        >
+          С 9:00-21:00
+          круглосуточно
+        </a>
       </div>
   
       <nav className="hidden lg:flex flex-wrap items-center space-x-2 lg:space-x-6 text-sm font-semibold text-black">

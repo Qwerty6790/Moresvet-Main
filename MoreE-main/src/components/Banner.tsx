@@ -40,7 +40,7 @@ export default function ImageHoverEffect() {
       {/* Hero Section */}
       <div className="flex flex-col  max-md:mt-32 lg:flex-row w-full h-auto lg:h-[600px] bg-white">
         {/* Left Block: Slider */}
-        <div className="w-full max-md:hidden h-screen lg:h-[610px] relative overflow-hidden">
+        <div className="w-full max-md:hidden h-screen lg:h-[710px] relative overflow-hidden">
           {slides.map((slide, index) => (
             <motion.img
               key={index}
