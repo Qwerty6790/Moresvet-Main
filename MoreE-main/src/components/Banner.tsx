@@ -15,14 +15,6 @@ export default function ChandelierSlider() {
       description: '43W 723227 ДЕРЕВО',
       details: '34162 ₽'
     },
-   
-    { 
-      image: './images/3.png', 
-      title: 'Подвесной светильник',
-      description: 'DK4050BG матовое золото ',
-      details: '3170 ₽'
-    },
-    
     { 
       image: './images/5.png', 
       title: 'Люстра VARESE',
