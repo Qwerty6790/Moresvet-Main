@@ -329,7 +329,7 @@ const [searchQuery, setSearchQuery] = useState('');
 
             {/* Правая часть - карточки товаров */}
             <div className="hidden lg:grid grid-cols-3 gap-6 w-[900px]">
-              {products.slice(0, 6).map((product, index) => (
+              {products.slice(0, 3).map((product, index) => (
                 <Link 
                   href={`/products/${product.source}/${product.article}`}
                   key={product._id} 
@@ -342,13 +342,13 @@ const [searchQuery, setSearchQuery] = useState('');
                   {getStockCount(product.stock) > 0 ? (
                     <div className="absolute top-4 right-4 flex items-center space-x-2 bg-white/10 
                                   backdrop-blur-md px-3 py-1 rounded-full">
-                      <div className="w-2 h-2 rounded-full bg-white animate-pulse"></div>
+                    
                       <span className="text-xs text-white/80">В наличии</span>
                     </div>
                   ) : (
-                    <div className="absolute top-4 right-4 flex items-center space-x-2 bg-white/10 
+                    <div className="absolute top-4 right-4 flex items-center space-x-2  
                                   backdrop-blur-md px-3 py-1 rounded-full">
-                      <div className="w-2 h-2 rounded-full bg-red-500/50"></div>
+                    
           
                     </div>
                   )}
