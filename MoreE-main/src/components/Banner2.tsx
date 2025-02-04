@@ -53,21 +53,7 @@ export default function ImageHoverEffect2() {
             
           ))}
 
-          {/* Left Arrow */}
-          <button
-            onClick={handlePrevSlide}
-            className="absolute left-4 top-1/2 transform -translate-y-1/2  p-3 rounded-full shadow-md "
-          >
-            <ChevronLeft color='black' size={40} />
-          </button>
-
-          {/* Right Arrow */}
-          <button
-            onClick={handleNextSlide}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2  p-3 rounded-full shadow-md "
-          >
-            <ChevronRight color='black' size={40} />
-          </button>
+       
 
           {/* Pagination Dots */}
         
