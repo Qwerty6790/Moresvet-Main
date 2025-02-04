@@ -28,13 +28,9 @@ const Header = () => {
   return (
     <header className={`bg-white py-4 md:py-6 border-b border-gray-300 fixed top-0 w-full z-50 ${isScrolled ? "shadow-lg" : ""}`}>
     {/* Repeated Banner */}
-    <div className="w-full h-5 flex items-center overflow-hidden">
+    <div className="w-full  flex items-center overflow-hidden">
       </div>
-    <div className="container mx-auto flex flex-wrap items-center justify-between px-4">
-    <p className="mt-4 absolute -z-10 font-bold opacity-30 text-4xl md:text-9xl text-neutral-400">
-           MoreElecktriki
-          </p> 
-        
+    <div className="container mx-auto flex flex-wrap items-center justify-between px-4">  
       <div className="flex text-sm font-semibold items-center space-x-2 md:space-x-4 w-full md:w-auto justify-between md:justify-start">
         <span className="text-xs sm:text-sm text-black truncate">
           Ваш город: <span className="font-medium">Москва</span>
