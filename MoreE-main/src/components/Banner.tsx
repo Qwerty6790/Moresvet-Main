@@ -19,7 +19,7 @@ export default function ChandelierSlider() {
     { 
       image: './images/3.png', 
       title: 'Подвесной светильник',
-      description: 'DK4050-BG  матовое золото ',
+      description: 'DK4050BG матовое золото ',
       details: '3170 ₽'
     },
     
@@ -108,16 +108,16 @@ export default function ChandelierSlider() {
                 className="w-1/3 space-y-6 pr-10"
               >
                 <div className="flex items-center space-x-3">
-                  <Gem className="text-gold-500с w-full h-10" />
-                  <h2 className="text-7xl font-thin tracking-wider text-gray-800">
+                  <Gem className="text-gold-500 w-full h-10" />
+                  <h2 className="text-7xl max-md:text-5xl font-thin tracking-wider text-gray-800">
                     {slides[currentSlide].title}
                   </h2>
                 </div>
-                <p className="text-7xl font-light text-gray-600">
+                <p className="text-7xl max-md:text-4xl  font-light text-gray-600">
                   {slides[currentSlide].description}
                 </p>
-                <div className="bg-gray-100 rounded-xl p-4 border border-gray-200 shadow-sm">
-                  <p className="text-3xl font-medium text-gray-500 uppercase tracking-widest">
+                <div className=" rounded-xl p-2 max-md:border-hidden  border border-gray-200 shadow-sm">
+                  <p className="text-2xl  font-medium uppercase tracking-widest">
                     {slides[currentSlide].details}
                   </p>
                 </div>
