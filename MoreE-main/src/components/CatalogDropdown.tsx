@@ -1,28 +1,28 @@
 'use client';
-import { AlignJustify, X } from 'lucide-react';
+import { AlignJustify, Menu, X } from 'lucide-react';
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
 const DropdownMenu: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [hoveredCategoryIndex, setHoveredCategoryIndex] = useState<number>(0); // Default to the first category
+  const [hoveredCategoryIndex, setHoveredCategoryIndex] = useState<number>(0);
 
   const categories = [
     { 
       links: [{ href: '/products', label: 'Все товары' }],
-      images: ['/images/p1.png', '/images/p3.png', '/images/p2.png'],
+      image: '/images/p1.png'
     },
     { 
       links: [{ href: '/auth/register', label: 'Войти' }],
-      images: ['/images/p4.png', '/images/p5.png'],
+      image: '/images/p1.png'
     },
     { 
       links: [{ href: '/cart', label: 'Корзина' }],
-      images: ['/images/p6.png', '/images/p7.png'],
+      image: '/images/p1.png'
     },
     { 
       links: [{ href: '/liked', label: 'Избранное' }],
-      images: ['/images/p8.png', '/images/p9.png'],
+      image: '/images/p1.png'
     },
   ];
 
@@ -35,7 +35,7 @@ const DropdownMenu: React.FC = () => {
               <li
                 key={link.href}
                 className="relative p-10 max-md:text-4xl text-6xl"
-                onMouseEnter={() => setHoveredCategoryIndex(index)} // Update hovered category
+                onMouseEnter={() => setHoveredCategoryIndex(index)}
               >
                 <motion.a
                   href={link.href}
@@ -53,40 +53,52 @@ const DropdownMenu: React.FC = () => {
     </div>
   );
 
-  const renderImages = (): JSX.Element => {
-    const images = categories[hoveredCategoryIndex]?.images || [];
+  const renderImage = (): JSX.Element => {
+    const image = categories[hoveredCategoryIndex]?.image;
     return (
       <motion.div
-        className="top-1/2 right-10 max-md:hidden transform -translate-y-1/2 flex space-y-4"
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: 50 }}
+        className="fixed top-0 right-0 w-1/2 h-full max-md:hidden flex items-center justify-center "
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
         transition={{ type: 'spring', stiffness: 200, damping: 20 }}
       >
-        {images.map((src, index) => (
-          <motion.img
-            key={index}
-            src={src}
-            alt={`Category ${index}`}
-            className="rounded-lg shadow-lg w-[500px] h-[200px] object-contain"
-            initial={{ scale: 0.9 }}
-            animate={{ scale: 1 }}
-            whileHover={{ scale: 1.05 }}
-          />
-        ))}
+        <motion.img
+          src={image}
+          alt={`Category ${hoveredCategoryIndex}`}
+          className="w-full h-full object-contain "
+          initial={{ scale: 0.9 }}
+          animate={{ scale: 1 }}
+          whileHover={{ scale: 1.02 }}
+          transition={{ duration: 0.3 }}
+        />
       </motion.div>
     );
   };
+
+  const CloseButton = () => (
+    <motion.button
+      onClick={() => setIsOpen(false)}
+      className="fixed top-8 right-8 z-30 p-2 rounded-full bg-white shadow-lg hover:shadow-xl transition-shadow"
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.9 }}
+      initial={{ rotate: -90, opacity: 0 }}
+      animate={{ rotate: 0, opacity: 1 }}
+      exit={{ rotate: 90, opacity: 0 }}
+      transition={{ duration: 0.2 }}
+    >
+      <X size={32} className="text-neutral-800" />
+    </motion.button>
+  );
 
   return (
     <div className="relative">
       {/* Desktop menu toggle */}
       <div
         className="hidden lg:flex items-center cursor-pointer"
-        onClick={() => setIsOpen(!isOpen)} // Toggle menu
+        onClick={() => setIsOpen(!isOpen)}
       >
-        <AlignJustify size={30} />
-        <span className="ml-2 font-medium">Каталог</span>
+        <Menu className="w-9 h-8 mr-3 text-black" />
       </div>
 
       {/* Mobile menu toggle */}
@@ -99,32 +111,26 @@ const DropdownMenu: React.FC = () => {
 
       {/* Dropdown menu */}
       <motion.div
-        className={`fixed inset-0 bg-white text-black z-20 p-6 transition-all duration-300 ${
+        className={`fixed inset-0 bg-white text-black z-20 transition-all duration-300 ${
           isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
         initial={{ opacity: 0 }}
         animate={{ opacity: isOpen ? 1 : 0 }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       >
-        {/* Header with close button */}
-        <div className="flex justify-between items-center border-b border-gray-300 pb-4">
+        {isOpen && <CloseButton />}
+        
+        {/* Header */}
+        <div className="flex items-center p-6 ">
           <h2 className="text-4xl font-bold">Каталог</h2>
-          <button
-            onClick={() => setIsOpen(false)} // Close menu
-            className="text-black hover:text-gray-700"
-          >
-            <X size={24} />
-          </button>
         </div>
 
         {/* Menu content */}
-        <div className="relative mt-4 flex">
-          <div
-            className="w-3/4 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent max-md:overflow-y-auto max-h-[70vh] pr-4"
-          >
+        <div className="relative flex h-full">
+          <div className="w-1/2 p-6 overflow-y-auto">
             {renderCategories()}
           </div>
-          <div className="relative">{renderImages()}</div>
+          {renderImage()}
         </div>
       </motion.div>
     </div>

@@ -1,86 +1,91 @@
 import React from 'react';
-import { FaFacebook, FaInstagram, FaTwitter, FaTelegram } from 'react-icons/fa';
 
-const Footer: React.FC = () => {
+const Footer = () => {
   return (
-    <footer className="bg-white text-black py-8">
-      {/* Top Section */}
-      <div className="container mx-auto px-4 lg:px-16 grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* Company Info */}
-        <div className="space-y-4">
-          <h4 className="text-lg font-semibold">MoreElectriki</h4>
-          <p className="text-sm text-black">
-            Электротовары для вашего дома и бизнеса. Качество и надежность — наша цель.
-          </p>
+    <footer className="bg-white text-gray-400 py-8">
+      <div className="container mx-auto px-4">
+        {/* Main Footer Content */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          {/* О Minimir */}
+          <div>
+            <h3 className="text-black text-2xl sm:text-3xl mb-4">MoreElecriki</h3>
+            <ul className="space-y-2">
+              <li><a href="#" className="hover:text-white">О компании</a></li>
+              <li><a href="#" className="hover:text-white">Контакты</a></li>
+              <li><a href="#" className="hover:text-white">Карта сайта</a></li>
+              <li><a href="#" className="hover:text-white">Публичная оферта</a></li>
+              <li><a href="#" className="hover:text-white">Политика конфиденциальности</a></li>
+            </ul>
+          </div>
+
+          {/* Покупателю */}
+          <div>
+            <h3 className="text-white text-2xl sm:text-3xl mb-4">Покупателю</h3>
+            <ul className="space-y-2">
+              <li><a href="#" className="hover:text-white">Личный кабинет</a></li>
+              <li><a href="#" className="hover:text-white">Доставка и оплата</a></li>
+              <li><a href="#" className="hover:text-white">Обмен и возврат</a></li>
+              <li><a href="#" className="hover:text-white">Онлайн примерочная</a></li>
+              <li><a href="#" className="hover:text-white">Гарантия</a></li>
+            </ul>
+          </div>
+
+          {/* Дизайнерам */}
+          <div>
+            <h3 className="text-white text-2xl sm:text-3xl mb-4">Дизайнерам</h3>
+            <ul className="space-y-2">
+              <li><a href="#" className="hover:text-white">База 3D моделей</a></li>
+              <li><a href="#" className="hover:text-white">Strotskis Club</a></li>
+              <li><a href="#" className="hover:text-white">Гайд для дизайнеров Werkel</a></li>
+              <li><a href="#" className="hover:text-white">Каталог Werkel 2024</a></li>
+              <li><a href="#" className="hover:text-white">Трековые системы освещения Elektrostandard</a></li>
+            </ul>
+          </div>
+
+          {/* Консультация и Бренды */}
+          <div className="space-y-8">
+            <div>
+              <h3 className="text-white text-2xl sm:text-3xl mb-4">Консультация 24/7</h3>
+              <div className="space-y-2">
+                <p>8 800 777 15 37</p>
+                <p>info@minimir.ru</p>
+                <p>WhatsApp</p>
+                <p>Telegram</p>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-black text-2xl sm:text-3xl mb-4">Наши бренды</h3>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                <div className="text-black">EUROSVET</div>
+                <div className="text-black">WERKEL</div>
+                <div className="text-black">BOGATES</div>
+                <div className="text-black">GOTTIS</div>
+                <div className="text-black">ELEKTROSTANDARD</div>
+                <div className="text-black">STROTSKIS</div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Quick Links */}
-        <div className="space-y-4">
-          <h4 className="text-lg font-semibold">Быстрые ссылки</h4>
-          <ul className="space-y-2">
-            <li>
-              <a href="/about" className="text-sm text-black hover:text-gray-400 transition">
-                О компании
-              </a>
-            </li>
-            <li>
-              <a href="/products" className="text-sm text-black hover:text-gray-400 transition">
-                Каталог товаров
-              </a>
-            </li>
-            <li>
-              <a href="/contact" className="text-sm text-black hover:text-gray-400 transition">
-                Контакты
-              </a>
-            </li>
-            <li>
-              <a href="/faq" className="text-sm text-black hover:text-gray-400 transition">
-                Частые вопросы
-              </a>
-            </li>
-          </ul>
+        {/* Newsletter Section */}
+        <div className="mt-8">
+          <h3 className="text-white text-2xl sm:text-3xl mb-4">Будьте в тренде</h3>
+          <p className="mb-4">Подписывайтесь на наши каналы в соцсетях и email рассылку и узнавайте первыми о самых интересных новинках и предложениях.</p>
+          <div className="flex gap-4 flex-wrap">
+            <a href="#" className="hover:text-white text-sm sm:text-base">VK</a>
+            <a href="#" className="hover:text-white text-sm sm:text-base">YouTube</a>
+            <a href="#" className="hover:text-white text-sm sm:text-base">Pinterest</a>
+            <a href="#" className="hover:text-white text-sm sm:text-base">Telegram</a>
+          </div>
         </div>
 
-        {/* Contact Info */}
-        <div className="space-y-4">
-          <h4 className="text-lg font-semibold">Контакты</h4>
-          <ul className="space-y-2 text-sm text-black">
-            <li>Адрес: г. Москва, ул. Электриков, д. 5</li>
-            <li>Телефон: <a href="tel:+1234567890" className="hover:text-white">+7 (123) 456-78-90</a></li>
-            <li>Email: <a href="mailto:info@moreelectriki.com" className="hover:text-white">info@moreelectriki.com</a></li>
-          </ul>
+        {/* Copyright */}
+        <div className="mt-8 text-sm text-center sm:text-left">
+          <p>©1998-2025, Minimir.ru - официальный интернет-магазин производителя.</p>
+          <p>Использование материалов сайта без согласования запрещено.</p>
         </div>
       </div>
-
-      {/* Divider */}
-      <div className="border-t border-gray-800 my-6"></div>
-
-      {/* Bottom Section */}
-      <div className="container mx-auto px-4 lg:px-16 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
-        <p className="text-sm text-black">
-          &copy; {new Date().getFullYear()} MoreElectriki. Все права защищены.
-        </p>
-        <div className="flex space-x-4">
-          <a href="#" className="text-black hover:text-gray-400 transition">
-            <FaFacebook size={20} />
-          </a>
-          <a href="#" className="text-black hover:text-gray-400 transition">
-            <FaInstagram size={20} />
-          </a>
-          <a href="#" className="text-black hover:text-gray-400 transition">
-            <FaTwitter size={20} />
-          </a>
-          <a href="#" className="text-black hover:text-gray-400 transition">
-            <FaTelegram size={20} />
-          </a>
-        </div>
-      </div>
-      <div className=" absolute  space-y-5 ">
-          <p className="mt-4 font-bold text-4xl md:text-9xl text-neutral-400">
-           10 000+ товаров
-          </p>    
-          
-        </div>
     </footer>
   );
 };

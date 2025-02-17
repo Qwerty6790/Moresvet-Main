@@ -48,7 +48,7 @@ const LightStar: React.FC = () => {
         params: {
           page,
           limit: 4,
-          name: 'LODI',
+          name: 'LightStar',
           minPrice,
           maxPrice,
         },
@@ -83,7 +83,7 @@ const LightStar: React.FC = () => {
         <div className="grid grid-cols-3 gap-4">
         </div>
       ) : (
-        <CatalogOfLightStar products={products} />
+        <CatalogOfLightStar products={products} viewMode={'table'} />
       )}
     </motion.div>
   );

@@ -1,120 +1,333 @@
-import React, { useState, useEffect } from "react";
-import { SearchIcon, X, Menu, Grid, User } from "lucide-react";
-import { FaHeart } from "react-icons/fa";
-import { BiBasket } from "react-icons/bi";
-import { AnimatePresence, motion } from "framer-motion";
-import { FiSearch } from "react-icons/fi";
-import DropdownMenu from "./CatalogDropdown";
+import React, { useState, useEffect } from 'react';
+import { Search, Heart, ShoppingBag, User, Menu as MenuIcon, X, ChevronRight, Phone, Mail, MapPin } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import DropdownMenu from './CatalogDropdown';
+import Navigation from './Menu';
+
+interface MenuItem {
+  id: string;
+  title: string;
+  icon: React.ComponentType<any>;
+  component?: React.ComponentType<any>;
+  items?: string[];
+}
 
 const Header = () => {
-  const [cartCount, setCartCount] = useState(0);
-  const [wishlistCount, setWishlistCount] = useState(0);
-  const [notificationsCount, setNotificationsCount] = useState(3);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
+  const [prevScrollPos, setPrevScrollPos] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
+  const router = useRouter();
+
+  // Закрытие меню при клике вне его
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const mobileMenu = document.getElementById('mobile-menu');
+      if (mobileMenu && !mobileMenu.contains(event.target as Node)) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    if (isMobileMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMobileMenuOpen]);
+
+  // Блокировка скролла при открытом меню
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen]);
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      router.push(`/search?query=${encodeURIComponent(searchQuery)}`);
+      setIsSearchOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 500);
+
+    return () => clearTimeout(handler);
+  }, [searchQuery]);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      const currentScrollPos = window.scrollY;
+      const maxScroll = 100;
+      const progress = Math.min(currentScrollPos / maxScroll, 1);
+      setScrollProgress(progress);
+      setIsScrolled(currentScrollPos > 50 && currentScrollPos > prevScrollPos);
+      setPrevScrollPos(currentScrollPos);
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [prevScrollPos]);
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (debouncedSearchQuery.trim()) {
+      const encodedSearchQuery = encodeURIComponent(debouncedSearchQuery);
+      router.push(`/search/${encodedSearchQuery}?query=${encodedSearchQuery}`);
+      setIsSearchOpen(false);
+    }
+  };
+
+  const logoHeight = 4 - (scrollProgress * 1);
+  const phoneTextSize = 2 - (scrollProgress * 0.25);
+
+  const menuItems: MenuItem[] = [
+    {
+      id: 'catalog',
+      title: 'Каталог',
+      icon: MenuIcon,
+      component: DropdownMenu
+    },
+    {
+      id: 'account',
+      title: 'Личный кабинет',
+      icon: User,
+      items: ['Мои заказы', 'Избранное', 'Настройки']
+    },
+    {
+      id: 'contacts',
+      title: 'Контакты',
+      icon: Phone,
+      items: ['8 800 777 15 37', 'support@example.com', 'Наши магазины']
+    }
+  ];
 
   return (
-    <header className={`bg-white py-4 md:py-6 border-b border-gray-300 fixed top-0 w-full z-50 ${isScrolled ? "shadow-lg" : ""}`}>
-    {/* Repeated Banner */}
-    <div className="w-full  flex items-center overflow-hidden">
-      </div>
-    <div className="container mx-auto flex flex-wrap items-center justify-between px-4">  
-      <div className="flex text-sm font-semibold items-center space-x-2 md:space-x-4 w-full md:w-auto justify-between md:justify-start">
-        <span className="text-xs sm:text-sm text-black truncate">
-          Ваш город: <span className="font-medium">Москва</span>
-        </span>
-        <div className="hidden sm:block text-xs sm:text-sm text-black">
-          <span className="mr-2 sm:mr-4 truncate">8-926-552-21-73</span>
-          <span>8-800-250-19-05</span>
-        </div>
-        <a
-          href="mailto:s.roma86@mail.ru"
-          className="hidden sm:block text-xs sm:text-sm text-black hover:underline truncate"
+    <header className="w-full bg-white fixed top-0 left-0 right-0 z-40">
+      {/* Main header */}
+      <div className="container mx-auto px-4 py-4 flex flex-wrap justify-between items-center bg-white transition-all duration-300">
+        {/* Mobile menu button */}
+        <button 
+          className="lg:hidden p-2"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
-          s.roma86@mail.ru
-        </a>
-        <a
-          href="mailto:s.roma86@mail.ru"
-          className="hidden sm:block text-xs sm:text-sm text-black hover:underline truncate"
-        >
-          С 9:00-21:00
-          круглосуточно
-        </a>
-      </div>
-  
-      <nav className="hidden lg:flex flex-wrap items-center space-x-2 lg:space-x-6 text-sm font-semibold text-black">
-        <a href="/about" className="hover:text-blue-600 truncate">ДИЗАЙНЕРАМ</a>
-        <a href="/project" className="hover:text-blue-600 truncate">НАШИ ПРОЕКТЫ</a>
-        <a href="#" className="hover:text-blue-600 truncate">КОНТАКТЫ</a>
-        <a href="#" className="hover:text-blue-600 truncate">3D МОДЕЛИ</a>
-        <a href="#" className="hover:text-blue-600 truncate">ОПЛАТА</a>
-        <a href="#" className="hover:text-blue-600 truncate">ДОСТАВКА</a>
-      </nav>
-    </div>
-  
-    <div className="container mx-auto flex items-center justify-between max-md:justify-center mt-2 md:mt-4 px-4">
-      <div className="flex items-center space-x-4">
-        <a
-          href="/"
-          className={`font-extrabold ${
-            isScrolled ? "text-lg sm:text-2xl" : "text-2xl sm:text-4xl"
-          } text-black  transition truncate`}
-        >
-         <span className="text-4xl">MORE</span>  ELECTRIKI
-        </a>
-  
-        <div className="flex items-center   space-x-2 md:space-x-6 bg-black text-xs md:text-sm lg:text-2xl text-white px-3 py-2 md:px-4 md:py-2 rounded truncate>
-        ">
-           
-            <DropdownMenu />
-       
-        </div>
-      </div>
-  
-      <form className="hidden md:flex mx-5 items-center border border-gray-300 rounded-md overflow-hidden w-1/2">
-        <input
-          type="text"
-          placeholder="Поиск"
-          className="flex-1 p-2 text-sm text-gray-700 focus:outline-none"
-        />
-        <button type="submit" className="px-4">
-          <FiSearch size={18} className="text-gray-600" />
-        </button>
-      </form>
-  
-      <div className="flex items-center p-2 space-x-2 md:space-x-5">
-        <a href="/cart" className="relative max-md:hidden flex items-center text-black hover:text-gray-700">
-          <BiBasket className="-ml-2" size={23} />
-          {cartCount > 0 && (
-            <span className="absolute -top-2 -right-2 bg-neutral-400 text-black text-xs font-bold rounded-full  w-5 h-5 flex items-center justify-center border border-gray-300 shadow-sm">
-              {cartCount}
-            </span>
+          {isMobileMenuOpen ? (
+            <X className="w-6 h-6" />
+          ) : (
+            <MenuIcon className="w-6 h-6" />
           )}
+        </button>
+
+        {/* Logo */}
+        <a href="/" className="flex-shrink-0">
+          <div className="flex items-center transition-all duration-300">
+            <img 
+              src="/images/logo.png" 
+              alt="minimir" 
+              className="h-8 md:h-12 lg:h-16 transition-all duration-300"
+              style={{
+                height: `${logoHeight}rem`,
+              }}
+            />
+          </div>
         </a>
-        <div className="hidden md:flex items-center space-x-2 lg:space-x-4">
-          <a
-            href="/auth/register"
-            className="flex text-black rounded-lg transition"
-          >
-            <User   size={23} />
-          </a>
+
+        {/* Search bar - desktop */}
+        <div className="hidden lg:flex flex-1 max-w-2xl mx-auto px-4">
+          <div className="relative flex items-center w-full">
+            <form onSubmit={handleSearchSubmit} className="w-full flex">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Поиск"
+                className="w-full px-2 py-2 text-sm border border-gray-300 text-black focus:outline-none"
+              />
+              <button
+                type="submit"
+                className="px-2 py-2 bg-black border border-l-0 border-gray-300 hover:bg-gray-200 transition duration-200"
+              >
+                <Search className="w-5 h-5 text-white" />
+              </button>
+            </form>
+          </div>
+        </div>
+
+        {/* Mobile search button */}
+        <button 
+          className="lg:hidden p-2"
+          onClick={() => setIsSearchOpen(!isSearchOpen)}
+        >
+          <Search className="w-6 h-6" />
+        </button>
+
+        {/* Contact and icons */}
+        <div className="flex items-center space-x-2 md:space-x-6">
+          {/* Phone number */}
+          <div className="hidden md:block text-right transition-all duration-300">
+            <div 
+              className="font-bold text-black transition-all duration-300"
+              style={{
+                fontSize: `${phoneTextSize}rem`
+              }}
+            >
+              8 800 777 15 37
+            </div>
+            <div className="text-xs text-gray-600">Консультации и поддержка 24/7</div>
+          </div>
+
+          {/* Action buttons */}
+          <div className="flex items-center space-x-2 md:space-x-4">
+            <button className="flex flex-col items-center text-xs md:text-sm text-gray-600">
+              <User className="w-5 h-5 text-black" />
+              <span className="hidden text-black md:block">Войти</span>
+            </button>
+            <button className="flex flex-col items-center text-xs md:text-sm text-gray-600">
+              <Heart className="w-5 h-5 text-black" />
+              <span className="hidden text-black md:block">Избранное</span>
+            </button>
+            <button className="flex flex-col items-center text-xs md:text-sm text-gray-600">
+              <ShoppingBag className="w-5 h-5 text-black" />
+              <span className="hidden text-black md:block">Корзина</span>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  </header>
-  
+
+      {/* Mobile search overlay */}
+      <div className={`lg:hidden w-full bg-white transition-all duration-300 ${isSearchOpen ? 'h-16' : 'h-0 overflow-hidden'}`}>
+        <form onSubmit={handleSearchSubmit} className="h-full p-4">
+          <div className="relative flex items-center w-full">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Поиск"
+              className="w-full px-2 py-2 text-sm border border-gray-300 text-black focus:outline-none"
+            />
+            <button
+              type="submit"
+              className="absolute right-0 px-2 py-2"
+            >
+              <Search className="w-5 h-5 text-gray-600" />
+            </button>
+          </div>
+        </form>
+      </div>
+
+      {/* Enhanced Mobile Menu */}
+      <div 
+        id="mobile-menu"
+        className={`fixed top-0 left-0 w-full h-full bg-white transform transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:hidden`}
+        style={{ paddingTop: '4rem' }}
+      >
+        <div className="h-full overflow-y-auto">
+          {/* Search bar in mobile menu */}
+          <div className="px-4 py-3 border-b border-gray-200">
+            <form onSubmit={handleSearchSubmit} className="relative">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Поиск по каталогу"
+                className="w-full px-4 py-2 pr-10 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+              />
+              <button
+                type="submit"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2"
+              >
+                <Search className="w-5 h-5 text-gray-500" />
+              </button>
+            </form>
+          </div>
+
+          {/* Main menu items */}
+          <nav className="py-2">
+            {menuItems.map((item) => (
+              <div key={item.id} className="border-b border-gray-100 last:border-0">
+                <button
+                  className="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-gray-50"
+                  onClick={() => setActiveSubmenu(activeSubmenu === item.id ? null : item.id)}
+                >
+                  <div className="flex items-center space-x-3">
+                    <item.icon className="w-5 h-5 text-gray-600" />
+                    <span className="font-medium">{item.title}</span>
+                  </div>
+                  <ChevronRight 
+                    className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                      activeSubmenu === item.id ? 'transform rotate-90' : ''
+                    }`}
+                  />
+                </button>
+
+                {/* Submenu content */}
+                <div
+                  className={`overflow-hidden transition-all duration-200 ${activeSubmenu === item.id ? 'max-h-96' : 'max-h-0'}`}
+                >
+                  <div className="bg-gray-50 py-2">
+                    {item.component ? (
+                      <div className="px-4">
+                        <item.component />
+                      </div>
+                    ) : (
+                      <ul className="space-y-1">
+                        {item.items?.map((subItem, index) => (
+                          <li key={index}>
+                            <a
+                              href="#"
+                              className="block px-8 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                            >
+                              {subItem}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </nav>
+
+          {/* Contact information */}
+          <div className="px-4 py-6 bg-gray-50 mt-4">
+            <div className="space-y-4">
+              <div className="flex items-center space-x-3 text-gray-600">
+                <Phone className="w-5 h-5" />
+                <a href="tel:88007771537" className="text-sm">8 800 777 15 37</a>
+              </div>
+              <div className="flex items-center space-x-3 text-gray-600">
+                <Mail className="w-5 h-5" />
+                <a href="mailto:support@example.com" className="text-sm">support@example.com</a>
+              </div>
+              <div className="flex items-center space-x-3 text-gray-600">
+                <MapPin className="w-5 h-5" />
+                <span className="text-sm">Наши магазины</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop navigation */}
+      <nav className={`hidden lg:block bg-white border-t border-gray-200 transition-all duration-300 ${isScrolled ? 'h-0 overflow-hidden opacity-0' : 'h-auto opacity-100'}`}>
+        <Navigation />
+      </nav>
+    </header>
   );
 };
 
