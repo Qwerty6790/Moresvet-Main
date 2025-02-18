@@ -149,6 +149,8 @@ export const CatalogOfProducts: React.FC<CatalogOfProductsProps> = ({ products, 
                   </span>
                 </div>
               </div>
+
+              <p className="text-gray-500">{product.brand}</p>
             </div>
           </div>
         );

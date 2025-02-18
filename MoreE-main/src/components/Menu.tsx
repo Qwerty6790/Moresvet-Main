@@ -19,9 +19,13 @@ interface MenuData {
 }
 
 const Navigation = () => {
+  // Состояния для десктопного выпадающего меню и мобильного аккордеона
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileActiveDropdown, setMobileActiveDropdown] = useState<string | null>(null);
+  const [dropdownTimeout, setDropdownTimeout] = useState<NodeJS.Timeout | null>(null);
 
-  // Данные выпадающего меню для каждого пункта навигации
+  // Данные меню (без изменений)
   const menuData: MenuData = {
     "Освещение для дома": {
       columns: [
@@ -33,7 +37,7 @@ const Navigation = () => {
             "Люстра на штанге",
             "Светильник потолочный",
             "Светильник подвесной",
-          ]
+          ],
         },
         {
           title: "Трековые светильники",
@@ -45,7 +49,7 @@ const Navigation = () => {
             "Esthetic Magnetic",
             "Flat Magnetic",
             "Slim Magnetic",
-          ]
+          ],
         },
         {
           title: "Точечные светильники",
@@ -53,36 +57,35 @@ const Navigation = () => {
             "Спот",
             "Накладной светильник",
             "Встраиваемый светильник",
-          ]
+          ],
         },
         {
           title: "Настольные лампы и торшеры",
           items: [
             "Настольная лампа",
             "Торшер",
-          ]
+          ],
         },
         {
           title: "Бра",
           items: [
             "Бра",
             "Светильник настенный",
-          ]
+          ],
         },
         {
           title: "Лампы и лампочки",
           items: [
             "Лампа",
             "Лампочка",
-          ]
+          ],
         },
       ],
-      
       featured: {
         image: "/images/Lustry-umni.png",
         title: "ТРЕКОВАЯ СИСТЕМА SLIM MAGNETIC 2000-3500K",
-        link: "#"
-      }
+        link: "#",
+      },
     },
     "Уличное освещение": {
       columns: [
@@ -92,23 +95,23 @@ const Navigation = () => {
             "Потолочные уличные светильники",
             "Подвесные уличные светильники",
             "Светильники с датчиками",
-            "Светодиодные уличные светильники"
-          ]
+            "Светодиодные уличные светильники",
+          ],
         },
         {
           title: "Уличные фонари",
           items: [
             "Декоративные фонари",
             "Энергосберегающие фонари",
-            "Фонари для парков"
-          ]
-        }
+            "Фонари для парков",
+          ],
+        },
       ],
       featured: {
         image: "/images/Fonar-yliza.png",
         title: "Уличное освещение премиум-класса",
-        link: "#"
-      }
+        link: "#",
+      },
     },
     "Розетки и выключатели": {
       columns: [
@@ -117,23 +120,23 @@ const Navigation = () => {
           items: [
             "Настенные розетки",
             "Подвесные розетки",
-            "Уголковые розетки"
-          ]
+            "Уголковые розетки",
+          ],
         },
         {
           title: "Выключатели",
           items: [
             "Тактильные выключатели",
             "Сенсорные выключатели",
-            "Электронные выключатели"
-          ]
-        }
+            "Электронные выключатели",
+          ],
+        },
       ],
       featured: {
         image: "/images/switch.png",
         title: "Современные розетки и выключатели",
-        link: "#"
-      }
+        link: "#",
+      },
     },
     "Модульное оборудование": {
       columns: [
@@ -142,23 +145,23 @@ const Navigation = () => {
           items: [
             "Цифровые панели",
             "Модульные системы",
-            "Интерактивные панели"
-          ]
+            "Интерактивные панели",
+          ],
         },
         {
           title: "Системы монтажа",
           items: [
             "Металлические крепления",
             "Пластиковые крепления",
-            "Комплектующие"
-          ]
-        }
+            "Комплектующие",
+          ],
+        },
       ],
       featured: {
         image: "/images/module.png",
         title: "Модульное оборудование для вашего проекта",
-        link: "#"
-      }
+        link: "#",
+      },
     },
     "Умный дом": {
       columns: [
@@ -167,23 +170,23 @@ const Navigation = () => {
           items: [
             "Управление освещением",
             "Управление климатом",
-            "Безопасность и видеонаблюдение"
-          ]
+            "Безопасность и видеонаблюдение",
+          ],
         },
         {
           title: "Устройства управления",
           items: [
             "Пульты дистанционного управления",
             "Смартфоны и планшеты",
-            "Интеграция с голосовыми ассистентами"
-          ]
-        }
+            "Интеграция с голосовыми ассистентами",
+          ],
+        },
       ],
       featured: {
         image: "/images/smart-home.png",
         title: "Решения для умного дома",
-        link: "#"
-      }
+        link: "#",
+      },
     },
     "Электротовары": {
       columns: [
@@ -192,23 +195,23 @@ const Navigation = () => {
           items: [
             "Электрические кабели",
             "Силовые кабели",
-            "Проводка для дома"
-          ]
+            "Проводка для дома",
+          ],
         },
         {
           title: "Защитное оборудование",
           items: [
             "Автоматические выключатели",
             "УЗО",
-            "Розетки с заземлением"
-          ]
-        }
+            "Розетки с заземлением",
+          ],
+        },
       ],
       featured: {
         image: "/images/electrical.png",
         title: "Качественные электротовары",
-        link: "#"
-      }
+        link: "#",
+      },
     },
     "Товары для дома": {
       columns: [
@@ -217,23 +220,23 @@ const Navigation = () => {
           items: [
             "Настенные светильники",
             "Торшеры",
-            "Подсветка интерьера"
-          ]
+            "Подсветка интерьера",
+          ],
         },
         {
           title: "Мебель и аксессуары",
           items: [
             "Столы и стулья",
             "Декоративные элементы",
-            "Ковры и шторы"
-          ]
-        }
+            "Ковры и шторы",
+          ],
+        },
       ],
       featured: {
         image: "/images/home.png",
         title: "Товары для уютного дома",
-        link: "#"
-      }
+        link: "#",
+      },
     },
     "Новинки": {
       columns: [
@@ -242,15 +245,15 @@ const Navigation = () => {
           items: [
             "Новейшие технологии",
             "Последние тренды",
-            "Эксклюзивные модели"
-          ]
-        }
+            "Эксклюзивные модели",
+          ],
+        },
       ],
       featured: {
         image: "/images/new.png",
         title: "Новинки сезона",
-        link: "#"
-      }
+        link: "#",
+      },
     },
     "Акции": {
       columns: [
@@ -259,23 +262,23 @@ const Navigation = () => {
           items: [
             "Скидки до 50%",
             "Сезонные акции",
-            "Распродажи"
-          ]
+            "Распродажи",
+          ],
         },
         {
           title: "Спецпредложения",
           items: [
             "Комплекты товаров",
             "Подарки при покупке",
-            "Акционные предложения"
-          ]
-        }
+            "Акционные предложения",
+          ],
+        },
       ],
       featured: {
         image: "/images/sale.png",
         title: "Акции и распродажи",
-        link: "#"
-      }
+        link: "#",
+      },
     },
     "Дизайнерам": {
       columns: [
@@ -284,23 +287,23 @@ const Navigation = () => {
           items: [
             "Программы для дизайна",
             "Профессиональное оборудование",
-            "Аксессуары для творчества"
-          ]
+            "Аксессуары для творчества",
+          ],
         },
         {
           title: "Материалы",
           items: [
             "Декоративные материалы",
             "Текстиль и ткани",
-            "Краски и лаки"
-          ]
-        }
+            "Краски и лаки",
+          ],
+        },
       ],
       featured: {
         image: "/images/designer.png",
         title: "Инструменты для дизайна интерьера",
-        link: "#"
-      }
+        link: "#",
+      },
     },
     "Все о компании": {
       columns: [
@@ -309,34 +312,34 @@ const Navigation = () => {
           items: [
             "История компании",
             "Наша миссия",
-            "Партнёры"
-          ]
+            "Партнёры",
+          ],
         },
         {
           title: "Контакты",
           items: [
             "Адрес",
             "Телефон",
-            "Email"
-          ]
+            "Email",
+          ],
         },
         {
           title: "Вакансии",
           items: [
             "Открытые вакансии",
-            "Как подать заявку"
-          ]
-        }
+            "Как подать заявку",
+          ],
+        },
       ],
       featured: {
         image: "/images/company.png",
         title: "Узнайте больше о нас",
-        link: "#"
-      }
-    }
+        link: "#",
+      },
+    },
   };
 
-  // Массив пунктов навигации (ключи из menuData)
+  // Массив пунктов навигации
   const navItems = [
     "Освещение для дома",
     "Уличное освещение",
@@ -351,20 +354,56 @@ const Navigation = () => {
     "Все о компании",
   ];
 
+  // Обработчики для десктопного dropdown с задержкой
+  const handleDropdownMouseEnter = (item: string) => {
+    if (dropdownTimeout) {
+      clearTimeout(dropdownTimeout);
+      setDropdownTimeout(null);
+    }
+    setActiveDropdown(item);
+  };
+
+  const handleDropdownMouseLeave = () => {
+    const timeout = setTimeout(() => {
+      setActiveDropdown(null);
+    }, 200); // задержка в 200 мс, можно регулировать
+    setDropdownTimeout(timeout);
+  };
+
   return (
-    <nav className="bg-neutral-800 relative">
-      <div className="container mx-auto px-4 flex items-center justify-center">
-        <div className="flex flex-wrap justify-center space-x-4 sm:space-x-6">
+    <nav className="bg-white w-full relative">
+      {/* Верхняя панель: логотип и переключатель мобильного меню */}
+      <div className="container mx-auto px-4 flex items-center justify-between py-4">
+
+        {/* Кнопка-гамбургер – видна только на мобильных */}
+        <div className="md:hidden">
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle Menu"
+            className="text-black focus:outline-none"
+          >
+            {mobileMenuOpen ? (
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
+          </button>
+        </div>
+        {/* Десктопное меню – видно на md и выше */}
+        <div className="hidden md:flex space-x-6">
           {navItems.map((item) => (
             <div
               key={item}
               className="relative group"
-              onMouseEnter={() => setActiveDropdown(item)}
-              onMouseLeave={() => setActiveDropdown(null)}
+              onMouseEnter={() => handleDropdownMouseEnter(item)}
+              onMouseLeave={handleDropdownMouseLeave}
             >
-              {/* Формируем ссылку на страницу поиска с query-параметром */}
               <Link href={`/search/${encodeURIComponent(item)}?query=${encodeURIComponent(item)}`}>
-                <span className="py-3 text-sm font-medium text-white hover:text-gray-600 whitespace-nowrap block">
+                <span className="py-3 text-sm font-medium text-black hover:text-gray-600 whitespace-nowrap transition-colors duration-200">
                   {item}
                 </span>
               </Link>
@@ -372,25 +411,26 @@ const Navigation = () => {
           ))}
         </div>
       </div>
-      {/* Выпадающее меню, центрированное строго посередине */}
+
+      {/* Десктопное выпадающее меню с улучшенным дизайном */}
       {activeDropdown && menuData[activeDropdown] && (
         <div
-          className="absolute top-full left-1/2 transform -translate-x-1/2 w-full bg-white shadow-lg z-50"
-          onMouseEnter={() => setActiveDropdown(activeDropdown)}
-          onMouseLeave={() => setActiveDropdown(null)}
+          className="absolute top-full left-0 w-full bg-white border-t border-gray-200 shadow-xl z-50"
+          onMouseEnter={handleDropdownMouseEnter.bind(null, activeDropdown)}
+          onMouseLeave={handleDropdownMouseLeave}
         >
-          <div className="mx-auto">
-            <div className="flex flex-col md:flex-row p-8">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 flex-1">
+          <div className="max-w-screen-xl mx-auto px-8 py-8">
+            <div className="flex">
+              {/* Основная область: колонки */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 flex-1">
                 {menuData[activeDropdown].columns.map((column, idx) => (
-                  <div key={`${activeDropdown}-${idx}`} className="min-w-[200px] mb-4 md:mb-0">
-                    <h3 className="text-black font-semibold mb-4">{column.title}</h3>
+                  <div key={`${activeDropdown}-${idx}`} className="p-2">
+                    <h3 className="text-lg font-bold text-gray-800 mb-3">{column.title}</h3>
                     <ul className="space-y-2">
                       {column.items.map((subItem) => (
                         <li key={subItem}>
-                          {/* Ссылка для подпункта – также переходим на страницу поиска */}
                           <Link href={`/search/${encodeURIComponent(subItem)}?query=${encodeURIComponent(subItem)}`}>
-                            <span className="text-sm text-gray-600 hover:text-black block transition-colors duration-150">
+                            <span className="block text-sm text-gray-600 hover:text-gray-900 transition-colors duration-200">
                               {subItem}
                             </span>
                           </Link>
@@ -400,16 +440,17 @@ const Navigation = () => {
                   </div>
                 ))}
               </div>
+              {/* Боковая область: featured (показываем только на больших экранах) */}
               {menuData[activeDropdown].featured && (
-                <div className="mt-8 md:mt-0 md:ml-8 min-w-[300px]">
+                <div className="hidden lg:block w-1/3 pl-8">
                   <a href={menuData[activeDropdown].featured.link} className="block group">
                     <img
                       src={menuData[activeDropdown].featured.image}
                       alt={menuData[activeDropdown].featured.title}
-                      className="w-full h-60 object-cover"
+                      className="w-full h-64 object-cover rounded-lg shadow-md transform group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="mt-4">
-                      <h3 className="text-lg font-semibold text-black uppercase">
+                      <h3 className="text-lg font-semibold text-gray-800 uppercase group-hover:text-gray-900 transition-colors duration-200">
                         {menuData[activeDropdown].featured.title}
                       </h3>
                     </div>
@@ -418,6 +459,69 @@ const Navigation = () => {
               )}
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Мобильное меню (аккордеон) */}
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-white border-t border-gray-200">
+          {navItems.map((item) => (
+            <div key={item}>
+              <div
+                className="flex justify-between items-center p-4 border-b cursor-pointer"
+                onClick={() => setMobileActiveDropdown(mobileActiveDropdown === item ? null : item)}
+              >
+                <span className="text-black font-medium">{item}</span>
+                <svg
+                  className={`h-4 w-4 transform transition-transform duration-200 ${
+                    mobileActiveDropdown === item ? 'rotate-180' : 'rotate-0'
+                  }`}
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+              {mobileActiveDropdown === item && menuData[item] && (
+                <div className="p-4 bg-gray-50">
+                  <div className="space-y-4">
+                    {menuData[item].columns.map((column, idx) => (
+                      <div key={`${item}-${idx}`}>
+                        <h3 className="text-base font-bold text-gray-800 mb-2">{column.title}</h3>
+                        <ul className="space-y-2">
+                          {column.items.map((subItem) => (
+                            <li key={subItem}>
+                              <Link href={`/search/${encodeURIComponent(subItem)}?query=${encodeURIComponent(subItem)}`}>
+                                <span className="block text-sm text-gray-600 hover:text-gray-900 transition-colors duration-200">
+                                  {subItem}
+                                </span>
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                    {menuData[item].featured && (
+                      <div className="mt-4">
+                        <a href={menuData[item].featured.link} className="block">
+                          <img
+                            src={menuData[item].featured.image}
+                            alt={menuData[item].featured.title}
+                            className="w-full h-40 object-cover rounded-lg shadow-md"
+                          />
+                          <h3 className="mt-2 text-lg font-semibold text-gray-800 uppercase">
+                            {menuData[item].featured.title}
+                          </h3>
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       )}
     </nav>

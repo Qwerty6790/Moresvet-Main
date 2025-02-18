@@ -231,7 +231,7 @@ const SearchResults: React.FC = () => {
           <div className="flex items-center gap-4">
             <SearchIcon size={36} className="text-gray-400" />
             <div>
-              <h1 className="text-4xl font-bold mb-2">Результаты поиска</h1>
+              <h1 className="text-4xl font-bold mb-2">Внутренний Каталог</h1>
               <p className="text-gray-300 text-lg">
                 По запросу "{query}" {totalProducts > 0 ? `найдено ${totalProducts} товаров` : 'ничего не найдено'}
               </p>
@@ -333,8 +333,6 @@ const SearchResults: React.FC = () => {
                 <div className="mb-4">
                   <SearchIcon size={48} className="mx-auto text-gray-400" />
                 </div>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-2">По вашему запросу ничего не найдено</h2>
-                <p className="text-gray-600 mb-8">Попробуйте изменить параметры поиска или сформулировать запрос иначе</p>
                 <button 
                   onClick={() => router.push('/')}
                   className="inline-flex items-center px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-all transform hover:scale-105 duration-200 shadow-md"

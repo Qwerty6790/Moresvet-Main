@@ -57,12 +57,11 @@ const Footer = () => {
             <div>
               <h3 className="text-black text-2xl sm:text-3xl mb-4">Наши бренды</h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                <div className="text-black">EUROSVET</div>
-                <div className="text-black">WERKEL</div>
-                <div className="text-black">BOGATES</div>
-                <div className="text-black">GOTTIS</div>
+                <div className="text-black">Maytoni</div>
+                <div className="text-black">Artelamp</div>
+                <div className="text-black">KinkLight</div>
+                <div className="text-black">Stluce</div>
                 <div className="text-black">ELEKTROSTANDARD</div>
-                <div className="text-black">STROTSKIS</div>
               </div>
             </div>
           </div>
