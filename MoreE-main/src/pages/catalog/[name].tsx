@@ -118,7 +118,6 @@ const brands: Brand[] = [
       { label: 'Бра', href: '/decorative-lamps', searchName: 'Бра' },
       { label: 'Светильник', href: '/decorative-lamps', searchName: 'Светильник' },
       { label: 'Трековый светильник', href: '/decorative-lamps', searchName: 'трековый светильник' },
-      { label: 'Настенный светильник', href: '/decorative-lamps', searchName: 'настенный светильник' },
     ],
   },
   {
