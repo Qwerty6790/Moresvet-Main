@@ -20,10 +20,6 @@ const DropdownMenu: React.FC = () => {
       links: [{ href: '/cart', label: 'Корзина' }],
       image: '/images/p1.png'
     },
-    { 
-      links: [{ href: '/liked', label: 'Избранное' }],
-      image: '/images/p1.png'
-    },
   ];
 
   const renderCategories = (): JSX.Element => (

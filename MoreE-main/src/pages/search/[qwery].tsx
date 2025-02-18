@@ -7,7 +7,16 @@ import Header from '@/components/Header';
 import Menu from '@/components/Menu';
 import Pagination from '@/components/PaginationComponents';
 import { ClipLoader } from 'react-spinners';
-import { Grid, List, X, ChevronDown, Sliders, ArrowUpDown, Check, Search as SearchIcon } from 'lucide-react';
+import { 
+  Grid, 
+  List, 
+  X, 
+  ChevronDown, 
+  Sliders, 
+  ArrowUpDown, 
+  Check, 
+  Search as SearchIcon 
+} from 'lucide-react';
 
 // Типы данных
 type FiltersCount = {
@@ -37,7 +46,7 @@ const SearchResults: React.FC = () => {
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [selectedSort, setSelectedSort] = useState('popular');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [selectedFilters, setSelectedFilters] = useState<{[key: string]: string[]}>({
+  const [selectedFilters, setSelectedFilters] = useState<{[key: string]: string[]}>( {
     'Тип цоколя': [],
     'Степень защиты': [],
     'Место применения': [],
@@ -137,7 +146,7 @@ const SearchResults: React.FC = () => {
             page: currentPage,
             pageSize: 32,
             sortBy: 'price',
-            sortOrder: sortOrder || 'asc',  // Убедитесь, что sortOrder может быть undefined
+            sortOrder: sortOrder || 'asc',
             filters: JSON.stringify(activeFilters),
           },
         });
@@ -157,7 +166,6 @@ const SearchResults: React.FC = () => {
       }
     };
     
-
     fetchProducts();
   }, [query, currentPage, sortOrder, selectedFilters]);
 
@@ -210,30 +218,26 @@ const SearchResults: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen relative text-black">
       <Header />
       <Menu />
 
       {/* Hero section */}
-      <div className="relative  text-black py-10 mt-40">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute inset-0  to-transparent"></div>
-        </div>
-        
+      <div className="relative py-10 mt-32 md:mt-40">
         <div className="container mx-auto px-4 relative">
           {/* Breadcrumbs */}
-          <div className="flex items-center text-sm text-black mb-6">
-            <a href="/" className="hover:text-white transition-colors">MoreElecriki.ru</a>
+          <div className="flex flex-wrap items-center text-xs md:text-sm mb-4">
+            <a href="/" className="hover:text-gray-700 transition-colors">MoreElecriki.ru</a>
             <span className="mx-2">/</span>
-            <span className="text-black">Главная</span>
+            <span>Главная</span>
           </div>
 
-          <div className="flex items-center gap-4">
-            <SearchIcon size={36} className="text-gray-400" />
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <SearchIcon size={36} className="text-gray-500" />
             <div>
-              <h1 className="text-4xl font-bold mb-2">Внутренний Каталог</h1>
-              <p className="text-gray-300 text-lg">
-                По запросу "{query}" {totalProducts > 0 ? `найдено ${totalProducts} товаров` : 'ничего не найдено'}
+              <h1 className="text-2xl sm:text-4xl font-bold mb-2">Внутренний Каталог</h1>
+              <p className="text-sm sm:text-base text-gray-600">
+                По запросу &quot;{query}&quot; {totalProducts > 0 ? `найдено ${totalProducts} товаров` : 'ничего не найдено'}
               </p>
             </div>
           </div>
@@ -243,11 +247,11 @@ const SearchResults: React.FC = () => {
       {/* Фильтры и сортировка */}
       <div className="sticky top-[80px] bg-white z-30 shadow-sm">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between py-4">
-            <div className="flex items-center space-x-4">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between py-4 gap-4">
+            <div className="flex flex-wrap items-center gap-4">
               <button 
                 onClick={() => setIsFilterOpen(true)}
-                className="flex items-center px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-all transform hover:scale-105 duration-200 shadow-md"
+                className="flex items-center px-4 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition transform hover:scale-105 duration-200 shadow-md"
               >
                 <Sliders className="w-5 h-5 mr-2" />
                 <span>Фильтры</span>
@@ -261,7 +265,7 @@ const SearchResults: React.FC = () => {
               <div className="relative">
                 <button
                   onClick={() => setIsSortOpen(!isSortOpen)}
-                  className="flex items-center px-6 py-3 bg-white border-2 border-gray-200 rounded-lg hover:border-gray-300 transition-all duration-200"
+                  className="flex items-center px-4 py-3 bg-white border border-gray-200 rounded-lg hover:border-gray-300 transition duration-200"
                 >
                   <ArrowUpDown className="w-5 h-5 mr-2" />
                   <span className="font-medium">{sortOptions.find(opt => opt.id === selectedSort)?.label}</span>
@@ -269,7 +273,7 @@ const SearchResults: React.FC = () => {
                 </button>
 
                 {isSortOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-xl">
+                  <div className="absolute top-full left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-10">
                     {sortOptions.map(option => (
                       <button
                         key={option.id}
@@ -279,7 +283,7 @@ const SearchResults: React.FC = () => {
                         {selectedSort === option.id && (
                           <Check className="w-5 h-5 mr-2 text-blue-500" />
                         )}
-                        <span className={selectedSort === option.id ? "text-blue-500 font-medium" : ""}>
+                        <span className={selectedSort === option.id ? "text-blue-500 font-medium" : "text-black"}>
                           {option.label}
                         </span>
                       </button>
@@ -289,27 +293,27 @@ const SearchResults: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex items-center gap-6">
-              <span className="text-gray-600 font-medium">
+            <div className="flex items-center gap-4">
+              <span className="text-sm font-medium text-black">
                 {showFiltered ? `Найдено ${totalProducts} товаров` : `${totalProducts} товаров`}
               </span>
               <div className="flex items-center gap-2 bg-gray-100 p-1 rounded-lg">
                 <button
                   onClick={() => setViewMode('grid')}
-                  className={`p-2 rounded-md transition-all duration-200 ${
+                  className={`p-2 rounded-md transition duration-200 ${
                     viewMode === 'grid' 
-                      ? 'bg-white text-gray-900 shadow-sm' 
-                      : 'text-gray-600 hover:text-gray-900'
+                      ? 'bg-white text-black shadow-sm' 
+                      : 'text-gray-600 hover:text-black'
                   }`}
                 >
                   <Grid size={20} />
                 </button>
                 <button
                   onClick={() => setViewMode('list')}
-                  className={`p-2 rounded-md transition-all duration-200 ${
+                  className={`p-2 rounded-md transition duration-200 ${
                     viewMode === 'list' 
-                      ? 'bg-white text-gray-900 shadow-sm' 
-                      : 'text-gray-600 hover:text-gray-900'
+                      ? 'bg-white text-black shadow-sm' 
+                      : 'text-gray-600 hover:text-black'
                   }`}
                 >
                   <List size={20} />
@@ -335,7 +339,7 @@ const SearchResults: React.FC = () => {
                 </div>
                 <button 
                   onClick={() => router.push('/')}
-                  className="inline-flex items-center px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-all transform hover:scale-105 duration-200 shadow-md"
+                  className="inline-flex items-center px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition transform hover:scale-105 duration-200 shadow-md"
                 >
                   Вернуться на главную
                 </button>
@@ -390,7 +394,7 @@ const SearchResults: React.FC = () => {
                           onChange={() => handleFilterChange(category, option)}
                           className="form-checkbox h-5 w-5 text-blue-500 rounded border-gray-300"
                         />
-                        <span className="ml-3 text-gray-700">{option}</span>
+                        <span className="ml-3">{option}</span>
                       </label>
                     ))}
                   </div>
@@ -402,13 +406,13 @@ const SearchResults: React.FC = () => {
             <div className="sticky bottom-0 bg-white pt-4 pb-6 space-y-4">
               <button
                 onClick={handleResetFilters}
-                className="w-full py-3 text-gray-600 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all duration-200 font-medium"
+                className="w-full py-3 text-gray-600 bg-gray-100 rounded-xl hover:bg-gray-200 transition duration-200 font-medium"
               >
                 Сбросить все фильтры
               </button>
               <button
                 onClick={() => setIsFilterOpen(false)}
-                className="w-full py-3 text-white bg-gray-900 rounded-xl hover:bg-gray-800 transition-all duration-200 font-medium"
+                className="w-full py-3 text-white bg-gray-900 rounded-xl hover:bg-gray-800 transition duration-200 font-medium"
               >
                 Показать {totalProducts} товаров
               </button>

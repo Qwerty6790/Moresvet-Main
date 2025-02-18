@@ -1,5 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Heart, ShoppingBag, User, Menu as MenuIcon, X, ChevronRight, Phone, Mail, MapPin, Camera } from 'lucide-react';
+import {
+  Search,
+  Heart,
+  ShoppingBag,
+  User,
+  Menu as MenuIcon,
+  X,
+  ChevronRight,
+  Phone,
+  Mail,
+  MapPin,
+  Camera
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import DropdownMenu from './CatalogDropdown';
 import Navigation from './Menu';
@@ -129,7 +141,7 @@ const Header = () => {
       {/* Top brand bar */}
       <div className="hidden lg:block w-full bg-white border-b border-gray-100">
         <div className="container mx-auto px-4">
-          <div className="text-xs text-gray-500 py-1">
+          <div className="text-xs text-black py-1">
             Strotskis Group: Eurosvot, Elektrostandard, Werkel
           </div>
         </div>
@@ -145,9 +157,9 @@ const Header = () => {
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? (
-              <X className="w-6 h-6" />
+              <X className="w-6 h-6 text-black" />
             ) : (
-              <MenuIcon className="w-6 h-6" />
+              <MenuIcon className="w-6 h-6 text-black" />
             )}
           </button>
 
@@ -176,7 +188,7 @@ const Header = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Поиск"
-                className="w-full px-4 py-2 text-sm border border-r-0 border-gray-300 rounded-l text-black focus:outline-none focus:border-gray-400"
+                className="w-full px-4 py-2 text-sm border border-r-0 border-gray-300 rounded-l focus:outline-none focus:border-gray-400 text-black"
               />
               <button
                 type="submit"
@@ -186,7 +198,7 @@ const Header = () => {
               </button>
             </form>
             <button className="ml-2 p-2 hover:bg-gray-100 rounded">
-              <Camera className="w-5 h-5 text-gray-600" />
+              <Camera className="w-5 h-5 text-black" />
             </button>
           </div>
         </div>
@@ -196,7 +208,7 @@ const Header = () => {
           className="lg:hidden p-2 hover:bg-gray-100 rounded-lg"
           onClick={() => setIsSearchOpen(!isSearchOpen)}
         >
-          <Search className="w-6 h-6" />
+          <Search className="w-6 h-6 text-black" />
         </button>
 
         {/* Right section */}
@@ -204,22 +216,22 @@ const Header = () => {
           {/* Phone number */}
           <div className="hidden lg:block text-right">
             <div className="font-bold text-2xl text-black">8 800 777 15 37</div>
-            <div className="text-xs text-gray-600">Консультации и поддержка 24/7</div>
+            <div className="text-xs text-black">Консультации и поддержка 24/7</div>
           </div>
 
           {/* Action buttons */}
           <div className="flex items-center space-x-1 md:space-x-4">
             <a href='/auth/register' className="flex flex-col items-center p-2 hover:bg-gray-100 rounded-lg">
-              <User className="w-6 h-6 text-gray-700" />
-              <span className="hidden text-xs font-medium text-gray-700 mt-1 lg:block">Войти</span>
+              <User className="w-6 h-6 text-black" />
+              <span className="hidden text-xs font-medium text-black mt-1 lg:block">Войти</span>
             </a>
             <a href='/liked' className="flex flex-col items-center p-2 hover:bg-gray-100 rounded-lg">
-              <Heart className="w-6 h-6 text-gray-700" />
-              <span className="hidden text-xs font-medium text-gray-700 mt-1 lg:block">Избранное</span>
+              <Heart className="w-6 h-6 text-black" />
+              <span className="hidden text-xs font-medium text-black mt-1 lg:block">Избранное</span>
             </a>
             <a href='/cart' className="flex flex-col items-center p-2 hover:bg-gray-100 rounded-lg">
-              <ShoppingBag className="w-6 h-6 text-gray-700" />
-              <span className="hidden text-xs font-medium text-gray-700 mt-1 lg:block">Корзина</span>
+              <ShoppingBag className="w-6 h-6 text-black" />
+              <span className="hidden text-xs font-medium text-black mt-1 lg:block">Корзина</span>
             </a>
           </div>
         </div>
@@ -234,13 +246,13 @@ const Header = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Поиск"
-              className="w-full px-4 py-2 text-sm border border-gray-300 rounded-l text-black focus:outline-none focus:border-gray-400"
+              className="w-full px-4 py-2 text-sm border border-gray-300 rounded-l focus:outline-none focus:border-gray-400 text-black"
             />
             <button type="submit" className="px-6 py-2 bg-gray-900 rounded-r">
               <Search className="w-5 h-5 text-white" />
             </button>
             <button className="ml-2 p-2 hover:bg-gray-100 rounded">
-              <Camera className="w-5 h-5 text-gray-600" />
+              <Camera className="w-5 h-5 text-black" />
             </button>
           </div>
         </form>
@@ -249,30 +261,27 @@ const Header = () => {
       {/* Enhanced Mobile Menu */}
       <div 
         id="mobile-menu"
-        className={`fixed top-0 left-0 w-full h-full bg-white transform transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:hidden`}
+        className={`fixed top-0 left-0 w-full h-full bg-white text-black transform transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:hidden`}
         style={{ paddingTop: '4rem' }}
       >
         <div className="h-full overflow-y-auto">
-          {/* Main categories */}
-     
-           
-             <Navigation />
-          
+          {/* Основное меню (категории) */}
+          <Navigation />
 
-          {/* Additional menu items */}
+          {/* Дополнительные пункты меню */}
           <nav className="py-2 mt-4 bg-gray-50">
             {menuItems.map((item) => (
               <div key={item.id} className="border-b border-gray-100 last:border-0">
                 <button
-                  className="w-full px-6 py-3 flex items-center justify-between text-left hover:bg-gray-100"
+                  className="w-full px-6 py-3 flex items-center justify-between text-left hover:bg-gray-100 text-black"
                   onClick={() => setActiveSubmenu(activeSubmenu === item.id ? null : item.id)}
                 >
                   <div className="flex items-center space-x-3">
-                    <item.icon className="w-5 h-5 text-gray-600" />
+                    <item.icon className="w-5 h-5 text-black" />
                     <span className="font-medium">{item.title}</span>
                   </div>
                   <ChevronRight 
-                    className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                    className={`w-5 h-5 text-black transition-transform duration-200 ${
                       activeSubmenu === item.id ? 'transform rotate-90' : ''
                     }`}
                   />
@@ -285,10 +294,10 @@ const Header = () => {
                         <item.component />
                       </div>
                     ) : (
-                      <ul className="space-y-1">
+                      <ul className="space-y-1 text-black">
                         {item.items?.map((subItem, index) => (
                           <li key={index}>
-                            <a href="#" className="block px-8 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50">
+                            <a href="#" className="block px-8 py-2 text-sm text-black hover:text-black hover:bg-gray-100">
                               {subItem}
                             </a>
                           </li>
@@ -301,18 +310,18 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* Contact information */}
+          {/* Контактная информация */}
           <div className="px-4 py-6 bg-gray-50 mt-4">
-            <div className="space-y-4">
-              <div className="flex items-center space-x-3 text-gray-600">
+            <div className="space-y-4 text-black">
+              <div className="flex items-center space-x-3">
                 <Phone className="w-5 h-5" />
                 <a href="tel:88007771537" className="text-sm">8 800 777 15 37</a>
               </div>
-              <div className="flex items-center space-x-3 text-gray-600">
+              <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5" />
                 <a href="mailto:support@example.com" className="text-sm">support@example.com</a>
               </div>
-              <div className="flex items-center space-x-3 text-gray-600">
+              <div className="flex items-center space-x-3">
                 <MapPin className="w-5 h-5" />
                 <span className="text-sm">Наши магазины</span>
               </div>

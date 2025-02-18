@@ -313,20 +313,20 @@ const Catalog: NextPage<CatalogProps> = ({
   return (
     <>
       <Head>
-        <title>Каталог Люстр - Все Бренды | Minimiru.ru</title>
+        <title>Каталог Люстр - Все Бренды | MoreElecktriki.ru</title>
         <meta name="description" content="Большой выбор люстр от различных брендов. Высокое качество и доступные цены." />
       </Head>
-      <div className="min-h-screen bg-white relative">
+      <div className="min-h-screen bg-white relative text-black">
         <Header />
 
         {/* Breadcrumbs */}
         <div className="container mx-auto mt-24 md:mt-40 px-4 pt-4 pb-2">
-          <div className="flex flex-wrap items-center text-xs md:text-sm text-gray-500">
-            <a href="/" className="hover:text-gray-900">
+          <div className="flex flex-wrap items-center text-xs md:text-sm">
+            <a href="/" className="hover:text-gray-900 transition-colors">
               Minimiru.ru
             </a>
             <span className="mx-2">/</span>
-            <a href="/lighting" className="hover:text-gray-900">
+            <a href="/lighting" className="hover:text-gray-900 transition-colors">
               Освещение для дома
             </a>
             <span className="mx-2">/</span>
@@ -336,18 +336,19 @@ const Catalog: NextPage<CatalogProps> = ({
 
         {/* Заголовок страницы */}
         <div className="container mx-auto px-4 py-6">
-          <h1 className="text-2xl md:text-4xl font-medium text-gray-900">Люстры</h1>
+          <h1 className="text-2xl md:text-4xl font-medium">
+            Люстры
+          </h1>
         </div>
 
         {/* Фильтры и сортировка */}
         <div className="sticky top-[80px] bg-white z-30 border-t border-b border-gray-200">
           <div className="container mx-auto px-4">
-            {/* На мобильных вертикально, на md - горизонтально */}
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between py-3 space-y-3 md:space-y-0">
               <div className="flex flex-wrap items-center gap-4">
                 <button
                   onClick={() => setIsFilterOpen(true)}
-                  className="px-4 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-800"
+                  className="px-4 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-800 transition-colors"
                 >
                   Все фильтры
                 </button>
@@ -366,13 +367,13 @@ const Catalog: NextPage<CatalogProps> = ({
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setViewMode('grid')}
-                    className={`p-2 rounded-md ${viewMode === 'grid' ? 'bg-gray-200' : 'bg-white'}`}
+                    className={`p-2 rounded-md transition-colors duration-200 ${viewMode === 'grid' ? 'bg-gray-200' : 'bg-white'}`}
                   >
                     <Grid size={20} />
                   </button>
                   <button
                     onClick={() => setViewMode('list')}
-                    className={`p-2 rounded-md ${viewMode === 'list' ? 'bg-gray-200' : 'bg-white'}`}
+                    className={`p-2 rounded-md transition-colors duration-200 ${viewMode === 'list' ? 'bg-gray-200' : 'bg-white'}`}
                   >
                     <List size={20} />
                   </button>
@@ -396,9 +397,7 @@ const Catalog: NextPage<CatalogProps> = ({
 
         {/* Выезжающая панель фильтров */}
         <div
-          className={`fixed inset-0 bg-black bg-opacity-50 transition-opacity z-40 ${
-            isFilterOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-          }`}
+          className={`fixed inset-0 bg-black bg-opacity-50 transition-opacity z-40 ${isFilterOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         >
           <div
             className={`fixed inset-y-0 left-0 w-full sm:w-96 bg-white transform transition-transform duration-300 ease-in-out overflow-y-auto ${
@@ -424,7 +423,7 @@ const Catalog: NextPage<CatalogProps> = ({
                       setCurrentPage(1);
                     }}
                     placeholder="Поиск товаров..."
-                    className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl"
+                    className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none"
                   />
                   <Search className="absolute left-4 top-3.5 h-5 w-5 text-gray-400" />
                 </div>
@@ -442,7 +441,7 @@ const Catalog: NextPage<CatalogProps> = ({
                         setMinPrice(+e.target.value);
                         setCurrentPage(1);
                       }}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none"
                       placeholder="От"
                     />
                     <span className="absolute right-4 top-3 text-gray-400">₽</span>
@@ -456,7 +455,7 @@ const Catalog: NextPage<CatalogProps> = ({
                         setMaxPrice(+e.target.value);
                         setCurrentPage(1);
                       }}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl"
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none"
                       placeholder="До"
                     />
                     <span className="absolute right-4 top-3 text-gray-400">₽</span>
@@ -477,7 +476,7 @@ const Catalog: NextPage<CatalogProps> = ({
                         onChange={() => handleBrandChange(brand)}
                         className="form-radio text-blue-500 h-5 w-5"
                       />
-                      <span className="ml-3 text-gray-700">{brand.name}</span>
+                      <span className="ml-3">{brand.name}</span>
                     </label>
                   ))}
                 </div>
