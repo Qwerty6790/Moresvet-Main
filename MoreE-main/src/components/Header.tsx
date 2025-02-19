@@ -203,9 +203,9 @@ const Header = () => {
           </div>
           {/* Кнопки действий */}
           <div className="flex items-center space-x-1 md:space-x-4">
-            <a href="/auth/register" className="flex flex-col items-center p-2 hover:bg-gray-100 rounded-lg">
+            <a href="/auth/register" className="flex max-md:hidden flex-col items-center p-2 hover:bg-gray-100 rounded-lg">
               <User className="w-6 h-6" />
-              <span className="hidden text-xs font-medium mt-1 lg:block">Войти</span>
+              <span className="hidden text-xs max-md:hidden font-medium mt-1 lg:block">Войти</span>
             </a>
             <a href="/liked" className="flex flex-col items-center p-2 hover:bg-gray-100 rounded-lg">
               <Heart className="w-6 h-6" />
