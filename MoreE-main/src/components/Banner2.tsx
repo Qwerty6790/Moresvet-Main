@@ -18,7 +18,7 @@ export default function ImageHoverEffect2() {
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <div className="flex flex-col mt-20 lg:flex-row w-full h-[450px] lg:h-[600px] bg-white relative">
+      <div className="flex flex-col mt-20 lg:flex-row w-full h-[450px] lg:h-[900px] bg-white relative">
         {/* Left Block: Slider */}
         <div className="w-full h-full relative overflow-hidden flex justify-center items-center">
           {slides.map((slide, index) => (
