@@ -82,8 +82,8 @@ const Navigation = () => {
         },
       ],
       featured: {
-        image: "/images/Lustry-umni.png",
-        title: "ТРЕКОВАЯ СИСТЕМА SLIM MAGNETIC 2000-3500K",
+        image: "/images/13.jpg",
+        title: "Световое решение для дома",
         link: "#",
       },
     },
@@ -108,7 +108,7 @@ const Navigation = () => {
         },
       ],
       featured: {
-        image: "/images/Fonar-yliza.png",
+        image: "/images/Fonar-yliza.jpg",
         title: "Уличное освещение премиум-класса",
         link: "#",
       },
