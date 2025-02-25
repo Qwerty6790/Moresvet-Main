@@ -336,15 +336,15 @@ const Catalog: NextPage<CatalogProps> = ({
           {/* Заголовок с выпадающим меню */}
           <div className="flex items-center justify-between py-6 border-b border-gray-200">
             <button className="flex items-center text-2xl font-bold text-black">
-              Декоративный свет
+              Каталог
               <ChevronDown className="ml-2 w-6 h-6" />
             </button>
           </div>
 
           {/* Основной контент */}
-          <div className="flex gap-8 pt-6">
+          <div className="flex flex-col lg:flex-row gap-8 pt-6">
             {/* Левое меню категорий */}
-            <div className="w-72 flex-shrink-0">
+            <div className="w-full lg:w-72 flex-shrink-0 mb-4 lg:mb-0">
               <nav className="space-y-4">
                 {categories.map((category) => (
                   <a
@@ -361,8 +361,8 @@ const Catalog: NextPage<CatalogProps> = ({
             {/* Правая часть с фильтрами и товарами */}
             <div className="flex-1">
               {/* Верхняя панель с фильтрами */}
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-4">
+              <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6">
+                <div className="flex items-center gap-4 mb-4 md:mb-0">
                   <button className="text-gray-900 font-medium">Фильтры</button>
                   <button className="text-gray-900 font-medium">Новинки</button>
                   <button className="text-gray-900 font-medium">Акции</button>
@@ -375,7 +375,7 @@ const Catalog: NextPage<CatalogProps> = ({
                       <option>RUB</option>
                     </select>
                   </div>
-                  <span className="text-gray-600">1230 товаров</span>
+                  <span className="text-gray-600">{totalProducts} товаров</span>
                 </div>
               </div>
 
@@ -391,7 +391,7 @@ const Catalog: NextPage<CatalogProps> = ({
               </div>
 
               {/* Пагинация */}
-              <div className="mt-14">
+              <div className="flex justify-center mt-14">
                 <Pagination
                   currentPage={currentPage}
                   totalPages={totalPages}

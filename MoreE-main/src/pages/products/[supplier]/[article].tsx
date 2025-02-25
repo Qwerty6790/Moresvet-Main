@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { Toaster, toast } from 'sonner';
+import 'tailwindcss/tailwind.css';
 import { Heart, ArrowLeft, Copy } from 'lucide-react';
 import Header from '@/components/Header';
 
