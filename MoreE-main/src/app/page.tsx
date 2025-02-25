@@ -1,9 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Analytics } from "@vercel/analytics/react";;
-import ImageHoverEffect from '@/components/Banner';;
-import LightStar from './cardproducts/LightStar/page';
+import { Analytics } from "@vercel/analytics/react";
+import ImageHoverEffect from '@/components/Banner';
 import ImageHoverEffect2 from '@/components/Banner2';
 
 export default function Home() {

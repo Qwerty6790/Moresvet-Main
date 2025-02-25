@@ -5,7 +5,9 @@ import { motion } from 'framer-motion';
 
 export default function ImageHoverEffect2() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const slides = [{ image: './images/17.jpg' },{ image: './images/20.jpg' }];
+  const slides = [
+    { image: './images/18.jpg' },{ image: './images/19.jpg',}
+  ];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -18,7 +20,7 @@ export default function ImageHoverEffect2() {
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <div className="flex flex-col mt-20 lg:flex-row w-full h-[450px] lg:h-[900px] bg-white relative">
+      <div className="flex cona flex-col mt-20 lg:flex-row w-full h-[450px] lg:h-screen bg-white relative">
         {/* Left Block: Slider */}
         <div className="w-full h-full relative overflow-hidden flex justify-center items-center">
           {slides.map((slide, index) => (

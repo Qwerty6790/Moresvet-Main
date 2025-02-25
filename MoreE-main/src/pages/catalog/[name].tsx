@@ -7,7 +7,7 @@ import { ProductI } from '../../types/interfaces';
 import { ClipLoader } from 'react-spinners';
 import { CatalogOfProducts } from '@/components/CatalogOfProducts';
 import Pagination from '@/components/PaginationComponents';
-import { Grid, List, X, Search } from 'lucide-react';
+import { Grid, List, X, Search, ChevronDown } from 'lucide-react';
 import Header from '@/components/Header';
 import Head from 'next/head';
 
@@ -310,188 +310,94 @@ const Catalog: NextPage<CatalogProps> = ({
     setCurrentPage(1);
   };
 
+  const categories = [
+    { name: 'Люстры', href: '/catalog/Люстры' },
+    { name: 'Подвесные светильники', href: '/catalog/Подвесные-светильники' },
+    { name: 'Потолочные светильники', href: '/catalog/Потолочные-светильники' },
+    { name: 'Напольные светильники (Торшер)', href: '/catalog/Напольные-светильники' },
+    { name: 'Настенные светильники (Бра)', href: '/catalog/Настенные-светильники' },
+    { name: 'Настольные светильники', href: '/catalog/Настольные-светильники' },
+    { name: 'Подсветка', href: '/catalog/Подсветка' },
+    { name: 'Встраиваемый светильник', href: '/catalog/Встраиваемый-светильник' },
+    { name: 'Аксессуары', href: '/catalog/Аксессуары' },
+  ];
+
   return (
     <>
       <Head>
-        <title>Каталог Люстр - Все Бренды | MoreElecktriki.ru</title>
-        <meta name="description" content="Большой выбор люстр от различных брендов. Высокое качество и доступные цены." />
+        <title>Каталог светильников | MoreElecktriki.ru</title>
+        <meta name="description" content="Большой выбор светильников от различных брендов. Высокое качество и доступные цены." />
       </Head>
-      <div className="min-h-screen bg-white relative text-black">
+      <div className="min-h-screen bg-white">
         <Header />
 
-        {/* Breadcrumbs */}
-        <div className="container mx-auto mt-24 md:mt-40 px-4 pt-4 pb-2">
-          <div className="flex flex-wrap items-center text-xs md:text-sm">
-            <a href="/" className="hover:text-gray-900 transition-colors">
-              Minimiru.ru
-            </a>
-            <span className="mx-2">/</span>
-            <a href="/lighting" className="hover:text-gray-900 transition-colors">
-              Освещение для дома
-            </a>
-            <span className="mx-2">/</span>
-            <span className="text-gray-900">Люстры</span>
+        {/* Основной контейнер */}
+        <div className="container mx-auto px-4 mt-32">
+          {/* Заголовок с выпадающим меню */}
+          <div className="flex items-center justify-between py-6 border-b border-gray-200">
+            <button className="flex items-center text-2xl font-bold text-black">
+              Декоративный свет
+              <ChevronDown className="ml-2 w-6 h-6" />
+            </button>
           </div>
-        </div>
 
-        {/* Заголовок страницы */}
-        <div className="container mx-auto px-4 py-6">
-          <h1 className="text-2xl md:text-4xl font-medium">
-            Люстры
-          </h1>
-        </div>
-
-        {/* Фильтры и сортировка */}
-        <div className="sticky top-[80px] bg-white z-30 border-t border-b border-gray-200">
-          <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between py-3 space-y-3 md:space-y-0">
-              <div className="flex flex-wrap items-center gap-4">
-                <button
-                  onClick={() => setIsFilterOpen(true)}
-                  className="px-4 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-800 transition-colors"
-                >
-                  Все фильтры
-                </button>
-                <button className="px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-                  Цена
-                </button>
-                <button className="px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-                  Степень пылевлагозащиты
-                </button>
-                <button className="px-4 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-                  Источник света
-                </button>
-              </div>
-              <div className="flex items-center gap-4">
-                <span className="text-gray-500">Товаров: {totalProducts}</span>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => setViewMode('grid')}
-                    className={`p-2 rounded-md transition-colors duration-200 ${viewMode === 'grid' ? 'bg-gray-200' : 'bg-white'}`}
+          {/* Основной контент */}
+          <div className="flex gap-8 pt-6">
+            {/* Левое меню категорий */}
+            <div className="w-72 flex-shrink-0">
+              <nav className="space-y-4">
+                {categories.map((category) => (
+                  <a
+                    key={category.href}
+                    href={category.href}
+                    className="block text-gray-900 hover:text-gray-600 transition-colors"
                   >
-                    <Grid size={20} />
-                  </button>
-                  <button
-                    onClick={() => setViewMode('list')}
-                    className={`p-2 rounded-md transition-colors duration-200 ${viewMode === 'list' ? 'bg-gray-200' : 'bg-white'}`}
-                  >
-                    <List size={20} />
-                  </button>
-                </div>
-              </div>
+                    {category.name}
+                  </a>
+                ))}
+              </nav>
             </div>
-          </div>
-        </div>
 
-        {/* Список товаров */}
-        <div className="container mx-auto px-4 py-8" ref={productsContainerRef}>
-          {isPageLoading ? (
-            <div className="flex justify-center items-center h-64">
-              <ClipLoader color="#000000" loading={true} size={60} />
-            </div>
-          ) : (
-            <CatalogOfProducts products={products} viewMode={viewMode} />
-          )}
-          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
-        </div>
-
-        {/* Выезжающая панель фильтров */}
-        <div
-          className={`fixed inset-0 bg-black bg-opacity-50 transition-opacity z-40 ${isFilterOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-        >
-          <div
-            className={`fixed inset-y-0 left-0 w-full sm:w-96 bg-white transform transition-transform duration-300 ease-in-out overflow-y-auto ${
-              isFilterOpen ? 'translate-x-0' : '-translate-x-full'
-            }`}
-          >
-            <div className="p-6">
-              <div className="flex justify-between items-center mb-8">
-                <h2 className="text-2xl font-bold">Фильтры</h2>
-                <button onClick={() => setIsFilterOpen(false)} className="p-2 hover:bg-gray-100 rounded-full">
-                  <X size={24} />
-                </button>
-              </div>
-
-              {/* Поиск */}
-              <div className="mb-8">
-                <div className="relative">
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => {
-                      setSearchQuery(e.target.value);
-                      setCurrentPage(1);
-                    }}
-                    placeholder="Поиск товаров..."
-                    className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none"
-                  />
-                  <Search className="absolute left-4 top-3.5 h-5 w-5 text-gray-400" />
+            {/* Правая часть с фильтрами и товарами */}
+            <div className="flex-1">
+              {/* Верхняя панель с фильтрами */}
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-4">
+                  <button className="text-gray-900 font-medium">Фильтры</button>
+                  <button className="text-gray-900 font-medium">Новинки</button>
+                  <button className="text-gray-900 font-medium">Акции</button>
+                  <button className="text-gray-900 font-medium">По цене</button>
                 </div>
-              </div>
-
-              {/* Фильтр по цене */}
-              <div className="mb-8">
-                <h3 className="text-lg font-semibold mb-4">Цена</h3>
-                <div className="flex items-center space-x-4">
-                  <div className="relative flex-1">
-                    <input
-                      type="number"
-                      value={minPrice}
-                      onChange={(e) => {
-                        setMinPrice(+e.target.value);
-                        setCurrentPage(1);
-                      }}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none"
-                      placeholder="От"
-                    />
-                    <span className="absolute right-4 top-3 text-gray-400">₽</span>
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
+                    <span className="text-gray-600">Валюта:</span>
+                    <select className="bg-transparent border-none font-medium focus:outline-none">
+                      <option>RUB</option>
+                    </select>
                   </div>
-                  <span className="text-gray-400">—</span>
-                  <div className="relative flex-1">
-                    <input
-                      type="number"
-                      value={maxPrice}
-                      onChange={(e) => {
-                        setMaxPrice(+e.target.value);
-                        setCurrentPage(1);
-                      }}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none"
-                      placeholder="До"
-                    />
-                    <span className="absolute right-4 top-3 text-gray-400">₽</span>
+                  <span className="text-gray-600">1230 товаров</span>
+                </div>
+              </div>
+
+              {/* Список товаров */}
+              <div className="min-h-[200px]">
+                {isPageLoading ? (
+                  <div className="flex justify-center items-center h-64">
+                    <ClipLoader color="#000000" loading={true} size={60} />
                   </div>
-                </div>
+                ) : (
+                  <CatalogOfProducts products={products} viewMode={viewMode} />
+                )}
               </div>
 
-              {/* Выбор бренда */}
-              <div className="mb-8">
-                <h3 className="text-lg font-semibold mb-4">Бренды</h3>
-                <div className="space-y-3">
-                  {brands.map((brand) => (
-                    <label key={brand.name} className="flex items-center p-3 rounded-lg hover:bg-gray-50 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="brand"
-                        checked={selectedBrand.name === brand.name}
-                        onChange={() => handleBrandChange(brand)}
-                        className="form-radio text-blue-500 h-5 w-5"
-                      />
-                      <span className="ml-3">{brand.name}</span>
-                    </label>
-                  ))}
-                </div>
+              {/* Пагинация */}
+              <div className="mt-14">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={setCurrentPage}
+                />
               </div>
-
-              {/* Сброс фильтров */}
-              <button
-                onClick={() => {
-                  handleResetFilters();
-                  setIsFilterOpen(false);
-                }}
-                className="w-full py-3 bg-red-50 text-red-500 rounded-xl hover:bg-red-100 transition-colors"
-              >
-                Сбросить фильтры
-              </button>
             </div>
           </div>
         </div>

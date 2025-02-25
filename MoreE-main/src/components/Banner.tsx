@@ -1,5 +1,4 @@
 'use client';
-import LightStar from '@/app/cardproducts/LightStar/page';
 import Link from 'next/link';
 import CategoryGrid from './GridCategory';
 

@@ -2,12 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import 'tailwindcss/tailwind.css';
-import Header from '@/components/Header';
 import { Toaster, toast } from 'sonner';
-import { Heart, Facebook, Send, ChevronLeft, ChevronRight } from 'lucide-react';
-import ClipLoader from 'react-spinners/ClipLoader';
-import { FaWhatsapp } from "react-icons/fa";
+import { Heart, ArrowLeft, Copy } from 'lucide-react';
+import Header from '@/components/Header';
 
 interface ProductI {
   imageAddress: any;
@@ -23,19 +20,28 @@ interface ProductI {
 const ProductDetail: React.FC = () => {
   const router = useRouter();
   const { supplier, article } = router.query;
-
   const [product, setProduct] = useState<ProductI | null>(null);
   const [loading, setLoading] = useState(true);
-  const [isLiked, setIsLiked] = useState(false);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [quantity, setQuantity] = useState(1);
+  // Основное изображение, отображаемое в большом блоке
+  const [mainImage, setMainImage] = useState<string>('');
+  // Флаг ошибки загрузки для основного изображения
+  const [mainImageError, setMainImageError] = useState(false);
+  // 5 случайных миниатюр (не включая первое изображение)
+  const [thumbnails, setThumbnails] = useState<string[]>([]);
+  // Индексы миниатюр, у которых произошла ошибка загрузки
+  const [failedThumbnailIndices, setFailedThumbnailIndices] = useState<number[]>([]);
+  // Состояние для избранного
+  const [isFavorite, setIsFavorite] = useState(false);
 
+  // Загрузка данных о товаре
   useEffect(() => {
     const fetchProduct = async () => {
       if (!supplier || !article) return;
       setLoading(true);
       try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/product/${supplier}?productArticle=${article}`);
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/product/${supplier}?productArticle=${article}`
+        );
         setProduct(response.data);
       } catch (error) {
         console.error(error);
@@ -47,190 +53,218 @@ const ProductDetail: React.FC = () => {
     fetchProduct();
   }, [supplier, article]);
 
+  // Обработка изображений: выбираем основное (первое) и 5 случайных из оставшихся
   useEffect(() => {
-    const liked = JSON.parse(localStorage.getItem('liked') || '{"products": []}');
-    const isProductLiked = liked.products.some((item: any) => item.article === product?.article);
-    setIsLiked(isProductLiked);
+    if (product) {
+      const allImages =
+        typeof product.imageAddresses === 'string'
+          ? [product.imageAddresses]
+          : Array.isArray(product.imageAddresses)
+          ? product.imageAddresses
+          : typeof product.imageAddress === 'string'
+          ? [product.imageAddress]
+          : Array.isArray(product.imageAddress)
+          ? product.imageAddress
+          : [];
+      if (allImages.length > 0) {
+        // Основное изображение — всегда первое
+        setMainImage(allImages[0]);
+        setMainImageError(false);
+        if (allImages.length > 1) {
+          // Из оставшихся выбираем 5 случайных
+          const remaining = allImages.slice(1);
+          // Перемешиваем массив (алгоритм Фишера-Йетса)
+          for (let i = remaining.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [remaining[i], remaining[j]] = [remaining[j], remaining[i]];
+          }
+          setThumbnails(remaining.slice(0, 5));
+          setFailedThumbnailIndices([]);
+        }
+      }
+    }
   }, [product]);
 
-  const extractStock = (stock: string): number => {
-    const match = stock.match(/\d+/);
-    return match ? parseInt(match[0], 10) : 0;
-  };
-
-  const addToCart = () => {
-    if (!product) {
-      toast.error('Товар не найден');
-      return;
+  // При загрузке товара проверяем, есть ли он в избранном
+  useEffect(() => {
+    if (product) {
+      const likedData = JSON.parse(localStorage.getItem('liked') || '{"products": []}');
+      const exists = likedData.products.some((p: ProductI) => p._id === product._id);
+      setIsFavorite(exists);
     }
+  }, [product]);
 
-    const stockCount = extractStock(product.stock);
-    if (stockCount <= 0) {
-      toast.error('Товар закончился');
-      return;
-    }
-
-    const cart = JSON.parse(localStorage.getItem('cart') || '{"products": []}');
-    const existingProductIndex = cart.products.findIndex((item: any) => item.article === product.article);
-
-    if (existingProductIndex > -1) {
-      cart.products[existingProductIndex].quantity += quantity;
+  // Функция для добавления/удаления товара в/из избранного
+  const toggleFavorite = () => {
+    if (!product) return;
+    const likedData = JSON.parse(localStorage.getItem('liked') || '{"products": []}');
+    if (isFavorite) {
+      // Удаляем товар
+      likedData.products = likedData.products.filter((p: ProductI) => p._id !== product._id);
+      localStorage.setItem('liked', JSON.stringify(likedData));
+      setIsFavorite(false);
+      toast.success('Товар удалён из избранного');
     } else {
-      cart.products.push({ article: product.article, source: product.source, quantity });
-    }
-
-    localStorage.setItem('cart', JSON.stringify(cart));
-    toast.success('Товар добавлен в корзину');
-  };
-
-  const addToLiked = () => {
-    if (!product) {
-      toast.error('Товар не найден');
-      return;
-    }
-
-    const liked = JSON.parse(localStorage.getItem('liked') || '{"products": []}');
-    const existingProductIndex = liked.products.findIndex((item: any) => item.article === product.article);
-
-    if (existingProductIndex > -1) {
-      liked.products.splice(existingProductIndex, 1);
-      setIsLiked(false);
-      toast.success('Товар удален из избранного');
-    } else {
-      liked.products.push({ article: product.article, source: product.source, quantity: 1 });
-      setIsLiked(true);
+      // Добавляем товар
+      likedData.products.push(product);
+      localStorage.setItem('liked', JSON.stringify(likedData));
+      setIsFavorite(true);
       toast.success('Товар добавлен в избранное');
-    }
-
-    localStorage.setItem('liked', JSON.stringify(liked));
-  };
-
-  const shareOnTelegram = () => {
-    if (product) {
-      const url = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(product.name)}`;
-      window.open(url, '_blank');
-    }
-  };
-
-  const shareOnWhatsApp = () => {
-    if (product) {
-      const url = `https://wa.me/?text=${encodeURIComponent(product.name)}%20${encodeURIComponent(window.location.href)}`;
-      window.open(url, '_blank');
-    }
-  };
-
-  const shareOnFacebook = () => {
-    if (product) {
-      const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`;
-      window.open(url, '_blank');
-    }
-  };
-
-  const goToPrevImage = () => {
-    const images = Array.isArray(product?.imageAddresses) ? product?.imageAddresses : [product?.imageAddresses];
-    if (images?.length > 0) {
-      setCurrentImageIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
-    }
-  };
-
-  const goToNextImage = () => {
-    const images = Array.isArray(product?.imageAddresses) ? product?.imageAddresses : [product?.imageAddresses];
-    if (images?.length > 0) {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
     }
   };
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen bg-white text-black">
-        <ClipLoader size={50} color="#000000" loading={loading} />
+      <div className="flex justify-center items-center h-screen bg-white">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
       </div>
     );
   }
 
   if (!product) {
     return (
-      <div className="flex justify-center items-center h-screen bg-white text-black">
+      <div className="flex justify-center items-center h-screen bg-white">
         <p>Товар не найден</p>
       </div>
     );
   }
 
-  const images = Array.isArray(product?.imageAddresses) && product.imageAddresses.length > 0
-  ? product.imageAddresses
-  : product?.imageAddress
-  ? [product.imageAddress]
-  : []; // обработка imageAddress
-
   return (
-    <div className="flex flex-col min-h-screen bg-white">
-      <Toaster position="top-center" richColors />
+    <div className="min-h-screen bg-white">
       <Header />
-      <div className="flex justify-center mt-52 items-center flex-1 p-6">
-        <div className="bg-white rounded-lg  flex flex-col md:flex-row max-w-7xl w-full">
-          {/* Левый блок с изображением */}
-          <div className="w-full md:w-1/2 relative">
-            {images.length > 0 ? (
-              <img className="w-full h-full object-cover rounded-lg" src={images[currentImageIndex]} alt={product.name} />
-            ) : (
-              <div className="w-full h-full bg-gray-200">No Image</div>
-            )}
+      <div className="max-w-[1420px] mt-10 mx-auto px-8 pt-24">
+        {/* Top Navigation */}
+        <div className="flex items-center justify-between py-6">
+          <button 
+            onClick={() => router.back()}
+            className="flex items-center text-gray-900 hover:text-gray-700"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            <span className="text-sm">Напольные светильники (Торшер)</span>
+          </button>
+          <div className="flex items-center gap-4">
+            <button className="p-2 hover:bg-gray-100 rounded-full">
+              <Copy className="w-5 h-5" />
+            </button>
+            <button 
+              onClick={toggleFavorite}
+              className="p-2 hover:bg-gray-100 rounded-full"
+            >
+              <Heart 
+                className={`w-5 h-5 ${isFavorite ? 'text-red-500 fill-red-500' : 'text-gray-500'}`} 
+              />
+            </button>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex">
+          {/* Left Side - Product Info */}
+          <div className="w-5/12 pr-12">
+            <div className="mb-8">
+              <div className="flex gap-2 mb-4">
+                <span className="px-3 py-1 bg-gray-100 rounded-full text-xs">new</span>
+                <span className="px-3 py-1 bg-gray-100 rounded-full text-xs">LED</span>
+              </div>
+              <h1 className="text-4xl font-bold mb-2">{product.name}</h1>
+              <div className="flex items-center gap-3">
+                <p className="text-sm text-gray-600">{product.article}</p>
+                <button className="text-sm text-gray-600 underline">Все характеристики</button>
+              </div>
+            </div>
+
+            {/* Dimensions */}
+            <div className="flex items-center gap-3 mb-12">
+              <span className="text-xl">1620</span>
+              <span className="text-xl">×</span>
+              <span className="text-xl">450</span>
+              <span className="text-xl">×</span>
+              <span className="text-xl">450</span>
+            </div>
+
+            {/* Specifications */}
+            <div className="space-y-6">
+              <div>
+                <p className="text-sm mb-2">Цветовая температура, К</p>
+                <div className="h-px bg-gray-200"></div>
+              </div>
+
+              <div>
+                <p className="text-sm mb-2">Мощность, Вт</p>
+                <p className="text-sm text-gray-600">36</p>
+                <div className="h-px bg-gray-200"></div>
+              </div>
+
+              <div>
+                <p className="text-sm mb-2">Степень защиты</p>
+                <p className="text-sm text-gray-600">IP 20</p>
+                <div className="h-px bg-gray-200"></div>
+              </div>
+            </div>
+
+            {/* Price and Action */}
+            <div className="mt-12">
+              <div className="flex items-baseline justify-between mb-6">
+                <span className="text-4xl font-bold">
+                  {new Intl.NumberFormat('ru-RU').format(product.price)} ₽
+                </span>
+                <span className="text-sm text-gray-600">В наличии: {product.stock}</span>
+              </div>
+              <button className="w-full py-4 border border-gray-900 rounded text-sm font-medium hover:bg-gray-50">
+                Найти у партнёра
+              </button>
+            </div>
           </div>
 
-          {/* Правая часть с информацией о товаре */}
-          <div className="w-full md:w-1/2 flex flex-col justify-between p-8">
-            <div>
-              {/* Название товара */}
-              <h1 className="text-4xl font-extrabold text-black tracking-wide">{product.name}</h1>
-              {/* Цена */}
-             
-              {/* Артикул и наличие */}
-              <p className="text-lg text-gray-600 mt-4">Артикул: {product.article}</p>
-              <p className="text-lg text-gray-600 mt-2">Остаток: {product.stock} шт.</p>
-            </div>
-            <p className="text-4xl font-semibold text-gray-800 mt-2">{product.price} ₽</p>
-            <div className="mt-6 flex items-center justify-between">
-            
-              {/* Увеличение и уменьшение количества */}
-              <div className="flex items-center space-x-4">
-                <button onClick={() => setQuantity(Math.max(quantity - 1, 1))} className="bg-neutral-700 text-white px-4 py-2 text-3xl">
-                  -
-                </button>
-                <span className="text-2xl font-bold">{quantity}</span>
-                <button onClick={() => setQuantity(quantity + 1)} className="bg-neutral-700 text-white px-4 py-2  text-3xl">
-                  +
-                </button>
-              </div>
-
-              {/* Кнопка добавить в корзину */}
-              <button onClick={addToCart} className="bg-neutral-700 text-white p-8 mx-2 rounded-md text-lg transition duration-500 hover:bg-blue-700 w-48">
-                В Корзину
-              </button>
-            </div>
-
-            <div className="mt-6 flex items-center space-x-4">
-              {/* Добавить в избранное */}
-              <button onClick={addToLiked} className="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
-                <Heart fill={isLiked ? 'red' : 'none'} className="w-6 h-6" />
-                <span>{isLiked ? 'Удалить из избранного' : 'В избранное'}</span>
-              </button>
-
-              {/* Кнопки для соцсетей */}
-              <div className="flex space-x-4">
-                <button onClick={shareOnFacebook}>
-                  <Facebook color="black" size={24} />
-                </button>
-                <button onClick={shareOnTelegram}>
-                  <Send color="black" size={24} />
-                </button>
-                <button onClick={shareOnWhatsApp}>
-                  <FaWhatsapp color="black" size={24} />
-                </button>
-              </div>
+          {/* Right Side - Image */}
+          <div className="w-7/12 bg-[#f8f8f8]">
+            <div className="aspect-square relative">
+              {/* Основное изображение показывается только если загрузилось */}
+              {!mainImageError && mainImage && (
+                <img
+                  src={`${mainImage}?q=75&w=400`}
+                  alt="Product"
+                  className="w-full h-full object-contain p-12 mix-blend-multiply"
+                  onError={() => setMainImageError(true)}
+                />
+              )}
+              
+              {/* Thumbnails */}
+              {thumbnails.length > 0 && (
+                <div className="absolute bottom-4 left-4 right-4">
+                  <div className="flex gap-2 overflow-x-auto py-2">
+                    {thumbnails.map((img, idx) => {
+                      if (failedThumbnailIndices.includes(idx)) return null;
+                      return (
+                        <button
+                          key={idx}
+                          onClick={() => {
+                            setMainImage(img);
+                            setMainImageError(false);
+                          }}
+                          className={`relative flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden ${
+                            mainImage === img ? 'ring-2 ring-black' : 'opacity-50'
+                          }`}
+                        >
+                          <img 
+                            src={`${img}?q=75&w=100`}
+                            alt=""
+                            className="w-full h-full object-cover"
+                            onError={() =>
+                              setFailedThumbnailIndices((prev) => [...prev, idx])
+                            }
+                          />
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
+      <Toaster position="top-center" richColors />
     </div>
   );
 };
