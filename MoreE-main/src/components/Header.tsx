@@ -597,7 +597,7 @@ const Header = () => {
                 </div>
               )}
             </form>
-          </div>
+        </div>
 
           {/* Пользовательские действия */}
           <div className="hidden md:flex items-center space-x-8">
@@ -804,13 +804,13 @@ const Header = () => {
               ) : null}
             </div>
           </div>
-        </div>
+      </div>
       )}
 
       {/* Мобильное меню */}
       {isMobileMenuOpen && (
-        <div
-          id="mobile-menu"
+      <div 
+        id="mobile-menu"
           className="fixed inset-0 z-50 bg-white overflow-y-auto"
         >
           <div className="container mx-auto px-4 py-4">
@@ -825,8 +825,8 @@ const Header = () => {
               >
                 <X className="w-6 h-6 text-black" />
               </button>
-            </div>
-            
+          </div>
+
             {/* Поиск */}
             <div className="mt-4 mb-6">
               <form onSubmit={handleSearchSubmit} className="relative">
@@ -868,7 +868,7 @@ const Header = () => {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
                       </svg>
                       Каталог
-                    </div>
+                      </div>
                     {isMobileCatalogOpen ? (
                       <ChevronUp className="w-5 h-5 text-black" />
                     ) : (
@@ -935,8 +935,8 @@ const Header = () => {
                                 Все {category.title.toLowerCase()}
                               </Link>
                             </div>
-                          )}
-                        </div>
+                    )}
+                  </div>
                       ))}
                     </div>
                   )}
@@ -964,7 +964,7 @@ const Header = () => {
                   Контакты
                 </Link>
               </div>
-            </div>
+              </div>
 
             {/* Контактная информация */}
             <div className="mt-8 border-t border-gray-100 pt-6">
@@ -980,7 +980,7 @@ const Header = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   Пн-Пт: 9:00-18:00
-                </div>
+              </div>
                 <Link href="mailto:info@example.com" className="flex items-center text-black">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />

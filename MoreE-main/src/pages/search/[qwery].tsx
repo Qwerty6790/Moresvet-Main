@@ -55,6 +55,20 @@ const SearchResults: React.FC = () => {
     'Материал': [],
   });
   const [showFiltered, setShowFiltered] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const sortOptions = [
     { id: 'popular', label: 'По популярности' },
@@ -249,7 +263,7 @@ const SearchResults: React.FC = () => {
       {/* Основной контейнер */}
       <div className="container mx-auto px-4 mt-32">
         {/* Хлебные крошки */}
-        <div className="flex items-center space-x-2 text-sm text-gray-600 mb-6">
+        <div className="flex items-center space-x-2 text-sm text-gray-600 mb-6 overflow-x-auto whitespace-nowrap">
           <a href="/" className="hover:text-gray-900">Главная</a>
           <span>/</span>
           <a href="/catalog" className="hover:text-gray-900">Каталог</a>
@@ -259,16 +273,16 @@ const SearchResults: React.FC = () => {
 
         {/* Заголовок с выпадающим меню */}
         <div className="flex items-center justify-between py-6">
-          <button className="flex items-center text-2xl font-medium text-gray-900">
+          <button className="flex items-center text-xl md:text-2xl font-medium text-gray-900">
             {getCategoryTitle(query)}
             <ChevronDown className="ml-2 w-5 h-5" />
           </button>
       </div>
 
         {/* Основной контент */}
-        <div className="flex gap-8 pt-6">
-          {/* Левое меню категорий */}
-          <div className="w-64 flex-shrink-0">
+        <div className="flex flex-col md:flex-row gap-8 pt-6">
+          {/* Левое меню категорий - скрыто на мобильных */}
+          <div className="hidden md:block w-64 flex-shrink-0">
             <nav className="space-y-3">
               <a href="/catalog/Люстры" className="block text-[15px] text-gray-600 hover:text-gray-900 transition-colors">
                 Люстры
@@ -303,10 +317,10 @@ const SearchResults: React.FC = () => {
           {/* Правая часть с фильтрами и товарами */}
           <div className="flex-1">
             {/* Верхняя панель с фильтрами */}
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center space-x-6">
-            <button 
-              onClick={() => setIsFilterOpen(true)}
+            <div className="flex flex-wrap items-center justify-between mb-8 gap-4">
+              <div className="flex flex-wrap items-center gap-4 md:gap-6">
+                <button 
+                  onClick={() => setIsFilterOpen(true)}
                   className="flex items-center space-x-2 px-4 py-2.5 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition"
                 >
                   <Sliders className="w-5 h-5" />
@@ -316,53 +330,55 @@ const SearchResults: React.FC = () => {
                       {getActiveFiltersCount()}
                     </span>
                   )}
-            </button>
-                <button className="text-gray-600 hover:text-gray-900 transition">Новинки</button>
-                <button className="text-gray-600 hover:text-gray-900 transition">Акции</button>
-                <button className="text-gray-600 hover:text-gray-900 transition">По цене</button>
+                </button>
+                <div className="hidden md:flex items-center space-x-6">
+                  <button className="text-gray-600 hover:text-gray-900 transition">Новинки</button>
+                  <button className="text-gray-600 hover:text-gray-900 transition">Акции</button>
+                  <button className="text-gray-600 hover:text-gray-900 transition">По цене</button>
+                </div>
               </div>
 
-              <div className="flex items-center space-x-6">
-                <div className="flex items-center space-x-2">
+              <div className="flex items-center gap-4 md:gap-6">
+                <div className="hidden md:flex items-center space-x-2">
                   <span className="text-gray-600">Валюта:</span>
                   <select className="bg-transparent border-none text-gray-900 focus:outline-none">
                     <option>RUB</option>
                   </select>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <span className="text-gray-600">{totalProducts} товаров</span>
+                  <span className="text-gray-600 text-sm md:text-base">{totalProducts} товаров</span>
                   <div className="flex items-center space-x-2 bg-gray-100 p-1 rounded-lg">
-              <button
-                onClick={() => setViewMode('grid')}
+                    <button
+                      onClick={() => setViewMode('grid')}
                       className={`p-2 rounded-md transition ${
                         viewMode === 'grid' 
                           ? 'bg-white text-gray-900 shadow-sm' 
                           : 'text-gray-600 hover:text-gray-900'
                       }`}
                     >
-                      <Grid className="w-5 h-5" />
-              </button>
-              <button
-                onClick={() => setViewMode('list')}
+                      <Grid className="w-4 h-4 md:w-5 md:h-5" />
+                    </button>
+                    <button
+                      onClick={() => setViewMode('list')}
                       className={`p-2 rounded-md transition ${
                         viewMode === 'list' 
                           ? 'bg-white text-gray-900 shadow-sm' 
                           : 'text-gray-600 hover:text-gray-900'
                       }`}
                     >
-                      <List className="w-5 h-5" />
-              </button>
+                      <List className="w-4 h-4 md:w-5 md:h-5" />
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </div>
 
             {/* Список товаров */}
             {loading ? (
-          <div className="flex justify-center items-center h-64">
+              <div className="flex justify-center items-center h-64">
                 <ClipLoader size={50} color="#000000" />
-          </div>
-        ) : (
+              </div>
+            ) : (
               <div>
                 {products.length === 0 ? (
                   <div className="text-center py-16">
@@ -372,7 +388,7 @@ const SearchResults: React.FC = () => {
                     <h2 className="text-xl font-medium text-gray-900 mb-4">
                       По запросу "{query}" ничего не найдено
                     </h2>
-            <button
+                    <button
                       onClick={() => router.push('/')}
                       className="inline-flex items-center px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition"
                     >
@@ -425,7 +441,7 @@ const SearchResults: React.FC = () => {
                   <div className="grid grid-cols-2 gap-3">
                     {options.map(option => (
                       <label key={option} className="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
-                <input
+                        <input
                           type="checkbox"
                           checked={selectedFilters[category].includes(option)}
                           onChange={() => handleFilterChange(category, option)}
@@ -434,7 +450,7 @@ const SearchResults: React.FC = () => {
                         <span className="ml-3 text-sm">{option}</span>
                       </label>
                     ))}
-                </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -447,12 +463,12 @@ const SearchResults: React.FC = () => {
               >
                 Сбросить все фильтры
               </button>
-            <button
+              <button
                 onClick={() => setIsFilterOpen(false)}
                 className="w-full py-3 text-white bg-gray-900 rounded-xl hover:bg-gray-800 transition duration-200"
               >
                 Показать {totalProducts} товаров
-            </button>
+              </button>
             </div>
           </div>
         </div>
