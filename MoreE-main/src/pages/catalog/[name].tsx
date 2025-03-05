@@ -372,55 +372,167 @@ const Catalog: NextPage<CatalogProps> = ({
       <Head>
         <title>Каталог светильников | MoreElecktriki.ru</title>
         <meta name="description" content="Большой выбор светильников от различных брендов. Высокое качество и доступные цены." />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <div className="min-h-screen bg-white">
         <Header />
 
         {/* Основной контейнер */}
-        <div className="container mx-auto px-4 mt-40">
+        <div className="container mx-auto px-4 sm:px-6 mt-28 sm:mt-32 md:mt-36 lg:mt-40">
           {/* Заголовок с выпадающим меню */}
-          <div className="flex items-center justify-between py-6 border-b border-gray-200">
-            <button className="flex items-center text-2xl font-bold text-black">
-              Каталог
-              <ChevronDown className="ml-2 w-6 h-6" />
-            </button>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between py-4 sm:py-6 border-b border-gray-200">
+            <div className="flex items-center justify-between">
+              <button className="flex items-center text-xl sm:text-2xl font-bold text-black">
+                Каталог
+                <ChevronDown className="ml-2 w-5 h-5 sm:w-6 sm:h-6" />
+              </button>
+              
+              {/* Мобильная кнопка фильтров */}
+              <button 
+                className="flex items-center text-sm font-medium bg-gray-100 px-3 py-1.5 rounded-lg sm:hidden"
+                onClick={() => setIsFilterOpen(!isFilterOpen)}
+              >
+                Фильтры
+                {isFilterOpen ? <X className="ml-2 w-4 h-4" /> : <ChevronDown className="ml-2 w-4 h-4" />}
+              </button>
+            </div>
+            
+            {/* Мобильная строка поиска */}
+            <div className="mt-4 sm:hidden relative">
+              <input
+                type="search"
+                placeholder="Поиск товаров..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[var(--voltum-blue)]"
+              />
+              <button
+                onClick={() => fetchProducts(1)}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1.5 bg-[var(--voltum-blue)] text-white rounded-lg"
+              >
+                <Search className="w-4 h-4" />
+              </button>
+            </div>
           </div>
 
           {/* Основной контент */}
-          <div className="flex flex-col lg:flex-row gap-8 pt-6">
-            {/* Левое меню категорий */}
-            <div className="w-full lg:w-72 flex-shrink-0 mb-4 lg:mb-0">
-              <nav className="space-y-4">
-                {categories.map((category) => (
-                  <a
-                    key={category.href}
-                    href={category.href}
-                    className="block text-gray-900 hover:text-gray-600 transition-colors"
+          <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8 pt-4 sm:pt-6">
+            {/* Левое меню категорий - скрыто на мобильных, показывается при нажатии на кнопку фильтров */}
+            <div className={`w-full lg:w-64 xl:w-72 flex-shrink-0 mb-4 lg:mb-0 transition-all duration-300 ease-in-out ${isFilterOpen ? 'block' : 'hidden lg:block'}`}>
+              <div className="sticky top-24 overflow-auto max-h-[calc(100vh-120px)] pb-6">
+                <h3 className="text-lg font-semibold mb-4 text-gray-900">Категории</h3>
+                <nav className="space-y-2 sm:space-y-3">
+                  {categories.map((category) => (
+                    <a
+                      key={category.href}
+                      href={category.href}
+                      className="block text-gray-900 hover:text-[var(--voltum-blue)] transition-colors text-sm sm:text-base py-1"
+                    >
+                      {category.name}
+                    </a>
+                  ))}
+                </nav>
+                
+                {/* Фильтры для мобильной версии */}
+                <div className="mt-6 lg:hidden">
+                  <h3 className="text-lg font-semibold mb-4 text-gray-900">Фильтры</h3>
+                  
+                  {/* Бренды */}
+                  <div className="mb-4">
+                    <h4 className="font-medium mb-2">Бренд</h4>
+                    <select 
+                      className="w-full p-2 border border-gray-300 rounded-md"
+                      value={selectedBrand.name}
+                      onChange={(e) => {
+                        const brand = brands.find(b => b.name === e.target.value);
+                        if (brand) handleBrandChange(brand);
+                      }}
+                    >
+                      {brands.map((brand) => (
+                        <option key={brand.name} value={brand.name}>
+                          {brand.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  
+                  {/* Цена */}
+                  <div className="mb-4">
+                    <h4 className="font-medium mb-2">Цена</h4>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        placeholder="От"
+                        value={minPrice}
+                        onChange={(e) => setMinPrice(Number(e.target.value))}
+                        className="w-full p-2 border border-gray-300 rounded-md"
+                      />
+                      <span>-</span>
+                      <input
+                        type="number"
+                        placeholder="До"
+                        value={maxPrice}
+                        onChange={(e) => setMaxPrice(Number(e.target.value))}
+                        className="w-full p-2 border border-gray-300 rounded-md"
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* Кнопка сброса фильтров */}
+                  <button
+                    onClick={handleResetFilters}
+                    className="w-full py-2 px-4 bg-gray-100 text-gray-800 rounded-md hover:bg-gray-200 transition-colors mt-4"
                   >
-                    {category.name}
-                  </a>
-                ))}
-              </nav>
+                    Сбросить фильтры
+                  </button>
+                </div>
+              </div>
             </div>
 
             {/* Правая часть с фильтрами и товарами */}
             <div className="flex-1">
-              {/* Верхняя панель с фильтрами */}
-              <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6">
-                <div className="flex items-center gap-4 mb-4 md:mb-0">
-                  <button className="text-gray-900 font-medium">Фильтры</button>
-                  <button className="text-gray-900 font-medium">Новинки</button>
-                  <button className="text-gray-900 font-medium">Акции</button>
-                  <button className="text-gray-900 font-medium">По цене</button>
+              {/* Верхняя панель с фильтрами - скрыта на мобильных */}
+              <div className="hidden sm:flex flex-col md:flex-row items-start md:items-center justify-between mb-4 sm:mb-6">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-4 md:mb-0">
+                  <button className="text-gray-900 font-medium text-sm sm:text-base">Фильтры</button>
+                  <button className="text-gray-900 font-medium text-sm sm:text-base">Новинки</button>
+                  <button className="text-gray-900 font-medium text-sm sm:text-base">Акции</button>
+                  <button 
+                    className="text-gray-900 font-medium text-sm sm:text-base flex items-center"
+                    onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+                  >
+                    По цене
+                    <ChevronDown className={`ml-1 w-4 h-4 transition-transform ${sortOrder === 'desc' ? 'rotate-180' : ''}`} />
+                  </button>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
-                    <span className="text-gray-600">Валюта:</span>
-                    <select className="bg-transparent border-none font-medium focus:outline-none">
+                    <span className="text-gray-600 text-sm sm:text-base">Валюта:</span>
+                    <select className="bg-transparent border-none font-medium focus:outline-none text-sm sm:text-base">
                       <option>RUB</option>
                     </select>
                   </div>
-                  <span className="text-gray-600">{totalProducts} товаров</span>
+                  <span className="text-gray-600 text-sm sm:text-base">{totalProducts} товаров</span>
+                </div>
+              </div>
+
+              {/* Режим отображения товаров */}
+              <div className="flex justify-end mb-4">
+                <div className="flex items-center gap-2 bg-gray-100 p-1 rounded-lg">
+                  <button
+                    className={`p-1.5 rounded-md ${viewMode === 'grid' ? 'bg-white shadow-sm' : ''}`}
+                    onClick={() => setViewMode('grid')}
+                    aria-label="Сетка"
+                  >
+                    <Grid className="w-4 h-4" />
+                  </button>
+                  <button
+                    className={`p-1.5 rounded-md ${viewMode === 'list' ? 'bg-white shadow-sm' : ''}`}
+                    onClick={() => setViewMode('list')}
+                    aria-label="Список"
+                  >
+                    <List className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
 
@@ -428,35 +540,45 @@ const Catalog: NextPage<CatalogProps> = ({
               <div className="min-h-[200px]" ref={productsContainerRef}>
                 {isPageLoading ? (
                   <div className="flex justify-center items-center h-64">
-                    <ClipLoader color="#000000" loading={true} size={60} />
+                    <ClipLoader color="#000B4E" loading={true} size={60} />
                   </div>
-                ) : (
+                ) : products.length > 0 ? (
                   <CatalogOfProducts products={allLoadedProducts} viewMode={viewMode} />
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-64 text-center">
+                    <p className="text-gray-500 mb-4">По вашему запросу ничего не найдено</p>
+                    <button
+                      onClick={handleResetFilters}
+                      className="px-4 py-2 bg-[var(--voltum-blue)] text-white rounded-md hover:bg-[var(--voltum-blue-light)] transition-colors"
+                    >
+                      Сбросить фильтры
+                    </button>
+                  </div>
                 )}
               </div>
 
               {/* Кнопка "Показать еще" */}
               {currentPage < totalPages && (
-                <div className="flex justify-center mt-8">
+                <div className="flex justify-center mt-6 sm:mt-8">
                   <button
                     onClick={handleLoadMore}
                     disabled={isLoadingMore}
-                    className="px-6 py-3 bg-black text-white rounded-md hover:bg-gray-800 transition-colors disabled:opacity-50"
+                    className="px-4 sm:px-6 py-2 sm:py-3 bg-[var(--voltum-blue)] text-white rounded-md hover:bg-[var(--voltum-blue-light)] transition-colors disabled:opacity-50 text-sm sm:text-base w-full sm:w-auto"
                   >
                     {isLoadingMore ? (
-                      <div className="flex items-center">
+                      <div className="flex items-center justify-center">
                         <ClipLoader color="#FFFFFF" loading={true} size={20} />
                         <span className="ml-2">Загрузка...</span>
                       </div>
                     ) : (
-                      "Показать еще"
+                      'Показать еще'
                     )}
                   </button>
                 </div>
               )}
 
               {/* Пагинация */}
-              <div className="flex justify-center mt-14">
+              <div className="mt-6 sm:mt-8 mb-8 sm:mb-12">
                 <Pagination
                   currentPage={currentPage}
                   totalPages={totalPages}

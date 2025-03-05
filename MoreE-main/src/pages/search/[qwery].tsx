@@ -4,7 +4,6 @@ import axios from 'axios';
 import 'tailwindcss/tailwind.css';
 import CatalogOfProductSearch from '@/components/Catalogofsearch';
 import Header from '@/components/Header';
-import Menu from '@/components/Menu';
 import Pagination from '@/components/PaginationComponents';
 import { ClipLoader } from 'react-spinners';
 import { 
@@ -246,7 +245,6 @@ const SearchResults: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#FAFAFA]">
       <Header />
-      <Menu />
 
       {/* Основной контейнер */}
       <div className="container mx-auto px-4 mt-32">

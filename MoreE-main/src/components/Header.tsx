@@ -246,6 +246,7 @@ const Header = () => {
       const encodedSearchQuery = encodeURIComponent(searchQuery);
       router.push(`/search/${encodedSearchQuery}?query=${encodedSearchQuery}`);
       setIsSearchOpen(false);
+      setIsMobileMenuOpen(false);
     }
   };
 
@@ -255,7 +256,27 @@ const Header = () => {
       const encodedSearchQuery = encodeURIComponent(query);
       router.push(`/search/${encodedSearchQuery}?query=${encodedSearchQuery}`);
       setIsSearchOpen(false);
+      setIsMobileMenuOpen(false);
     }
+  };
+
+  // Обработчик для перехода к категории
+  const handleCategoryClick = (categoryTitle: string) => {
+    const encodedCategory = encodeURIComponent(categoryTitle);
+    router.push(`/search/${encodedCategory}?query=${encodedCategory}`);
+    setIsCatalogOpen(false);
+    setIsMobileMenuOpen(false);
+    setIsMobileCatalogOpen(false);
+  };
+
+  // Обработчик для перехода к подкатегории
+  const handleSubCategoryClick = (categoryTitle: string, subCategoryTitle: string) => {
+    const encodedCategory = encodeURIComponent(categoryTitle);
+    const encodedSubCategory = encodeURIComponent(subCategoryTitle);
+    router.push(`/search/${encodedSubCategory}?query=${encodedSubCategory}&category=${encodedCategory}`);
+    setIsCatalogOpen(false);
+    setIsMobileMenuOpen(false);
+    setIsMobileCatalogOpen(false);
   };
 
   const toggleDarkMode = () => {
@@ -686,11 +707,7 @@ const Header = () => {
                           : 'text-gray-700 hover:bg-gray-50'
                       }`}
                       onMouseEnter={() => handleCategoryHover(index)}
-                      onClick={() =>
-                        router.push(
-                          `/search/${encodeURIComponent(category.title)}?query=${encodeURIComponent(category.title)}`
-                        )
-                      }
+                      onClick={() => handleCategoryClick(category.title)}
                     >
                       <img src={category.icon} className="w-5 h-5 mr-3" alt={category.title} />
                       {category.title}
@@ -721,8 +738,12 @@ const Header = () => {
                   <div className="grid grid-cols-4 gap-6">
                     {catalogSubCategories[catalogCategories[activeCategory].title].map((sub, index) => (
                       <Link
-                        href={`/search/${encodeURIComponent(sub.title)}?query=${encodeURIComponent(sub.title)}`}
                         key={index}
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleSubCategoryClick(catalogCategories[activeCategory].title, sub.title);
+                        }}
                         className="group"
                       >
                         <div className="aspect-square bg-gray-50 rounded-lg overflow-hidden mb-3 flex items-center justify-center border border-gray-100 group-hover:border-red-200 transition-colors">
@@ -863,7 +884,13 @@ const Header = () => {
                             onClick={() => toggleAccordionItem(index)}
                             className="flex items-center justify-between w-full py-2 px-2 text-md text-black hover:bg-gray-50 rounded-lg"
                           >
-                            <div className="flex items-center">
+                            <div 
+                              className="flex items-center"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleCategoryClick(category.title);
+                              }}
+                            >
                               <Image
                                 src={category.icon}
                                 alt={category.title}
@@ -886,18 +913,24 @@ const Header = () => {
                                 catalogSubCategories[category.title as keyof typeof catalogSubCategories].map((sub, subIndex) => (
                                   <Link
                                     key={subIndex}
-                                    href={`/catalog/${encodeURIComponent(category.title)}/${encodeURIComponent(sub.title)}`}
+                                    href="#"
                                     className="block py-2 px-2 text-sm text-black hover:bg-gray-50 rounded-lg"
-                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      handleSubCategoryClick(category.title, sub.title);
+                                    }}
                                   >
                                     {sub.title}
                                   </Link>
                                 ))
                               }
                               <Link
-                                href={`/catalog/${encodeURIComponent(category.title)}`}
+                                href="#"
                                 className="block py-2 px-2 text-sm font-medium text-black hover:bg-gray-50 rounded-lg"
-                                onClick={() => setIsMobileMenuOpen(false)}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  handleCategoryClick(category.title);
+                                }}
                               >
                                 Все {category.title.toLowerCase()}
                               </Link>
