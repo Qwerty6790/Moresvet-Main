@@ -133,107 +133,50 @@ const ProductDetail: React.FC = () => {
   return (
     <div className="min-h-screen bg-white">
       <Header />
-      <div className="max-w-[1420px] mt-10 mx-auto px-8 pt-24">
+      <div className="max-w-[1420px] mt-10 mx-auto px-4 sm:px-6 lg:px-8 pt-16 md:pt-24">
         {/* Top Navigation */}
-        <div className="flex items-center justify-between py-6">
+        <div className="flex items-center justify-between py-4 md:py-6">
           <button 
             onClick={() => router.back()}
             className="flex items-center text-gray-900 hover:text-gray-700"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            <span className="text-sm">Напольные светильники (Торшер)</span>
+            <span className="text-xs sm:text-sm">Напольные светильники (Торшер)</span>
           </button>
-          <div className="flex items-center gap-4">
-            <button className="p-2 hover:bg-gray-100 rounded-full">
-              <Copy className="w-5 h-5" />
+          <div className="flex items-center gap-2 sm:gap-4">
+            <button className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-full">
+              <Copy className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
             <button 
               onClick={toggleFavorite}
-              className="p-2 hover:bg-gray-100 rounded-full"
+              className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-full"
             >
               <Heart 
-                className={`w-5 h-5 ${isFavorite ? 'text-red-500 fill-red-500' : 'text-gray-500'}`} 
+                className={`w-4 h-4 sm:w-5 sm:h-5 ${isFavorite ? 'text-red-500 fill-red-500' : 'text-gray-500'}`} 
               />
             </button>
           </div>
         </div>
 
         {/* Main Content */}
-        <div className="flex">
-          {/* Left Side - Product Info */}
-          <div className="w-5/12 pr-12">
-            <div className="mb-8">
-              <div className="flex gap-2 mb-4">
-                <span className="px-3 py-1 bg-gray-100 rounded-full text-xs">new</span>
-                <span className="px-3 py-1 bg-gray-100 rounded-full text-xs">LED</span>
-              </div>
-              <h1 className="text-4xl font-bold mb-2">{product.name}</h1>
-              <div className="flex items-center gap-3">
-                <p className="text-sm text-gray-600">{product.article}</p>
-                <button className="text-sm text-gray-600 underline">Все характеристики</button>
-              </div>
-            </div>
-
-            {/* Dimensions */}
-            <div className="flex items-center gap-3 mb-12">
-              <span className="text-xl">1620</span>
-              <span className="text-xl">×</span>
-              <span className="text-xl">450</span>
-              <span className="text-xl">×</span>
-              <span className="text-xl">450</span>
-            </div>
-
-            {/* Specifications */}
-            <div className="space-y-6">
-              <div>
-                <p className="text-sm mb-2">Цветовая температура, К</p>
-                <div className="h-px bg-gray-200"></div>
-              </div>
-
-              <div>
-                <p className="text-sm mb-2">Мощность, Вт</p>
-                <p className="text-sm text-gray-600">36</p>
-                <div className="h-px bg-gray-200"></div>
-              </div>
-
-              <div>
-                <p className="text-sm mb-2">Степень защиты</p>
-                <p className="text-sm text-gray-600">IP 20</p>
-                <div className="h-px bg-gray-200"></div>
-              </div>
-            </div>
-
-            {/* Price and Action */}
-            <div className="mt-12">
-              <div className="flex items-baseline justify-between mb-6">
-                <span className="text-4xl font-bold">
-                  {new Intl.NumberFormat('ru-RU').format(product.price)} ₽
-                </span>
-                <span className="text-sm text-gray-600">В наличии: {product.stock}</span>
-              </div>
-              <button className="w-full py-4 border border-gray-900 rounded text-sm font-medium hover:bg-gray-50">
-                Найти у партнёра
-              </button>
-            </div>
-          </div>
-
-          {/* Right Side - Image */}
-          <div className="w-7/12 bg-[#f8f8f8]">
+        <div className="flex flex-col lg:flex-row">
+          {/* Right Side - Image (показываем первым на мобильных) */}
+          <div className="w-full lg:w-7/12 lg:order-2 bg-[#f8f8f8] mb-6 lg:mb-0">
             <div className="aspect-square relative">
               {/* Основное изображение показывается только если загрузилось */}
               {!mainImageError && mainImage && (
                 <img
                   src={`${mainImage}?q=75&w=400`}
                   alt="Product"
-                  className="w-full h-full object-contain p-12 mix-blend-multiply"
+                  className="w-full h-full object-contain p-6 sm:p-8 lg:p-12 mix-blend-multiply"
                   onError={() => setMainImageError(true)}
                 />
               )}
               
               {/* Thumbnails */}
               {thumbnails.length > 0 && (
-                <div className="absolute bottom-4 left-4 right-4">
-                  <div className="flex gap-2 overflow-x-auto py-2">
+                <div className="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 right-2 sm:right-4">
+                  <div className="flex gap-1 sm:gap-2 overflow-x-auto py-2">
                     {thumbnails.map((img, idx) => {
                       if (failedThumbnailIndices.includes(idx)) return null;
                       return (
@@ -243,7 +186,7 @@ const ProductDetail: React.FC = () => {
                             setMainImage(img);
                             setMainImageError(false);
                           }}
-                          className={`relative flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden ${
+                          className={`relative flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-lg overflow-hidden ${
                             mainImage === img ? 'ring-2 ring-black' : 'opacity-50'
                           }`}
                         >
@@ -261,6 +204,63 @@ const ProductDetail: React.FC = () => {
                   </div>
                 </div>
               )}
+            </div>
+          </div>
+
+          {/* Left Side - Product Info */}
+          <div className="w-full lg:w-5/12 lg:order-1 lg:pr-12">
+            <div className="mb-4 sm:mb-8">
+              <div className="flex gap-2 mb-3 sm:mb-4">
+                <span className="px-2 sm:px-3 py-0.5 sm:py-1 bg-gray-100 rounded-full text-xs">new</span>
+                <span className="px-2 sm:px-3 py-0.5 sm:py-1 bg-gray-100 rounded-full text-xs">LED</span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">{product.name}</h1>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
+                <p className="text-xs sm:text-sm text-gray-600">{product.article}</p>
+                <button className="text-xs sm:text-sm text-gray-600 underline">Все характеристики</button>
+              </div>
+            </div>
+
+            {/* Dimensions */}
+            <div className="flex items-center gap-2 sm:gap-3 mb-6 sm:mb-12">
+              <span className="text-base sm:text-xl">1620</span>
+              <span className="text-base sm:text-xl">×</span>
+              <span className="text-base sm:text-xl">450</span>
+              <span className="text-base sm:text-xl">×</span>
+              <span className="text-base sm:text-xl">450</span>
+            </div>
+
+            {/* Specifications */}
+            <div className="space-y-4 sm:space-y-6">
+              <div>
+                <p className="text-xs sm:text-sm mb-2">Цветовая температура, К</p>
+                <div className="h-px bg-gray-200"></div>
+              </div>
+
+              <div>
+                <p className="text-xs sm:text-sm mb-2">Мощность, Вт</p>
+                <p className="text-xs sm:text-sm text-gray-600">36</p>
+                <div className="h-px bg-gray-200"></div>
+              </div>
+
+              <div>
+                <p className="text-xs sm:text-sm mb-2">Степень защиты</p>
+                <p className="text-xs sm:text-sm text-gray-600">IP 20</p>
+                <div className="h-px bg-gray-200"></div>
+              </div>
+            </div>
+
+            {/* Price and Action */}
+            <div className="mt-6 sm:mt-12">
+              <div className="flex items-baseline justify-between mb-4 sm:mb-6">
+                <span className="text-2xl sm:text-3xl md:text-4xl font-bold">
+                  {new Intl.NumberFormat('ru-RU').format(product.price)} ₽
+                </span>
+                <span className="text-xs sm:text-sm text-gray-600">В наличии: {product.stock}</span>
+              </div>
+              <button className="w-full py-3 sm:py-4 border border-gray-900 rounded text-xs sm:text-sm font-medium hover:bg-gray-50">
+                Найти у партнёра
+              </button>
             </div>
           </div>
         </div>
