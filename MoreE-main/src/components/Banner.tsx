@@ -1,110 +1,87 @@
 'use client';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import CategoryGrid from './GridCategory';
-
-const categories = [
-  {
-    title: 'Люстры',
-    image: '/images/11.jpg',
-    link: '/catalog/Люстры',
-    size: 'large'
-  },
-  {
-    title: 'Торшер',
-    image: '/images/14.jpg',
-    link: '/catalog/Люстры',
-    size: 'low'
-  },
-  {
-    title: 'Трековые светильники',
-    image: '/images/12.jpg',
-    link: '/catalog/Трековые светильники',
-    size: 'medium'
-  },
-  
-  {
-    title: 'Розетки и выключатели',
-    image: '/images/13.jpg',
-    link: '/catalog/Розетки и выключатели',
-    size: 'small'
-  },
-  {
-    title: 'Точечные светильники',
-    image: '/images/15.jpg',
-    link: '/catalog/Точечные светильники',
-    size: 'small'
-  },
-  {
-    title: 'Умный дом',
-    image: '/images/16.jpg',
-    link: '/catalog/Умный дом',
-    size: 'small'
-  },
-  {
-    title: 'Настенные светильники',
-    image: '/images/17.jpg',
-    link: '/catalog/Настенные светильники',
-    size: 'large'
-  }
-];
-
-const products = [
-  {
-    title: 'Блок питания 100W 24V',
-    price: '5 250₽',
-    image: '/images/products/power.jpg',
-    link: '/products/1',
-    isNew: true
-  },
-  {
-    title: 'Настольная лампа белая',
-    price: '10 100₽',
-    image: '/images/products/lamp.jpg',
-    link: '/products/2'
-  },
-  {
-    title: 'Люстра VARESE',
-    price: '25 600₽',
-    image: '/images/products/chandelier.jpg',
-    link: '/products/3'
-  },
-  {
-    title: 'Подвесной светильник',
-    price: '29 800₽',
-    image: '/images/products/pendant.jpg',
-    link: '/products/4'
-  },
-  {
-    title: 'Подвесной светильник медный',
-    price: '30 400₽',
-    image: '/images/products/copper.jpg',
-    link: '/products/5'
-  }
-];
-
-const features = [
-  {
-    title: 'РАБОТАЕМ 24/7',
-    description: 'консультация и поддержка'
-  },
-  {
-    title: 'БЕСПЛАТНАЯ ДОСТАВКА',
-    description: 'на заказ свыше 5 000₽ по всей России'
-  },
-  {
-    title: '+2 ГОДА ГАРАНТИИ',
-    description: 'от партнёра на все светильники'
-  }
-];
+import Maytoni from '@/app/cardproducts/page';
 
 export default function Banner() {
-  return (
-    <div className="w-full bg-white">
-      {/* Popular Categories */}
-     <CategoryGrid />
+  // Массив преимуществ для отображения
+  const benefits = [
+    {
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-8 h-8">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+        </svg>
+      ),
+      title: 'Гарантия качества',
+      description: 'Все товары проходят строгий контроль качества'
+    },
+    {
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-8 h-8">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      ),
+      title: 'Быстрая доставка',
+      description: 'Доставляем заказы в кратчайшие сроки'
+    },
+    {
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-8 h-8">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+        </svg>
+      ),
+      title: 'Удобная оплата',
+      description: 'Различные способы оплаты для вашего удобства'
+    },
+    {
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-8 h-8">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      ),
+      title: 'Техническая поддержка',
+      description: 'Наши специалисты всегда готовы помочь с выбором'
+    }
+  ];
 
-      {/* New Products and Bestsellers */}
-      
+  // Массив брендов для отображения
+  const brands = [
+    { name: 'Maytoni', logo: '/images/brands/maytoni.png' },
+    { name: 'Voltum', logo: '/images/brands/voltum.png' },
+    { name: 'Lightstar', logo: '/images/brands/lightstar.png' },
+    { name: 'Odeon Light', logo: '/images/brands/odeon.png' },
+    { name: 'Elektrostandard', logo: '/images/brands/elektrostandard.png' },
+    { name: 'Novotech', logo: '/images/brands/novotech.png' }
+  ];
+
+  // Массив специальных предложений
+  const specialOffers = [
+    {
+      title: 'Скидка 20%',
+      description: 'на все подвесные светильники',
+      image: '/images/special-offer-1.jpg',
+      link: '/catalog/pendant'
+    },
+    {
+      title: 'Комплект светильников',
+      description: 'для ванной комнаты со скидкой 15%',
+      image: '/images/special-offer-2.jpg',
+      link: '/catalog/bathroom'
+    }
+  ];
+
+  return (
+    <div className="w-full ">
+      {/* Секция с товарами */}
+      <div className="relative">
+        <div className="absolute top-0 left-0 w-full h-64 z-0"></div>
+        <div className="relative z-10">
+          <Maytoni />  
+        </div>    
+      </div>
+      {/* Секция с категориями */}
+      <CategoryGrid />
     </div>
   );
 }

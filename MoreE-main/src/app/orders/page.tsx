@@ -18,6 +18,7 @@ const Orders: React.FC = () => {
     const fetchOrders = async () => {
       const token = localStorage.getItem('token');
       try {
+        // Запрос всех заказов
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/orders`, {
           headers: {
             Authorization: `Bearer ${token}`,

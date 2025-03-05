@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { ProductI } from '@/types/interfaces';
 
@@ -8,6 +8,9 @@ interface CatalogOfProductsProps {
 }
 
 const ProductCard: React.FC<{ product: ProductI }> = ({ product }) => {
+  const [imageValid, setImageValid] = useState(true);
+
+  // Формируем массив изображений из различных возможных полей
   const images = (() => {
     if (typeof product.imageAddresses === 'string') {
       return [product.imageAddresses];
@@ -23,6 +26,9 @@ const ProductCard: React.FC<{ product: ProductI }> = ({ product }) => {
 
   // Используем только первое изображение
   const mainImage = images[0];
+
+  // Если URL изображения отсутствует или уже была ошибка загрузки – не отображаем товар
+  if (!mainImage || !imageValid) return null;
 
   const addToCart = (article: string, source: string, name: string) => {
     const cart = JSON.parse(localStorage.getItem('cart') || '{"products": []}');
@@ -50,6 +56,7 @@ const ProductCard: React.FC<{ product: ProductI }> = ({ product }) => {
                 alt={product.name}
                 className="w-full h-full object-contain mix-blend-multiply"
                 loading="lazy"
+                onError={() => setImageValid(false)}
               />
             )}
           </div>

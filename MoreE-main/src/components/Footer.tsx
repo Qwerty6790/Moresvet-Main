@@ -1,88 +1,74 @@
 import React from 'react';
+import Link from 'next/link';
+import { Phone, Mail, MessageCircle } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="bg-white text-gray-400 py-8">
-      <div className="container mx-auto px-4">
-        {/* Main Footer Content */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {/* О Minimir */}
+    <footer className=" text-black py-8 border-t border-gray-100">
+      <div className="container mx-auto px-4 max-w-5xl">
+        {/* Main Footer Content - Compact Version */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {/* About MoreElecriki */}
           <div>
-            <h3 className="text-black text-2xl sm:text-3xl mb-4">MoreElecriki</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="hover:text-white">О компании</a></li>
-              <li><a href="#" className="hover:text-white">Контакты</a></li>
-              <li><a href="#" className="hover:text-white">Карта сайта</a></li>
-              <li><a href="#" className="hover:text-white">Публичная оферта</a></li>
-              <li><a href="#" className="hover:text-white">Политика конфиденциальности</a></li>
+            <h3 className="text-black font-medium text-lg mb-3">MoreElecriki</h3>
+            <ul className="space-y-2 text-sm">
+              <li><Link href="/company/about" className="hover:text-red-600 transition-colors duration-200">О компании</Link></li>
+              <li><Link href="/contacts" className="hover:text-red-600 transition-colors duration-200">Контакты</Link></li>
+              <li><Link href="/sitemap" className="hover:text-red-600 transition-colors duration-200">Карта сайта</Link></li>
             </ul>
           </div>
 
-          {/* Покупателю */}
+          {/* For Buyers */}
           <div>
-            <h3 className="text-white text-2xl sm:text-3xl mb-4">Покупателю</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="hover:text-white">Личный кабинет</a></li>
-              <li><a href="#" className="hover:text-white">Доставка и оплата</a></li>
-              <li><a href="#" className="hover:text-white">Обмен и возврат</a></li>
-              <li><a href="#" className="hover:text-white">Онлайн примерочная</a></li>
-              <li><a href="#" className="hover:text-white">Гарантия</a></li>
+            <h3 className="text-black font-medium text-lg mb-3">Покупателю</h3>
+            <ul className="space-y-2 text-sm">
+              <li><Link href="/account" className="hover:text-red-600 transition-colors duration-200">Личный кабинет</Link></li>
+              <li><Link href="/customers/delivery" className="hover:text-red-600 transition-colors duration-200">Доставка и оплата</Link></li>
+              <li><Link href="/customers/warranty" className="hover:text-red-600 transition-colors duration-200">Гарантия</Link></li>
             </ul>
           </div>
 
-          {/* Дизайнерам */}
+          {/* For Designers */}
           <div>
-            <h3 className="text-white text-2xl sm:text-3xl mb-4">Дизайнерам</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="hover:text-white">База 3D моделей</a></li>
-              <li><a href="#" className="hover:text-white">Strotskis Club</a></li>
-              <li><a href="#" className="hover:text-white">Гайд для дизайнеров Werkel</a></li>
-              <li><a href="#" className="hover:text-white">Каталог Werkel 2024</a></li>
-              <li><a href="#" className="hover:text-white">Трековые системы освещения Elektrostandard</a></li>
+            <h3 className="text-black font-medium text-lg mb-3">Дизайнерам</h3>
+            <ul className="space-y-2 text-sm">
+              <li><Link href="/designers/3d-models" className="hover:text-red-600 transition-colors duration-200">База 3D моделей</Link></li>
+              <li><Link href="/designers/club" className="hover:text-red-600 transition-colors duration-200">Клуб дизайнеров</Link></li>
+              <li><Link href="/catalog/werkel" className="hover:text-red-600 transition-colors duration-200">Каталог Werkel 2024</Link></li>
             </ul>
           </div>
 
-          {/* Консультация и Бренды */}
-          <div className="space-y-8">
-            <div>
-              <h3 className="text-white text-2xl sm:text-3xl mb-4">Консультация 24/7</h3>
-              <div className="space-y-2">
-                <p>8 800 777 15 37</p>
-                <p>info@minimir.ru</p>
-                <p>WhatsApp</p>
-                <p>Telegram</p>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-black text-2xl sm:text-3xl mb-4">Наши бренды</h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                <div className="text-black">Maytoni</div>
-                <div className="text-black">Artelamp</div>
-                <div className="text-black">KinkLight</div>
-                <div className="text-black">Stluce</div>
-                <div className="text-black">ELEKTROSTANDARD</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Newsletter Section */}
-        <div className="mt-8">
-          <h3 className="text-white text-2xl sm:text-3xl mb-4">Будьте в тренде</h3>
-          <p className="mb-4">Подписывайтесь на наши каналы в соцсетях и email рассылку и узнавайте первыми о самых интересных новинках и предложениях.</p>
-          <div className="flex gap-4 flex-wrap">
-            <a href="#" className="hover:text-white text-sm sm:text-base">VK</a>
-            <a href="#" className="hover:text-white text-sm sm:text-base">YouTube</a>
-            <a href="#" className="hover:text-white text-sm sm:text-base">Pinterest</a>
-            <a href="#" className="hover:text-white text-sm sm:text-base">Telegram</a>
+          {/* Contact */}
+          <div>
+            <h3 className="text-black font-medium text-lg mb-3">Контакты</h3>
+            <ul className="space-y-2 text-sm">
+              <li className="flex items-center">
+                <Phone className="w-3 h-3 mr-2 text-black" /> 
+                <Link href="tel:88007771537" className="hover:text-red-600 transition-colors duration-200">8 800 777 15 37</Link>
+              </li>
+              <li className="flex items-center">
+                <Mail className="w-3 h-3 mr-2 text-black" /> 
+                <Link href="mailto:info@moreelecriki.ru" className="hover:text-red-600 transition-colors duration-200">info@moreelecriki.ru</Link>
+              </li>
+              <li className="flex items-center">
+                <MessageCircle className="w-3 h-3 mr-2 text-black" /> 
+                <Link href="https://wa.me/88007771537" className="hover:text-red-600 transition-colors duration-200">WhatsApp</Link>
+              </li>
+            </ul>
           </div>
         </div>
 
         {/* Copyright */}
-        <div className="mt-8 text-sm text-center sm:text-left">
-          <p>©1998-2025, Minimir.ru - официальный интернет-магазин производителя.</p>
-          <p>Использование материалов сайта без согласования запрещено.</p>
+        <div className="mt-6 pt-4 border-t border-gray-100 text-xs text-gray-500">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <p>©2023-2024, MoreElecriki - официальный интернет-магазин светотехники.</p>
+            <div className="mt-3 md:mt-0 flex space-x-3">
+              <img src="/images/visa-logo.svg" alt="Visa" className="h-6" />
+              <img src="/images/mastercard-logo.svg" alt="Mastercard" className="h-6" />
+              <img src="/images/mir-logo.svg" alt="МИР" className="h-6" />
+              <img src="/images/sbp-logo.svg" alt="СБП" className="h-6" />
+            </div>
+          </div>
         </div>
       </div>
     </footer>

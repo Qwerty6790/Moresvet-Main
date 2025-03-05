@@ -167,14 +167,21 @@ const Catalog: NextPage<CatalogProps> = ({
   const [viewMode, setViewMode] = useState<'grid' | 'table' | 'list'>('grid');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
+  const [allLoadedProducts, setAllLoadedProducts] = useState<ProductI[]>(initialProducts);
   const limit = 32;
   const router = useRouter();
   const { name: urlName } = router.query;
   const productsContainerRef = useRef<HTMLDivElement>(null);
 
   // Функция для получения товаров (при изменении фильтров или страницы)
-  const fetchProducts = async (page: number) => {
-    setIsPageLoading(true);
+  const fetchProducts = async (page: number, append: boolean = false) => {
+    if (!append) {
+      setIsPageLoading(true);
+    } else {
+      setIsLoadingMore(true);
+    }
+    
     // Если введён поисковый запрос – отключаем фильтрацию по категории
     const categoryFilter =
       !searchQuery && selectedCategory.label !== 'Все товары'
@@ -205,22 +212,33 @@ const Catalog: NextPage<CatalogProps> = ({
           },
         }
       );
-      setProducts(data.products);
+      
+      if (append) {
+        setAllLoadedProducts(prev => [...prev, ...data.products]);
+      } else {
+        setAllLoadedProducts(data.products);
+        setProducts(data.products);
+      }
+      
       setTotalPages(data.totalPages);
       setTotalProducts(data.totalProducts);
     } catch (error) {
       console.error('Ошибка при получении продуктов:', error);
       setError('Ошибка при получении продуктов. Попробуйте снова.');
     } finally {
-      setIsPageLoading(false);
+      if (!append) {
+        setIsPageLoading(false);
+      } else {
+        setIsLoadingMore(false);
+      }
     }
   };
 
-  // Запрос новых данных при изменении страницы или фильтров
+  // Запрос новых данных при изменении фильтров
   useEffect(() => {
-    fetchProducts(currentPage);
+    setCurrentPage(1);
+    fetchProducts(1);
   }, [
-    currentPage,
     selectedBrand.name,
     selectedCategory.label,
     minPrice,
@@ -232,6 +250,26 @@ const Catalog: NextPage<CatalogProps> = ({
     sortOrder,
     searchQuery,
   ]);
+
+  // Обработчик изменения страницы
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    fetchProducts(page, true);
+    
+    // Плавная прокрутка к началу списка товаров
+    if (productsContainerRef.current) {
+      productsContainerRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  // Обработчик кнопки "Показать еще"
+  const handleLoadMore = () => {
+    if (currentPage < totalPages) {
+      const nextPage = currentPage + 1;
+      setCurrentPage(nextPage);
+      fetchProducts(nextPage, true);
+    }
+  };
 
   // При изменении URL определяем выбранную категорию/бренд или, если нет точного совпадения – выполняем глобальный поиск
   useEffect(() => {
@@ -311,15 +349,22 @@ const Catalog: NextPage<CatalogProps> = ({
   };
 
   const categories = [
-    { name: 'Люстры', href: '/catalog/Люстры' },
-    { name: 'Подвесные светильники', href: '/catalog/Подвесные-светильники' },
-    { name: 'Потолочные светильники', href: '/catalog/Потолочные-светильники' },
-    { name: 'Напольные светильники (Торшер)', href: '/catalog/Напольные-светильники' },
-    { name: 'Настенные светильники (Бра)', href: '/catalog/Настенные-светильники' },
-    { name: 'Настольные светильники', href: '/catalog/Настольные-светильники' },
-    { name: 'Подсветка', href: '/catalog/Подсветка' },
-    { name: 'Встраиваемый светильник', href: '/catalog/Встраиваемый-светильник' },
-    { name: 'Аксессуары', href: '/catalog/Аксессуары' },
+    { name: 'Люстры', href: '/catalog/Люстра' },
+    { name: 'Подвесные светильники', href: '/catalog/Подвесной светильник' },
+    { name: 'Потолочные светильники', href: '/catalog/Потолочный светильник' },
+    { name: 'Напольные светильники', href: '/catalog/Напольный светильник' },
+    { name: 'Настенные светильники', href: '/catalog/Настенный светильник' },
+    { name: 'Настольные светильники', href: '/catalog/Настольный светильник' },
+    { name: 'Ленты', href: '/catalog/Лента' },
+    { name: 'Встраиваемый светильник', href: '/catalog/Встраиваемый светильник' },
+    { name: 'Уличные светильники', href: '/catalog/Уличный светильник' },
+    { name: 'Трековые светильники', href: '/catalog/Трековый светильник' },
+    { name: 'Врезные светильники', href: '/catalog/Врезной светильник' },
+    { name: 'Подвесные светильники', href: '/catalog/Подвесной светильник' },
+    { name: 'Бра', href: '/catalog/Бра' },
+    { name: 'Светильники', href: '/catalog/Светильник' },
+    { name: 'Лампы', href: '/catalog/Лампа' },
+    { name: 'Шинпроводы', href: '/catalog/Шинпровод' },
   ];
 
   return (
@@ -332,7 +377,7 @@ const Catalog: NextPage<CatalogProps> = ({
         <Header />
 
         {/* Основной контейнер */}
-        <div className="container mx-auto px-4 mt-32">
+        <div className="container mx-auto px-4 mt-40">
           {/* Заголовок с выпадающим меню */}
           <div className="flex items-center justify-between py-6 border-b border-gray-200">
             <button className="flex items-center text-2xl font-bold text-black">
@@ -380,22 +425,42 @@ const Catalog: NextPage<CatalogProps> = ({
               </div>
 
               {/* Список товаров */}
-              <div className="min-h-[200px]">
+              <div className="min-h-[200px]" ref={productsContainerRef}>
                 {isPageLoading ? (
                   <div className="flex justify-center items-center h-64">
                     <ClipLoader color="#000000" loading={true} size={60} />
                   </div>
                 ) : (
-                  <CatalogOfProducts products={products} viewMode={viewMode} />
+                  <CatalogOfProducts products={allLoadedProducts} viewMode={viewMode} />
                 )}
               </div>
+
+              {/* Кнопка "Показать еще" */}
+              {currentPage < totalPages && (
+                <div className="flex justify-center mt-8">
+                  <button
+                    onClick={handleLoadMore}
+                    disabled={isLoadingMore}
+                    className="px-6 py-3 bg-black text-white rounded-md hover:bg-gray-800 transition-colors disabled:opacity-50"
+                  >
+                    {isLoadingMore ? (
+                      <div className="flex items-center">
+                        <ClipLoader color="#FFFFFF" loading={true} size={20} />
+                        <span className="ml-2">Загрузка...</span>
+                      </div>
+                    ) : (
+                      "Показать еще"
+                    )}
+                  </button>
+                </div>
+              )}
 
               {/* Пагинация */}
               <div className="flex justify-center mt-14">
                 <Pagination
                   currentPage={currentPage}
                   totalPages={totalPages}
-                  onPageChange={setCurrentPage}
+                  onPageChange={handlePageChange}
                 />
               </div>
             </div>

@@ -6,7 +6,8 @@ import { motion } from 'framer-motion';
 export default function ImageHoverEffect2() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const slides = [
-    { image: './images/18.jpg' },{ image: './images/19.jpg',}
+    { type: 'video', src: './images/voltum.mp4' },
+ // Добавлено видео
   ];
 
   useEffect(() => {
@@ -20,19 +21,28 @@ export default function ImageHoverEffect2() {
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <div className="flex cona flex-col mt-20 lg:flex-row w-full h-[450px] lg:h-screen bg-white relative">
+      <div className="flex cona flex-col mt-32 lg:flex-row w-full h-[450px] lg:h-screen bg-white relative">
         {/* Left Block: Slider */}
         <div className="w-full h-full relative overflow-hidden flex justify-center items-center">
           {slides.map((slide, index) => (
-            <motion.img
+            <motion.div
               key={index}
-              src={slide.image}
-              alt={`Slide ${index}`}
-              className={`absolute w-full h-full object-cover transition-opacity duration-1000 ${currentSlide === index ? 'opacity-100' : 'opacity-0'}`}
+              className={`absolute w-full h-full transition-opacity duration-1000 ${
+                currentSlide === index ? 'opacity-100' : 'opacity-0'
+              }`}
               initial={{ opacity: 0 }}
               animate={{ opacity: currentSlide === index ? 1 : 0 }}
               transition={{ duration: 0.8 }}
-            />
+            >
+              {slide.type === 'image' ? (
+                <img src={slide.src} alt={`Slide ${index}`} className="w-full h-full object-cover" />
+              ) : (
+                <video autoPlay loop muted className="w-full h-full object-cover">
+                  <source src={slide.src} type="video/mp4" />
+                  Ваш браузер не поддерживает видео.
+                </video>
+              )}
+            </motion.div>
           ))}
 
           {/* Text Overlay */}
@@ -42,7 +52,7 @@ export default function ImageHoverEffect2() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, ease: 'easeOut' }}
           >
-            Выбирай свой свет
+            <span className='text-[7px]'>Выбирай</span> свой свет вместе с <span className='text-[#0a0c34]'>Voltum</span><span className='text-[7px]'>Maytoni</span>
           </motion.div>
         </div>
       </div>
