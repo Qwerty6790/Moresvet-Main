@@ -41,11 +41,7 @@ export default function RootLayout({
       </Script>
 
       <body className={inter.className}>
-        <noscript>
-          <div>
-            <img src="https://mc.yandex.ru/watch/98895734" style={{ position: "absolute", left: "-9999px" }} alt="" />
-          </div>
-        </noscript>
+      
         
         <main> 
           <Header />

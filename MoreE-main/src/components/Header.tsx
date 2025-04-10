@@ -11,12 +11,14 @@ import {
   Moon,
   Sun,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  UserRound
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import axios from 'axios';
 import Image from 'next/image';
+import { FaHeart, FaShoppingBag, FaShoppingBasket, FaShoppingCart, FaUser } from 'react-icons/fa';
 
 // Интерфейс для товара (используется в поиске)
 interface Product {
@@ -436,21 +438,21 @@ const Header = () => {
   return (
     <header className="bg-white shadow-md fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300">
       {/* Верхняя панель навигации */}
-      <div className={`border-b border-gray-200 transition-all duration-300 ${hideTopBar ? 'h-0 overflow-hidden opacity-0' : 'h-12 opacity-100'}`}>
+      <div className={`border-b border-gray-200  transition-all duration-300 ${hideTopBar ? 'h-0 overflow-hidden opacity-0' : 'h-12 opacity-100'}`}>
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex items-center justify-between h-12">
             {/* Левое меню */}
             <nav className="hidden md:flex items-center space-x-6">
               <Link
                 href="/brands"
-                className="text-gray-700 hover:text-red-600 text-sm font-medium transition-colors"
+                className="text-black hover:text-blue-400 text-sm font-medium transition-colors"
               >
                 Бренды
               </Link>
               <div className="relative group">
                 <Link
                   href="/company"
-                  className="text-gray-700 hover:text-red-600 text-sm font-medium transition-colors flex items-center"
+                  className="text-black hover:text-blue-400 text-sm font-medium transition-colors flex items-center"
                 >
                   Компания
                   <ChevronDown className="w-4 h-4 ml-1" />
@@ -459,19 +461,19 @@ const Header = () => {
                   <div className="py-2">
                     <Link
                       href="/company/about"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-red-600"
+                      className="block px-4 py-2 text-sm text-black hover:bg-gray-50 hover:text-blue-400"
                     >
                       О компании
                     </Link>
                     <Link
                       href="/company/history"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-red-600"
+                      className="block px-4 py-2 text-sm text-black hover:bg-gray-50 hover:text-blue-400"
                     >
                       История
                     </Link>
                     <Link
                       href="/company/team"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-red-600"
+                      className="block px-4 py-2 text-sm text-black hover:bg-gray-50 hover:text-blue-400"
                     >
                       Команда
                     </Link>
@@ -480,14 +482,14 @@ const Header = () => {
               </div>
               <Link
                 href="/blog"
-                className="text-gray-700 hover:text-red-600 text-sm font-medium transition-colors"
+                className="text-black hover:text-blue-400 text-sm font-medium transition-colors"
               >
                 Блог
               </Link>
               <div className="relative group">
                 <Link
                   href="/customers"
-                  className="text-gray-700 hover:text-red-600 text-sm font-medium transition-colors flex items-center"
+                  className="text-black hover:text-blue-400 text-sm font-medium transition-colors flex items-center"
                 >
                   Покупателям
                   <ChevronDown className="w-4 h-4 ml-1" />
@@ -496,25 +498,25 @@ const Header = () => {
                   <div className="py-2">
                     <Link
                       href="/customers/delivery"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-red-600"
+                      className="block px-4 py-2 text-sm text-black hover:bg-gray-50 hover:text-blue-400"
                     >
                       Доставка
                     </Link>
                     <Link
                       href="/customers/payment"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-red-600"
+                      className="block px-4 py-2 text-sm text-black hover:bg-gray-50 hover:text-blue-400"
                     >
                       Оплата
                     </Link>
                     <Link
                       href="/customers/warranty"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-red-600"
+                      className="block px-4 py-2 text-sm text-black hover:bg-gray-50 hover:text-blue-400"
                     >
                       Гарантия
                     </Link>
                     <Link
                       href="/customers/faq"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-red-600"
+                      className="block px-4 py-2 text-sm text-black hover:bg-gray-50 hover:text-blue-400"
                     >
                       Частые вопросы
                     </Link>
@@ -523,13 +525,13 @@ const Header = () => {
               </div>
               <Link
                 href="/contacts"
-                className="text-gray-700 hover:text-red-600 text-sm font-medium transition-colors"
+                className="text-black hover:text-blue-400 text-sm font-medium transition-colors"
               >
                 Контакты
               </Link>
               <Link
                 href="/sales"
-                className="text-gray-700 hover:text-red-600 text-sm font-medium transition-colors"
+                className="text-black hover:text-blue-400 text-sm font-medium transition-colors"
               >
                 Акции
               </Link>
@@ -539,7 +541,7 @@ const Header = () => {
             <div className="hidden md:flex items-center ml-auto">
               <Link
                 href="tel:+74956779569"
-                className="text-gray-800 font-medium text-sm hover:text-red-600 transition-colors flex items-center"
+                className="text-black font-medium text-sm hover:text-blue-400 transition-colors flex items-center"
               >
                 <Phone className="w-4 h-4 mr-2 text-black" />
                 +7 (495) 677-95-69
@@ -547,7 +549,7 @@ const Header = () => {
               <span className="mx-2 text-gray-300">•</span>
               <Link
                 href="/callback"
-                className="text-gray-600 text-sm hover:text-red-600 transition-colors"
+                className="text-black text-sm hover:text-blue-400 transition-colors"
               >
                 Заказать звонок
               </Link>
@@ -557,7 +559,7 @@ const Header = () => {
       </div>
 
       {/* Основной хедер */}
-      <div className="max-w-6xl mx-auto px-4">
+      <div className="max-w-[1200px] mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Логотип */}
           <Link href="/" className="flex-shrink-0 transition-transform hover:scale-105">
@@ -600,42 +602,28 @@ const Header = () => {
         </div>
 
           {/* Пользовательские действия */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-6">
             <Link
               href="/auth/login"
-              className="flex flex-col items-center text-gray-700 hover:text-red-600 transition-colors"
+              className="flex flex-col items-center text-black hover:text-blue-400 transition-colors"
             >
-              <User className="w-6 h-6 mb-1" />
-              <span className="text-xs font-medium">Войти</span>
+              <FaUser className="w-6 h-6 mb-1 fill-current" />
+              
             </Link>
-            <Link
-              href="/Brands"
-              className="flex flex-col items-center text-gray-700 hover:text-red-600 transition-colors"
-            >
-              <svg className="w-6 h-6 mb-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M22 12H18L15 21L9 3L6 12H2"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <span className="text-xs font-medium">Сравнение</span>
-            </Link>
+            
             <Link
               href="/liked"
-              className="flex flex-col items-center text-gray-700 hover:text-red-600 transition-colors"
+              className="flex flex-col items-center text-black hover:text-blue-400 transition-colors"
             >
-              <Heart className="w-6 h-6 mb-1" />
-              <span className="text-xs font-medium">Избранное</span>
+              <FaHeart className="w-6 h-6 mb-1 fill-current" />
+           
             </Link>
             <Link
               href="/cart"
-              className="flex flex-col items-center text-gray-700 hover:text-red-600 transition-colors relative"
+              className="flex flex-col items-center text-black hover:text-blue-400 transition-colors relative"
             >
-              <ShoppingCart className="w-6 h-6 mb-1" />
-              <span className="text-xs font-medium">Корзина</span>
+              <FaShoppingBag className="w-6 h-6 mb-1 fill-current" />
+            
             </Link>
           </div>
 

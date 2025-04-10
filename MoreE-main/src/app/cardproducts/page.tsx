@@ -1,6 +1,5 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import axios from 'axios';
 import CatalogOfProductsStluce from './CatalogofMayoni';
 import { ProductI } from '../../types/interfaces';
@@ -10,6 +9,7 @@ const Maytoni: React.FC = () => {
   const [products, setProducts] = useState<ProductI[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isClient, setIsClient] = useState(false);
 
   // Функция для добавления товара в корзину
   const handleAddToCart = (product: ProductI) => {
@@ -40,8 +40,8 @@ const Maytoni: React.FC = () => {
       const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/products/search`, {
         params: {
           page: 1,
-          limit: 4,
-          name: 'Выключатель ',
+          limit: 5,
+          name: 'Терморегулятор',
         },
       });
       console.log(res.data.products);
@@ -59,29 +59,25 @@ const Maytoni: React.FC = () => {
   };
 
   useEffect(() => {
+    setIsClient(true);
     fetchProducts();
   }, []);
 
+  if (!isClient) {
+    return null;
+  }
+
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto">
       {isLoading ? (
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center text-gray-700"
-        >
+        <p className="text-center text-gray-700">
           Загрузка товаров...
-        </motion.p>
+        </p>
       ) : error ? (
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center text-red-500"
-        >
+        <p className="text-center text-red-500">
           {error}
-        </motion.p>
+        </p>
       ) : (
-        // Передаем товары в компонент-каталог, а также функцию добавления в корзину
         <CatalogOfProductsStluce products={products} viewMode="grid" />
       )}
     </div>

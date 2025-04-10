@@ -261,7 +261,7 @@ const SearchResults: React.FC = () => {
       <Header />
 
       {/* Основной контейнер */}
-      <div className="container mx-auto px-4 mt-32">
+      <div className="container  mx-auto px-4 mt-32">
         {/* Хлебные крошки */}
         <div className="flex items-center space-x-2 text-sm text-gray-600 mb-6 overflow-x-auto whitespace-nowrap">
           <a href="/" className="hover:text-gray-900">Главная</a>

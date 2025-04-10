@@ -25,7 +25,7 @@ const categories: Category[] = [
   {
     id: 3,
     title: 'Настенные светильники',
-    image: '/images/14.jpg',
+    image: '/images/14.png',
     name: 'Настенный светильник',
   },
   {

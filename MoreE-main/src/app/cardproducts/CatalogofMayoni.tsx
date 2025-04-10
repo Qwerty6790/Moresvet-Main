@@ -124,7 +124,7 @@ export const CatalogOfProductsMaytoni: React.FC<CatalogOfProductsProps> = ({ pro
   );
 
   return (
-    <div className="w-full py-12 ">
+    <div className="w-full py-12">
       <div className="container mx-auto px-4">
         {/* Заголовок с навигацией */}
         <div className="flex items-center justify-between mb-8">
@@ -153,7 +153,7 @@ export const CatalogOfProductsMaytoni: React.FC<CatalogOfProductsProps> = ({ pro
         </div>
         
         {/* Сетка товаров */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
           {currentProducts.map((product, index) => (
             <ProductCard key={`${product.article}-${index}`} product={product} />
           ))}

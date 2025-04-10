@@ -5,12 +5,13 @@ import { Phone, Mail, MessageCircle } from 'lucide-react';
 const Footer = () => {
   return (
     <footer className=" text-black py-8 border-t border-gray-100">
-      <div className="container mx-auto px-4 max-w-5xl">
+      <div className="container mx-auto px-4 max-w-7xl">
         {/* Main Footer Content - Compact Version */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-10">
+        <h3 className="text-black font-medium text-3xl  mb-3">MoreElecriki</h3>
           {/* About MoreElecriki */}
           <div>
-            <h3 className="text-black font-medium text-lg mb-3">MoreElecriki</h3>
+          <h3 className="text-black font-medium text-lg mb-3">О компании</h3>
             <ul className="space-y-2 text-sm">
               <li><Link href="/company/about" className="hover:text-red-600 transition-colors duration-200">О компании</Link></li>
               <li><Link href="/contacts" className="hover:text-red-600 transition-colors duration-200">Контакты</Link></li>
@@ -60,15 +61,7 @@ const Footer = () => {
 
         {/* Copyright */}
         <div className="mt-6 pt-4 border-t border-gray-100 text-xs text-gray-500">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p>©2023-2024, MoreElecriki - официальный интернет-магазин светотехники.</p>
-            <div className="mt-3 md:mt-0 flex space-x-3">
-              <img src="/images/visa-logo.svg" alt="Visa" className="h-6" />
-              <img src="/images/mastercard-logo.svg" alt="Mastercard" className="h-6" />
-              <img src="/images/mir-logo.svg" alt="МИР" className="h-6" />
-              <img src="/images/sbp-logo.svg" alt="СБП" className="h-6" />
-            </div>
-          </div>
+         
         </div>
       </div>
     </footer>
