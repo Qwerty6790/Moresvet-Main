@@ -102,7 +102,7 @@ export default function Banner() {
   // Популярные категории для каталога
   const popularCategories = [
     { id: 1, title: 'ЛЮСТРЫ', image: '/images/ЛюстраME.webp', link: '/catalog?category=Люстра&page=1' },
-    { id: 2, title: 'СВЕТИЛЬНИКИ', image: '/images/s2.png', link: '/catalog/Светильник' },
+    { id: 2, title: 'СВЕТИЛЬНИКИ', image: '/images/светильникME.webp', link: '/catalog/Светильник' },
     { id: 3, title: 'БРА И ПОДСВЕТКИ', image: '/images/БраME.webp', link: '/catalog/Бра' },
     { id: 3, title: 'Лампочки', image: '/images/лампочкаME.webp', link: '/catalog/Лампочка' },
     { id: 5, title: 'НАСТОЛЬНЫЕ ЛАМПЫ', image: '/images/настольнаялампаME.webp', link: '/catalog/Настольная лампа' },
