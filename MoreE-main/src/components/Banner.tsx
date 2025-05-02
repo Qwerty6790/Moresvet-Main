@@ -296,7 +296,7 @@ export default function Banner() {
           <BrandSlider />
         </div>
         <div className="mb-12">
-        <div className="container mx-auto">
+        <div className=" mx-auto">
           <div className="grid grid-cols-7 gap-4 relative">
             {popularCategories.map((category) => (
               <div
