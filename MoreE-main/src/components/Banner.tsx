@@ -104,7 +104,7 @@ export default function Banner() {
     { id: 1, title: 'ЛЮСТРЫ', image: '/images/ЛюстраME.webp', link: '/catalog?category=Люстра&page=1' },
     { id: 2, title: 'СВЕТИЛЬНИКИ', image: '/images/светильникME.webp', link: '/catalog/Светильник' },
     { id: 3, title: 'БРА И ПОДСВЕТКИ', image: '/images/БраME.webp', link: '/catalog/Бра' },
-    { id: 3, title: 'Лампочки', image: '/images/лампочкаME.webp', link: '/catalog/Лампочка' },
+    { id: 3, title: 'Лампочки', image: '/images/светоидоднаялампаME.webp', link: '/catalog/Лампочка' },
     { id: 5, title: 'НАСТОЛЬНЫЕ ЛАМПЫ', image: '/images/настольнаялампаME.webp', link: '/catalog/Настольная лампа' },
     { id: 6, title: 'ТОРШЕРЫ', image: '/images/ТоршерME.webp', link: '/catalog/Торшер' },
     { id: 7, title: 'УЛИЧНОЕ ОСВЕЩЕНИЕ', image: '/images/УличныйсветильникME.webp', link: '/catalog/Уличный светильник' }
