@@ -2728,7 +2728,9 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                     <ResetFiltersButton />
                   </div>
                   <div className="md:w-1/2">
-                    <CatalogOfProductSearch products={products} viewMode={viewMode === 'table' ? 'grid' : viewMode} />
+                    {isClient && (
+                      <CatalogOfProductSearch products={products} viewMode={viewMode === 'table' ? 'grid' : viewMode} />
+                    )}
                   </div>
                 </div>
               </div>
