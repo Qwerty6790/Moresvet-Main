@@ -1,10 +1,9 @@
 'use client'
-import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import axios from 'axios';
 import Link from 'next/link';
-import Image from 'next/image'; // Добавляем оптимизированный компонент для изображений
 import Header from '@/components/Header';
 import 'tailwindcss/tailwind.css';
 import Footer from '@/components/Footer';
@@ -13,62 +12,33 @@ import { BASE_URL } from '@/utils/constants';
 import { ClipLoader } from 'react-spinners';
 import SEO from '@/components/SEO';
 import { fetchProductsWithSorting } from '@/utils/api';
-import CatalogOfProductSearch from '@/components/Catalogofsearch';
-import Head from 'next/head';
-import { motion, AnimatePresence } from 'framer-motion'; // Добавляем анимации
 
-// Обновленный тип для категории с улучшенными полями
+import CatalogOfProductSearch from '@/components/Catalogofsearch';
+import Head from 'next/head'; // Добавляем импорт Head
+
+// Импортируем типы для категорий и брендов
 export type Category = {
-  id?: string;
   label: string;
   searchName: string;
   href?: string;
-  image?: string; // Добавляем поле для изображения категории
-  description?: string; // Добавляем поле для описания
   aliases?: string[];
-  subcategories?: Category[];
-  isOpen?: boolean;
-  featured?: boolean; // Отмечаем особые категории
+  subcategories?: Category[]; // Добавляем подкатегории
+  isOpen?: boolean; // Для состояния аккордеона
+  id?: string; // Добавляем id для идентификации категории
 };
 
 export type Brand = {
   name: string;
   categories: Category[];
-  logo?: string; // Добавляем поле для логотипа бренда
-  description?: string; // Добавляем поле для описания бренда
 };
 
+// Добавляем новый тип для популярных поисковых запросов
 export type PopularSearch = {
   text: string;
   queryParam: string;
   forCategories?: string[];
   forBrands?: string[];
 };
-
-// Новый тип для фильтров
-export type ExtractedFilters = {
-  colors: string[];
-  materials: string[];
-  features: string[];
-  styles: string[];
-  places: string[];
-  priceRange: {
-    min: number;
-    max: number;
-  };
-};
-
-// Новый тип для настроек сортировки
-export type SortOption = 'asc' | 'desc' | 'popularity' | 'newest' | 'random' | null;
-
-// Обновленный интерфейс для props страницы
-interface CatalogIndexProps {
-  initialProducts: ProductI[];
-  initialTotalPages: number;
-  initialTotalProducts: number;
-  source?: string;
-  lcpImageUrls: string[];
-}
 
 // Добавляем категории из ProductCategory.tsx
 const productCategories = [
@@ -638,38 +608,36 @@ const ImageCategories: React.FC<{
   );
 
   return (
-    <div className="mb-8">
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
-        {filteredCategories.map((category, index) => {
-          // Получаем URL изображения для категории
-          const imageUrl = categoryImageMap[category.label] || '/images/placeholder.png';
+    <div className="mb-10">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6">
+        {filteredCategories.slice(0, 6).map((category, index) => {
+          // Определяем URL изображения для категории
+          const imageUrl = categoryImageMap[category.label] || '/images/s1.png';
+          
+          // Сопоставляем метки с изображения
+          let displayLabel = category.label;
+          if (category.label.includes('Люстр')) displayLabel = 'Подвесные светильники';
+          else if (category.label.includes('потолочные')) displayLabel = 'Потолочные светильники';
+          else if (category.label.includes('Настенный') || category.label.includes('Бра')) displayLabel = 'Настенные светильники';
+          else if (category.label.includes('Настольная')) displayLabel = 'Настольные светильники';
+          else if (category.label.includes('Торшер') || category.label.includes('напольный')) displayLabel = 'Напольные светильники';
+          else if (category.label.includes('комплектующие')) displayLabel = 'Комплектующие';
           
           return (
-            <motion.div
-              key={`${category.label}-${index}`}
-              whileHover={{ scale: 1.03 }}
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+            <div
+              key={index}
               onClick={() => onCategoryClick(category)}
-              className="cursor-pointer group overflow-hidden"
+              className="flex flex-col items-center cursor-pointer transition-transform hover:scale-105"
             >
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden h-full hover:shadow-md transition-shadow duration-300 flex flex-col">
-                <div className="relative aspect-square overflow-hidden bg-gray-50">
-                  <Image
-                    src={imageUrl}
-                    alt={category.label}
-                    fill
-                    sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 20vw"
-                    className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                    priority={index < 5}
-                  />
-                </div>
-                <div className="p-3 text-center bg-white">
-                  <h3 className="font-medium text-sm sm:text-base text-gray-900 truncate group-hover:text-black">
-                    {category.label}
-                  </h3>
-                </div>
+              <div className="relative w-full aspect-square mb-4 overflow-hidden rounded-lg bg-white p-2 border border-gray-100 shadow-sm">
+                <img 
+                  src={imageUrl} 
+                  alt={category.label}
+                  className="w-full h-full object-contain"
+                />
               </div>
-            </motion.div>
+              <div className="text-center text-sm font-medium">{displayLabel}</div>
+            </div>
           );
         })}
       </div>
@@ -1430,7 +1398,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
     return relatedCategories.slice(0, 5);
   };
 
-  // Компонент для отображения связанных категорий с улучшенным дизайном
+  // Компонент для отображения связанных категорий
   const RelatedCategories = () => {
     let relatedCategories: Category[] = [];
     let shouldRender = false;
@@ -1444,34 +1412,19 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
       shouldRender = relatedCategories.length > 0;
     }
     
+    // Вместо раннего возврата null, рендерим пустой фрагмент, если не нужно отображать
     if (!shouldRender) {
-      return <></>; 
+      return <></>; // Пустой фрагмент вместо null
     }
     
     return (
-      <div className="mb-6 bg-gradient-to-r from-gray-50 to-white rounded-xl p-4 border border-gray-100 shadow-sm">
-        <h3 className="text-lg font-medium mb-3 text-gray-900">
-          Похожие категории
-          <span className="block h-1 w-12 bg-black mt-1"></span>
-        </h3>
-        
-        <div className="flex flex-wrap gap-2">
-          {relatedCategories.map((category, index) => (
-            <motion.button
-              key={`related-${index}`}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => handleCategoryChange(category)}
-              className="px-4 py-2 bg-white text-sm text-gray-700 rounded-full border border-gray-200 hover:border-gray-300 hover:bg-gray-50 shadow-sm transition-all"
-            >
-              {category.label}
-            </motion.button>
-          ))}
-        </div>
+      <div>
+      
+      
       </div>
     );
   };
-
+  
   // Функция для переключения состояния аккордеона категории
   const toggleCategoryAccordion = (categoryId: string) => {
     setProductCategoriesState(prev => 
@@ -1481,7 +1434,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
     );
   };
 
-  // Функция для рендеринга категорий с улучшенным дизайном
+  // Функция для рендеринга категорий
   const renderCategories = () => {
     // Всегда показываем основные категории с аккордеоном, независимо от выбранного бренда
     return (
@@ -1491,85 +1444,57 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
             if (category.label === 'Все товары') return null;
             
             const hasSubcategories = category.subcategories && category.subcategories.length > 0;
-            const isSelected = selectedCategory?.label === category.label || 
-                              selectedCategory?.searchName === category.searchName;
             
             return (
-              <div key={`${category.label}-${index}`} className="mb-2">
+              <div key={`${category.label}-${index}`} className="mb-1">
                 <div 
-                  className={`flex items-center justify-between px-3 py-2 rounded-lg transition-all duration-200 ${
-                    isSelected && !hasSubcategories
-                      ? 'font-medium text-white bg-gray-800 shadow-sm' 
-                      : 'text-gray-700 hover:text-black hover:bg-gray-100 cursor-pointer'
+                  className={`flex items-center justify-between px-2 py-1.5 rounded transition-colors duration-200 ${
+                    (selectedCategory?.label === category.label || 
+                    selectedCategory?.searchName === category.searchName) && 
+                    !hasSubcategories
+                      ? 'font-bold text-black bg-gray-100' 
+                      : 'text-gray-600 hover:text-black hover:bg-gray-50 cursor-pointer'
                   }`}
                   onClick={() => hasSubcategories 
                     ? toggleCategoryAccordion(category.id) 
                     : handleCategoryChange(category)
                   }
                 >
-                  <span className="flex items-center gap-2">
-                    {/* Иконка категории - можно добавить разные иконки для разных категорий */}
-                    <span className="text-sm">
-                      {category.label === 'Люстры' && (
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                          <path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z" />
-                        </svg>
-                      )}
-                      {category.label === 'Светильники' && (
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.599-.8a1 1 0 01.894 1.79l-1.233.616 1.738 5.42a1 1 0 01-.285 1.05A3.989 3.989 0 0115 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.715-5.349L10 6.477 6.237 7.582l1.715 5.349a1 1 0 01-.285 1.05A3.989 3.989 0 015 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.738-5.42-1.233-.617a1 1 0 01.894-1.788l1.599.799L9 4.323V3a1 1 0 011-1zm-5 8.274l-.818 2.552c.25.112.526.174.818.174.292 0 .569-.062.818-.174L5 10.274zm10 0l-.818 2.552c.25.112.526.174.818.174.292 0 .569-.062.818-.174L15 10.274z" clipRule="evenodd" />
-                        </svg>
-                      )}
-                      {category.label === 'Бра' && (
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                          <path d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7.2 17.5 9.134a1 1 0 010 1.732l-3.354 1.935-1.18 4.455a1 1 0 01-1.933 0L9.854 12.8 6.5 10.866a1 1 0 010-1.732l3.354-1.935 1.18-4.455A1 1 0 0112 2z" />
-                        </svg>
-                      )}
-                    </span>
-                    <span>{category.label}</span>
-                  </span>
+                  <span>{category.label}</span>
                   {hasSubcategories && (
-                    <span className={`transform transition-transform duration-200 text-gray-400 ${category.isOpen ? 'rotate-180' : ''}`}>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path fillRule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                      </svg>
+                    <span className="transform transition-transform duration-200 text-gray-400">
+                      {category.isOpen ? (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                          <path fillRule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+                        </svg>
+                      ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                          <path fillRule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                        </svg>
+                      )}
                     </span>
                   )}
                 </div>
                 
-                {/* Подкатегории в аккордеоне с анимацией */}
-                <AnimatePresence>
-                  {hasSubcategories && category.isOpen && (
-                    <motion.div 
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pl-4 mt-1 space-y-1 border-l-2 border-gray-100 ml-3">
-                        {category.subcategories.map((subcat, subIndex) => {
-                          const isSubSelected = selectedCategory?.label === subcat.label || 
-                                             selectedCategory?.searchName === subcat.searchName;
-                          
-                          return (
-                            <div 
-                              key={`${subcat.label}-${subIndex}`}
-                              className={`flex items-center px-3 py-1.5 rounded-md transition-all duration-200 ${
-                                isSubSelected
-                                  ? 'font-medium text-white bg-gray-800 shadow-sm' 
-                                  : 'text-gray-600 hover:text-black hover:bg-gray-100 cursor-pointer'
-                              }`}
-                              onClick={() => handleCategoryChange(subcat)}
-                            >
-                              {subcat.label}
-                            </div>
-                          );
-                        })}
+                {/* Подкатегории в аккордеоне */}
+                {hasSubcategories && category.isOpen && (
+                  <div className="pl-4 mt-1 space-y-1 border-l-2 border-gray-100 ml-2">
+                    {category.subcategories.map((subcat, subIndex) => (
+                      <div 
+                        key={`${subcat.label}-${subIndex}`}
+                        className={`flex items-center px-2 py-1 rounded transition-colors duration-200 ${
+                          selectedCategory?.label === subcat.label || 
+                          selectedCategory?.searchName === subcat.searchName
+                            ? 'font-bold text-black bg-gray-100' 
+                            : 'text-gray-600 hover:text-black hover:bg-gray-50 cursor-pointer'
+                        }`}
+                        onClick={() => handleCategoryChange(subcat)}
+                      >
+                        {subcat.label}
                       </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                    ))}
+                  </div>
+                )}
               </div>
             );
           })}
@@ -2115,669 +2040,799 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
     };
   }, []);
 
-  // Фильтр цены с улучшенной адаптивностью
-  // ... existing code ...
-
-  // Компонент для стилизованного отображения фильтра цены
-  const PriceFilter = () => {
-    // Локальные состояния для ввода цен
-    const [tempMinPrice, setTempMinPrice] = useState<string>(minPrice === 10 ? '' : minPrice.toString());
-    const [tempMaxPrice, setTempMaxPrice] = useState<string>(maxPrice === 1000000 ? '' : maxPrice.toString());
-    
-    // Обработчик применения фильтра
-    const applyPriceFilter = () => {
-      const min = tempMinPrice === '' ? 10 : parseInt(tempMinPrice);
-      const max = tempMaxPrice === '' ? 1000000 : parseInt(tempMaxPrice);
-      handlePriceRangeChange(min, max);
-    };
-    
-    return (
-      <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 mb-4">
-        <h2 className="font-bold mb-3 text-gray-900 uppercase text-sm">Цена, ₽</h2>
-        <div className="flex flex-col space-y-4">
-          <div className="flex justify-between items-center gap-3">
-            <div className="flex-1 relative group">
-              <input
-                type="number"
-                min="0"
-                placeholder="От"
-                value={tempMinPrice}
-                onChange={(e) => setTempMinPrice(e.target.value)}
-                className="w-full p-2.5 border border-gray-200 group-hover:border-gray-400 rounded-lg text-sm transition-colors bg-gray-50 group-hover:bg-white focus:outline-none focus:ring-2 focus:ring-gray-200 focus:bg-white"
-              />
-              <span className="absolute top-2.5 right-3 text-gray-400 pointer-events-none">₽</span>
-            </div>
-            <span className="text-gray-400">—</span>
-            <div className="flex-1 relative group">
-              <input
-                type="number"
-                min="0"
-                placeholder="До"
-                value={tempMaxPrice}
-                onChange={(e) => setTempMaxPrice(e.target.value)}
-                className="w-full p-2.5 border border-gray-200 group-hover:border-gray-400 rounded-lg text-sm transition-colors bg-gray-50 group-hover:bg-white focus:outline-none focus:ring-2 focus:ring-gray-200 focus:bg-white"
-              />
-              <span className="absolute top-2.5 right-3 text-gray-400 pointer-events-none">₽</span>
-            </div>
-          </div>
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={applyPriceFilter}
-            className="bg-black text-white rounded-lg py-2.5 text-sm font-medium hover:bg-gray-800 transition-colors"
-          >
-            Применить
-          </motion.button>
-        </div>
-      </div>
-    );
-  };
-
-  // Компонент для отображения цветов с улучшенным стилем
-  const ColorFilter = () => {
-    if (extractedFilters.colors.length === 0) return null;
-    
-    return (
-      <div className="bg-white rounded-xl p-4 shadow-sm mb-4 border border-gray-100">
-        <h2 className="font-bold mb-3 text-gray-900 uppercase text-sm flex items-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-          </svg>
-          Цвет
-        </h2>
-        <div className="grid grid-cols-2 gap-2 text-sm">
-          {extractedFilters.colors.map((color) => (
-            <motion.div
-              key={color}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className={`flex items-center py-2 px-3 rounded-lg cursor-pointer transition-all duration-200 ${
-                selectedColor === color 
-                  ? 'bg-gray-800 text-white shadow-sm' 
-                  : 'hover:bg-gray-50 border border-gray-100'
-              }`}
-              onClick={() => handleColorChange(color)}
-            >
-              <div 
-                className={`w-5 h-5 rounded-full mr-2 flex-shrink-0 ${selectedColor === color ? 'ring-2 ring-white' : 'border border-gray-300'}`} 
-                style={{ backgroundColor: color.toLowerCase() }}
-              />
-              <span className={`${selectedColor === color ? 'text-white font-medium' : 'text-gray-700'} text-sm truncate`}>
-                {color}
-              </span>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    );
-  };
-
-  // Компонент для отображения материалов
-  const MaterialFilter = () => {
-    if (extractedFilters.materials.length === 0) return null;
-    
-    return (
-      <div className="bg-white rounded-xl p-4 shadow-sm mb-4 border border-gray-100">
-        <h2 className="font-bold mb-3 text-gray-900 uppercase text-sm flex items-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-          </svg>
-          Материал
-        </h2>
-        <div className="grid grid-cols-2 gap-2 text-sm">
-          {extractedFilters.materials.map((material) => (
-            <motion.div
-              key={material}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className={`flex items-center py-2 px-3 rounded-lg cursor-pointer transition-all duration-200 ${
-                selectedMaterial === material 
-                  ? 'bg-gray-800 text-white shadow-sm' 
-                  : 'hover:bg-gray-50 border border-gray-100'
-              }`}
-              onClick={() => handleMaterialChange(material)}
-            >
-              <span 
-                className={`w-5 h-5 rounded flex-shrink-0 flex items-center justify-center mr-2 ${
-                  selectedMaterial === material 
-                    ? 'bg-white text-gray-800' 
-                    : 'border border-gray-300 bg-gray-50'
-                }`}
-              >
-                {selectedMaterial === material && (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                )}
-              </span>
-              <span className={`${selectedMaterial === material ? 'text-white font-medium' : 'text-gray-700'} text-sm truncate`}>
-                {material}
-              </span>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    );
-  };
-
-  // Компонент для отображения активных фильтров
-  const ActiveFilters = () => {
-    if (
-      !(selectedBrand?.name !== 'Все товары' || 
-      selectedCategory?.label !== 'Все товары' || 
-      minPrice !== 10 || 
-      maxPrice !== 1000000 || 
-      selectedColor ||
-      selectedMaterial ||
-      searchQuery)
-    ) {
-      return null;
-    }
-    
-    return (
-      <div className="bg-white rounded-xl p-4 mb-6 shadow-sm border border-gray-100">
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-sm font-medium text-gray-700">Активные фильтры</h3>
-          <button
-            onClick={handleResetFilters}
-            className="text-xs text-gray-600 hover:text-black hover:underline font-medium flex items-center gap-1"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-            Сбросить все
-          </button>
-        </div>
-        
-        <div className="flex flex-wrap gap-2 items-center mt-2">
-          {selectedCategory?.label !== 'Все товары' && (
-            <motion.div 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="bg-gradient-to-r from-gray-800 to-gray-700 px-3 py-1.5 rounded-full text-xs flex items-center gap-1 text-white shadow-sm"
-            >
-              <span>Категория: {selectedCategory?.label}</span>
-              <button 
-                onClick={() => handleCategoryChange({ label: 'Все товары', searchName: 'Все товары' })} 
-                className="text-gray-200 hover:text-white p-0.5 ml-1"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                </svg>
-              </button>
-            </motion.div>
-          )}
-          
-          {selectedBrand && selectedBrand.name !== 'Все товары' && (
-            <motion.div 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="bg-gradient-to-r from-gray-800 to-gray-700 px-3 py-1.5 rounded-full text-xs flex items-center gap-1 text-white shadow-sm"
-            >
-              <span>Бренд: {selectedBrand.name}</span>
-              <button 
-                onClick={() => {
-                  const globalBrand = brands.find(b => b.name === 'Все товары');
-                  if (globalBrand) handleBrandChange(globalBrand);
-                }}
-                className="text-gray-200 hover:text-white p-0.5 ml-1"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                </svg>
-              </button>
-            </motion.div>
-          )}
-          
-          {(minPrice !== 10 || maxPrice !== 1000000) && (
-            <motion.div 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="bg-gradient-to-r from-blue-600 to-blue-500 px-3 py-1.5 rounded-full text-xs flex items-center gap-1 text-white shadow-sm"
-            >
-              <span>Цена: {minPrice} - {maxPrice} ₽</span>
-              <button 
-                onClick={() => {
-                  setMinPrice(10);
-                  setMaxPrice(1000000);
-                  handlePriceRangeChange(10, 1000000);
-                }} 
-                className="text-blue-100 hover:text-white p-0.5 ml-1"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                </svg>
-              </button>
-            </motion.div>
-          )}
-          
-          {selectedColor && (
-            <motion.div 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="bg-gradient-to-r from-purple-600 to-purple-500 px-3 py-1.5 rounded-full text-xs flex items-center gap-1 text-white shadow-sm"
-            >
-              <span className="flex items-center">
-                <span className="w-3 h-3 rounded-full mr-1.5 border border-white" style={{ backgroundColor: selectedColor.toLowerCase() }}></span>
-                Цвет: {selectedColor}
-              </span>
-              <button 
-                onClick={() => handleColorChange(selectedColor)} 
-                className="text-purple-100 hover:text-white p-0.5 ml-1"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                </svg>
-              </button>
-            </motion.div>
-          )}
-          
-          {selectedMaterial && (
-            <motion.div 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="bg-gradient-to-r from-green-600 to-green-500 px-3 py-1.5 rounded-full text-xs flex items-center gap-1 text-white shadow-sm"
-            >
-              <span>Материал: {selectedMaterial}</span>
-              <button 
-                onClick={() => handleMaterialChange(selectedMaterial)} 
-                className="text-green-100 hover:text-white p-0.5 ml-1"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                </svg>
-              </button>
-            </motion.div>
-          )}
-          
-          {searchQuery && (
-            <motion.div 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="bg-gradient-to-r from-amber-600 to-amber-500 px-3 py-1.5 rounded-full text-xs flex items-center gap-1 text-white shadow-sm"
-            >
-              <span>Поиск: {searchQuery}</span>
-              <button 
-                onClick={() => {
-                  setSearchQuery('');
-                  fetchProducts(selectedBrand?.name || '');
-                }} 
-                className="text-amber-100 hover:text-white p-0.5 ml-1"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                </svg>
-              </button>
-            </motion.div>
-          )}
-        </div>
-      </div>
-    );
-  };
-
-  // Компонент для кнопки сброса фильтров
-  const ResetFiltersButton = () => {
-    return (
-      <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 mb-4">
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          className="w-full py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm text-gray-700 transition-all font-medium flex items-center justify-center group"
-          onClick={handleResetFilters}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-gray-500 group-hover:text-gray-700 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-          </svg>
-          Сбросить все фильтры
-        </motion.button>
-      </div>
-    );
-  };
-
-  // Улучшенный компонент с красивым заголовком
-  const CatalogHeading = () => {
-    return (
-      <div className="mb-6 sm:mb-8">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 relative inline-block">
-          {sourceTitle}
-          <motion.span
-            initial={{ width: 0 }}
-            animate={{ width: '100%' }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="block h-1.5 bg-gradient-to-r from-gray-800 to-gray-500 mt-2"
-          />
-        </h1>
-        <p className="text-gray-600 mt-2 max-w-3xl">
-          Выберите из широкого ассортимента {selectedCategory?.label || 'светотехники'} 
-          {selectedBrand?.name !== 'Все товары' && ` от бренда ${selectedBrand?.name}`}. Мы поможем создать идеальное 
-          световое решение для вашего пространства.
-        </p>
-      </div>
-    );
-  };
-
-  // Компонент для улучшенной сортировки товаров
-  const EnhancedSortControl = () => {
-    return (
-      <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 mb-4">
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-3">
-          <div className="text-sm text-gray-700 font-medium w-full sm:w-auto text-center sm:text-left flex items-center">
-            Найдено: <span className="text-black font-semibold ml-1">{totalProducts}</span> товаров
-          </div>
-          
-          <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
-            {/* Переключатель режима отображения */}
-            <div className="bg-gray-100 rounded-full p-1 flex items-center">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setViewMode('grid')}
-                className={`p-2 rounded-full transition-all ${
-                  viewMode === 'grid' 
-                    ? 'bg-gray-800 text-white shadow-sm' 
-                    : 'text-gray-600 hover:bg-gray-200'
-                }`}
-                title="Сетка"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                </svg>
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setViewMode('list')}
-                className={`p-2 rounded-full transition-all ${
-                  viewMode === 'list' 
-                    ? 'bg-gray-800 text-white shadow-sm' 
-                    : 'text-gray-600 hover:bg-gray-200'
-                }`}
-                title="Список"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              </motion.button>
-            </div>
-            
-            {/* Переключатель товар/коллекции */}
-            <div className="hidden sm:flex bg-white border border-gray-200 rounded-full px-1 py-1 shadow-sm">
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setDisplayMode('product')}
-                className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all ${
-                  displayMode === 'product' 
-                    ? 'bg-black text-white' 
-                    : 'text-gray-600 hover:bg-gray-100'
-                }`}
-              >
-                Товары
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setDisplayMode('collection')}
-                className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all ${
-                  displayMode === 'collection'
-                    ? 'bg-black text-white' 
-                    : 'text-gray-600 hover:bg-gray-100'
-                }`}
-              >
-                Коллекции
-              </motion.button>
-            </div>
-            
-            {/* Выпадающий список сортировки */}
-            <div className="relative group">
-              <select
-                className="appearance-none pl-3 pr-8 py-2 border border-gray-300 rounded-lg bg-white text-sm text-gray-700 cursor-pointer focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-transparent group-hover:border-gray-400 transition-colors"
-                value={sortOrder || 'popularity'}
-                onChange={(e) => handleSortOrderChange(e.target.value as any)}
-              >
-                <option value="popularity">По популярности</option>
-                <option value="newest">Сначала новые</option>
-                <option value="asc">Цена ↑</option>
-                <option value="desc">Цена ↓</option>
-              </select>
-              <div className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none text-gray-500">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  // Компонент для красивых хлебных крошек
-  const EnhancedBreadcrumbs = () => {
-    return (
-      <div className="mb-4 py-3 hidden sm:block">
-        <nav className="flex" aria-label="Breadcrumb">
-          <ol className="inline-flex items-center space-x-1 md:space-x-3">
-            <li className="inline-flex items-center">
-              <Link href="/">
-                <a className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 transition-colors">
-                  <svg className="mr-2 h-4 w-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
-                  </svg>
-                  Главная
-                </a>
-              </Link>
-            </li>
-            <li>
-              <div className="flex items-center">
-                <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                  <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path>
-                </svg>
-                <Link href="/catalog">
-                  <a className="ml-1 text-sm font-medium text-gray-600 hover:text-gray-900 md:ml-2 transition-colors">Каталог</a>
-                </Link>
-              </div>
-            </li>
-            
-            {selectedBrand && selectedBrand.name !== 'Все товары' && (
-              <li>
-                <div className="flex items-center">
-                  <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path>
-                  </svg>
-                  <span className="ml-1 text-sm font-medium text-gray-600 md:ml-2">{selectedBrand.name}</span>
-                </div>
-              </li>
-            )}
-            
-            {selectedCategory && selectedCategory.label !== 'Все товары' && (
-              <li>
-                <div className="flex items-center">
-                  <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path>
-                  </svg>
-                  <span className="ml-1 text-sm font-medium text-gray-900 md:ml-2">{selectedCategory.label}</span>
-                </div>
-              </li>
-            )}
-          </ol>
-        </nav>
-      </div>
-    );
-  };
-
-  // Компонент для красивого заголовка каталога
-  const CatalogPageHeader = () => {
-    return (
-      <div className="mb-8">
-        <motion.h1 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 inline-block relative"
-        >
-          {sourceTitle}
-          <motion.div 
-            initial={{ width: 0 }}
-            animate={{ width: '100%' }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="absolute -bottom-2 left-0 h-1 bg-gradient-to-r from-gray-800 to-gray-500"
-          />
-        </motion.h1>
-        
-        <motion.p 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="text-gray-600 mt-4 max-w-3xl text-sm md:text-base"
-        >
-          {selectedCategory?.label !== 'Все товары' 
-            ? `${selectedCategory?.label} - это современное и практичное световое решение для вашего интерьера. ${selectedBrand?.name !== 'Все товары' ? `Бренд ${selectedBrand?.name} предлагает качественные и надёжные модели. ` : ''}Выбирайте из широкого ассортимента и создавайте уютную атмосферу в вашем пространстве.`
-            : `Освещение играет важную роль в создании атмосферы в любом помещении. ${selectedBrand?.name !== 'Все товары' ? `Бренд ${selectedBrand?.name} предлагает широкий ассортимент светотехники от классики до современных моделей. ` : ''}Выбирайте из нашей коллекции и преобразите ваш интерьер.`
-          }
-        </motion.p>
-        
-        <div className="flex flex-wrap gap-4 mt-6">
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-            className="flex items-center gap-2 text-sm text-gray-600"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-            <span>Быстрая доставка</span>
-          </motion.div>
-          
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-            className="flex items-center gap-2 text-sm text-gray-600"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-            <span>Гарантия качества</span>
-          </motion.div>
-          
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.7 }}
-            className="flex items-center gap-2 text-sm text-gray-600"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-            <span>Профессиональная поддержка</span>
-          </motion.div>
-        </div>
-      </div>
-    );
-  };
-
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen flex flex-col bg-gray-50">
       <Head>
-        <title>{sourceTitle}</title>
-        <meta name="description" content={seoKeywords} />
-        <link rel="canonical" href={canonicalUrl} />
+        {/* Рендерим preload теги для LCP изображений с приоритетной загрузкой */}
+        {lcpImageUrls.map((url) => (
+          <link
+            key={url}
+            rel="preload"
+            href={url}
+            as="image"
+          />
+        ))}
+        {/* SEO компонент и другие теги <head> */}
+        <SEO
+          title={sourceTitle}
+          description={`Каталог товаров ${selectedBrand?.name || ''} ${selectedCategory?.label || ''}. Большой выбор светильников и люстр.`}
+          keywords={seoKeywords}
+          url={canonicalUrl}
+        />
       </Head>
       <Header />
-      <div className="flex flex-col md:flex-row">
-        <div className="md:w-1/4">
-          <ImageCategories categories={productCategories} onCategoryClick={handleCategoryChange} />
-        </div>
-        <div className="md:w-3/4">
-          <CatalogHeading />
-          <div className="flex flex-col md:flex-row">
-            <div className="md:w-1/3">
-              <RelatedCategories />
-            </div>
-            <div className="md:w-2/3">
-              <div className="flex flex-col md:flex-row">
-                <div className="md:w-1/3">
+      <main className="flex-grow container mx-auto px-2 sm:px-4 lg:px-8 pt-4 sm:pt-6 pb-12 max-w-full overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          {/* Хлебные крошки - скрываем на самых маленьких экранах */}
+          <div className="hidden sm:flex items-center text-sm text-gray-500 mb-4">
+            <Link href="/" className="hover:text-gray-900 transition-colors">Назад</Link>
+            <span className="mx-2">/</span>
+            <Link href="/" className="hover:text-gray-900 transition-colors">Главная</Link>
+            <span className="mx-2">/</span>
+            <Link href="/catalog" className="hover:text-gray-900 transition-colors">Каталог</Link>
+            <span className="mx-2">/</span>
+            <span className="text-gray-900 font-medium">ДЕКОРАТИВНЫЙ СВЕТ</span>
+          </div>
+          
+          {/* Заголовок с переключателем режима просмотра */}
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8 gap-3">
+            <h1 className="text-4xl md:text-4xl lg:text-5xl font-bold text-center w-full mb-6">
+              ДЕКОРАТИВНЫЙ СВЕТ
+            </h1>
+          </div>
+          
+          {/* Добавляем компонент ImageCategories здесь */}
+          {isClient && (
+            <ImageCategories 
+              categories={[
+                { id: 'podvesnye', label: 'Люстры', searchName: 'Подвесные светильники' },
+                { id: 'potolochnye', label: 'потолочные', searchName: 'Потолочные светильники' },
+                { id: 'nastennye', label: 'Бра', searchName: 'Настенные светильники' },
+                { id: 'nastolnye', label: 'Настольная лампа', searchName: 'Настольные светильники' },
+                { id: 'napolnye', label: 'Торшер', searchName: 'Напольные светильники' },
+                { id: 'komplektuyuschie', label: 'комплектующие', searchName: 'Комплектующие' }
+              ]} 
+              onCategoryClick={handleCategoryChange}
+            />
+          )}
+          
+          {/* Mobile Filter Button - улучшенный вид */}
+          <div className="lg:hidden mb-4">
+            <button 
+              onClick={toggleMobileFilter}
+              className="w-full py-2.5 px-4 bg-white rounded-lg shadow-sm flex items-center justify-between border border-gray-200"
+            >
+              <span className="font-medium flex items-center text-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                </svg>
+                Фильтры и категории
+              </span>
+              <span className="bg-gray-100 px-2 py-1 rounded-full text-xs font-medium text-gray-700">
+                {totalProducts} товаров
+              </span>
+            </button>
+          </div>
+          
+          <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
+            {/* Left Sidebar - Улучшенный мобильный фильтр */}
+            <div className={`
+              ${isMobileFilterOpen ? 'fixed inset-0 z-50 bg-white overflow-y-auto p-4' : 'hidden'} 
+              lg:block lg:relative lg:z-auto lg:w-[270px] lg:flex-shrink-0
+            `}>
+              {/* Mobile Filter Header с кнопкой закрытия */}
+              {isMobileFilterOpen && (
+                <div className="lg:hidden flex justify-between items-center mb-4 pb-3 border-b sticky top-0 bg-white z-10">
+                  <h2 className="font-bold text-lg">Фильтры и категории</h2>
+                  <button 
+                    onClick={toggleMobileFilter} 
+                    className="p-1.5 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              )}
+
+              {/* Категории */}
+              <div className="bg-white rounded-lg p-4 shadow-sm mb-4 border border-gray-100">
+                <h2 className="font-bold mb-3 text-gray-900 uppercase text-sm">Категории</h2>
+                <div className="space-y-0.5 max-h-[400px] overflow-y-auto pr-1">
                   {renderCategories()}
                 </div>
-                <div className="md:w-2/3">
-                  <div className="flex flex-col md:flex-row">
-                    <div className="md:w-1/2">
-                      <PriceFilter />
+              </div>
+              
+              {/* Фильтр цены с улучшенной адаптивностью */}
+              <div className="bg-white rounded-lg p-4 shadow-sm mb-4 border border-gray-100">
+                <h2 className="font-bold mb-3 text-gray-900 uppercase text-sm">Цена, ₽</h2>
+                <div className="flex flex-col space-y-4">
+                  <div className="flex justify-between items-center gap-3">
+                    <div className="flex-1">
+                      <input
+                        type="number"
+                        min="0"
+                        placeholder="От"
+                        value={minPrice === 10 ? '' : minPrice}
+                        onChange={(e) => {
+                          const value = parseInt(e.target.value) || 10;
+                          setMinPrice(value);
+                        }}
+                        className="w-full p-2 border border-gray-300 rounded-md text-sm"
+                      />
                     </div>
-                    <div className="md:w-1/2">
-                      <ColorFilter />
+                    <span className="text-gray-400">—</span>
+                    <div className="flex-1">
+                      <input
+                        type="number"
+                        min="0"
+                        placeholder="До"
+                        value={maxPrice === 1000000 ? '' : maxPrice}
+                        onChange={(e) => {
+                          const value = parseInt(e.target.value) || 1000000;
+                          setMaxPrice(value);
+                        }}
+                        className="w-full p-2 border border-gray-300 rounded-md text-sm"
+                      />
                     </div>
                   </div>
-                  <div className="flex flex-col md:flex-row">
-                    <div className="md:w-1/2">
-                      <MaterialFilter />
-                    </div>
-                    <div className="md:w-1/2">
-                      <ActiveFilters />
-                    </div>
-                  </div>
-                  <div className="md:w-1/2">
-                    <ResetFiltersButton />
-                  </div>
-                  <div className="md:w-1/2">
-                    {isClient && (
-                      <CatalogOfProductSearch products={products} viewMode={viewMode === 'table' ? 'grid' : viewMode} />
-                    )}
-                  </div>
+                  <button
+                    onClick={() => handlePriceRangeChange(minPrice, maxPrice)}
+                    className="bg-black text-white rounded-md py-2 text-sm font-medium hover:bg-gray-800 transition-colors"
+                  >
+                    Применить
+                  </button>
                 </div>
               </div>
-            </div>
-          </div>
-          <div className="mt-8">
-            {isLoading ? (
-              <div className="flex justify-center">
-                <ClipLoader color="#36d7b7" />
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {products.map((product, index) => (
-                  <div key={product._id || `product-${index}`} className="bg-white rounded-lg shadow-md p-4">
-                    <Link href={`/product/${product._id}`}>
-                      <a>
-                        <div className="relative aspect-square overflow-hidden">
-                          <Image
-                            src={typeof product.image === 'string' ? product.image : '/images/placeholder.png'}
-                            alt={typeof product.name === 'string' ? product.name : 'Product image'}
-                            layout="fill"
-                            objectFit="cover"
-                          />
-                        </div>
-                        <h3 className="mt-2 text-lg font-medium">{product.name}</h3>
-                        <p className="text-gray-600">{product.description}</p>
-                        <div className="mt-4 flex justify-between items-center">
-                          <span className="text-gray-800 font-medium">₽{product.price}</span>
-                          <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors">Купить</button>
-                        </div>
-                      </a>
-                    </Link>
+
+              {/* Остальные фильтры - без изменений */}
+              {/* ... existing code ... */}
+
+              {/* Colors - если есть в товарах */}
+              {extractedFilters.colors.length > 0 && (
+                <div className="bg-white rounded-lg p-4 shadow-sm mb-4 border border-gray-100">
+                  <h2 className="font-bold mb-3 text-gray-900 uppercase text-sm">Цвет</h2>
+                  <div className="grid grid-cols-2 gap-1 sm:gap-2 text-sm">
+                    {extractedFilters.colors.map((color) => (
+                      <div
+                        key={color}
+                        className={`flex items-center py-1.5 px-2 rounded-md cursor-pointer ${
+                          selectedColor === color ? 'bg-gray-100 font-medium' : 'hover:bg-gray-50'
+                        }`}
+                        onClick={() => handleColorChange(color)}
+                      >
+                        <div 
+                          className="w-4 h-4 rounded-full mr-2 border border-gray-300" 
+                          style={{ 
+                            backgroundColor: color.toLowerCase(),
+                            boxShadow: selectedColor === color ? '0 0 0 2px rgba(59, 130, 246, 0.5)' : 'none' 
+                          }}
+                        />
+                        <span className={`${selectedColor === color ? 'text-black font-medium' : 'text-gray-700'} text-xs sm:text-sm truncate`}>
+                          {color}
+                        </span>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
+              )}
+
+              {/* Materials - если есть в товарах */}
+              {extractedFilters.materials.length > 0 && (
+                <div className="bg-white rounded-lg p-4 shadow-sm mb-4 border border-gray-100">
+                  <h2 className="font-bold mb-3 text-gray-900 uppercase text-sm">Материал</h2>
+                  <div className="grid grid-cols-2 gap-1 sm:gap-2 text-sm">
+                    {extractedFilters.materials.map((material) => (
+                      <div
+                        key={material}
+                        className={`flex items-center py-1.5 px-2 rounded-md cursor-pointer ${
+                          selectedMaterial === material ? 'bg-gray-100 font-medium' : 'hover:bg-gray-50'
+                        }`}
+                        onClick={() => handleMaterialChange(material)}
+                      >
+                        <span 
+                          className={`w-4 h-4 rounded border mr-1.5 flex items-center justify-center ${
+                            selectedMaterial === material 
+                              ? 'bg-black border-black text-white' 
+                              : 'border-gray-300'
+                          }`}
+                        >
+                          {selectedMaterial === material && (
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                          )}
+                        </span>
+                        <span className={`${selectedMaterial === material ? 'text-black font-medium' : 'text-gray-700'} text-xs sm:text-sm truncate`}>
+                          {material}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Reset Filters button */}
+              <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 mb-4">
+                <button
+                  className="w-full py-2 border border-gray-300 rounded-md hover:bg-gray-50 text-sm text-gray-700 transition-colors font-medium flex items-center justify-center"
+                  onClick={handleResetFilters}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  Сбросить все фильтры
+                </button>
               </div>
-            )}
-            {totalPages > 1 && (
-              <div className="mt-8">
-                {renderPagination()}
+              
+              {/* Закрыть фильтр на мобильных */}
+              {isMobileFilterOpen && (
+                <div className="lg:hidden sticky bottom-0 left-0 right-0 bg-white p-3 border-t border-gray-200 mt-auto">
+                  <button
+                    onClick={toggleMobileFilter}
+                    className="w-full py-2.5 bg-black text-white font-medium rounded-md"
+                  >
+                    Показать результаты ({totalProducts})
+                  </button>
+                </div>
+              )}
+
+              {/* Добавляем блок брендов в мобильный фильтр */}
+              {isMobileFilterOpen && (
+                <div className="lg:hidden bg-white rounded-lg p-4 shadow-sm mb-4 border border-gray-100">
+                  <h2 className="font-bold mb-3 text-gray-900 uppercase text-sm">Бренды</h2>
+                  <div className="space-y-2 max-h-[200px] overflow-y-auto pr-1">
+                    {/* Если есть source, показываем только выбранный бренд */}
+                    {router.query.source && selectedBrand ? (
+                      <div
+                        className="flex items-center px-2 py-1.5 rounded transition-colors duration-200 font-bold text-black bg-gray-100"
+                      >
+                        {selectedBrand.name}
+                      </div>
+                    ) : (
+                      // Иначе показываем все бренды
+                      brands.map((brand, index) => (
+                        <div
+                          key={index}
+                          className={`flex items-center px-2 py-1.5 rounded transition-colors duration-200 ${
+                            selectedBrand?.name === brand.name
+                              ? 'font-bold text-black bg-gray-100' 
+                              : 'text-gray-600 hover:text-black hover:bg-gray-50 cursor-pointer'
+                          }`}
+                          onClick={() => handleBrandChange(brand)}
+                        >
+                          {brand.name}
+                        </div>
+                      ))
+                    )}
+                  </div>
+                  
+                  {/* Показываем категории выбранного бренда в мобильном фильтре */}
+                  {selectedBrand && selectedBrand.name !== 'Все товары' && selectedBrand.categories.length > 0 && (
+                    <div className="mt-4 pt-4 border-t border-gray-100">
+                      <h3 className="font-medium text-sm text-gray-700 mb-2">Категории {selectedBrand.name}</h3>
+                      <div className="space-y-1.5">
+                        {selectedBrand.categories
+                          .filter(category => category.label !== 'Все товары')
+                          .map((category, idx) => (
+                            <div
+                              key={idx}
+                              onClick={() => {
+                                // При клике на категорию бренда мы меняем только выбранную категорию
+                                setSelectedCategory(category);
+                                
+                                // Обновляем URL с сохранением источника (бренда)
+                                router.push({
+                                  pathname: router.pathname,
+                                  query: {
+                                    ...router.query,
+                                    source: selectedBrand.name === 'Все товары' ? undefined : selectedBrand.name,
+                                    category: category.searchName,
+                                    page: 1
+                                  },
+                                }, undefined, { shallow: true });
+                                
+                                // Загружаем товары и закрываем мобильный фильтр
+                                fetchProducts(selectedBrand.name === 'Все товары' ? '' : selectedBrand.name, 1);
+                                setIsMobileFilterOpen(false);
+                              }}
+                              className={`px-3 py-2 rounded-md text-sm ${
+                                selectedCategory?.label === category.label
+                                  ? 'bg-gray-800 text-white font-medium'
+                                  : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                              }`}
+                            >
+                              {category.label}
+                            </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Right Content Area */}
+            <div className="flex-1">
+              {/* Filter and Sort controls с улучшенной адаптивностью */}
+              <div className="bg-white rounded-lg p-3 sm:p-4 mb-4 sm:mb-6 shadow-sm border border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-3">
+                <div className="text-sm text-gray-700 font-medium w-full sm:w-auto text-center sm:text-left">
+                  Найдено: <span className="text-black font-semibold">{totalProducts}</span> товаров
+                </div>
+                
+                <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
+                  {/* Переключатель режима отображения для десктопа */}
+                  <div className="hidden sm:flex bg-gray-100 rounded-full px-1 py-1">
+                    <button
+                      onClick={() => setViewMode('grid')}
+                      className={`p-1.5 rounded-full transition-colors ${
+                        viewMode === 'grid' 
+                          ? 'bg-black text-white' 
+                          : 'text-gray-700 hover:bg-gray-200'
+                      }`}
+                      title="Сетка"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                      </svg>
+                    </button>
+                    <button
+                      onClick={() => setViewMode('list')}
+                      className={`p-1.5 rounded-full transition-colors ${
+                        viewMode === 'list' 
+                          ? 'bg-black text-white' 
+                          : 'text-gray-700 hover:bg-gray-200'
+                      }`}
+                      title="Список"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                      </svg>
+                    </button>
+                    <button
+                      onClick={() => setViewMode('table')}
+                      className={`p-1.5 rounded-full transition-colors ${
+                        viewMode === 'table' 
+                          ? 'bg-black text-white' 
+                          : 'text-gray-700 hover:bg-gray-200'
+                      }`}
+                      title="Таблица"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M3 14h18M3 6h18M3 18h18" />
+                      </svg>
+                    </button>
+                  </div>
+                  
+                  {/* Переключатель отображения продукт/коллекция */}
+                  <div className="flex bg-white rounded-full border border-gray-200 p-1 shadow-sm">
+                    <button 
+                      onClick={() => setDisplayMode('product')}
+                      className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-colors ${
+                        displayMode === 'product' 
+                          ? 'bg-black text-white' 
+                          : 'text-gray-600 hover:bg-gray-100'
+                      }`}
+                    >
+                      Товар
+                    </button>
+                    <button
+                      onClick={() => setDisplayMode('collection')}
+                      className={`px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium transition-colors ${
+                        displayMode === 'collection'
+                          ? 'bg-black text-white' 
+                          : 'text-gray-600 hover:bg-gray-100'
+                      }`}
+                    >
+                      Коллекции
+                    </button>
+                  </div>
+                  
+                  {/* Мобильный переключатель режимов отображения */}
+                  <div className="sm:hidden flex bg-gray-100 rounded-full px-1 py-1">
+                    <button
+                      onClick={() => setViewMode('grid')}
+                      className={`p-1.5 rounded-full transition-colors ${
+                        viewMode === 'grid' 
+                          ? 'bg-black text-white' 
+                          : 'text-gray-700 hover:bg-gray-200'
+                      }`}
+                      title="Сетка"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6z" />
+                      </svg>
+                    </button>
+                    <button
+                      onClick={() => setViewMode('table')}
+                      className={`p-1.5 rounded-full transition-colors ${
+                        viewMode === 'table' 
+                          ? 'bg-black text-white' 
+                          : 'text-gray-700 hover:bg-gray-200'
+                      }`}
+                      title="Таблица"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M3 14h18" />
+                      </svg>
+                    </button>
+                  </div>
+                  
+                  <select
+                    className="text-xs sm:text-sm border border-gray-300 rounded-md px-2 py-1.5 sm:px-3 sm:py-1.5 bg-white focus:ring-2 focus:ring-gray-200 outline-none flex-1 sm:flex-none"
+                    value={sortOrder || 'popularity'}
+                    onChange={(e) => handleSortOrderChange(e.target.value as any)}
+                  >
+                    <option value="popularity">По популярности</option>
+                    <option value="newest">Сначала новые</option>
+                    <option value="asc">Цена ↑</option>
+                    <option value="desc">Цена ↓</option>
+                  </select>
+                </div>
               </div>
-            )}
-          </div>
-        </div>
-      </div>
+
+              {/* Активные фильтры, если есть */}
+              {(selectedBrand?.name !== 'Все товары' || 
+                selectedCategory?.label !== 'Все товары' || 
+                minPrice !== 10 || 
+                maxPrice !== 1000000 || 
+                selectedColor ||
+                selectedMaterial ||
+                searchQuery) && (
+                <div className="bg-white rounded-lg p-4 mb-6 shadow-sm border border-gray-100">
+                  <div className="flex flex-wrap gap-2 items-center">
+                    <span className="text-xs sm:text-sm font-medium text-gray-700">Активные фильтры:</span>
+                    
+                    {selectedCategory?.label !== 'Все товары' && (
+                      <div className="bg-gray-100 px-3 py-1.5 rounded-full text-xs flex items-center gap-1 border border-gray-200">
+                        <span className="text-gray-700">Категория: {selectedCategory?.label}</span>
+                        <button 
+                          onClick={() => handleCategoryChange({ label: 'Все товары', searchName: 'Все товары' })} 
+                          className="text-gray-500 hover:text-black p-0.5 ml-1"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                          </svg>
+                        </button>
+                      </div>
+                    )}
+                    
+                    {selectedBrand && selectedBrand.name !== 'Все товары' && (
+                      <div className="bg-gray-100 px-3 py-1.5 rounded-full text-xs flex items-center gap-1 border border-gray-200">
+                        {/* <span className="text-gray-700">Бренд: {selectedBrand.name}</span> */}
+                        <button 
+                          onClick={() => {
+                            const globalBrand = brands.find(b => b.name === 'Все товары');
+                            if (globalBrand) handleBrandChange(globalBrand);
+                          }}
+                          className="text-gray-500 hover:text-black p-0.5 ml-1"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                          </svg>
+                        </button>
+                      </div>
+                    )}
+                    
+                    {(minPrice !== 10 || maxPrice !== 1000000) && (
+                      <div className="bg-gray-100 px-3 py-1.5 rounded-full text-xs flex items-center gap-1 border border-gray-200">
+                        <span className="text-gray-700">Цена: {minPrice} - {maxPrice} ₽</span>
+                        <button 
+                          onClick={() => {
+                            setMinPrice(10);
+                            setMaxPrice(1000000);
+                            handlePriceRangeChange(10, 1000000);
+                          }} 
+                          className="text-gray-500 hover:text-black p-0.5 ml-1"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                          </svg>
+                        </button>
+                      </div>
+                    )}
+                    
+                    {selectedColor && (
+                      <div className="bg-gray-100 px-3 py-1.5 rounded-full text-xs flex items-center gap-1 border border-gray-200">
+                        <span className="text-gray-700 flex items-center">
+                          <span className="w-3 h-3 rounded-full mr-1 border border-gray-300" style={{ backgroundColor: selectedColor.toLowerCase() }}></span>
+                          Цвет: {selectedColor}
+                        </span>
+                        <button 
+                          onClick={() => handleColorChange(selectedColor)} 
+                          className="text-gray-500 hover:text-black p-0.5 ml-1"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                          </svg>
+                        </button>
+                      </div>
+                    )}
+                    
+                    {selectedMaterial && (
+                      <div className="bg-gray-100 px-3 py-1.5 rounded-full text-xs flex items-center gap-1 border border-gray-200">
+                        <span className="text-gray-700">Материал: {selectedMaterial}</span>
+                        <button 
+                          onClick={() => handleMaterialChange(selectedMaterial)} 
+                          className="text-gray-500 hover:text-black p-0.5 ml-1"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                          </svg>
+                        </button>
+                      </div>
+                    )}
+                    
+                    {searchQuery && (
+                      <div className="bg-gray-100 px-3 py-1.5 rounded-full text-xs flex items-center gap-1 border border-gray-200">
+                        <span className="text-gray-700">Поиск: {searchQuery}</span>
+                        <button 
+                          onClick={() => {
+                            setSearchQuery('');
+                            fetchProducts(selectedBrand?.name || '');
+                          }} 
+                          className="text-gray-500 hover:text-black p-0.5 ml-1"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                          </svg>
+                        </button>
+                      </div>
+                    )}
+                    
+                    <button
+                      onClick={handleResetFilters}
+                      className="text-xs sm:text-sm text-gray-700 hover:text-black hover:underline font-medium"
+                    >
+                      Сбросить все
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Показываем ImageCategories только если нет source */}
+              {!source && ( 
+                <ImageCategories 
+                  categories={productCategories} 
+                  onCategoryClick={handleCategoryChange} 
+                />
+              )}
+
+              {/* Отображаем связанные категории - убираем условный рендеринг */}
+              <RelatedCategories />
+
+              {/* Блок брендов: показываем только если есть source в URL */}
+              {router.query.source ? (
+                <div className="flex-1 bg-white rounded-lg p-3 sm:p-4 mb-4 shadow-sm border border-gray-100">
+                  <h2 className="font-medium text-lg mb-3">Бренд</h2>
+                  <div className="flex items-center">
+                    {selectedBrand && (
+                      <div className="flex-shrink-0">
+                        <div className="whitespace-nowrap px-4 py-2 rounded-md text-sm bg-black text-white font-medium">
+                          {selectedBrand.name}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Показываем категории выбранного бренда - всегда раскрыты */}
+                  {selectedBrand && selectedBrand.name !== 'Все товары' && selectedBrand.categories.length > 0 && (
+                    <div className="mt-4 pt-2">
+                      <h3 className="font-medium text-sm text-gray-700 mb-3">Категории {selectedBrand.name}</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedBrand.categories.map((category, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => {
+                              // При клике на категорию бренда меняем только выбранную категорию
+                              setSelectedCategory(category);
+                              
+                              // Обновляем URL с сохранением источника (бренда)
+                              router.push({
+                                pathname: router.pathname,
+                                query: {
+                                  ...router.query,
+                                  source: selectedBrand.name === 'Все товары' ? undefined : selectedBrand.name,
+                                  category: category.searchName,
+                                  page: 1
+                                },
+                              }, undefined, { shallow: true });
+                              
+                              // Загружаем товары
+                              fetchProducts(selectedBrand.name === 'Все товары' ? '' : selectedBrand.name, 1);
+                            }}
+                            className={`px-3 py-1.5 rounded-md text-xs ${
+                              selectedCategory?.label === category.label
+                                ? 'bg-gray-800 text-white font-medium'
+                                : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                            }`}
+                          >
+                            {category.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : null}
+
+              {/* Products Grid */}
+              <div className="flex-1 bg-white rounded-lg p-3 sm:p-4 shadow-sm border border-gray-100 overflow-hidden">
+                {/* --- Измененный блок загрузки --- */}
+                {(isLoading || !isClient) ? (
+                  // Всегда рендерим скелетон сетки, чтобы избежать CLS=null
+                  <div className="grid auto-rows-auto w-full grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-2 md:grid-cols-3 md:gap-3 lg:grid-cols-4 lg:gap-3 xl:grid-cols-4 xl:gap-3">
+                    {Array.from({ length: 8 }).map((_, i) => (
+                      <div key={`skeleton-${i}`} className="bg-white rounded-lg border border-gray-100 flex flex-col h-full">
+                        <div className="relative aspect-square bg-gray-100 animate-pulse rounded-t-lg min-h-[150px] sm:min-h-[180px]"></div>
+                        <div className="p-2 sm:p-4 flex flex-col flex-grow">
+                          <div className="h-4 bg-gray-200 rounded w-3/4 mb-2 animate-pulse"></div>
+                          <div className="h-3 bg-gray-200 rounded w-1/2 mb-3 animate-pulse"></div>
+                          <div className="mt-auto flex items-center justify-between gap-2">
+                            <div className="h-5 bg-gray-200 rounded w-1/3 animate-pulse"></div>
+                            <div className="h-8 bg-gray-300 rounded w-1/2 animate-pulse"></div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : products.length > 0 ? (
+                  // Рендер реальных товаров
+                  <>
+                    {displayMode === 'product' ? (
+                      <CatalogOfProductSearch
+                        products={products}
+                        viewMode={viewMode}
+                        isLoading={isLoading} // Передаем isLoading, хотя он уже false здесь
+                      />
+                      // ... (остальной код для product mode)
+                     ) : (
+                      // Режим коллекций
+                      <div className="space-y-8">
+                        {Object.entries(groupProductsByCollection(products))
+                          // Сортируем коллекции: сначала по количеству товаров (по убыванию), 
+                          // но "Прочие товары" всегда внизу
+                          .sort((a, b) => {
+                            if (a[0] === 'Прочие товары') return 1;
+                            if (b[0] === 'Прочие товары') return -1;
+                            return b[1].length - a[1].length;
+                          })
+                          .map(([collectionName, collectionProducts]) => (
+                            <div key={collectionName} className={`mb-12 ${collectionName === 'Прочие товары' ? 'mt-8 pt-8 border-t border-gray-200' : ''}`}>
+                              <div className="flex items-center gap-2 mb-4">
+                                <h3 className="text-xl font-bold text-gray-900">{collectionName}</h3>
+                                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                                  {collectionProducts.length} {collectionProducts.length === 1 ? 'товар' : 
+                                    (collectionProducts.length >= 2 && collectionProducts.length <= 4) ? 'товара' : 'товаров'}
+                                </span>
+                              </div>
+                              <div className="border-b border-gray-200 mb-4"></div>
+                              <CatalogOfProductSearch
+                                products={collectionProducts} 
+                                viewMode={viewMode}
+                                isLoading={isLoading}                      
+                              />
+                            </div>
+                          ))
+                        }
+                      </div>
+                    )}
+                     {/* Пагинация */}
+                     <div className={`mt-8 ${displayMode === 'collection' ? 'hidden sm:hidden' : ''}`}>
+                       {renderPagination()}
+                     </div>
+                  </>
+                ) : (
+                   // Товары не найдены
+                  <div className="p-12 text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 14a2 2 0 100-4 2 2 0 000 4z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M22 12a10 10 0 11-20 0 10 10 0 0120 0z" />
+                    </svg>
+                    <p className="mt-4 text-gray-500 text-lg">Товары не найдены</p>
+                    <p className="text-gray-400 mt-2">Попробуйте изменить параметры фильтрации</p>
+                    <button 
+                      onClick={handleResetFilters} 
+                      className="mt-4 px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition-colors text-sm font-medium"
+                    >
+                      Сбросить все фильтры
+                    </button>
+                  </div>
+                )}
+              </div> {/* Конец Products Area */}
+            </div> {/* Конец Right Content Area */}
+          </div> {/* Конец flex-col lg:flex-row */}
+        </div> {/* Конец max-w-9xl */}
+      </main>
       <Footer />
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  const { source, page, category, color, material, minPrice, maxPrice, sort } = query;
+  const sourceName = source || '';
+  const pageNumber = page ? parseInt(page as string, 10) : 1;
+  const limit = 40; // Лимит на странице
+
+  try {
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Timeout')), 5000); // 5 сек таймаут
+    });
+
+    const params: Record<string, any> = { limit, page: pageNumber }; // Передаем limit и page в params
+
+    // ... (логика установки sortBy, sortOrder, name, color, material, minPrice, maxPrice в params) ...
+     // Установка параметров сортировки
+     if (sort) {
+       if (sort === 'asc') { params.sortBy = 'price'; params.sortOrder = 'asc'; }
+       else if (sort === 'desc') { params.sortBy = 'price'; params.sortOrder = 'desc'; }
+       else if (sort === 'popularity') { params.sortBy = 'popularity'; params.sortOrder = 'desc'; }
+       else if (sort === 'newest') { params.sortBy = 'date'; params.sortOrder = 'desc'; }
+     } else {
+       params.sortBy = 'popularity'; params.sortOrder = 'desc'; // По умолчанию - популярность
+     }
+     // Обработка категории
+     if (category && typeof category === 'string' && category.toLowerCase() !== 'все товары' /*...*/) {
+        const decodedCategory = decodeURIComponent(category);
+        if (decodedCategory.toLowerCase().includes('настольн')) {
+            params.name = 'Настольная лампа';
+        } else {
+            params.name = decodedCategory;
+        }
+     }
+     if (color) params.color = color;
+     if (material) params.material = material;
+     if (minPrice && !isNaN(Number(minPrice))) params.minPrice = Number(minPrice);
+     if (maxPrice && !isNaN(Number(maxPrice))) params.maxPrice = Number(maxPrice);
+
+
+    // Запрашиваем *только первую страницу* на сервере
+    const dataPromise = fetchProductsWithSorting(sourceName as string, params); // Используем fetchProductsWithSorting напрямую
+
+    const initialData = await Promise.race([dataPromise, timeoutPromise]) as {
+      products: ProductI[],
+      totalPages: number,
+      totalProducts: number
+    };
+
+    // Получаем URL для LCP кандидатов (первые 3 товара)
+    const lcpImageUrls = (initialData.products || [])
+      .slice(0, 3) // Берем первые 3
+      .map(product => {
+        let originalUrl: string | null = null;
+         if (typeof product.imageAddresses === 'string') originalUrl = product.imageAddresses;
+         else if (Array.isArray(product.imageAddresses) && product.imageAddresses.length > 0) originalUrl = product.imageAddresses[0];
+         else if (typeof product.imageAddress === 'string') originalUrl = product.imageAddress;
+         else if (Array.isArray(product.imageAddress) && product.imageAddress.length > 0) originalUrl = product.imageAddress[0];
+
+        if (!originalUrl) return null;
+        // Используем серверно-безопасную нормализацию
+        return normalizeUrlServerSafe(originalUrl, true); // true = isLCP
+      })
+      .filter(url => url !== null) as string[];
+
+    return {
+      props: {
+        initialProducts: initialData.products || [],
+        initialTotalPages: initialData.totalPages || 1,
+        initialTotalProducts: initialData.totalProducts || 0,
+        source: sourceName || null,
+        lcpImageUrls: lcpImageUrls, // Передаем URL
+      }
+    };
+  } catch (error) {
+    console.error('Ошибка при получении товаров с сервера (getServerSideProps):', error);
+    return {
+      props: {
+        initialProducts: [],
+        initialTotalPages: 0,
+        initialTotalProducts: 0,
+        source: sourceName || null,
+        lcpImageUrls: [], // Пустой массив в случае ошибки
+      }
+    };
+  }
 };
 
 export default CatalogIndex;

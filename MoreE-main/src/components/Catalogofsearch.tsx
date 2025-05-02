@@ -6,7 +6,8 @@ import { motion } from 'framer-motion';
 
 interface CatalogOfProductProps {
   products: ProductI[];
-  viewMode: 'grid' | 'list';
+  viewMode: 'grid' | 'list' | 'table';
+  isLoading?: boolean;
 }
 
 // Функция нормализации URL: если протокол страницы https и URL начинается с http://,
@@ -18,7 +19,7 @@ const normalizeUrl = (url: string): string => {
   return url;
 };
 
-const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, viewMode }) => {
+const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, viewMode, isLoading }) => {
   const addToCart = (article: string, source: string, name: string) => {
     const cart = JSON.parse(localStorage.getItem('cart') || '{"products": []}');
     const existingProductIndex = cart.products.findIndex((item: any) => item.article === article);
@@ -115,12 +116,12 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
                 )}
               </div>
 
-              <div className="aspect-square bg-[#f8f8f8] flex items-center justify-center relative overflow-hidden">
+              <div className="aspect-square bg-white flex items-center justify-center relative overflow-hidden">
                 {images.length > 0 && !mainImageError ? (
                   <motion.img
                     src={`${images[currentIndex]}?q=75&w=400`}
                     alt={product.name}
-                    className="w-full h-full object-contain mix-blend-multiply p-4"
+                    className="w-full h-full object-contain p-4"
                     loading={index < 8 ? "eager" : "lazy"}
                     onError={() => setMainImageError(true)}
                     animate={{ 
@@ -129,7 +130,7 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
                     transition={{ duration: 0.3 }}
                   />
                 ) : (
-                  <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
+                  <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-500">
                     Нет изображения
                   </div>
                 )}
@@ -168,7 +169,7 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
                   disabled={Number(product.stock) <= 0}
                   className={`absolute top-3 right-3 p-2 rounded-full shadow-md ${
                     Number(product.stock) > 0 
-                      ? 'bg-white hover:bg-gray-900 hover:text-white' 
+                      ? 'bg-white hover:bg-black hover:text-white' 
                       : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                   } transition-colors duration-300`}
                 >
@@ -182,7 +183,7 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
             {/* Информация о товаре */}
             <div className="p-4 flex flex-col justify-between gap-2">
               <div>
-                <h3 className="text-sm sm:text-base font-medium text-gray-800 line-clamp-2 min-h-[48px] group-hover:text-black transition-colors">
+                <h3 className="text-sm sm:text-base font-medium text-gray-800 line-clamp-2 group-hover:text-black transition-colors">
                   {product.name}
                 </h3>
                 <div className="flex items-center mt-1">
@@ -205,9 +206,9 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
                     addToCart(product.article, product.source, product.name);
                   }}
                   disabled={Number(product.stock) <= 0}
-                  className={`px-4 py-2 w-full sm:w-auto text-white text-sm font-medium rounded-lg transition-colors ${
+                  className={`px-4 py-2 text-white text-sm font-medium rounded-lg transition-colors ${
                     Number(product.stock) > 0 
-                      ? 'bg-gray-900 hover:bg-gray-800' 
+                      ? 'bg-black hover:bg-gray-800' 
                       : 'bg-gray-300 cursor-not-allowed'
                   }`}
                 >
@@ -219,7 +220,7 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
               <div className="flex items-center gap-2 mt-1">
                 <div className={`w-2 h-2 rounded-full ${Number(product.stock) > 0 ? 'bg-green-500' : 'bg-red-500'}`} />
                 <span className="text-xs text-gray-500">
-                  {Number(product.stock) > 0 ? `В наличии: ${product.realStock}` : 'Нет в наличии'}
+                  {Number(product.stock) > 0 ? `В наличии: ${product.realStock || product.stock}` : 'Нет в наличии'}
                 </span>
               </div>
             </div>
@@ -232,9 +233,13 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
   // Создаем стиль сетки в зависимости от выбранного режима просмотра
   const gridStyle = useMemo(() => {
     if (viewMode === 'list') {
-      return 'grid-cols-1 gap-4';
+      return 'grid-cols-1 gap-6';
     }
-    return 'grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5 lg:gap-6';
+    if (viewMode === 'table') {
+      return 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5 lg:gap-6';
+    }
+    // По умолчанию используем стиль grid
+    return 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6';
   }, [viewMode]);
 
   return (
