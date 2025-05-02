@@ -91,7 +91,7 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
         initial="hidden"
         animate="visible"
         variants={cardVariants}
-        className="group bg-white rounded-md overflow-hidden transition-all duration-300 hover:shadow-sm border border-gray-200"
+        className="group bg-white rounded-sm overflow-hidden transition-all duration-300 hover:shadow-sm border border-gray-200"
       >
         <Link href={`/products/${product.source}/${encodeURIComponent(product.article)}`}>
           <div>
@@ -105,7 +105,7 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
               {/* Бейджи */}
               <div className="absolute top-2 left-2 flex gap-2 z-10">
                 {product.isNew && (
-                  <div className="bg-black text-white rounded px-2 py-0.5 text-xs">
+                  <div className="bg-black text-white rounded-sm px-2 py-0.5 text-xs">
                     NEW
                   </div>
                 )}
@@ -116,7 +116,7 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
                   <motion.img
                     src={`${images[currentIndex]}?q=75&w=400`}
                     alt={product.name}
-                    className="w-full h-full object-contain p-3"
+                    className="w-full h-full object-contain p-2"
                     loading={index < 8 ? "eager" : "lazy"}
                     onError={() => setMainImageError(true)}
                     animate={{ 
@@ -129,66 +129,23 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
                     Нет изображения
                   </div>
                 )}
-
-                {/* Пагинация (точки) поверх изображения, если изображений больше одного */}
-                {images.length > 1 && (
-                  <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-1 bg-white/80 px-2 py-1 rounded-full shadow-sm">
-                    {images.map((_, idx) => (
-                      <motion.span
-                        key={idx}
-                        initial={{ opacity: 0.6 }}
-                        animate={{ 
-                          opacity: idx === currentIndex ? 1 : 0.6,
-                          scale: idx === currentIndex ? 1.2 : 1
-                        }}
-                        className={`w-2 h-2 rounded-full ${
-                          idx === currentIndex ? 'bg-black' : 'bg-gray-400'
-                        }`}
-                      ></motion.span>
-                    ))}
-                  </div>
-                )}
-
-                {/* Кнопка быстрого добавления в корзину */}
-                <motion.button
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ 
-                    opacity: isHovering ? 1 : 0,
-                    scale: isHovering ? 1 : 0.8
-                  }}
-                  transition={{ duration: 0.2 }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    addToCart(product.article, product.source, product.name);
-                  }}
-                  disabled={Number(product.stock) <= 0}
-                  className={`absolute top-3 right-3 p-2 rounded-full shadow-md ${
-                    Number(product.stock) > 0 
-                      ? 'bg-white hover:bg-black hover:text-white' 
-                      : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                  } transition-colors duration-300`}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                  </svg>
-                </motion.button>
               </div>
             </div>
 
             {/* Информация о товаре */}
             <div className="p-3 flex flex-col justify-between gap-1">
               <div>
-                <div className="flex items-center">
+                <div className="flex items-center mb-1">
                   <div className="flex items-center text-xs text-gray-500">
-                    <span className="text-gray-400">{product.source}</span>
+                    <span className="text-gray-400 uppercase">{product.source}</span>
                   </div>
                 </div>
-                <h3 className="text-sm font-medium text-gray-800 line-clamp-2 group-hover:text-black transition-colors mt-1">
+                <h3 className="text-sm font-medium text-gray-800 line-clamp-2 group-hover:text-black transition-colors">
                   {product.name}
                 </h3>
               </div>
               
-              <div className="flex flex-col items-start justify-between gap-2 mt-2">
+              <div className="flex flex-col items-start justify-between gap-1 mt-2">
                 <span className="text-base font-bold text-gray-900">
                   {new Intl.NumberFormat('ru-RU').format(product.price)} ₽
                 </span>
@@ -201,7 +158,7 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
                     addToCart(product.article, product.source, product.name);
                   }}
                   disabled={Number(product.stock) <= 0}
-                  className={`px-3 py-1.5 text-white text-xs font-medium rounded transition-colors w-full flex items-center justify-center ${
+                  className={`px-3 py-1.5 text-white text-xs font-medium rounded-sm transition-colors w-full flex items-center justify-center ${
                     Number(product.stock) > 0 
                       ? 'bg-black hover:bg-gray-800' 
                       : 'bg-gray-300 cursor-not-allowed'
