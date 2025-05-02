@@ -101,138 +101,19 @@ const sideBannerSlides: SideBannerSlide[] = [
 export default function Banner() {
   // Популярные категории для каталога
   const popularCategories = [
-    { id: 1, title: 'ЛЮСТРЫ', image: '/images/s1.png', link: '/catalog?category=Люстра&page=1' },
+    { id: 1, title: 'ЛЮСТРЫ', image: '/images/ЛюстраME.webp', link: '/catalog?category=Люстра&page=1' },
     { id: 2, title: 'СВЕТИЛЬНИКИ', image: '/images/s2.png', link: '/catalog/Светильник' },
-    { id: 3, title: 'БРА И ПОДСВЕТКИ', image: '/images/s3.png', link: '/catalog/Бра' },
-    { id: 4, title: 'СПОТЫ', image: '/images/s4.png', link: '/catalog/Спот' },
-    { id: 5, title: 'НАСТОЛЬНЫЕ ЛАМПЫ', image: '/images/s5.png', link: '/catalog/Настольная лампа' },
-    { id: 6, title: 'ТОРШЕРЫ', image: '/images/s6.png', link: '/catalog/Торшер' },
-    { id: 7, title: 'УЛИЧНОЕ ОСВЕЩЕНИЕ', image: '/images/s7.png', link: '/catalog/Уличный светильник' }
+    { id: 3, title: 'БРА И ПОДСВЕТКИ', image: '/images/БраME.webp', link: '/catalog/Бра' },
+    { id: 5, title: 'НАСТОЛЬНЫЕ ЛАМПЫ', image: '/images/настольнаялампаME.webp', link: '/catalog/Настольная лампа' },
+    { id: 6, title: 'ТОРШЕРЫ', image: '/images/ТоршерME.webp', link: '/catalog/Торшер' },
+    { id: 7, title: 'УЛИЧНОЕ ОСВЕЩЕНИЕ', image: '/images/УличныйсветильникME.webp', link: '/catalog/Уличный светильник' }
   ];
 
-  // Специально для вас - товары с точными данными как на изображении
-  const specialProducts = [
-    {
-      id: 1,
-      title: 'Настольная лампа Maytoni Simple MOD231-TL-01-N',
-      price: '15 990 ₽',
-      brand: 'Maytoni (Германия)',
-      image: '/images/180.jpg',
-      inStock: 'На складе: 30 шт',
-      buttonText: 'В КОРЗИНУ'
-    },
-    {
-      id: 2,
-      title: 'Накладка Werkel для розетки USB графит рифленый WL04-USB-CP',
-      price: '234 ₽',
-      brand: 'Werkel (Германия)',
-      image: '/images/181.png',
-      inStock: 'На складе: 8 шт',
-      buttonText: 'В КОРЗИНУ'
-    },
-    {
-      id: 3,
-      title: 'Выключатель с самовозвратом',
-      price: '970 ₽',
-      brand: 'Xiaomi',
-      image: '/images/179.jpg',
-      buttonText: 'СРАВНИТЬ ХАРАКТЕРИСТИКИ'
-    },
-    {
-      id: 4,
-      title: 'Настольная лампа Maytoni Elba ARM326-00-R',
-      price: '15 990 ₽',
-      brand: 'Maytoni (Германия)',
-      image: '/images/178.jpg',
-      inStock: 'На складе: 50 шт',
-      buttonText: 'В КОРЗИНУ'
-    },
-    {
-      id: 5,
-      title: 'Проводной переключатель XiaoMi Vol...',
-      price: '890 ₽',
-      brand: 'Xiaomi',
-      image: '/images/177.jpg',
-      buttonText: 'СРАВНИТЬ ХАРАКТЕРИСТИКИ'
-    }
-  ];
+ 
 
-  // Блоки для специальных предложений
-  const specialOffers = [
-    {
-      id: 1,
-      title: 'УЛИЧНОЕ ОСВЕЩЕНИЕ',
-      description: 'ДЛЯ ДОМА И САДА',
-      image: '/images/13.jpg',
-      buttonText: 'СМОТРЕТЬ ВСЕ'
-    },
-    {
-      id: 2,
-      title: 'МЕБЕЛЬ',
-      description: 'ДЛЯ ДАЧИ',
-      image: '/images/20.jpg',
-      buttonText: 'СМОТРЕТЬ ВСЕ'
-    }
-  ];
-
-  // Большая ликвидация - товары с точными данными как на изображении
-  const saleProducts = [
-    {
-      id: 1,
-      title: 'Подвесной светодиодный светильник Odeon Light Lazia 3449/9',
-      oldPrice: '1 800 ₽',
-      price: '1 580 ₽',
-      discount: '-12%',
-      image: '/images/18.jpg',
-      inStock: 'На складе: 40 шт',
-      rating: 4,
-      brand: 'Odeon Light (Италия)',
-      buttonText: 'В КОРЗИНУ'
-    },
-    {
-      id: 2,
-      title: 'Подвесной светодиодный светильник Odeon Light Lazia 3449/9',
-      oldPrice: '2 450 ₽',
-      price: '1 960 ₽',
-      discount: '-20%',
-      image: '/images/19.jpg',
-      inStock: 'На складе: 42 шт',
-      rating: 4,
-      brand: 'Odeon Light (Италия)',
-      buttonText: 'В КОРЗИНУ'
-    },
-    {
-      id: 3,
-      title: 'Подвесная люстра Nataly Maytoni (Хрустальная)',
-      oldPrice: '10 890 ₽',
-      price: '8 712 ₽',
-      discount: '-20%',
-      image: '/images/20.jpg',
-      inStock: 'На складе: 8 шт',
-      rating: 4,
-      brand: 'Maytoni (Германия)',
-      buttonText: 'В КОРЗИНУ'
-    }
-  ];
 
   // Товар дня
-  const productOfDay = {
-    id: 1,
-    title: 'Настенный светодиодный светильник Imperium Loft Cosmos Earth',
-    price: '14 140 ₽',
-    brand: 'Imperium Loft (Россия)',
-    image: '/images/earth.jpg'
-  };
-
-  // Типы помещений
-  const roomTypes = [
-    { id: 1, title: 'СПАЛЬНЯ', image: '/images/11.jpg' },
-    { id: 2, title: 'ГОСТИНАЯ', image: '/images/12.jpg' },
-    { id: 3, title: 'КУХНЯ', image: '/images/13.jpg' },
-    { id: 4, title: 'ДЕТСКАЯ', image: '/images/14.png' },
-    { id: 5, title: 'ВАННАЯ', image: '/images/15.jpg' }
-  ];
-
+ 
   // Состояния для индексов текущих слайдов
   const [currentMainSlideIndex, setCurrentMainSlideIndex] = useState(0);
 
@@ -444,7 +325,7 @@ export default function Banner() {
     
      
       </div>
-        {/* Популярные категории */}
+
       
     
 
