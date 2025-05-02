@@ -609,7 +609,7 @@ const ImageCategories: React.FC<{
 
   return (
     <div className="mb-10">
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
         {filteredCategories.slice(0, 6).map((category, index) => {
           // Определяем URL изображения для категории
           const imageUrl = categoryImageMap[category.label] || '/images/s1.png';
@@ -629,11 +629,11 @@ const ImageCategories: React.FC<{
               onClick={() => onCategoryClick(category)}
               className="flex flex-col items-center cursor-pointer transition-transform hover:scale-105"
             >
-              <div className="relative w-full aspect-square mb-4 overflow-hidden rounded-lg bg-white p-2 border border-gray-100 shadow-sm">
+              <div className="relative w-full aspect-square mb-4 overflow-hidden bg-white border border-gray-200">
                 <img 
                   src={imageUrl} 
                   alt={category.label}
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-contain p-4"
                 />
               </div>
               <div className="text-center text-sm font-medium">{displayLabel}</div>
@@ -2085,8 +2085,8 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
           </div>
           
           {/* Заголовок с переключателем режима просмотра */}
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8 gap-3">
-            <h1 className="text-4xl md:text-4xl lg:text-5xl font-bold text-center w-full mb-6">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-10 sm:mb-12 gap-3">
+            <h1 className="text-4xl md:text-5xl font-bold text-center w-full">
               ДЕКОРАТИВНЫЙ СВЕТ
             </h1>
           </div>
@@ -2110,15 +2110,15 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
           <div className="lg:hidden mb-4">
             <button 
               onClick={toggleMobileFilter}
-              className="w-full py-2.5 px-4 bg-white rounded-lg shadow-sm flex items-center justify-between border border-gray-200"
+              className="w-full py-2.5 px-4 bg-white rounded-md shadow-sm flex items-center justify-between border border-gray-200"
             >
               <span className="font-medium flex items-center text-sm">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                 </svg>
-                Фильтры и категории
+                Фильтры
               </span>
-              <span className="bg-gray-100 px-2 py-1 rounded-full text-xs font-medium text-gray-700">
+              <span className="bg-gray-100 px-2 py-1 rounded text-xs font-medium text-gray-700">
                 {totalProducts} товаров
               </span>
             </button>
@@ -2128,12 +2128,12 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
             {/* Left Sidebar - Улучшенный мобильный фильтр */}
             <div className={`
               ${isMobileFilterOpen ? 'fixed inset-0 z-50 bg-white overflow-y-auto p-4' : 'hidden'} 
-              lg:block lg:relative lg:z-auto lg:w-[270px] lg:flex-shrink-0
+              lg:block lg:relative lg:z-auto lg:w-[220px] lg:flex-shrink-0
             `}>
               {/* Mobile Filter Header с кнопкой закрытия */}
               {isMobileFilterOpen && (
                 <div className="lg:hidden flex justify-between items-center mb-4 pb-3 border-b sticky top-0 bg-white z-10">
-                  <h2 className="font-bold text-lg">Фильтры и категории</h2>
+                  <h2 className="font-bold text-lg">Фильтры</h2>
                   <button 
                     onClick={toggleMobileFilter} 
                     className="p-1.5 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
@@ -2145,122 +2145,39 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                 </div>
               )}
 
-              {/* Категории */}
-              <div className="bg-white rounded-lg p-4 shadow-sm mb-4 border border-gray-100">
-                <h2 className="font-bold mb-3 text-gray-900 uppercase text-sm">Категории</h2>
+              {/* Кнопка фильтров */}
+              <div className="bg-white rounded-md p-3 shadow-sm mb-4 border border-gray-200">
+                <div className="flex items-center mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                  </svg>
+                  <span className="font-medium text-sm uppercase">Фильтры</span>
+                </div>
                 <div className="space-y-0.5 max-h-[400px] overflow-y-auto pr-1">
-                  {renderCategories()}
-                </div>
-              </div>
-              
-              {/* Фильтр цены с улучшенной адаптивностью */}
-              <div className="bg-white rounded-lg p-4 shadow-sm mb-4 border border-gray-100">
-                <h2 className="font-bold mb-3 text-gray-900 uppercase text-sm">Цена, ₽</h2>
-                <div className="flex flex-col space-y-4">
-                  <div className="flex justify-between items-center gap-3">
-                    <div className="flex-1">
-                      <input
-                        type="number"
-                        min="0"
-                        placeholder="От"
-                        value={minPrice === 10 ? '' : minPrice}
-                        onChange={(e) => {
-                          const value = parseInt(e.target.value) || 10;
-                          setMinPrice(value);
-                        }}
-                        className="w-full p-2 border border-gray-300 rounded-md text-sm"
-                      />
-                    </div>
-                    <span className="text-gray-400">—</span>
-                    <div className="flex-1">
-                      <input
-                        type="number"
-                        min="0"
-                        placeholder="До"
-                        value={maxPrice === 1000000 ? '' : maxPrice}
-                        onChange={(e) => {
-                          const value = parseInt(e.target.value) || 1000000;
-                          setMaxPrice(value);
-                        }}
-                        className="w-full p-2 border border-gray-300 rounded-md text-sm"
-                      />
+                  {/* Опции фильтра "Показывать только" */}
+                  <div className="py-2">
+                    <div className="text-sm font-medium mb-2">Показывать только</div>
+                    <div className="flex flex-col gap-2 ml-1">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" className="form-checkbox h-4 w-4 text-black rounded-sm border-gray-300" />
+                        <span className="text-sm text-gray-700">В наличии</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" className="form-checkbox h-4 w-4 text-black rounded-sm border-gray-300" />
+                        <span className="text-sm text-gray-700">Популярные</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" className="form-checkbox h-4 w-4 text-black rounded-sm border-gray-300" />
+                        <span className="text-sm text-gray-700">3D</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" className="form-checkbox h-4 w-4 text-black rounded-sm border-gray-300" />
+                        <span className="text-sm text-gray-700">Новинка</span>
+                      </label>
                     </div>
                   </div>
-                  <button
-                    onClick={() => handlePriceRangeChange(minPrice, maxPrice)}
-                    className="bg-black text-white rounded-md py-2 text-sm font-medium hover:bg-gray-800 transition-colors"
-                  >
-                    Применить
-                  </button>
                 </div>
               </div>
-
-              {/* Остальные фильтры - без изменений */}
-              {/* ... existing code ... */}
-
-              {/* Colors - если есть в товарах */}
-              {extractedFilters.colors.length > 0 && (
-                <div className="bg-white rounded-lg p-4 shadow-sm mb-4 border border-gray-100">
-                  <h2 className="font-bold mb-3 text-gray-900 uppercase text-sm">Цвет</h2>
-                  <div className="grid grid-cols-2 gap-1 sm:gap-2 text-sm">
-                    {extractedFilters.colors.map((color) => (
-                      <div
-                        key={color}
-                        className={`flex items-center py-1.5 px-2 rounded-md cursor-pointer ${
-                          selectedColor === color ? 'bg-gray-100 font-medium' : 'hover:bg-gray-50'
-                        }`}
-                        onClick={() => handleColorChange(color)}
-                      >
-                        <div 
-                          className="w-4 h-4 rounded-full mr-2 border border-gray-300" 
-                          style={{ 
-                            backgroundColor: color.toLowerCase(),
-                            boxShadow: selectedColor === color ? '0 0 0 2px rgba(59, 130, 246, 0.5)' : 'none' 
-                          }}
-                        />
-                        <span className={`${selectedColor === color ? 'text-black font-medium' : 'text-gray-700'} text-xs sm:text-sm truncate`}>
-                          {color}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Materials - если есть в товарах */}
-              {extractedFilters.materials.length > 0 && (
-                <div className="bg-white rounded-lg p-4 shadow-sm mb-4 border border-gray-100">
-                  <h2 className="font-bold mb-3 text-gray-900 uppercase text-sm">Материал</h2>
-                  <div className="grid grid-cols-2 gap-1 sm:gap-2 text-sm">
-                    {extractedFilters.materials.map((material) => (
-                      <div
-                        key={material}
-                        className={`flex items-center py-1.5 px-2 rounded-md cursor-pointer ${
-                          selectedMaterial === material ? 'bg-gray-100 font-medium' : 'hover:bg-gray-50'
-                        }`}
-                        onClick={() => handleMaterialChange(material)}
-                      >
-                        <span 
-                          className={`w-4 h-4 rounded border mr-1.5 flex items-center justify-center ${
-                            selectedMaterial === material 
-                              ? 'bg-black border-black text-white' 
-                              : 'border-gray-300'
-                          }`}
-                        >
-                          {selectedMaterial === material && (
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
-                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                            </svg>
-                          )}
-                        </span>
-                        <span className={`${selectedMaterial === material ? 'text-black font-medium' : 'text-gray-700'} text-xs sm:text-sm truncate`}>
-                          {material}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
 
               {/* Reset Filters button */}
               <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 mb-4">

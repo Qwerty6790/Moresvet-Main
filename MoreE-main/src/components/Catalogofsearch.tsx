@@ -91,7 +91,7 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
         initial="hidden"
         animate="visible"
         variants={cardVariants}
-        className="group bg-white rounded-xl overflow-hidden transition-all duration-300 hover:shadow-xl border border-gray-100"
+        className="group bg-white rounded-md overflow-hidden transition-all duration-300 hover:shadow-sm border border-gray-200"
       >
         <Link href={`/products/${product.source}/${encodeURIComponent(product.article)}`}>
           <div>
@@ -103,15 +103,10 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
               onMouseLeave={handleMouseLeave}
             >
               {/* Бейджи */}
-              <div className="absolute top-3 left-3 flex gap-2 z-10">
-                {Number(product.stock) > 0 && (
-                  <div className="bg-gradient-to-r from-green-500 to-green-400 text-white rounded-full px-3 py-1 text-xs shadow-sm">
-                    В наличии
-                  </div>
-                )}
+              <div className="absolute top-2 left-2 flex gap-2 z-10">
                 {product.isNew && (
-                  <div className="bg-gradient-to-r from-blue-500 to-cyan-400 text-white rounded-full px-3 py-1 text-xs shadow-sm">
-                    Новинка
+                  <div className="bg-black text-white rounded px-2 py-0.5 text-xs">
+                    NEW
                   </div>
                 )}
               </div>
@@ -121,7 +116,7 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
                   <motion.img
                     src={`${images[currentIndex]}?q=75&w=400`}
                     alt={product.name}
-                    className="w-full h-full object-contain p-4"
+                    className="w-full h-full object-contain p-3"
                     loading={index < 8 ? "eager" : "lazy"}
                     onError={() => setMainImageError(true)}
                     animate={{ 
@@ -181,47 +176,46 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
             </div>
 
             {/* Информация о товаре */}
-            <div className="p-4 flex flex-col justify-between gap-2">
+            <div className="p-3 flex flex-col justify-between gap-1">
               <div>
-                <h3 className="text-sm sm:text-base font-medium text-gray-800 line-clamp-2 group-hover:text-black transition-colors">
-                  {product.name}
-                </h3>
-                <div className="flex items-center mt-1">
+                <div className="flex items-center">
                   <div className="flex items-center text-xs text-gray-500">
                     <span className="text-gray-400">{product.source}</span>
                   </div>
                 </div>
+                <h3 className="text-sm font-medium text-gray-800 line-clamp-2 group-hover:text-black transition-colors mt-1">
+                  {product.name}
+                </h3>
               </div>
               
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mt-2">
-                <span className="text-lg sm:text-xl font-bold text-gray-900">
+              <div className="flex flex-col items-start justify-between gap-2 mt-2">
+                <span className="text-base font-bold text-gray-900">
                   {new Intl.NumberFormat('ru-RU').format(product.price)} ₽
                 </span>
                 
                 <motion.button
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
                   onClick={(e) => {
                     e.preventDefault();
                     addToCart(product.article, product.source, product.name);
                   }}
                   disabled={Number(product.stock) <= 0}
-                  className={`px-4 py-2 text-white text-sm font-medium rounded-lg transition-colors ${
+                  className={`px-3 py-1.5 text-white text-xs font-medium rounded transition-colors w-full flex items-center justify-center ${
                     Number(product.stock) > 0 
                       ? 'bg-black hover:bg-gray-800' 
                       : 'bg-gray-300 cursor-not-allowed'
                   }`}
                 >
-                  {Number(product.stock) > 0 ? 'Купить' : 'Нет в наличии'}
+                  {Number(product.stock) > 0 ? (
+                    <>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                      </svg>
+                      Купить
+                    </>
+                  ) : 'Нет в наличии'}
                 </motion.button>
-              </div>
-              
-              {/* Индикатор наличия товара */}
-              <div className="flex items-center gap-2 mt-1">
-                <div className={`w-2 h-2 rounded-full ${Number(product.stock) > 0 ? 'bg-green-500' : 'bg-red-500'}`} />
-                <span className="text-xs text-gray-500">
-                  {Number(product.stock) > 0 ? `В наличии: ${product.realStock || product.stock}` : 'Нет в наличии'}
-                </span>
               </div>
             </div>
           </div>
@@ -233,13 +227,13 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
   // Создаем стиль сетки в зависимости от выбранного режима просмотра
   const gridStyle = useMemo(() => {
     if (viewMode === 'list') {
-      return 'grid-cols-1 gap-6';
+      return 'grid-cols-1 gap-4';
     }
     if (viewMode === 'table') {
-      return 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5 lg:gap-6';
+      return 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4';
     }
     // По умолчанию используем стиль grid
-    return 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 gap-4 md:gap-6';
+    return 'grid-cols-2 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-3 gap-4';
   }, [viewMode]);
 
   return (
