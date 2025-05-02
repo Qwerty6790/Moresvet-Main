@@ -10,9 +10,8 @@ import Footer from '@/components/Footer';
 import { ProductI } from '@/types/interfaces';
 import { BASE_URL } from '@/utils/constants';
 import { ClipLoader } from 'react-spinners';
-import SEO from '../../components/SEO';
+import SEO from '@/components/SEO';
 import { fetchProductsWithSorting } from '@/utils/api';
-import CatalogOfProducts from '@/components/CatalogOfProducts';
 import CatalogOfProductSearch from '@/components/Catalogofsearch';
 import Head from 'next/head'; // Добавляем импорт Head
 
@@ -579,18 +578,24 @@ brands[0].categories = [
 // ЗАМЕНИТЕ ЭТИ URL НА ВАШИ РЕАЛЬНЫЕ ИЗОБРАЖЕНИЯ
 const categoryImageMap: Record<string, string> = {
   'Люстра': '/images/s1.png', 
-  'Светильник': '/images/s2.png', 
+  'Люстры': '/images/s1.png',
+  'Светильник': '/images/s2.png',
+  'Светильники': '/images/s2.png', 
   'Бра': '/images/s4.png', 
   'Торшер': '/images/s5.png', 
   'Настольная лампа': '/images/s6.png', 
   'Трековый светильник': '/images/s9.png', 
   'Точечные светильники': '/images/s8.png', 
-  'Уличные светильники': '/images/s3.png', 
+  'Точечный светильник': '/images/s8.png',
+  'Уличные светильники': '/images/s3.png',
+  'Уличный светильник': '/images/s3.png', 
   'Светодиодная лента': '/images/s7.png',
+  'Умный свет': '/images/smart-light.png',
+  'Профиль для ленты': '/images/profile.png',
   // Добавьте другие категории по необходимости
 };
 
-// Новый компонент для отображения категорий с изображениями
+// Обновленный компонент для отображения категорий с изображениями
 const ImageCategories: React.FC<{ 
   categories: Category[]; 
   onCategoryClick: (category: Category) => void; 
@@ -601,74 +606,37 @@ const ImageCategories: React.FC<{
   );
 
   return (
-    <div className=" bg-white p-6 rounded-lg shadow-sm">
-     
-      {/* <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-        {filteredCategories.map((category) => {
-          // Получаем URL изображения из карты или используем заглушку, если нет
-          const imageUrl = categoryImageMap[category.label] || 
-                         `https://via.placeholder.com/150/EEEEEE/000000?text=${encodeURIComponent(category.label.substring(0, 10))}`;
-          
-          return (
-            <div 
-              key={category.searchName}
-              className="flex flex-col items-center text-center cursor-pointer group transition-transform duration-200 hover:transform hover:scale-105"
-              onClick={() => onCategoryClick(category)}
-            >
-              <div className="w-20 h-20 sm:w-24 sm:h-24 mb-3 overflow-hidden rounded-full border border-gray-100 group-hover:shadow-md transition-shadow bg-gray-50 flex items-center justify-center">
-                <img 
-                  src={imageUrl} 
-                  alt={category.label} 
-                  className="w-full h-full object-contain p-2" 
-                  loading="lazy"
-                  onError={(e) => {
-                    // В случае ошибки загрузки ставим заглушку
-                    (e.target as HTMLImageElement).src = `https://via.placeholder.com/150/EEEEEE/000000?text=${encodeURIComponent(category.label.charAt(0))}`;
-                  }}
-                />
-              </div>
-              <span className="text-xs sm:text-sm text-gray-700 group-hover:text-black transition-colors font-medium">
-                {category.label}
-              </span>
-            </div>
-          );
-        })}
-      </div> */}
-    </div>
+   <div></div>
   );
 };
 
 // --- Вспомогательные константы (перемещаем ВЫШЕ normalizeUrlServerSafe) ---
-const IMAGE_SIZES = { THUMBNAIL: 20, SMALL: 80, MEDIUM: 100 };
-const QUALITY_LEVELS = { LOW: 5, MEDIUM: 10, HIGH: 20, VERY_HIGH: 35 };
-const IMAGE_FORMATS = { AVIF: 'avif', WEBP: 'webp', JPG: 'jpg', PNG: 'png' }; // Добавляем форматы
+const IMAGE_SIZES = { THUMBNAIL: 20, SMALL: 100, MEDIUM: 300, LARGE: 600 }; // Увеличил размеры для лучшего качества изображений
+const QUALITY_LEVELS = { LOW: 5, MEDIUM: 30, HIGH: 50, VERY_HIGH: 75 }; // Повысил качество для лучшего визуального восприятия
+const IMAGE_FORMATS = { AVIF: 'avif', WEBP: 'webp', JPG: 'jpg', PNG: 'png' }; // Форматы изображений
 
-// Предположим, у нас есть серверно-безопасная функция для LCP URL
+// Улучшенная функция для преобразования URL для оптимизации LCP
 const normalizeUrlServerSafe = (originalUrl: string, isLCP: boolean = false): string | null => {
   if (!originalUrl) return null;
   const url = originalUrl.trim();
 
-  // --- Логика выбора формата/качества как на клиенте для LCP ---
-  // На сервере мы не можем достоверно проверить поддержку AVIF/WebP,
-  // поэтому для LCP (forceWebP=true) мы *предполагаем* поддержку WebP.
-  // Если же forceWebP=false, выбираем JPG по умолчанию.
+  // --- Оптимизированная логика выбора формата/качества для LCP ---
   let format: string;
   let quality: number;
-  if (isLCP) { // Логика для isLCP=true (forceWebP=true на клиенте)
-      format = IMAGE_FORMATS.WEBP; // Предполагаем WebP
-      quality = QUALITY_LEVELS.HIGH; // Качество для WebP
+  let size: number;
+  
+  if (isLCP) { 
+    // Для LCP используем WebP с высоким качеством и средним размером
+    // Это обеспечит хороший баланс между скоростью загрузки и качеством
+    format = IMAGE_FORMATS.WEBP;
+    quality = QUALITY_LEVELS.HIGH; 
+    size = IMAGE_SIZES.MEDIUM; // Используем средний размер для LCP изображений
   } else {
-      // Логика для isLCP=false (стандартный выбор на клиенте)
-      // На сервере сложно определить AVIF/WebP, выбираем безопасный JPG
-      format = IMAGE_FORMATS.JPG;
-      quality = QUALITY_LEVELS.VERY_HIGH; // Качество для JPG
+    // Для обычных изображений используем JPG с очень высоким качеством
+    format = IMAGE_FORMATS.JPG;
+    quality = QUALITY_LEVELS.VERY_HIGH;
+    size = IMAGE_SIZES.SMALL; // Меньший размер для остальных изображений
   }
-
-  // --- Логика выбора размера как на клиенте ---
-  // На сервере нет window.innerWidth или navigator.connection.
-  // Используем базовый размер SMALL по умолчанию.
-  // Можно улучшить с помощью Client Hints, если они настроены.
-  const size = IMAGE_SIZES.SMALL; // Используем SMALL как базовый
 
   // Для разных доменов применяем специальную оптимизацию
   const isAllowedDomain = url.includes('lightstar.ru') || url.includes('moresvet.ru') || url.includes('divinare.ru');
@@ -676,10 +644,20 @@ const normalizeUrlServerSafe = (originalUrl: string, isLCP: boolean = false): st
   if (isAllowedDomain) {
     const baseUrl = url.split('?')[0];
     let optimizedUrl = `${baseUrl}?format=${format}&quality=${quality}&width=${size}`;
-    if (format === 'jpg') optimizedUrl += '&progressive=true';
+    
+    // Дополнительные параметры оптимизации для разных форматов
+    if (format === 'jpg') {
+      optimizedUrl += '&progressive=true'; // Прогрессивный JPG для быстрого отображения
+    }
+    
+    // Всегда удаляем метаданные для уменьшения размера
     optimizedUrl += '&strip=true';
-    // Не добавляем cacheBust на сервере для предзагрузки
-    // optimizedUrl += `&cacheBust=${Math.floor(Date.now() / 3600000)}`;
+    
+    // Для LCP не добавляем cacheBust, чтобы не препятствовать кешированию
+    if (!isLCP) {
+      optimizedUrl += `&cacheBust=${Math.floor(Date.now() / 3600000)}`;
+    }
+    
     return optimizedUrl;
   }
 
@@ -1405,23 +1383,9 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
     }
     
     return (
-      <div className="mb-6 bg-white rounded-lg p-5 border border-gray-100 shadow-sm">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4">
-          <h3 className="text-lg font-medium text-gray-800">Похожие категории</h3>
-          <span className="text-xs text-gray-500 mt-1 sm:mt-0">Возможно, вам понравится</span>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {relatedCategories.map((category, index) => (
-            <button 
-              key={`${category.label}-${index}`}
-              onClick={() => handleCategoryChange(category)}
-              className="px-4 py-2 bg-gray-50 hover:bg-gray-100 text-sm rounded-full transition-colors border border-gray-200 hover:border-gray-300 flex items-center space-x-1"
-            >
-              <span className="w-2 h-2 bg-gray-400 rounded-full inline-block"></span>
-              <span>{category.label}</span>
-            </button>
-          ))}
-        </div>
+      <div>
+      
+      
       </div>
     );
   };
@@ -1437,35 +1401,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
 
   // Функция для рендеринга категорий
   const renderCategories = () => {
-    // Если выбран конкретный бренд, показываем только его категории
-    if (selectedBrand && selectedBrand.name !== 'Все товары') {
-      return (
-        <div>
-          <div className="space-y-2 pl-2 text-sm">
-            {selectedBrand.categories.map((category, index) => {
-              if (category.label === 'Все товары') return null;
-              
-              return (
-                <div 
-                  key={`${category.label}-${index}`}
-                  className={`flex items-center px-2 py-1 rounded transition-colors duration-200 ${
-                    selectedCategory?.label === category.label || 
-                    selectedCategory?.searchName === category.searchName
-                      ? 'font-bold text-black bg-gray-100' 
-                      : 'text-gray-600 hover:text-black hover:bg-gray-50 cursor-pointer'
-                  }`}
-                  onClick={() => handleCategoryChange(category)}
-                >
-                  {category.label}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      );
-    }
-    
-    // Для "Все товары" показываем основные категории с аккордеоном
+    // Всегда показываем основные категории с аккордеоном, независимо от выбранного бренда
     return (
       <div>
         <div className="space-y-1 pl-2 text-sm">
@@ -2072,7 +2008,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Head>
-        {/* Рендерим preload теги для LCP изображений */}
+        {/* Рендерим preload теги для LCP изображений с приоритетной загрузкой */}
         {lcpImageUrls.map((url) => (
           <link
             key={url}
@@ -2091,7 +2027,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
       </Head>
       <Header />
       <main className="flex-grow container mx-auto px-2 sm:px-4 lg:px-8 pt-4 sm:pt-6 pb-12 max-w-full overflow-hidden">
-        <div className="max-w-9xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           {/* Хлебные крошки - скрываем на самых маленьких экранах */}
           <div className="hidden sm:flex items-center text-sm text-gray-500 mb-4">
             <Link href="/" className="hover:text-gray-900 transition-colors">Главная</Link>
@@ -2100,9 +2036,10 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
           </div>
           
           {/* Заголовок с переключателем режима просмотра */}
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 gap-3">
-            <h1 className="text-xl md:text-2xl lg:text-3xl font-medium text-gray-900">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8 gap-3">
+            <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 relative">
               {sourceTitle}
+              <span className="block h-1 w-20 bg-black mt-2"></span>
             </h1>
             
             {/* Переключатель режима просмотра - адаптивный стиль */}
@@ -2110,7 +2047,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
               <div className="bg-white rounded-full border border-gray-200 p-1 shadow-sm flex">
                 <button 
                   onClick={() => setDisplayMode('product')}
-                  className={`px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium transition-colors ${
+                  className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-colors ${
                     displayMode === 'product' 
                       ? 'bg-black text-white' 
                       : 'text-gray-600 hover:bg-gray-100'
@@ -2131,6 +2068,14 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
               </div>
             </div>
           </div>
+          
+          {/* Добавляем компонент ImageCategories здесь */}
+          {isClient && selectedBrand && (
+            <ImageCategories 
+              categories={selectedBrand.categories.filter(c => c.label !== 'Все товары')} 
+              onCategoryClick={handleCategoryChange}
+            />
+          )}
           
           {/* Mobile Filter Button - улучшенный вид */}
           <div className="lg:hidden mb-4">
@@ -2312,6 +2257,80 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                   </button>
                 </div>
               )}
+
+              {/* Добавляем блок брендов в мобильный фильтр */}
+              {isMobileFilterOpen && (
+                <div className="lg:hidden bg-white rounded-lg p-4 shadow-sm mb-4 border border-gray-100">
+                  <h2 className="font-bold mb-3 text-gray-900 uppercase text-sm">Бренды</h2>
+                  <div className="space-y-2 max-h-[200px] overflow-y-auto pr-1">
+                    {/* Если есть source, показываем только выбранный бренд */}
+                    {router.query.source && selectedBrand ? (
+                      <div
+                        className="flex items-center px-2 py-1.5 rounded transition-colors duration-200 font-bold text-black bg-gray-100"
+                      >
+                        {selectedBrand.name}
+                      </div>
+                    ) : (
+                      // Иначе показываем все бренды
+                      brands.map((brand, index) => (
+                        <div
+                          key={index}
+                          className={`flex items-center px-2 py-1.5 rounded transition-colors duration-200 ${
+                            selectedBrand?.name === brand.name
+                              ? 'font-bold text-black bg-gray-100' 
+                              : 'text-gray-600 hover:text-black hover:bg-gray-50 cursor-pointer'
+                          }`}
+                          onClick={() => handleBrandChange(brand)}
+                        >
+                          {brand.name}
+                        </div>
+                      ))
+                    )}
+                  </div>
+                  
+                  {/* Показываем категории выбранного бренда в мобильном фильтре */}
+                  {selectedBrand && selectedBrand.name !== 'Все товары' && selectedBrand.categories.length > 0 && (
+                    <div className="mt-4 pt-4 border-t border-gray-100">
+                      <h3 className="font-medium text-sm text-gray-700 mb-2">Категории {selectedBrand.name}</h3>
+                      <div className="space-y-1.5">
+                        {selectedBrand.categories
+                          .filter(category => category.label !== 'Все товары')
+                          .map((category, idx) => (
+                            <div
+                              key={idx}
+                              onClick={() => {
+                                // При клике на категорию бренда мы меняем только выбранную категорию
+                                setSelectedCategory(category);
+                                
+                                // Обновляем URL с сохранением источника (бренда)
+                                router.push({
+                                  pathname: router.pathname,
+                                  query: {
+                                    ...router.query,
+                                    source: selectedBrand.name === 'Все товары' ? undefined : selectedBrand.name,
+                                    category: category.searchName,
+                                    page: 1
+                                  },
+                                }, undefined, { shallow: true });
+                                
+                                // Загружаем товары и закрываем мобильный фильтр
+                                fetchProducts(selectedBrand.name === 'Все товары' ? '' : selectedBrand.name, 1);
+                                setIsMobileFilterOpen(false);
+                              }}
+                              className={`px-3 py-2 rounded-md text-sm ${
+                                selectedCategory?.label === category.label
+                                  ? 'bg-gray-800 text-white font-medium'
+                                  : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                              }`}
+                            >
+                              {category.label}
+                            </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Right Content Area */}
@@ -2437,7 +2456,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                     
                     {selectedBrand && selectedBrand.name !== 'Все товары' && (
                       <div className="bg-gray-100 px-3 py-1.5 rounded-full text-xs flex items-center gap-1 border border-gray-200">
-                        <span className="text-gray-700">Бренд: {selectedBrand.name}</span>
+                        {/* <span className="text-gray-700">Бренд: {selectedBrand.name}</span> */}
                         <button 
                           onClick={() => {
                             const globalBrand = brands.find(b => b.name === 'Все товары');
@@ -2538,6 +2557,61 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
 
               {/* Отображаем связанные категории - убираем условный рендеринг */}
               <RelatedCategories />
+
+              {/* Блок брендов: показываем только если есть source в URL */}
+              {router.query.source ? (
+                <div className="flex-1 bg-white rounded-lg p-3 sm:p-4 mb-4 shadow-sm border border-gray-100">
+                  <h2 className="font-medium text-lg mb-3">Бренд</h2>
+                  <div className="flex items-center">
+                    {selectedBrand && (
+                      <div className="flex-shrink-0">
+                        <div className="whitespace-nowrap px-4 py-2 rounded-md text-sm bg-black text-white font-medium">
+                          {selectedBrand.name}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Показываем категории выбранного бренда - всегда раскрыты */}
+                  {selectedBrand && selectedBrand.name !== 'Все товары' && selectedBrand.categories.length > 0 && (
+                    <div className="mt-4 pt-2">
+                      <h3 className="font-medium text-sm text-gray-700 mb-3">Категории {selectedBrand.name}</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedBrand.categories.map((category, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => {
+                              // При клике на категорию бренда меняем только выбранную категорию
+                              setSelectedCategory(category);
+                              
+                              // Обновляем URL с сохранением источника (бренда)
+                              router.push({
+                                pathname: router.pathname,
+                                query: {
+                                  ...router.query,
+                                  source: selectedBrand.name === 'Все товары' ? undefined : selectedBrand.name,
+                                  category: category.searchName,
+                                  page: 1
+                                },
+                              }, undefined, { shallow: true });
+                              
+                              // Загружаем товары
+                              fetchProducts(selectedBrand.name === 'Все товары' ? '' : selectedBrand.name, 1);
+                            }}
+                            className={`px-3 py-1.5 rounded-md text-xs ${
+                              selectedCategory?.label === category.label
+                                ? 'bg-gray-800 text-white font-medium'
+                                : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                            }`}
+                          >
+                            {category.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : null}
 
               {/* Products Grid */}
               <div className="flex-1 bg-white rounded-lg p-3 sm:p-4 shadow-sm border border-gray-100 overflow-hidden">
@@ -2717,6 +2791,3 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 };
 
 export default CatalogIndex;
-
-// --- Убедимся, что константы доступны ---
-// (уже перемещены выше normalizeUrlServerSafe)
