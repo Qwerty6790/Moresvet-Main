@@ -1418,9 +1418,19 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
     }
     
     return (
-      <div>
-      
-      
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold mb-4">Похожие категории</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+          {relatedCategories.map((category, index) => (
+            <div 
+              key={`related-${index}`}
+              onClick={() => handleCategoryChange(category)}
+              className="bg-white border border-gray-100 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer text-center"
+            >
+              <div className="text-sm font-medium">{category.label}</div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   };
@@ -2041,7 +2051,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-white">
       <Head>
         {/* Рендерим preload теги для LCP изображений с приоритетной загрузкой */}
         {lcpImageUrls.map((url) => (
@@ -2657,11 +2667,11 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
               ) : null}
 
               {/* Products Grid */}
-              <div className="flex-1 bg-white rounded-lg p-3 sm:p-4 shadow-sm border border-gray-100 overflow-hidden">
+              <div className="flex-1 bg-white rounded-lg p-4 sm:p-5 shadow-sm border border-gray-100 overflow-hidden">
                 {/* --- Измененный блок загрузки --- */}
                 {(isLoading || !isClient) ? (
                   // Всегда рендерим скелетон сетки, чтобы избежать CLS=null
-                  <div className="grid auto-rows-auto w-full grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-2 md:grid-cols-3 md:gap-3 lg:grid-cols-4 lg:gap-3 xl:grid-cols-4 xl:gap-3">
+                  <div className="grid auto-rows-auto w-full grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4 lg:gap-6 xl:grid-cols-4 xl:gap-6">
                     {Array.from({ length: 8 }).map((_, i) => (
                       <div key={`skeleton-${i}`} className="bg-white rounded-lg border border-gray-100 flex flex-col h-full">
                         <div className="relative aspect-square bg-gray-100 animate-pulse rounded-t-lg min-h-[150px] sm:min-h-[180px]"></div>
@@ -2688,7 +2698,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                       // ... (остальной код для product mode)
                      ) : (
                       // Режим коллекций
-                      <div className="space-y-8">
+                      <div className="space-y-10">
                         {Object.entries(groupProductsByCollection(products))
                           // Сортируем коллекции: сначала по количеству товаров (по убыванию), 
                           // но "Прочие товары" всегда внизу
