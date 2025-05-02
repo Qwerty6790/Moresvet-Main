@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { ProductI } from '../types/interfaces';
 import { toast } from 'sonner';
+import { motion } from 'framer-motion';
 
 interface CatalogOfProductProps {
   products: ProductI[];
@@ -30,8 +31,8 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
     toast.success('Товар добавлен в корзину');
   };
 
-  // Компонент карточки товара с логикой отображения фотографий, как в CatalogOfProducts
-  const ProductCard: React.FC<{ product: ProductI; index: number }> = ({ product }) => {
+  // Компонент карточки товара с логикой отображения фотографий и улучшенным дизайном
+  const ProductCard: React.FC<{ product: ProductI; index: number }> = ({ product, index }) => {
     // Собираем массив изображений из всех возможных источников, нормализуем URL и ограничиваем до 4-х фото
     const images = useMemo(() => {
       const arr: string[] = [];
@@ -51,6 +52,7 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
     const [currentIndex, setCurrentIndex] = useState(0);
     const [mainImageError, setMainImageError] = useState(false);
     const [failedThumbnailIndices, setFailedThumbnailIndices] = useState<number[]>([]);
+    const [isHovering, setIsHovering] = useState(false);
 
     // При перемещении мыши вычисляем новый индекс изображения в зависимости от позиции курсора
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -63,31 +65,68 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
 
     const handleMouseLeave = () => {
       setCurrentIndex(0);
+      setIsHovering(false);
+    };
+
+    const handleMouseEnter = () => {
+      setIsHovering(true);
+    };
+
+    // Анимация карточки с задержкой для создания каскадного эффекта
+    const cardVariants = {
+      hidden: { opacity: 0, y: 20 },
+      visible: { 
+        opacity: 1, 
+        y: 0,
+        transition: { 
+          duration: 0.5,
+          delay: index * 0.05, // Небольшая задержка для каскадной анимации
+        }
+      }
     };
 
     return (
-      <div className="group bg-white rounded-xl p-4 transition-shadow hover:shadow-lg">
+      <motion.div 
+        initial="hidden"
+        animate="visible"
+        variants={cardVariants}
+        className="group bg-white rounded-xl overflow-hidden transition-all duration-300 hover:shadow-xl border border-gray-100"
+      >
         <Link href={`/products/${product.source}/${encodeURIComponent(product.article)}`}>
           <div>
-            <div className="relative mb-4">
+            {/* Контейнер изображения с hover-эффектом */}
+            <div
+              className="relative"
+              onMouseMove={handleMouseMove}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
               {/* Бейджи */}
               <div className="absolute top-3 left-3 flex gap-2 z-10">
-                <div className="bg-white rounded-full px-3 py-1 text-xs shadow-sm">new</div>
+                {Number(product.stock) > 0 && (
+                  <div className="bg-gradient-to-r from-green-500 to-green-400 text-white rounded-full px-3 py-1 text-xs shadow-sm">
+                    В наличии
+                  </div>
+                )}
+                {product.isNew && (
+                  <div className="bg-gradient-to-r from-blue-500 to-cyan-400 text-white rounded-full px-3 py-1 text-xs shadow-sm">
+                    Новинка
+                  </div>
+                )}
               </div>
 
-              {/* Контейнер изображения с hover-эффектом */}
-              <div
-                className="aspect-square bg-[#f8f8f8] flex items-center justify-center p-4 relative"
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
-              >
+              <div className="aspect-square bg-[#f8f8f8] flex items-center justify-center relative overflow-hidden">
                 {images.length > 0 && !mainImageError ? (
-                  <img
+                  <motion.img
                     src={`${images[currentIndex]}?q=75&w=400`}
                     alt={product.name}
-                    className="w-full h-full object-contain mix-blend-multiply"
-                    loading="lazy"
+                    className="w-full h-full object-contain mix-blend-multiply p-4"
+                    loading={index < 8 ? "eager" : "lazy"}
                     onError={() => setMainImageError(true)}
+                    animate={{ 
+                      scale: isHovering ? 1.05 : 1,
+                    }}
+                    transition={{ duration: 0.3 }}
                   />
                 ) : (
                   <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
@@ -97,93 +136,111 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
 
                 {/* Пагинация (точки) поверх изображения, если изображений больше одного */}
                 {images.length > 1 && (
-                  <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1">
+                  <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex gap-1 bg-white/80 px-2 py-1 rounded-full shadow-sm">
                     {images.map((_, idx) => (
-                      <span
+                      <motion.span
                         key={idx}
-                        className={`w-2 h-2 rounded-full ${idx === currentIndex ? 'bg-white' : 'bg-gray-400'}`}
-                      ></span>
+                        initial={{ opacity: 0.6 }}
+                        animate={{ 
+                          opacity: idx === currentIndex ? 1 : 0.6,
+                          scale: idx === currentIndex ? 1.2 : 1
+                        }}
+                        className={`w-2 h-2 rounded-full ${
+                          idx === currentIndex ? 'bg-black' : 'bg-gray-400'
+                        }`}
+                      ></motion.span>
                     ))}
                   </div>
                 )}
-              </div>
-            </div>
 
-            {/* Миниатюры для выбора изображения */}
-            {images.length > 1 && (
-              <div className="flex space-x-2">
-                {images.map((img, idx) => {
-                  if (failedThumbnailIndices.includes(idx)) return null;
-                  return (
-                    <button
-                      key={idx}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setCurrentIndex(idx);
-                        setMainImageError(false);
-                      }}
-                      className={`flex-shrink-0 w-8 h-8 rounded-lg overflow-hidden ${
-                        currentIndex === idx ? 'ring-2 ring-black' : 'opacity-50'
-                      }`}
-                    >
-                      <img
-                        src={`${img}?q=75&w=100`}
-                        alt=""
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                        onError={() => setFailedThumbnailIndices((prev) => [...prev, idx])}
-                      />
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-
-            {/* Информация о товаре */}
-            <div className="mt-2 flex flex-col justify-between h-20">
-              <h3 className="text-[15px] leading-tight font-normal text-black/90 min-h-[40px]">
-                {product.name}
-              </h3>
-              <div className="flex items-center gap-2">
-                <button
+                {/* Кнопка быстрого добавления в корзину */}
+                <motion.button
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ 
+                    opacity: isHovering ? 1 : 0,
+                    scale: isHovering ? 1 : 0.8
+                  }}
+                  transition={{ duration: 0.2 }}
                   onClick={(e) => {
                     e.preventDefault();
                     addToCart(product.article, product.source, product.name);
                   }}
                   disabled={Number(product.stock) <= 0}
-                  className={`px-4 py-2 mt-2 text-white text-sm font-medium rounded-lg transition ${
-                    Number(product.stock) > 0 ? 'bg-gray-900 hover:bg-gray-800' : 'bg-gray-400 cursor-not-allowed'
-                  }`}
+                  className={`absolute top-3 right-3 p-2 rounded-full shadow-md ${
+                    Number(product.stock) > 0 
+                      ? 'bg-white hover:bg-gray-900 hover:text-white' 
+                      : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                  } transition-colors duration-300`}
                 >
-                  Купить
-                </button>
-                <span className="text-xl font-bold text-black">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                  </svg>
+                </motion.button>
+              </div>
+            </div>
+
+            {/* Информация о товаре */}
+            <div className="p-4 flex flex-col justify-between gap-2">
+              <div>
+                <h3 className="text-sm sm:text-base font-medium text-gray-800 line-clamp-2 min-h-[48px] group-hover:text-black transition-colors">
+                  {product.name}
+                </h3>
+                <div className="flex items-center mt-1">
+                  <div className="flex items-center text-xs text-gray-500">
+                    <span className="text-gray-400">{product.source}</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mt-2">
+                <span className="text-lg sm:text-xl font-bold text-gray-900">
                   {new Intl.NumberFormat('ru-RU').format(product.price)} ₽
                 </span>
-                <div
-                  className={`w-3 h-3 rounded-full ${
-                    Number(product.stock) > 0 ? 'bg-green-500' : 'bg-red-500'
+                
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    addToCart(product.article, product.source, product.name);
+                  }}
+                  disabled={Number(product.stock) <= 0}
+                  className={`px-4 py-2 w-full sm:w-auto text-white text-sm font-medium rounded-lg transition-colors ${
+                    Number(product.stock) > 0 
+                      ? 'bg-gray-900 hover:bg-gray-800' 
+                      : 'bg-gray-300 cursor-not-allowed'
                   }`}
-                />
-                <span className="text-sm text-gray-600">Остаток: {product.realStock}</span>
+                >
+                  {Number(product.stock) > 0 ? 'Купить' : 'Нет в наличии'}
+                </motion.button>
+              </div>
+              
+              {/* Индикатор наличия товара */}
+              <div className="flex items-center gap-2 mt-1">
+                <div className={`w-2 h-2 rounded-full ${Number(product.stock) > 0 ? 'bg-green-500' : 'bg-red-500'}`} />
+                <span className="text-xs text-gray-500">
+                  {Number(product.stock) > 0 ? `В наличии: ${product.realStock}` : 'Нет в наличии'}
+                </span>
               </div>
             </div>
           </div>
         </Link>
-      </div>
+      </motion.div>
     );
   };
 
+  // Создаем стиль сетки в зависимости от выбранного режима просмотра
+  const gridStyle = useMemo(() => {
+    if (viewMode === 'list') {
+      return 'grid-cols-1 gap-4';
+    }
+    return 'grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5 lg:gap-6';
+  }, [viewMode]);
+
   return (
-    <div
-      className={`grid gap-6 ${
-        viewMode === 'grid'
-          ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
-          : 'grid-cols-1'
-      }`}
-    >
+    <div className={`grid ${gridStyle}`}>
       {products.map((product, index) => (
-        <ProductCard key={product._id} product={product} index={index} />
+        <ProductCard key={`${product._id || product.article}-${index}`} product={product} index={index} />
       ))}
     </div>
   );
