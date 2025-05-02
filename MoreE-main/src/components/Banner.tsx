@@ -107,7 +107,7 @@ export default function Banner() {
     { id: 3, title: 'Лампочки', image: '/images/светоидоднаялампаME.webp', link: '/catalog/Лампочка' },
     { id: 5, title: 'НАСТОЛЬНЫЕ ЛАМПЫ', image: '/images/настольнаялампаME.webp', link: '/catalog/Настольная лампа' },
     { id: 6, title: 'ТОРШЕРЫ', image: '/images/ТоршерME.webp', link: '/catalog/Торшер' },
-    { id: 7, title: 'УЛИЧНОЕ ОСВЕЩЕНИЕ', image: '/images/УличныйME.webp', link: '/catalog/Уличный светильник' }
+    { id: 7, title: 'УЛИЧНОЕ ОСВЕЩЕНИЕ', image: '/images/УличноееME.webp', link: '/catalog/Уличный светильник' }
     
   ];
 
