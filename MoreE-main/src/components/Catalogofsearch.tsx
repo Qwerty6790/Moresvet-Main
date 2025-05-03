@@ -87,60 +87,28 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
     };
 
     return (
-      <motion.div 
-        initial="hidden"
-        animate="visible"
-        variants={{
-          hidden: { opacity: 0, y: 20 },
-          visible: { 
-            opacity: 1, 
-            y: 0,
-            transition: { 
-              duration: 0.5,
-              delay: index * 0.05
-            }
-          }
-        }}
-        className="group bg-white rounded-sm overflow-hidden transition-all duration-300 hover:shadow-sm border border-gray-200"
-      >
+      <div className="bg-white rounded-sm overflow-hidden border border-gray-100">
         <Link href={`/products/${product.source}/${encodeURIComponent(product.article)}`}>
           <div>
-            {/* Контейнер изображения с hover-эффектом */}
-            <div
-              className="relative"
-              onMouseMove={(e) => {
-                const rect = e.currentTarget.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const width = rect.width;
-                setCurrentIndex(Math.floor((x / width) * images.length));
-              }}
-              onMouseEnter={() => setIsHovering(true)}
-              onMouseLeave={() => {
-                setCurrentIndex(0);
-                setIsHovering(false);
-              }}
-            >
+            {/* Контейнер изображения */}
+            <div className="relative">
               {/* Бейджи */}
-              <div className="absolute top-2 left-2 flex gap-2 z-10">
+              <div className="absolute top-2 left-2 z-10">
                 {product.isNew && (
-                  <div className="bg-black text-white rounded-sm px-2 py-0.5 text-xs">
+                  <div className="bg-black text-white text-xs px-2 py-0.5">
                     NEW
                   </div>
                 )}
               </div>
 
-              <div className="aspect-square bg-white flex items-center justify-center relative overflow-hidden">
+              <div className="aspect-square bg-white flex items-center justify-center">
                 {images.length > 0 && !mainImageError ? (
-                  <motion.img
+                  <img
                     src={`${images[currentIndex]}?q=75&w=400`}
                     alt={product.name}
                     className="w-full h-full object-contain p-2"
                     loading={index < 8 ? "eager" : "lazy"}
                     onError={() => setMainImageError(true)}
-                    animate={{ 
-                      scale: isHovering ? 1.05 : 1,
-                    }}
-                    transition={{ duration: 0.3 }}
                   />
                 ) : (
                   <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-500">
@@ -151,51 +119,60 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
             </div>
 
             {/* Информация о товаре */}
-            <div className="p-3 flex flex-col justify-between gap-1">
-              <div>
-                <div className="flex items-center mb-1">
-                  <div className="flex items-center text-xs text-gray-500">
-                    <span className="text-gray-400 uppercase">{product.source}</span>
-                  </div>
-                </div>
-                <h3 className="text-sm font-medium text-gray-800 line-clamp-2 group-hover:text-black transition-colors">
-                  {product.name}
-                </h3>
+            <div className="p-3">
+              <div className="mb-1">
+                <div className="text-xs text-gray-400 uppercase">{product.source}</div>
               </div>
+              <h3 className="text-sm text-gray-800 line-clamp-2 mb-2">
+                {product.name}
+              </h3>
               
-              <div className="flex flex-col items-start justify-between gap-1 mt-2">
-                <span className="text-base font-bold text-gray-900">
+              <div className="flex flex-col gap-2">
+                <span className="text-base font-bold">
                   {new Intl.NumberFormat('ru-RU').format(product.price)} ₽
                 </span>
                 
-                <motion.button
-                  whileHover={{ scale: 1.01 }}
-                  whileTap={{ scale: 0.99 }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    addToCart(product.article, product.source, product.name);
-                  }}
-                  disabled={Number(product.stock) <= 0}
-                  className={`px-3 py-1.5 text-white text-xs font-medium rounded-sm transition-colors w-full flex items-center justify-center ${
-                    Number(product.stock) > 0 
-                      ? 'bg-black hover:bg-gray-800' 
-                      : 'bg-gray-300 cursor-not-allowed'
-                  }`}
-                >
-                  {Number(product.stock) > 0 ? (
-                    <>
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                      </svg>
-                      Купить
-                    </>
-                  ) : 'Нет в наличии'}
-                </motion.button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    className="w-8 h-8 border border-gray-300 flex items-center justify-center"
+                  >
+                    −
+                  </button>
+                  
+                  <span className="text-center flex-1">1</span>
+                  
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    className="w-8 h-8 border border-gray-300 flex items-center justify-center"
+                  >
+                    +
+                  </button>
+                  
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      addToCart(product.article, product.source, product.name);
+                    }}
+                    disabled={Number(product.stock) <= 0}
+                    className="bg-white p-2 border border-gray-300"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </Link>
-      </motion.div>
+      </div>
     );
   };
 
