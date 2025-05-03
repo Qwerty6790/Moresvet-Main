@@ -90,7 +90,17 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
       <motion.div 
         initial="hidden"
         animate="visible"
-        variants={cardVariants}
+        variants={{
+          hidden: { opacity: 0, y: 20 },
+          visible: { 
+            opacity: 1, 
+            y: 0,
+            transition: { 
+              duration: 0.5,
+              delay: index * 0.05
+            }
+          }
+        }}
         className="group bg-white rounded-sm overflow-hidden transition-all duration-300 hover:shadow-sm border border-gray-200"
       >
         <Link href={`/products/${product.source}/${encodeURIComponent(product.article)}`}>
@@ -98,9 +108,17 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
             {/* Контейнер изображения с hover-эффектом */}
             <div
               className="relative"
-              onMouseMove={handleMouseMove}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
+              onMouseMove={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const width = rect.width;
+                setCurrentIndex(Math.floor((x / width) * images.length));
+              }}
+              onMouseEnter={() => setIsHovering(true)}
+              onMouseLeave={() => {
+                setCurrentIndex(0);
+                setIsHovering(false);
+              }}
             >
               {/* Бейджи */}
               <div className="absolute top-2 left-2 flex gap-2 z-10">
