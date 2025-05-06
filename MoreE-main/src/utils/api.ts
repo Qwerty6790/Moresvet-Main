@@ -2,7 +2,7 @@ export const getApiUrl = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   if (!apiUrl) {
     console.warn('API URL не определен, используется fallback');
-    return 'https://all-eight.vercel.app';
+    return 'https://all-database.vercel.app';
   }
   return apiUrl;
 }; 

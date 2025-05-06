@@ -1,4 +1,4 @@
-export const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://all-eight.vercel.app';
+export const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://all-database.vercel.app';
 // Для обратной совместимости временно оставляю BASE_URL
 export const BASE_URL = NEXT_PUBLIC_API_URL;
 export const IMAGE_QUALITY = 'q=75';

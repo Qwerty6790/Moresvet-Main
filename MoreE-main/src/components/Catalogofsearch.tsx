@@ -87,7 +87,7 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
     };
 
     return (
-      <div className="bg-white rounded-sm overflow-hidden border border-gray-100">
+      <div className="bg-white rounded-lg overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200">
         <Link href={`/products/${product.source}/${encodeURIComponent(product.article)}`}>
           <div>
             {/* Контейнер изображения */}
@@ -95,7 +95,7 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
               {/* Бейджи */}
               <div className="absolute top-2 left-2 z-10">
                 {product.isNew && (
-                  <div className="bg-black text-white text-xs px-2 py-0.5">
+                  <div className="bg-black text-white text-xs px-2 py-0.5 rounded-md">
                     NEW
                   </div>
                 )}
@@ -106,7 +106,7 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
                   <img
                     src={`${images[currentIndex]}?q=75&w=400`}
                     alt={product.name}
-                    className="w-full h-full object-contain p-2"
+                    className="w-full h-full object-contain p-2 hover:scale-105 transition-transform duration-300"
                     loading={index < 8 ? "eager" : "lazy"}
                     onError={() => setMainImageError(true)}
                   />
@@ -119,15 +119,15 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
             </div>
 
             {/* Информация о товаре */}
-            <div className="p-3">
+            <div className="p-4">
               <div className="mb-1">
-                <div className="text-xs text-gray-400 uppercase">{product.source}</div>
+                <div className="text-xs text-gray-400 uppercase font-medium">{product.source}</div>
               </div>
-              <h3 className="text-sm text-gray-800 line-clamp-2 mb-2">
+              <h3 className="text-sm text-gray-800 font-medium line-clamp-2 mb-3 hover:text-black transition-colors">
                 {product.name}
               </h3>
               
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-3">
                 <span className="text-base font-bold">
                   {new Intl.NumberFormat('ru-RU').format(product.price)} ₽
                 </span>
@@ -137,20 +137,38 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
+                      // Уменьшаем количество
+                      const cart = JSON.parse(localStorage.getItem('cart') || '{"products": []}');
+                      const existingProductIndex = cart.products.findIndex((item: any) => item.article === product.article);
+                      if (existingProductIndex > -1 && cart.products[existingProductIndex].quantity > 1) {
+                        cart.products[existingProductIndex].quantity -= 1;
+                        localStorage.setItem('cart', JSON.stringify(cart));
+                        toast.success('Количество товара уменьшено');
+                      }
                     }}
-                    className="w-8 h-8 border border-gray-300 flex items-center justify-center"
+                    className="w-8 h-8 border border-gray-300 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
                   >
                     −
                   </button>
                   
-                  <span className="text-center flex-1">1</span>
+                  <span className="text-center flex-1 font-medium">1</span>
                   
                   <button
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
+                      // Увеличиваем количество
+                      const cart = JSON.parse(localStorage.getItem('cart') || '{"products": []}');
+                      const existingProductIndex = cart.products.findIndex((item: any) => item.article === product.article);
+                      if (existingProductIndex > -1) {
+                        cart.products[existingProductIndex].quantity += 1;
+                        localStorage.setItem('cart', JSON.stringify(cart));
+                        toast.success('Количество товара увеличено');
+                      } else {
+                        addToCart(product.article, product.source, product.name);
+                      }
                     }}
-                    className="w-8 h-8 border border-gray-300 flex items-center justify-center"
+                    className="w-8 h-8 border border-gray-300 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
                   >
                     +
                   </button>
@@ -158,10 +176,12 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
                   <button
                     onClick={(e) => {
                       e.preventDefault();
+                      e.stopPropagation();
                       addToCart(product.article, product.source, product.name);
                     }}
                     disabled={Number(product.stock) <= 0}
-                    className="bg-white p-2 border border-gray-300"
+                    className="w-10 h-10 bg-white p-2 border border-gray-300 rounded-full hover:bg-gray-100 transition-colors flex items-center justify-center"
+                    aria-label="Добавить в корзину"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
