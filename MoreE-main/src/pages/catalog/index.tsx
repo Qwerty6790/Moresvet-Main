@@ -117,8 +117,8 @@ const productCategories = [
   { 
     id: 'bra', 
     label: 'Бра', 
-    searchName: 'Бра',
-    aliases: ['Бра',],
+    searchName: 'Настенный светильник',
+    aliases: ['Бра', 'Настенный светильник', 'Настенные светильники'],
     isOpen: false
   },
   { 
@@ -167,6 +167,30 @@ const productCategories = [
       { label: 'Грунтовый светильник', searchName: 'Грунтовый светильник' },
       { label: 'Ландшафтный светильник', searchName: 'Ландшафтный светильник' },
       { label: 'Парковый светильник', searchName: 'Парковый светильник' },
+    ],
+    isOpen: false
+  },
+  { 
+    id: 'komplektuyushie', 
+    label: 'Комплектующие', 
+    searchName: 'Комплектующие',
+    aliases: ['Комплектующие', 'Комплектующие для светильников', 'Комплектующие для освещения'],
+    subcategories: [
+      { 
+        label: 'Коннекторы', 
+        searchName: 'Коннекторы',
+        aliases: ['Коннекторы', 'Коннектор', 'Коннекторы для светильников', 'Коннекторы для освещения']
+      },
+      { 
+        label: 'Шнуры', 
+        searchName: 'Шнуры',
+        aliases: ['Шнуры', 'Шнур', 'Шнуры для светильников', 'Шнуры для освещения']
+      },
+      { 
+        label: 'Блок питания', 
+        searchName: 'Блок питания',
+        aliases: ['Блок питания', 'Блок питания для светильников', 'Блок питания для освещения']
+      },
     ],
     isOpen: false
   },
@@ -2176,6 +2200,64 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                       </label>
                     </div>
                   </div>
+                  
+                  {/* Категории в боковой панели */}
+                  <div className="py-2 border-t border-gray-100 mt-2">
+                    <div className="text-sm font-medium mb-2">Категории</div>
+                    <div className="space-y-1">
+                      {productCategoriesState.map((category) => (
+                        <div key={category.id} className="mb-1">
+                          <div 
+                            className={`flex items-center justify-between px-2 py-1.5 rounded transition-colors duration-200 ${
+                              (selectedCategory?.label === category.label || 
+                              selectedCategory?.searchName === category.searchName) 
+                                ? 'font-bold text-black bg-gray-100' 
+                                : 'text-gray-600 hover:text-black hover:bg-gray-50 cursor-pointer'
+                            }`}
+                            onClick={() => category.subcategories && category.subcategories.length > 0
+                              ? toggleCategoryAccordion(category.id)
+                              : handleCategoryChange(category)
+                            }
+                          >
+                            <span className="text-sm">{category.label}</span>
+                            {category.subcategories && category.subcategories.length > 0 && (
+                              <span className="transform transition-transform duration-200 text-gray-400">
+                                {category.isOpen ? (
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                    <path fillRule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+                                  </svg>
+                                ) : (
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                    <path fillRule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                  </svg>
+                                )}
+                              </span>
+                            )}
+                          </div>
+                          
+                          {/* Подкатегории в аккордеоне */}
+                          {category.subcategories && category.subcategories.length > 0 && category.isOpen && (
+                            <div className="pl-4 mt-1 space-y-1 border-l-2 border-gray-100 ml-2">
+                              {category.subcategories.map((subcat, subIndex) => (
+                                <div 
+                                  key={`${subcat.label}-${subIndex}`}
+                                  className={`flex items-center px-2 py-1 rounded transition-colors duration-200 ${
+                                    selectedCategory?.label === subcat.label || 
+                                    selectedCategory?.searchName === subcat.searchName
+                                      ? 'font-bold text-black bg-gray-100' 
+                                      : 'text-gray-600 hover:text-black hover:bg-gray-50 cursor-pointer'
+                                  }`}
+                                  onClick={() => handleCategoryChange(subcat)}
+                                >
+                                  <span className="text-sm">{subcat.label}</span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -2206,75 +2288,135 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
 
               {/* Добавляем блок брендов в мобильный фильтр */}
               {isMobileFilterOpen && (
-                <div className="lg:hidden bg-white rounded-lg p-4 shadow-sm mb-4 border border-gray-100">
-                  <h2 className="font-bold mb-3 text-gray-900 uppercase text-sm">Бренды</h2>
-                  <div className="space-y-2 max-h-[200px] overflow-y-auto pr-1">
-                    {/* Если есть source, показываем только выбранный бренд */}
-                    {router.query.source && selectedBrand ? (
-                      <div
-                        className="flex items-center px-2 py-1.5 rounded transition-colors duration-200 font-bold text-black bg-gray-100"
-                      >
-                        {selectedBrand.name}
-                      </div>
-                    ) : (
-                      // Иначе показываем все бренды
-                      brands.map((brand, index) => (
-                        <div
-                          key={index}
-                          className={`flex items-center px-2 py-1.5 rounded transition-colors duration-200 ${
-                            selectedBrand?.name === brand.name
-                              ? 'font-bold text-black bg-gray-100' 
-                              : 'text-gray-600 hover:text-black hover:bg-gray-50 cursor-pointer'
-                          }`}
-                          onClick={() => handleBrandChange(brand)}
-                        >
-                          {brand.name}
+                <div className="lg:hidden">
+                  {/* Блок категорий для мобильного фильтра */}
+                  <div className="bg-white rounded-lg p-4 shadow-sm mb-4 border border-gray-100">
+                    <h2 className="font-bold mb-3 text-gray-900 uppercase text-sm">Категории</h2>
+                    <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
+                      {productCategoriesState.map((category) => (
+                        <div key={category.id} className="mb-1">
+                          <div 
+                            className={`flex items-center justify-between px-2 py-1.5 rounded transition-colors duration-200 ${
+                              (selectedCategory?.label === category.label || 
+                              selectedCategory?.searchName === category.searchName) 
+                                ? 'font-bold text-black bg-gray-100' 
+                                : 'text-gray-600 hover:text-black hover:bg-gray-50 cursor-pointer'
+                            }`}
+                            onClick={() => category.subcategories && category.subcategories.length > 0
+                              ? toggleCategoryAccordion(category.id)
+                              : handleCategoryChange(category)
+                            }
+                          >
+                            <span className="text-sm">{category.label}</span>
+                            {category.subcategories && category.subcategories.length > 0 && (
+                              <span className="transform transition-transform duration-200 text-gray-400">
+                                {category.isOpen ? (
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                    <path fillRule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+                                  </svg>
+                                ) : (
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                    <path fillRule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                  </svg>
+                                )}
+                              </span>
+                            )}
+                          </div>
+                          
+                          {/* Подкатегории в аккордеоне для мобильного фильтра */}
+                          {category.subcategories && category.subcategories.length > 0 && category.isOpen && (
+                            <div className="pl-4 mt-1 space-y-1 border-l-2 border-gray-100 ml-2">
+                              {category.subcategories.map((subcat, subIndex) => (
+                                <div 
+                                  key={`${subcat.label}-${subIndex}`}
+                                  className={`flex items-center px-2 py-1 rounded transition-colors duration-200 ${
+                                    selectedCategory?.label === subcat.label || 
+                                    selectedCategory?.searchName === subcat.searchName
+                                      ? 'font-bold text-black bg-gray-100' 
+                                      : 'text-gray-600 hover:text-black hover:bg-gray-50 cursor-pointer'
+                                  }`}
+                                  onClick={() => handleCategoryChange(subcat)}
+                                >
+                                  <span className="text-sm">{subcat.label}</span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
-                      ))
-                    )}
+                      ))}
+                    </div>
                   </div>
                   
-                  {/* Показываем категории выбранного бренда в мобильном фильтре */}
-                  {selectedBrand && selectedBrand.name !== 'Все товары' && selectedBrand.categories.length > 0 && (
-                    <div className="mt-4 pt-4 border-t border-gray-100">
-                      <h3 className="font-medium text-sm text-gray-700 mb-2">Категории {selectedBrand.name}</h3>
-                      <div className="space-y-1.5">
-                        {selectedBrand.categories
-                          .filter(category => category.label !== 'Все товары')
-                          .map((category, idx) => (
-                            <div
-                              key={idx}
-                              onClick={() => {
-                                // При клике на категорию бренда мы меняем только выбранную категорию
-                                setSelectedCategory(category);
-                                
-                                // Обновляем URL с сохранением источника (бренда)
-                                router.push({
-                                  pathname: router.pathname,
-                                  query: {
-                                    ...router.query,
-                                    source: selectedBrand.name === 'Все товары' ? undefined : selectedBrand.name,
-                                    category: category.searchName,
-                                    page: 1
-                                  },
-                                }, undefined, { shallow: true });
-                                
-                                // Загружаем товары и закрываем мобильный фильтр
-                                fetchProducts(selectedBrand.name === 'Все товары' ? '' : selectedBrand.name, 1);
-                                setIsMobileFilterOpen(false);
-                              }}
-                              className={`px-3 py-2 rounded-md text-sm ${
-                                selectedCategory?.label === category.label
-                                  ? 'bg-gray-800 text-white font-medium'
-                                  : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                              }`}
-                            >
-                              {category.label}
-                            </div>
-                        ))}
-                      </div>
+                  <div className="bg-white rounded-lg p-4 shadow-sm mb-4 border border-gray-100">
+                    <h2 className="font-bold mb-3 text-gray-900 uppercase text-sm">Бренды</h2>
+                    <div className="space-y-2 max-h-[200px] overflow-y-auto pr-1">
+                      {/* Если есть source, показываем только выбранный бренд */}
+                      {router.query.source && selectedBrand ? (
+                        <div
+                          className="flex items-center px-2 py-1.5 rounded transition-colors duration-200 font-bold text-black bg-gray-100"
+                        >
+                          {selectedBrand.name}
+                        </div>
+                      ) : (
+                        // Иначе показываем все бренды
+                        brands.map((brand, index) => (
+                          <div
+                            key={index}
+                            className={`flex items-center px-2 py-1.5 rounded transition-colors duration-200 ${
+                              selectedBrand?.name === brand.name
+                                ? 'font-bold text-black bg-gray-100' 
+                                : 'text-gray-600 hover:text-black hover:bg-gray-50 cursor-pointer'
+                            }`}
+                            onClick={() => handleBrandChange(brand)}
+                          >
+                            {brand.name}
+                          </div>
+                        ))
+                      )}
                     </div>
-                  )}
+                    
+                    {/* Показываем категории выбранного бренда в мобильном фильтре */}
+                    {selectedBrand && selectedBrand.name !== 'Все товары' && selectedBrand.categories.length > 0 && (
+                      <div className="mt-4 pt-4 border-t border-gray-100">
+                        <h3 className="font-medium text-sm text-gray-700 mb-2">Категории {selectedBrand.name}</h3>
+                        <div className="space-y-1.5">
+                          {selectedBrand.categories
+                            .filter(category => category.label !== 'Все товары')
+                            .map((category, idx) => (
+                              <div
+                                key={idx}
+                                onClick={() => {
+                                  // При клике на категорию бренда мы меняем только выбранную категорию
+                                  setSelectedCategory(category);
+                                  
+                                  // Обновляем URL с сохранением источника (бренда)
+                                  router.push({
+                                    pathname: router.pathname,
+                                    query: {
+                                      ...router.query,
+                                      source: selectedBrand.name === 'Все товары' ? undefined : selectedBrand.name,
+                                      category: category.searchName,
+                                      page: 1
+                                    },
+                                  }, undefined, { shallow: true });
+                                  
+                                  // Загружаем товары и закрываем мобильный фильтр
+                                  fetchProducts(selectedBrand.name === 'Все товары' ? '' : selectedBrand.name, 1);
+                                  setIsMobileFilterOpen(false);
+                                }}
+                                className={`px-3 py-2 rounded-md text-sm ${
+                                  selectedCategory?.label === category.label
+                                    ? 'bg-gray-800 text-white font-medium'
+                                    : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                                }`}
+                              >
+                                {category.label}
+                              </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
