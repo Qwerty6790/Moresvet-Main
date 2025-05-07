@@ -614,7 +614,7 @@ const categoryImageMap: Record<string, string> = {
   'Точечные светильники': '/images/s8.png', 
   'Точечный светильник': '/images/s8.png',
   'Уличные светильники': '/images/ylihnoe.jpg',
-  'Уличный светильник': '/images/s3.png', 
+  'Уличный светильник': '/images/ylihnoe.jpg', 
   'Светодиодная лента': '/images/s7.png',
   'Умный свет': '/images/smart-light.png',
   'Профиль для ленты': '/images/profile.png',
