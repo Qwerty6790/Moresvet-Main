@@ -2524,7 +2524,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                   </div>
                   
                   <select
-                    className="text-xs sm:text-sm border border-gray-300 rounded-md px-2 py-1.5 sm:px-3 sm:py-1.5 bg-white focus:ring-2 focus:ring-gray-200 outline-none flex-1 sm:flex-none"
+                    className="text-xs sm:text-sm border  rounded-md px-2 py-1.5 sm:px-3 sm:py-1.5 bg-white focus:ring-2 focus:ring-gray-200 outline-none flex-1 sm:flex-none"
                     value={sortOrder || 'popularity'}
                     onChange={(e) => handleSortOrderChange(e.target.value as any)}
                   >
@@ -2545,15 +2545,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                 selectedMaterial ||
                 searchQuery) && (
                 <div className="flex flex-col space-y-2 mb-6">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-base font-medium text-gray-800">Найдено <span className="font-bold">{totalProducts}</span> товаров</h3>
-                    <button
-                      onClick={handleResetFilters}
-                      className="text-sm text-blue-600 hover:text-blue-800 hover:underline font-medium"
-                    >
-                      Сбросить все
-                    </button>
-                  </div>
+                 
                   
                   <div className="flex flex-wrap gap-2 mt-2">
                     {selectedCategory?.label !== 'Все товары' && (
