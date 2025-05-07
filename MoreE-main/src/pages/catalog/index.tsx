@@ -633,7 +633,7 @@ const ImageCategories: React.FC<{
 
   return (
     <div className="mb-10">
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+      {/* <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
         {filteredCategories.slice(0, 6).map((category, index) => {
           // Определяем URL изображения для категории
           const imageUrl = categoryImageMap[category.label] || '/images/s1.png';
@@ -664,7 +664,7 @@ const ImageCategories: React.FC<{
             </div>
           );
         })}
-      </div>
+      </div> */}
     </div>
   );
 };
