@@ -1288,6 +1288,15 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
     setIsMobileFilterOpen(!isMobileFilterOpen);
   };
   
+  // Функция для фильтрации популярных поисковых запросов в зависимости от категории и бренда - УДАЛЕНА
+  // const getRelevantPopularSearches = () => { ... };
+
+  // Функция для обработки клика по популярному поисковому запросу - УДАЛЕНА
+  // const handlePopularSearchClick = (queryParam: string) => { ... };
+
+  // Компонент для отображения популярных запросов - УДАЛЕН
+  // const PopularSearches = () => { ... };
+
   // Функция для поиска связанных категорий
   const findRelatedCategories = (currentCategory: Category): Category[] => {
     // Словарь связанных терминов для категорий
@@ -1859,7 +1868,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
             aria-label="Последняя страница"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M4.293 15.707a1 1 0 001.414 0L10.586 10 5.707 5.707a1 1 0 00-1.414 1.414L8.172 10l-3.88 3.88a1 1 0 000 1.414z" clipRule="evenodd" />
+              <path fillRule="evenodd" d="M4.293 15.707a1 1 0 001.414 0L10.586 10l-4.879-4.879a1 1 0 00-1.414 1.414L8.172 10l-3.88 3.88a1 1 0 000 1.414z" clipRule="evenodd" />
               <path fillRule="evenodd" d="M10.293 15.707a1 1 0 001.414 0L16.586 10l-4.879-4.879a1 1 0 00-1.414 1.414L14.172 10l-3.88 3.88a1 1 0 000 1.414z" clipRule="evenodd" />
             </svg>
           </button>
@@ -2105,6 +2114,21 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
               ДЕКОРАТИВНЫЙ СВЕТ
             </h1>
           </div>
+          
+          {/* Добавляем компонент ImageCategories здесь */}
+          {isClient && (
+            <ImageCategories 
+              categories={[
+                { id: 'podvesnye', label: 'Люстра', searchName: 'Люстры' },
+                { id: 'potolochnye', label: 'Светильник', searchName: 'Светильники' },
+                { id: 'nastennye', label: 'Бра', searchName: 'Настенные светильники' },
+                { id: 'nastolnye', label: 'Настольная лампа', searchName: 'Настольные светильники' },
+                { id: 'napolnye', label: 'Торшер', searchName: 'Напольные светильники' },
+                { id: 'komplektuyuschie', label: 'Уличное освещение', searchName: 'Уличный светильник' }
+              ]} 
+              onCategoryClick={handleCategoryChange}
+            />
+          )}
           
           {/* Mobile Filter Button - улучшенный вид */}
           <div className="lg:hidden mb-4">
@@ -2635,6 +2659,21 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                 </div>
               )}
 
+              {/* Добавляем компонент ImageCategories здесь */}
+              {isClient && (
+                <ImageCategories 
+                  categories={[
+                    { id: 'podvesnye', label: 'Люстра', searchName: 'Люстры' },
+                    { id: 'potolochnye', label: 'Светильник', searchName: 'Светильники' },
+                    { id: 'nastennye', label: 'Бра', searchName: 'Настенные светильники' },
+                    { id: 'nastolnye', label: 'Настольная лампа', searchName: 'Настольные светильники' },
+                    { id: 'napolnye', label: 'Торшер', searchName: 'Напольные светильники' },
+                    { id: 'komplektuyuschie', label: 'Уличное освещение', searchName: 'Уличный светильник' }
+                  ]} 
+                  onCategoryClick={handleCategoryChange}
+                />
+              )}
+              
               {/* Показываем ImageCategories только если нет source */}
               {!source && ( 
                 <ImageCategories 
