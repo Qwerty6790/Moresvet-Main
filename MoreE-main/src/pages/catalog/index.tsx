@@ -613,7 +613,7 @@ const categoryImageMap: Record<string, string> = {
   'Трековый светильник': '/images/s9.png', 
   'Точечные светильники': '/images/s8.png', 
   'Точечный светильник': '/images/s8.png',
-  'Уличные светильники': '/images/s3.png',
+  'Уличные светильники': '/images/ylihnoe.jpg',
   'Уличный светильник': '/images/s3.png', 
   'Светодиодная лента': '/images/s7.png',
   'Умный свет': '/images/smart-light.png',
@@ -2124,7 +2124,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                 { id: 'nastennye', label: 'Бра', searchName: 'Настенные светильники' },
                 { id: 'nastolnye', label: 'Настольная лампа', searchName: 'Настольные светильники' },
                 { id: 'napolnye', label: 'Торшер', searchName: 'Напольные светильники' },
-                { id: 'komplektuyuschie', label: 'комплектующие', searchName: 'Комплектующие' }
+                { id: 'komplektuyuschie', label: 'Уличное освещение', searchName: 'Уличный светильник' }
               ]} 
               onCategoryClick={handleCategoryChange}
             />
