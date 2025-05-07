@@ -641,7 +641,7 @@ const ImageCategories: React.FC<{
           else if (category.label.includes('Бра')) displayLabel = 'Бра';
           else if (category.label.includes('Настольная')) displayLabel = 'Настольные светильники';
           else if (category.label.includes('Торшер') || category.label.includes('Торшеры')) displayLabel = 'Напольные светильники';
-          else if (category.label.includes('Уличный светильник')) displayLabel = 'Уличные светильники';
+          else if (category.label.includes('Уличный светильник')) displayLabel = 'Уличное освещение';
           
           return (
             <div
