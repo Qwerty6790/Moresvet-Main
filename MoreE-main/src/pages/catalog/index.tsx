@@ -1288,15 +1288,6 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
     setIsMobileFilterOpen(!isMobileFilterOpen);
   };
   
-  // Функция для фильтрации популярных поисковых запросов в зависимости от категории и бренда - УДАЛЕНА
-  // const getRelevantPopularSearches = () => { ... };
-
-  // Функция для обработки клика по популярному поисковому запросу - УДАЛЕНА
-  // const handlePopularSearchClick = (queryParam: string) => { ... };
-
-  // Компонент для отображения популярных запросов - УДАЛЕН
-  // const PopularSearches = () => { ... };
-
   // Функция для поиска связанных категорий
   const findRelatedCategories = (currentCategory: Category): Category[] => {
     // Словарь связанных терминов для категорий
@@ -2114,21 +2105,6 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
               ДЕКОРАТИВНЫЙ СВЕТ
             </h1>
           </div>
-          
-          {/* Добавляем компонент ImageCategories здесь */}
-          {isClient && (
-            <ImageCategories 
-              categories={[
-                { id: 'podvesnye', label: 'Люстра', searchName: 'Люстры' },
-                { id: 'potolochnye', label: 'Светильник', searchName: 'Светильники' },
-                { id: 'nastennye', label: 'Бра', searchName: 'Настенные светильники' },
-                { id: 'nastolnye', label: 'Настольная лампа', searchName: 'Настольные светильники' },
-                { id: 'napolnye', label: 'Торшер', searchName: 'Напольные светильники' },
-                { id: 'komplektuyuschie', label: 'Уличное освещение', searchName: 'Уличный светильник' }
-              ]} 
-              onCategoryClick={handleCategoryChange}
-            />
-          )}
           
           {/* Mobile Filter Button - улучшенный вид */}
           <div className="lg:hidden mb-4">
