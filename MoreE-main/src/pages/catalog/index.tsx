@@ -649,13 +649,13 @@ const ImageCategories: React.FC<{
               onClick={() => onCategoryClick(category)}
               className="flex flex-col items-center cursor-pointer transition-transform hover:scale-105"
             >
-              <div className="relative w-full aspect-square mb-4 overflow-hidden bg-white border border-gray-200">
+              {/* <div className="relative w-full aspect-square mb-4 overflow-hidden bg-white border border-gray-200">
                 <img 
                   src={imageUrl} 
                   alt={category.label}
                   className="w-full h-full object-contain p-4"
                 />
-              </div>
+              </div> */}
               <div className="text-center text-sm font-medium">{displayLabel}</div>
             </div>
           );
