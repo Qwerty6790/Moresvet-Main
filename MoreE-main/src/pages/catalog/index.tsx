@@ -2544,16 +2544,24 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                 selectedColor ||
                 selectedMaterial ||
                 searchQuery) && (
-                <div className="bg-white rounded-lg p-4 mb-6 shadow-sm border border-gray-100">
-                  <div className="flex flex-wrap gap-2 items-center">
-                    <span className="text-xs sm:text-sm font-medium text-gray-700">Активные фильтры:</span>
-                    
+                <div className="flex flex-col space-y-2 mb-6">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-base font-medium text-gray-800">Найдено <span className="font-bold">{totalProducts}</span> товаров</h3>
+                    <button
+                      onClick={handleResetFilters}
+                      className="text-sm text-blue-600 hover:text-blue-800 hover:underline font-medium"
+                    >
+                      Сбросить все
+                    </button>
+                  </div>
+                  
+                  <div className="flex flex-wrap gap-2 mt-2">
                     {selectedCategory?.label !== 'Все товары' && (
-                      <div className="bg-gray-100 px-3 py-1.5 rounded-full text-xs flex items-center gap-1 border border-gray-200">
-                        <span className="text-gray-700">Категория: {selectedCategory?.label}</span>
+                      <div className="inline-flex items-center py-1.5 px-3 bg-gray-50 hover:bg-gray-100 transition-colors rounded-md">
+                        <span className="text-sm font-medium text-gray-800 mr-2">{selectedCategory?.label}</span>
                         <button 
                           onClick={() => handleCategoryChange({ label: 'Все товары', searchName: 'Все товары' })} 
-                          className="text-gray-500 hover:text-black p-0.5 ml-1"
+                          className="text-gray-500 hover:text-red-500"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -2563,14 +2571,14 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                     )}
                     
                     {selectedBrand && selectedBrand.name !== 'Все товары' && (
-                      <div className="bg-gray-100 px-3 py-1.5 rounded-full text-xs flex items-center gap-1 border border-gray-200">
-                        {/* <span className="text-gray-700">Бренд: {selectedBrand.name}</span> */}
+                      <div className="inline-flex items-center py-1.5 px-3 bg-gray-50 hover:bg-gray-100 transition-colors rounded-md">
+                        <span className="text-sm font-medium text-gray-800 mr-2">{selectedBrand.name}</span>
                         <button 
                           onClick={() => {
                             const globalBrand = brands.find(b => b.name === 'Все товары');
                             if (globalBrand) handleBrandChange(globalBrand);
                           }}
-                          className="text-gray-500 hover:text-black p-0.5 ml-1"
+                          className="text-gray-500 hover:text-red-500"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -2580,15 +2588,15 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                     )}
                     
                     {(minPrice !== 10 || maxPrice !== 1000000) && (
-                      <div className="bg-gray-100 px-3 py-1.5 rounded-full text-xs flex items-center gap-1 border border-gray-200">
-                        <span className="text-gray-700">Цена: {minPrice} - {maxPrice} ₽</span>
+                      <div className="inline-flex items-center py-1.5 px-3 bg-gray-50 hover:bg-gray-100 transition-colors rounded-md">
+                        <span className="text-sm font-medium text-gray-800 mr-2">{minPrice}₽ - {maxPrice}₽</span>
                         <button 
                           onClick={() => {
                             setMinPrice(10);
                             setMaxPrice(1000000);
                             handlePriceRangeChange(10, 1000000);
                           }} 
-                          className="text-gray-500 hover:text-black p-0.5 ml-1"
+                          className="text-gray-500 hover:text-red-500"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -2598,14 +2606,12 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                     )}
                     
                     {selectedColor && (
-                      <div className="bg-gray-100 px-3 py-1.5 rounded-full text-xs flex items-center gap-1 border border-gray-200">
-                        <span className="text-gray-700 flex items-center">
-                          <span className="w-3 h-3 rounded-full mr-1 border border-gray-300" style={{ backgroundColor: selectedColor.toLowerCase() }}></span>
-                          Цвет: {selectedColor}
-                        </span>
+                      <div className="inline-flex items-center py-1.5 px-3 bg-gray-50 hover:bg-gray-100 transition-colors rounded-md">
+                        <span className="w-3 h-3 rounded-full mr-2 border border-gray-300" style={{ backgroundColor: selectedColor.toLowerCase() }}></span>
+                        <span className="text-sm font-medium text-gray-800 mr-2">{selectedColor}</span>
                         <button 
                           onClick={() => handleColorChange(selectedColor)} 
-                          className="text-gray-500 hover:text-black p-0.5 ml-1"
+                          className="text-gray-500 hover:text-red-500"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -2615,11 +2621,11 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                     )}
                     
                     {selectedMaterial && (
-                      <div className="bg-gray-100 px-3 py-1.5 rounded-full text-xs flex items-center gap-1 border border-gray-200">
-                        <span className="text-gray-700">Материал: {selectedMaterial}</span>
+                      <div className="inline-flex items-center py-1.5 px-3 bg-gray-50 hover:bg-gray-100 transition-colors rounded-md">
+                        <span className="text-sm font-medium text-gray-800 mr-2">{selectedMaterial}</span>
                         <button 
                           onClick={() => handleMaterialChange(selectedMaterial)} 
-                          className="text-gray-500 hover:text-black p-0.5 ml-1"
+                          className="text-gray-500 hover:text-red-500"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -2629,14 +2635,14 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                     )}
                     
                     {searchQuery && (
-                      <div className="bg-gray-100 px-3 py-1.5 rounded-full text-xs flex items-center gap-1 border border-gray-200">
-                        <span className="text-gray-700">Поиск: {searchQuery}</span>
+                      <div className="inline-flex items-center py-1.5 px-3 bg-gray-50 hover:bg-gray-100 transition-colors rounded-md">
+                        <span className="text-sm font-medium text-gray-800 mr-2">"{searchQuery}"</span>
                         <button 
                           onClick={() => {
                             setSearchQuery('');
                             fetchProducts(selectedBrand?.name || '');
                           }} 
-                          className="text-gray-500 hover:text-black p-0.5 ml-1"
+                          className="text-gray-500 hover:text-red-500"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -2644,13 +2650,6 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                         </button>
                       </div>
                     )}
-                    
-                    <button
-                      onClick={handleResetFilters}
-                      className="text-xs sm:text-sm text-gray-700 hover:text-black hover:underline font-medium"
-                    >
-                      Сбросить все
-                    </button>
                   </div>
                 </div>
               )}
