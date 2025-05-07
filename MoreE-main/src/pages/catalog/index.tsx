@@ -2674,14 +2674,6 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                 />
               )}
               
-              {/* Показываем ImageCategories только если нет source */}
-              {!source && ( 
-                <ImageCategories 
-                  categories={productCategories} 
-                  onCategoryClick={handleCategoryChange} 
-                />
-              )}
-
               {/* Отображаем связанные категории - убираем условный рендеринг */}
               <RelatedCategories />
 
