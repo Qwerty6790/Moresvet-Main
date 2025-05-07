@@ -640,12 +640,12 @@ const ImageCategories: React.FC<{
           
           // Сопоставляем метки с изображения
           let displayLabel = category.label;
-          if (category.label.includes('Люстр')) displayLabel = 'Подвесные светильники';
-          else if (category.label.includes('потолочные')) displayLabel = 'Потолочные светильники';
-          else if (category.label.includes('Настенный') || category.label.includes('Бра')) displayLabel = 'Настенные светильники';
+          if (category.label.includes('Люстра')) displayLabel = 'Люстры';
+          else if (category.label.includes('Светильник')) displayLabel = 'Светильники';
+          else if (category.label.includes('Бра')) displayLabel = 'Бра';
           else if (category.label.includes('Настольная')) displayLabel = 'Настольные светильники';
-          else if (category.label.includes('Торшер') || category.label.includes('напольный')) displayLabel = 'Напольные светильники';
-          else if (category.label.includes('комплектующие')) displayLabel = 'Комплектующие';
+          else if (category.label.includes('Торшер') || category.label.includes('Торшеры')) displayLabel = 'Напольные светильники';
+          else if (category.label.includes('Уличный светильник')) displayLabel = 'Уличные светильники';
           
           return (
             <div
