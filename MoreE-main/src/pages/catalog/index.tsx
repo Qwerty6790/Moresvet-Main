@@ -2120,7 +2120,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                 { id: 'nastennye', label: 'Бра', searchName: 'Настенные светильники' },
                 { id: 'nastolnye', label: 'Настольная лампа', searchName: 'Настольные светильники' },
                 { id: 'napolnye', label: 'Торшер', searchName: 'Напольные светильники' },
-                { id: 'komplektuyuschie', label: 'Уличное освещение', searchName: 'Уличный светильник' }
+                { id: 'komplektuyuschie', label: 'Уличный светильник', searchName: 'Уличный светильник' }
               ]} 
               onCategoryClick={handleCategoryChange}
             />
