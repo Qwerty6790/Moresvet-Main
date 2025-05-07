@@ -603,9 +603,9 @@ brands[0].categories = [
 // Карта для сопоставления названий категорий с URL изображений
 // ЗАМЕНИТЕ ЭТИ URL НА ВАШИ РЕАЛЬНЫЕ ИЗОБРАЖЕНИЯ
 const categoryImageMap: Record<string, string> = {
-  'Люстра': '/images/s1.png', 
+  'Люстра': '/images/s1.jpg', 
   'Люстры': '/images/s1.png',
-  'Светильник': '/images/s2.png',
+  'Светильник': '/images/s2.jpeg',
   'Светильники': '/images/s2.png', 
   'Бра': '/images/s4.png', 
   'Торшер': '/images/s5.png', 
