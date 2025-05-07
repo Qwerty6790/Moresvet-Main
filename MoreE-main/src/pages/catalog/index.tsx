@@ -649,13 +649,13 @@ const ImageCategories: React.FC<{
               onClick={() => onCategoryClick(category)}
               className="flex flex-col items-center cursor-pointer transition-transform hover:scale-105"
             >
-              {/* <div className="relative w-full aspect-square mb-4 overflow-hidden bg-white border border-gray-200">
+              <div className="relative w-full aspect-square mb-4 overflow-hidden bg-white border border-gray-200">
                 <img 
                   src={imageUrl} 
                   alt={category.label}
                   className="w-full h-full object-contain p-4"
                 />
-              </div> */}
+              </div>
               <div className="text-center text-sm font-medium">{displayLabel}</div>
             </div>
           );
@@ -2655,20 +2655,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                 </div>
               )}
 
-              {/* Добавляем компонент ImageCategories здесь */}
-              {isClient && (
-                <ImageCategories 
-                  categories={[
-                    { id: 'podvesnye', label: 'Люстра', searchName: 'Люстры' },
-                    { id: 'potolochnye', label: 'Светильник', searchName: 'Светильники' },
-                    { id: 'nastennye', label: 'Бра', searchName: 'Настенные светильники' },
-                    { id: 'nastolnye', label: 'Настольная лампа', searchName: 'Настольные светильники' },
-                    { id: 'napolnye', label: 'Торшер', searchName: 'Напольные светильники' },
-                    { id: 'komplektuyuschie', label: 'Уличное освещение', searchName: 'Уличный светильник' }
-                  ]} 
-                  onCategoryClick={handleCategoryChange}
-                />
-              )}
+              {/* Удаляем дублированный компонент ImageCategories */}
               
               {/* Отображаем связанные категории - убираем условный рендеринг */}
               <RelatedCategories />
