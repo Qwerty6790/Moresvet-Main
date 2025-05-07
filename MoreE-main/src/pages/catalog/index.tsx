@@ -604,7 +604,7 @@ brands[0].categories = [
 // ЗАМЕНИТЕ ЭТИ URL НА ВАШИ РЕАЛЬНЫЕ ИЗОБРАЖЕНИЯ
 const categoryImageMap: Record<string, string> = {
   'Люстра': '/images/lustry.jpg', 
-  'Люстры': '/images/lustry.jpeg',
+  'Люстры': '/images/lustry.jpg',
   'Светильник': '/images/svetilniki.jpeg',
   'Светильники': '/images/svetilniki.jpeg', 
   'Бра': '/images/bra.jpeg', 
@@ -2119,8 +2119,8 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
           {isClient && (
             <ImageCategories 
               categories={[
-                { id: 'podvesnye', label: 'Люстры', searchName: 'Подвесные светильники' },
-                { id: 'potolochnye', label: 'потолочные', searchName: 'Потолочные светильники' },
+                { id: 'podvesnye', label: 'Люстра', searchName: 'Люстры' },
+                { id: 'potolochnye', label: 'Светильник', searchName: 'Светильники' },
                 { id: 'nastennye', label: 'Бра', searchName: 'Настенные светильники' },
                 { id: 'nastolnye', label: 'Настольная лампа', searchName: 'Настольные светильники' },
                 { id: 'napolnye', label: 'Торшер', searchName: 'Напольные светильники' },
