@@ -604,17 +604,13 @@ brands[0].categories = [
 // ЗАМЕНИТЕ ЭТИ URL НА ВАШИ РЕАЛЬНЫЕ ИЗОБРАЖЕНИЯ
 const categoryImageMap: Record<string, string> = {
   'Люстра': '/images/lustry.jpg', 
-  'Люстры': '/images/lustry.jpg',
   'Светильник': '/images/svetilniki.jpeg',
-  'Светильники': '/images/svetilniki.jpeg', 
   'Бра': '/images/bra.jpeg', 
   'Торшер': '/images/s5.png', 
   'Настольная лампа': '/images/s6.png', 
   'Трековый светильник': '/images/s9.png', 
   'Точечные светильники': '/images/s8.png', 
-  'Точечный светильник': '/images/s8.png',
   'Уличные светильники': '/images/ylihnoe.jpg',
-  'Уличный светильник': '/images/ylihnoe.jpg', 
   'Светодиодная лента': '/images/s7.png',
   'Умный свет': '/images/smart-light.png',
   'Профиль для ленты': '/images/profile.png',
