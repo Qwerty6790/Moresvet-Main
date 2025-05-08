@@ -2430,10 +2430,10 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                   <div className="hidden sm:flex bg-white border border-gray-200 rounded-md shadow-sm px-1 py-1">
                     <button
                       onClick={() => setViewMode('grid')}
-                      className={`p-1.5 rounded-md transition-colors ${
+                      className={`p-1.5 rounded-md transition-all ${
                         viewMode === 'grid' 
-                          ? 'bg-black text-white' 
-                          : 'text-gray-600 hover:bg-gray-100'
+                          ? 'bg-gradient-to-r from-gray-800 to-gray-700 text-white shadow-sm' 
+                          : 'text-gray-600 hover:bg-gray-50'
                       }`}
                       title="Сетка"
                     >
@@ -2443,10 +2443,10 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                     </button>
                     <button
                       onClick={() => setViewMode('list')}
-                      className={`p-1.5 rounded-md transition-colors ${
+                      className={`p-1.5 rounded-md transition-all ${
                         viewMode === 'list' 
-                          ? 'bg-black text-white' 
-                          : 'text-gray-600 hover:bg-gray-100'
+                          ? 'bg-gradient-to-r from-gray-800 to-gray-700 text-white shadow-sm' 
+                          : 'text-gray-600 hover:bg-gray-50'
                       }`}
                       title="Список"
                     >
@@ -2456,10 +2456,10 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                     </button>
                     <button
                       onClick={() => setViewMode('table')}
-                      className={`p-1.5 rounded-md transition-colors ${
+                      className={`p-1.5 rounded-md transition-all ${
                         viewMode === 'table' 
-                          ? 'bg-black text-white' 
-                          : 'text-gray-600 hover:bg-gray-100'
+                          ? 'bg-gradient-to-r from-gray-800 to-gray-700 text-white shadow-sm' 
+                          : 'text-gray-600 hover:bg-gray-50'
                       }`}
                       title="Таблица"
                     >
@@ -2475,13 +2475,16 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                       onClick={() => setDisplayMode('product')}
                       className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-all ${
                         displayMode === 'product' 
-                          ? 'bg-black text-white' 
+                          ? 'bg-gradient-to-r from-gray-800 to-gray-700 text-white' 
                           : 'text-gray-700 hover:bg-gray-50'
                       }`}
                     >
                       <div className="flex items-center gap-1.5">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                          <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                          <rect x="3" y="3" width="7" height="7" rx="1" strokeWidth="1.5" />
+                          <rect x="14" y="3" width="7" height="7" rx="1" strokeWidth="1.5" />
+                          <rect x="3" y="14" width="7" height="7" rx="1" strokeWidth="1.5" />
+                          <rect x="14" y="14" width="7" height="7" rx="1" strokeWidth="1.5" />
                         </svg>
                         <span>Товары</span>
                       </div>
@@ -2490,13 +2493,16 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                       onClick={() => setDisplayMode('collection')}
                       className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-all ${
                         displayMode === 'collection'
-                          ? 'bg-black text-white' 
+                          ? 'bg-gradient-to-r from-gray-800 to-gray-700 text-white' 
                           : 'text-gray-700 hover:bg-gray-50'
                       }`}
                     >
                       <div className="flex items-center gap-1.5">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                          <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM14 11a1 1 0 011 1v1h1a1 1 0 110 2h-1v1a1 1 0 11-2 0v-1h-1a1 1 0 110-2h1v-1a1 1 0 011-1z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                          <path d="M9 6l3 3 3-3" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M9 12h6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M9 18h6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                          <rect x="3" y="4" width="18" height="16" rx="2" strokeWidth="1.5" />
                         </svg>
                         <span>Коллекции</span>
                       </div>
@@ -2507,10 +2513,10 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                   <div className="sm:hidden flex bg-white border border-gray-200 rounded-md shadow-sm px-1 py-1">
                     <button
                       onClick={() => setViewMode('grid')}
-                      className={`p-1.5 rounded-md transition-colors ${
+                      className={`p-1.5 rounded-md transition-all ${
                         viewMode === 'grid' 
-                          ? 'bg-black text-white' 
-                          : 'text-gray-600 hover:bg-gray-100'
+                          ? 'bg-gradient-to-r from-gray-800 to-gray-700 text-white shadow-sm' 
+                          : 'text-gray-600 hover:bg-gray-50'
                       }`}
                       title="Сетка"
                     >
@@ -2520,10 +2526,10 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                     </button>
                     <button
                       onClick={() => setViewMode('table')}
-                      className={`p-1.5 rounded-md transition-colors ${
+                      className={`p-1.5 rounded-md transition-all ${
                         viewMode === 'table' 
-                          ? 'bg-black text-white' 
-                          : 'text-gray-600 hover:bg-gray-100'
+                          ? 'bg-gradient-to-r from-gray-800 to-gray-700 text-white shadow-sm' 
+                          : 'text-gray-600 hover:bg-gray-50'
                       }`}
                       title="Таблица"
                     >
