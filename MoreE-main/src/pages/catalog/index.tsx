@@ -2426,105 +2426,115 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                 </div>
                 
                 <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
-                  {/* Переключатель режима отображения для десктопа */}
-                  <div className="hidden sm:flex bg-gray-100 rounded-full px-1 py-1">
+                  {/* Переключатель режима отображения для десктопа - улучшенный дизайн */}
+                  <div className="hidden sm:flex bg-white border border-gray-200 rounded-md shadow-sm px-1 py-1">
                     <button
                       onClick={() => setViewMode('grid')}
-                      className={`p-1.5 rounded-full transition-colors ${
+                      className={`p-1.5 rounded-md transition-colors ${
                         viewMode === 'grid' 
                           ? 'bg-black text-white' 
-                          : 'text-gray-700 hover:bg-gray-200'
+                          : 'text-gray-600 hover:bg-gray-100'
                       }`}
                       title="Сетка"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                       </svg>
                     </button>
                     <button
                       onClick={() => setViewMode('list')}
-                      className={`p-1.5 rounded-full transition-colors ${
+                      className={`p-1.5 rounded-md transition-colors ${
                         viewMode === 'list' 
                           ? 'bg-black text-white' 
-                          : 'text-gray-700 hover:bg-gray-200'
+                          : 'text-gray-600 hover:bg-gray-100'
                       }`}
                       title="Список"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
                       </svg>
                     </button>
                     <button
                       onClick={() => setViewMode('table')}
-                      className={`p-1.5 rounded-full transition-colors ${
+                      className={`p-1.5 rounded-md transition-colors ${
                         viewMode === 'table' 
                           ? 'bg-black text-white' 
-                          : 'text-gray-700 hover:bg-gray-200'
+                          : 'text-gray-600 hover:bg-gray-100'
                       }`}
                       title="Таблица"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M3 14h18M3 6h18M3 18h18" />
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M3 14h18M3 6h18M3 18h18" />
                       </svg>
                     </button>
                   </div>
                   
-                  {/* Переключатель отображения продукт/коллекция */}
-                  <div className="flex bg-white rounded-full border border-gray-200 p-1 shadow-sm">
+                  {/* Переключатель отображения продукт/коллекция - улучшенный дизайн */}
+                  <div className="flex bg-white rounded-md border border-gray-200 shadow-sm overflow-hidden">
                     <button 
                       onClick={() => setDisplayMode('product')}
-                      className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-colors ${
+                      className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-all ${
                         displayMode === 'product' 
                           ? 'bg-black text-white' 
-                          : 'text-gray-600 hover:bg-gray-100'
+                          : 'text-gray-700 hover:bg-gray-50'
                       }`}
                     >
-                      Товар
+                      <div className="flex items-center gap-1.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                          <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
+                        </svg>
+                        <span>Товары</span>
+                      </div>
                     </button>
                     <button
                       onClick={() => setDisplayMode('collection')}
-                      className={`px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium transition-colors ${
+                      className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-all ${
                         displayMode === 'collection'
                           ? 'bg-black text-white' 
-                          : 'text-gray-600 hover:bg-gray-100'
+                          : 'text-gray-700 hover:bg-gray-50'
                       }`}
                     >
-                      Коллекции
+                      <div className="flex items-center gap-1.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                          <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM14 11a1 1 0 011 1v1h1a1 1 0 110 2h-1v1a1 1 0 11-2 0v-1h-1a1 1 0 110-2h1v-1a1 1 0 011-1z" />
+                        </svg>
+                        <span>Коллекции</span>
+                      </div>
                     </button>
                   </div>
                   
-                  {/* Мобильный переключатель режимов отображения */}
-                  <div className="sm:hidden flex bg-gray-100 rounded-full px-1 py-1">
+                  {/* Мобильный переключатель режимов отображения - улучшенный дизайн */}
+                  <div className="sm:hidden flex bg-white border border-gray-200 rounded-md shadow-sm px-1 py-1">
                     <button
                       onClick={() => setViewMode('grid')}
-                      className={`p-1.5 rounded-full transition-colors ${
+                      className={`p-1.5 rounded-md transition-colors ${
                         viewMode === 'grid' 
                           ? 'bg-black text-white' 
-                          : 'text-gray-700 hover:bg-gray-200'
+                          : 'text-gray-600 hover:bg-gray-100'
                       }`}
                       title="Сетка"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6z" />
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6z" />
                       </svg>
                     </button>
                     <button
                       onClick={() => setViewMode('table')}
-                      className={`p-1.5 rounded-full transition-colors ${
+                      className={`p-1.5 rounded-md transition-colors ${
                         viewMode === 'table' 
                           ? 'bg-black text-white' 
-                          : 'text-gray-700 hover:bg-gray-200'
+                          : 'text-gray-600 hover:bg-gray-100'
                       }`}
                       title="Таблица"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M3 14h18" />
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M3 14h18" />
                       </svg>
                     </button>
                   </div>
                   
                   <select
-                    className="text-xs sm:text-sm border  rounded-md px-2 py-1.5 sm:px-3 sm:py-1.5 bg-white focus:ring-2 focus:ring-gray-200 outline-none flex-1 sm:flex-none"
+                    className="text-xs sm:text-sm border rounded-md px-2 py-1.5 sm:px-3 sm:py-2 bg-white focus:ring-2 focus:ring-gray-200 outline-none flex-1 sm:flex-none shadow-sm"
                     value={sortOrder || 'popularity'}
                     onChange={(e) => handleSortOrderChange(e.target.value as any)}
                   >
