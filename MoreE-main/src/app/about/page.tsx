@@ -75,12 +75,7 @@ const About = () => {
   ];
 
   const photos = [
-    "/images/gallery1.jpg",
-    "/images/gallery2.jpg",
-    "/images/gallery3.jpg",
-    "/images/gallery4.jpg",
-    "/images/gallery5.jpg",
-    "/images/gallery6.jpg",
+    "/images/moreelecktrikiabout.webp",
   ];
 
   const theses = [
@@ -106,23 +101,19 @@ const About = () => {
       {/* Photo Gallery Section */}
       <div className="w-full bg-white py-16">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-3 gap-4 h-[50vh]">
-            {photos.map((photo, index) => (
-              <motion.div 
-                key={index}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: index * 0.1 }}
-                className={`relative overflow-hidden ${index === 0 ? 'col-span-2 row-span-2' : ''}`}
-              >
-                <div className="w-full h-full bg-gray-200 rounded-lg overflow-hidden">
-                  <div 
-                    className="w-full h-full bg-cover bg-center" 
-                    style={{ backgroundImage: `url(${photo})` }}
-                  />
-                </div>
-              </motion.div>
-            ))}
+          <div className="w-full h-[40vh]">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="w-full h-full"
+            >
+              <div className="w-full h-full bg-gray-200 rounded-lg overflow-hidden">
+                <div 
+                  className="w-full h-full bg-cover bg-center" 
+                  style={{ backgroundImage: `url(${photos[0]})` }}
+                />
+              </div>
+            </motion.div>
           </div>
         </div>
       </div>
