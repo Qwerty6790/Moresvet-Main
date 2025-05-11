@@ -14,18 +14,20 @@ interface Brand {
 
 // Данные брендов (используя найденные изображения логотипов)
 const brands: Brand[] = [
-  { id: 1, name: 'Maytoni', image: '/images/Maytoni.webp', link: '/brands/maytoni' },
-  { id: 2, name: 'LightStar', image: '/images/LightStar.png', link: '/brands/lightstar' },
-  { id: 3, name: 'Sonex', image: '/images/Sonexlogo.png', link: '/brands/sonex' },
-  { id: 4, name: 'Kink Light', image: '/images/KinkLight.png', link: '/brands/kinklight' },
+  { id: 1, name: 'Maytoni', image: '/images/maytonilogo.png', link: '/brands/maytoni' },
+  { id: 2, name: 'LightStar', image: '/images/lightstarlogo.png', link: '/brands/lightstar' },
+  { id: 3, name: 'Sonex', image: '/images/sonexlogo1.png', link: '/brands/sonex' },
+  { id: 4, name: 'Kink Light', image: '/images/kinklightlogo.png', link: '/brands/kinklight' },
   { id: 5, name: 'Arte Lamp', image: '/images/Artelamp.png', link: '/brands/artelamp' },
-  { id: 6, name: 'Elektrostandart', image: '/images/Elektrostandart.jpg', link: '/brands/elektrostandart' },
-  { id: 7, name: 'Lumion', image: '/images/Lumion.jpg', link: '/brands/lumion' },
-  { id: 8, name: 'Odeon Light', image: '/images/Odeon light.jpg', link: '/brands/odeonlight' },
+  { id: 6, name: 'Elektrostandart', image: '/images/elektrostandartlogo.png', link: '/brands/elektrostandart' },
+  { id: 7, name: 'Lumion', image: '/images/lumionlogo.png', link: '/brands/lumion' },
+  { id: 8, name: 'Odeon Light', image: '/images/odeonlightlogo.png', link: '/brands/odeonlight' },
   { id: 9, name: 'Werkel', image: '/images/werkel.png', link: '/brands/werkel' },
-  { id: 10, name: 'Denkirs', image: '/images/DenkirsLogo.png', link: '/brands/denkirs' },
-  { id: 11, name: 'Novotech', image: '/images/Novotech.png', link: '/brands/novotech' },
+  { id: 10, name: 'Denkirs', image: '/images/denkirslogo1.png', link: '/brands/denkirs' },
+  { id: 11, name: 'Novotech', image: '/images/novotechlogo.png', link: '/brands/novotech' },
   { id: 12, name: 'Voltum', image: '/images/Voltumlogo.webp', link: '/brands/voltum' },
+  { id: 13, name: 'Stluc', image: '/images/stlucelogo.png', link: '/brands/stluce' },
+  { id: 14, name: 'Favourite', image: '/images/favouritelogo.png', link: '/brands/favourite' },
 ];
 
 export default function BrandSlider() {

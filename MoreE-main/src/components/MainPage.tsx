@@ -297,21 +297,30 @@ export default function Banner() {
         </div>
         <div className="mb-12">
         <div className=" mx-auto">
-          <div className="grid grid-cols-7 gap-4 relative">
-            {popularCategories.map((category) => (
+          <div className="grid grid-cols-12 gap-4 relative">
+            {popularCategories.map((category, index) => (
               <div
                 key={category.id}
-                className="transform transition-transform duration-200 hover:scale-105"
+                className={`transform transition-transform duration-200 hover:scale-105 ${
+                  index === 0 ? 'col-span-4 row-span-2' : 
+                  index === 1 ? 'col-span-4' : 
+                  index === 2 ? 'col-span-4' : 
+                  index === 3 ? 'col-span-3' : 
+                  index === 4 ? 'col-span-5' : 
+                  index === 5 ? 'col-span-4' : 
+                  'col-span-8'
+                }`}
               >
-                <Link href={category.link} className="group block text-center">
-                  <div className="relative rounded-md overflow-hidden h-28 mb-2">
+                <Link href={category.link} className="group block text-center h-full">
+                  <div className={`relative rounded-md overflow-hidden ${index === 0 ? 'h-64' : 'h-28'} mb-2`}>
                     <img 
                       src={category.image} 
                       alt={category.title} 
-                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300 ease-in-out"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out"
                     />
+                    <div className="absolute inset-0 bg-black bg-opacity-20 group-hover:bg-opacity-10 transition-all duration-300"></div>
                   </div>
-                  <p className="text-center text-gray-700 text-xs font-semibold group-hover:text-blue-600 transition-colors duration-200">{category.title}</p>
+                  <p className="text-center text-gray-700 text-sm font-semibold group-hover:text-blue-600 transition-colors duration-200">{category.title}</p>
                 </Link>
               </div>
             ))}
