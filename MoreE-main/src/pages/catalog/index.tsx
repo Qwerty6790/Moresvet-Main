@@ -2475,7 +2475,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                       onClick={() => setDisplayMode('product')}
                       className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-all ${
                         displayMode === 'product' 
-                          ? 'bg-gradient-to-r rounded-full text-white' 
+                          ? 'bg-gradient-to-r rounded-full text-black' 
                           : 'text-black hover:bg-gray-50'
                       }`}
                     >
