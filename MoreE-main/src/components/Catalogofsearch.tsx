@@ -182,7 +182,7 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({
                           toast.success('Товар добавлен');
                         } catch (err) { console.error('Ошибка добавления в корзину (table):', err); toast.error('Ошибка'); }
                       }}
-                      className={`text-[10px] sm:text-xs py-1 px-1 sm:px-2 rounded ${isPurchasable ? 'bg-black text-white hover:bg-gray-800' : 'bg-gray-300 text-black cursor-not-allowed'}`}
+                      className={`text-[10px] sm:text-xs py-1 px-1 sm:px-2 rounded ${isPurchasable ? 'bg-black text-black hover:bg-gray-800' : 'bg-gray-300 text-black cursor-not-allowed'}`}
                       disabled={!isPurchasable}
                     >
                       В корзину
