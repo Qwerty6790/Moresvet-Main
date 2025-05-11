@@ -2684,7 +2684,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                 {/* Добавляем заголовок с логотипом бренда над товарами */}
                 {selectedBrand && selectedBrand.name !== 'Все товары' && (
                   <div className="mb-6 flex flex-col sm:flex-row items-center gap-3 sm:gap-5 border-b pb-4">
-                    <div className="h-14 w-14 sm:h-16 sm:w-16 bg-white rounded-lg border overflow-hidden p-1.5 flex-shrink-0">
+                    <div className="h-14 w-14 sm:h-16 sm:w-16 bg-black rounded-lg border overflow-hidden p-1.5 flex-shrink-0">
                       <img 
                         src={brandLogoMap[selectedBrand.name] || '/images/placeholder-logo.png'} 
                         alt={`${selectedBrand.name} logo`}
