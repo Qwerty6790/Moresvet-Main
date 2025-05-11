@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 
 // Интерфейс для брендов
@@ -32,71 +31,54 @@ const brands: Brand[] = [
 
 export default function BrandSlider() {
   const sliderRef = useRef<HTMLDivElement>(null);
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const [autoScroll, setAutoScroll] = useState(true);
-  const scrollSpeed = 1; // пикселей в миллисекунду
+  const [isPaused, setIsPaused] = useState(false);
 
-  // Эффект для автоматической прокрутки
   useEffect(() => {
-    if (!autoScroll || !sliderRef.current) return;
-    
-    const sliderWidth = sliderRef.current.scrollWidth;
-    const containerWidth = sliderRef.current.clientWidth;
-    
-    const animate = () => {
-      if (!sliderRef.current) return;
-      
-      // Увеличиваем позицию прокрутки
-      let newPosition = scrollPosition + scrollSpeed;
-      
-      // Если дошли до конца, начинаем сначала
-      if (newPosition >= sliderWidth - containerWidth) {
-        newPosition = 0;
-      }
-      
-      // Обновляем состояние и прокручиваем слайдер
-      setScrollPosition(newPosition);
-      sliderRef.current.scrollLeft = newPosition;
-    };
-    
-    const timer = setInterval(animate, 20); // Обновляем каждые 20 мс для плавности
-    
-    return () => clearInterval(timer);
-  }, [scrollPosition, autoScroll]);
+    const slider = sliderRef.current;
+    if (!slider) return;
 
-  // Обработчики событий для остановки и возобновления прокрутки при наведении
-  const handleMouseEnter = () => setAutoScroll(false);
-  const handleMouseLeave = () => setAutoScroll(true);
+    // Создаем CSS анимацию
+    slider.style.animation = 'none';
+    requestAnimationFrame(() => {
+      slider.style.animation = isPaused ? 'none' : 'slide 30s linear infinite';
+    });
+
+    return () => {
+      if (slider) {
+        slider.style.animation = 'none';
+      }
+    };
+  }, [isPaused]);
 
   return (
-    <div className="w-full mb-12">
-      <h2 className="text-2xl font-bold mb-6 text-center">Популярные бренды</h2>
+    <div className="w-full mb-12 bg-black py-8 overflow-hidden">
+      <h2 className="text-2xl font-bold mb-6 text-center text-white">Популярные бренды</h2>
       
-      <div 
-        className="relative"
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
-     
-       
-        
-        {/* Контейнер для слайдера */}
+      <div className="relative mx-auto max-w-7xl overflow-hidden">
         <div 
-          ref={sliderRef}
-          className="flex overflow-hidden px-10"
+          className="flex overflow-hidden"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
         >
-          <div className="flex items-center space-x-8 py-4">
+          <div 
+            ref={sliderRef}
+            className="flex space-x-8 py-4 min-w-max"
+            style={{
+              animationPlayState: isPaused ? 'paused' : 'running'
+            }}
+          >
+            {/* Первый набор брендов */}
             {brands.map((brand) => (
               <Link 
                 key={brand.id} 
                 href={brand.link}
-                className="flex-shrink-0 transition-transform duration-300 hover:scale-105"
+                className="flex-shrink-0 transition-transform duration-300 hover:scale-110"
               >
-                <div className="w-32 h-20 flex items-center justify-center bg-black p-2 rounded-lg shadow-sm">
+                <div className="w-32 h-24 flex items-center justify-center bg-black p-2 rounded-lg">
                   <img 
                     src={brand.image}
                     alt={`${brand.name} logo`}
-                    className="max-h-full max-w-full object-contain"
+                    className="max-h-full max-w-full object-contain filter invert"
                   />
                 </div>
               </Link>
@@ -107,22 +89,32 @@ export default function BrandSlider() {
               <Link 
                 key={`duplicate-${brand.id}`} 
                 href={brand.link}
-                className="flex-shrink-0 transition-transform duration-300 hover:scale-105"
+                className="flex-shrink-0 transition-transform duration-300 hover:scale-110"
               >
-                <div className="w-32 h-20 flex items-center justify-center bg-white p-2 rounded-lg shadow-sm">
+                <div className="w-32 h-24 flex items-center justify-center bg-black p-2 rounded-lg">
                   <img 
                     src={brand.image}
                     alt={`${brand.name} logo`}
-                    className="max-h-full max-w-full object-contain"
+                    className="max-h-full max-w-full object-contain filter invert"
                   />
                 </div>
               </Link>
             ))}
           </div>
         </div>
-        
-       
       </div>
+      
+      {/* CSS для анимации */}
+      <style jsx global>{`
+        @keyframes slide {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+      `}</style>
     </div>
   );
 } 
