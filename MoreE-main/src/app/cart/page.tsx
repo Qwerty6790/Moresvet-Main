@@ -7,7 +7,7 @@ import axios, { AxiosError } from 'axios';
 import { ProductI } from '../../types/interfaces';
 import { ClipLoader } from 'react-spinners';
 import Link from 'next/link';
-import { FaMinus, FaPlus, FaTrash } from 'react-icons/fa';
+import { FaMinus, FaPlus, FaTrash, FaShareAlt } from 'react-icons/fa';
 
 const Cart: React.FC = () => {
   const router = useRouter();
@@ -104,7 +104,23 @@ const Cart: React.FC = () => {
     toast.success('Корзина очищена');
   };
 
-  // Логика оформления заказа (без разделения на онлайн/офлайн оплату)
+  const handleShareCart = () => {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: 'Моя корзина товаров',
+          text: 'Посмотрите, какие товары у меня в корзине!',
+          url: window.location.href,
+        })
+        .then(() => console.log('Share successful'))
+        .catch((error) => console.error('Ошибка при шаринге', error));
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      toast.success('Ссылка скопирована');
+    }
+  };
+
+  // Логика оформления заказа
   const confirmOrder = async () => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -155,60 +171,101 @@ const Cart: React.FC = () => {
   const totalToPay = totalAmount + deliveryCost;
 
   return (
-    <section className="min-h-screen bg-gray-50">
+    <motion.section
+      className="min-h-screen bg-gray-50"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <Toaster position="top-center" richColors />
 
-      {/* Header Section */}
-      <div className="container mx-auto px-4 mt-64 pt-8">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-black">Корзина ({cartProducts.length})</h1>
-          <button className="flex items-center gap-2 text-black bg-white px-4 py-2 rounded-lg shadow-sm hover:shadow-md transition-all">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-            </svg>
-            Поделиться
-          </button>
+      {/* Hero секция */}
+      <div className="relative mt-32 h-[300px] bg-black overflow-hidden">
+        <div className="relative max-w-7xl mx-auto px-4 h-full flex items-center">
+          <div className="space-y-4">
+            <h1 className="text-7xl font-bold text-white tracking-tight">Корзина</h1>
+            <div className="flex items-center text-black/60 text-sm">
+              <Link href="/" className="hover:text-black transition-colors">
+                Главная
+              </Link>
+              <span className="mx-2">/</span>
+              <span className="text-black">Корзина</span>
+            </div>
+          </div>
         </div>
+      </div>
 
+      {/* Основной контент */}
+      <div className="max-w-7xl mx-auto px-4 -mt-10 relative z-10 pb-20">
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* Cart Items Section */}
+          {/* Секция товаров корзины */}
           <div className={`${!error ? 'lg:col-span-2' : 'lg:col-span-3'}`}>
             {isLoading ? (
-              <div className="bg-white rounded-2xl shadow-lg p-12 flex flex-col items-center">
+              <div className="bg-white rounded-2xl shadow-xl p-12 flex flex-col items-center">
                 <ClipLoader color="#000000" size={40} />
                 <p className="mt-4 text-black">Загружаем вашу корзину...</p>
               </div>
             ) : error ? (
-              <div className="bg-white rounded-2xl shadow-lg p-12 text-center w-full">
-                <img 
-                  src="/images/cartlogo.png" 
-                  alt="Empty cart"
-                  className="w-full h-64 object-contain mb-6"
-                />
-                <p className="text-xl text-black mb-6">{error}</p>
-                <Link
-                  href="/catalog"
-                  className="inline-flex items-center px-6 py-3 bg-black text-white rounded-xl hover:bg-gray-900 transition-all duration-300 shadow-lg hover:shadow-xl"
-                >
-                  Перейти в каталог
-                </Link>
+              <div className="bg-white rounded-2xl shadow-xl p-12">
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-6">
+                    <svg
+                      className="w-12 h-12 text-black/40"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M16 6v2h3v12H5V8h3V6H3v16h18V6h-5z" />
+                      <path d="M11 11V3H9v8H6l4 4 4-4h-3z" />
+                    </svg>
+                  </div>
+                  <p className="text-2xl font-medium text-black mb-6">{error}</p>
+                  <Link
+                    href="/catalog"
+                    className="inline-flex items-center px-6 py-3 border-2 border-black text-black rounded-xl hover:bg-black hover:text-white transition-colors text-lg font-medium"
+                  >
+                    Перейти в каталог
+                    <svg
+                      className="w-5 h-5 ml-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M17 8l4 4m0 0l-4 4m4-4H3"
+                      />
+                    </svg>
+                  </Link>
+                </div>
               </div>
             ) : (
-              <div className="bg-white rounded-xl shadow-md overflow-hidden">
-                <div className="p-4 bg-gray-100 border-b border-gray-200">
-                  <div className="flex justify-between items-center">
-                    <h2 className="text-lg font-medium text-black">Товары в корзине</h2>
-                    <button 
+              <div className="bg-white rounded-2xl shadow-xl p-6">
+                {/* Хедер с информацией и кнопкой поделиться */}
+                <div className="flex flex-col sm:flex-row items-center justify-between mb-6">
+                  <h1 className="text-2xl font-medium text-black">
+                    В корзине {cartProducts.length} {cartProducts.length === 1 ? 'товар' : cartProducts.length > 1 && cartProducts.length < 5 ? 'товара' : 'товаров'}
+                  </h1>
+                  <div className="flex items-center gap-4">
+                    <button
                       onClick={handleClearCart}
-                      className="text-red-500 hover:text-red-700 text-sm flex items-center gap-1"
+                      className="flex items-center gap-2 text-red-500 hover:text-red-700 transition-colors"
                     >
-                      <FaTrash size={14} />
+                      <FaTrash />
                       Очистить корзину
+                    </button>
+                    <button
+                      onClick={handleShareCart}
+                      className="flex items-center gap-2 text-black hover:underline transition-colors"
+                    >
+                      <FaShareAlt />
+                      Поделиться корзиной
                     </button>
                   </div>
                 </div>
-                
+
+                {/* Список товаров */}
                 <div className="divide-y divide-gray-200">
                   {cartProducts.map((product) => {
                     // Определяем URL изображения
@@ -228,19 +285,24 @@ const Cart: React.FC = () => {
                     const imageUrl = images.length > 0 ? images[0] : '/placeholder.jpg';
 
                     return (
-                      <div key={product._id} className="p-6 hover:bg-gray-50 transition-colors">
+                      <motion.div 
+                        key={product._id} 
+                        className="p-6 hover:bg-gray-50 rounded-xl transition-colors my-2"
+                        whileHover={{ scale: 1.02 }}
+                        transition={{ duration: 0.2 }}
+                      >
                         <div className="flex gap-6">
-                          <div className="w-28 h-28 bg-[#f8f8f8] rounded-lg flex items-center justify-center overflow-hidden">
+                          <div className="w-28 h-28 bg-gray-50 rounded-lg flex items-center justify-center overflow-hidden">
                             <img
                               src={`${imageUrl}?q=75&w=400`}
                               alt={product.name}
-                              className="w-full h-full object-contain mix-blend-multiply"
+                              className="w-full h-full object-contain p-2"
                             />
                           </div>
 
                           <div className="flex-grow">
                             <h3 className="text-lg font-medium text-black mb-1">{product.name}</h3>
-                            <p className="text-sm text-gray-500 mb-3">Артикул: {product.article}</p>
+                            <p className="text-sm text-black/60 mb-3">Артикул: {product.article}</p>
                             
                             <div className="flex flex-wrap items-center gap-6 mt-2">
                               <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
@@ -259,13 +321,18 @@ const Cart: React.FC = () => {
                                 </button>
                               </div>
                               
-                              <div className="text-lg font-bold text-black">{product.price} ₽</div>
+                              <div className="text-xl font-bold text-black">
+                                {typeof product.price === 'number' && !isNaN(product.price)
+                                  ? `${product.price.toLocaleString()} ₽`
+                                  : `${product.price} ₽`}
+                              </div>
                               
                               <button 
                                 onClick={() => handleRemoveProduct(product._id)} 
-                                className="ml-auto text-red-500 hover:text-red-700"
+                                className="ml-auto text-red-500 hover:text-red-700 flex items-center gap-2"
                               >
                                 <FaTrash size={16} />
+                                <span className="hidden sm:inline">Удалить</span>
                               </button>
                             </div>
                           </div>
@@ -279,7 +346,7 @@ const Cart: React.FC = () => {
                             </label>
                           </div>
                         </div>
-                      </div>
+                      </motion.div>
                     );
                   })}
                 </div>
@@ -287,36 +354,36 @@ const Cart: React.FC = () => {
             )}
           </div>
 
-          {/* Order Summary Section */}
+          {/* Сводка заказа */}
           {!error && (
             <div className="lg:col-span-1">
-              <div className="bg-white p-6 rounded-xl shadow-md sticky top-24">
-                <h2 className="text-xl font-bold text-black mb-6 pb-2 border-b border-gray-200">Ваш заказ</h2>
+              <div className="bg-white p-8 rounded-2xl shadow-xl sticky top-24">
+                <h2 className="text-2xl font-bold text-black mb-6 pb-3 border-b border-gray-200">Ваш заказ</h2>
                 <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-700">Товары ({cartProducts.length})</span>
-                    <span className="text-black font-medium">{totalAmount} ₽</span>
+                  <div className="flex justify-between items-center text-lg">
+                    <span className="text-black/70">Товары ({cartProducts.length})</span>
+                    <span className="text-black font-medium">{totalAmount.toLocaleString()} ₽</span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-700">Доставка</span>
+                  <div className="flex justify-between items-center text-lg">
+                    <span className="text-black/70">Доставка</span>
                     <span className="text-green-600 font-medium">Бесплатно</span>
                   </div>
-                  <div className="pt-4 mt-2 border-t border-gray-200">
-                    <div className="flex justify-between items-center mb-4">
-                      <span className="text-xl font-bold text-black">ИТОГО</span>
-                      <span className="text-xl font-bold text-black">{totalToPay} ₽</span>
+                  <div className="pt-4 mt-4 border-t border-gray-200">
+                    <div className="flex justify-between items-center mb-6">
+                      <span className="text-2xl font-bold text-black">ИТОГО</span>
+                      <span className="text-2xl font-bold text-black">{totalToPay.toLocaleString()} ₽</span>
                     </div>
-                    <div className="mb-6 p-3 bg-green-50 rounded-lg flex items-center gap-2 text-sm">
-                      <span className="text-gray-700">Вернется бонусами:</span>
+                    <div className="mb-8 p-4 bg-green-50 rounded-lg flex items-center gap-3 text-sm">
+                      <span className="text-black/70">Вернется бонусами:</span>
                       <span className="bg-green-500 text-white px-2 py-1 rounded font-medium">4 325 ₽</span>
                     </div>
                     <button
                       onClick={() => setIsOnlinePaymentModalOpen(true)}
-                      className="w-full py-3 bg-black text-white text-center font-medium rounded-lg hover:bg-gray-900 transition-all shadow-md hover:shadow-lg"
+                      className="w-full py-4 bg-black text-white text-center font-medium rounded-xl hover:bg-gray-900 transition-all shadow-md hover:shadow-lg text-lg"
                     >
                       ОФОРМИТЬ ЗАКАЗ
                     </button>
-                    <p className="text-sm text-gray-600 text-center mt-3">
+                    <p className="text-sm text-black/60 text-center mt-4">
                       Способ и время доставки можно выбрать при оформлении
                     </p>
                   </div>
@@ -327,10 +394,21 @@ const Cart: React.FC = () => {
         </div>
       </div>
 
-      {/* Enhanced Payment Modal */}
+      {/* Модальное окно оплаты */}
       {isOnlinePaymentModalOpen && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl p-8 max-w-md w-full">
+        <motion.div 
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          onClick={() => setIsOnlinePaymentModalOpen(false)}
+        >
+          <motion.div 
+            className="bg-white rounded-2xl p-8 max-w-md w-full"
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ type: 'spring', damping: 25 }}
+            onClick={(e) => e.stopPropagation()}
+          >
             <h3 className="text-2xl font-bold mb-6 text-black">Подтверждение оплаты</h3>
             <div className="space-y-6 mb-8">
               <div className="p-4 bg-gray-50 rounded-xl space-y-2">
@@ -340,7 +418,6 @@ const Cart: React.FC = () => {
                 </p>
               </div>
               <div className="flex items-center gap-3 p-4 border border-gray-200 rounded-xl">
-                {/* Иконка замка */}
                 <svg
                   className="w-5 h-5 text-black"
                   fill="none"
@@ -367,15 +444,15 @@ const Cart: React.FC = () => {
               </button>
               <button
                 onClick={() => setIsOnlinePaymentModalOpen(false)}
-                className="flex-1 py-4 bg-gray-50 text-black rounded-xl hover:bg-gray-100 transition-all duration-300 font-medium"
+                className="flex-1 py-4 bg-gray-100 text-black rounded-xl hover:bg-gray-200 transition-all duration-300 font-medium"
               >
                 Отмена
               </button>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
-    </section>
+    </motion.section>
   );
 };
 
