@@ -22,7 +22,7 @@ const brands: Brand[] = [
   { id: 6, name: 'Elektrostandart', image: '/images/elektrostandartlogo.png', link: '/brands/elektrostandart' },
   { id: 7, name: 'Lumion', image: '/images/lumionlogo.png', link: '/brands/lumion' },
   { id: 8, name: 'Odeon Light', image: '/images/odeonlightlogo.png', link: '/brands/odeonlight' },
-  { id: 9, name: 'Werkel', image: '/images/werkel.png', link: '/brands/werkel' },
+  { id: 9, name: 'Werkel', image: '/images/werkellogo.png', link: '/brands/werkel' },
   { id: 10, name: 'Denkirs', image: '/images/denkirslogo1.png', link: '/brands/denkirs' },
   { id: 11, name: 'Novotech', image: '/images/novotechlogo.png', link: '/brands/novotech' },
   { id: 12, name: 'Voltum', image: '/images/Voltumlogo.webp', link: '/brands/voltum' },
