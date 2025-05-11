@@ -2475,8 +2475,8 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                       onClick={() => setDisplayMode('product')}
                       className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-all ${
                         displayMode === 'product' 
-                          ? 'bg-gradient-to-r from-gray-800 to-gray-700 text-white' 
-                          : 'text-gray-700 hover:bg-gray-50'
+                          ? 'bg-gradient-to-r rounded-full text-white' 
+                          : 'text-black hover:bg-gray-50'
                       }`}
                     >
                       <div className="flex items-center gap-1.5">
@@ -2488,8 +2488,8 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                       onClick={() => setDisplayMode('collection')}
                       className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-all ${
                         displayMode === 'collection'
-                          ? 'bg-gradient-to-r from-gray-800 to-gray-700 text-white' 
-                          : 'text-gray-700 hover:bg-gray-50'
+                          ? 'bg-gradient-to-r roinded-full text-white' 
+                          : 'text-black hover:bg-gray-50'
                       }`}
                     >
                       <div className="flex items-center gap-1.5">
