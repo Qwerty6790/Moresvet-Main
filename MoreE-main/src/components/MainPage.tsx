@@ -297,30 +297,34 @@ export default function Banner() {
         </div>
         <div className="mb-12">
         <div className=" mx-auto">
-          <div className="grid grid-cols-12 gap-4 relative">
+          <div className="grid grid-cols-12 gap-6 relative">
             {popularCategories.map((category, index) => (
               <div
                 key={category.id}
                 className={`transform transition-transform duration-200 hover:scale-105 ${
-                  index === 0 ? 'col-span-4 row-span-2' : 
-                  index === 1 ? 'col-span-4' : 
-                  index === 2 ? 'col-span-4' : 
-                  index === 3 ? 'col-span-3' : 
-                  index === 4 ? 'col-span-5' : 
+                  index === 0 ? 'col-span-6 row-span-2' : 
+                  index === 1 ? 'col-span-3' : 
+                  index === 2 ? 'col-span-3' : 
+                  index === 3 ? 'col-span-4' : 
+                  index === 4 ? 'col-span-4' : 
                   index === 5 ? 'col-span-4' : 
-                  'col-span-8'
+                  'col-span-6'
                 }`}
               >
                 <Link href={category.link} className="group block text-center h-full">
-                  <div className={`relative rounded-md overflow-hidden ${index === 0 ? 'h-64' : 'h-28'} mb-2`}>
+                  <div className={`relative rounded-md overflow-hidden ${
+                    index === 0 ? 'h-72' : 
+                    (index === 3 || index === 4 || index === 5) ? 'h-36' : 
+                    index === 6 ? 'h-48' : 'h-32'
+                  } mb-2`}>
                     <img 
                       src={category.image} 
                       alt={category.title} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out p-2"
                     />
-                    <div className="absolute inset-0 bg-black bg-opacity-20 group-hover:bg-opacity-10 transition-all duration-300"></div>
+                    <div className="absolute inset-0 bg-black bg-opacity-10 group-hover:bg-opacity-0 transition-all duration-300"></div>
                   </div>
-                  <p className="text-center text-gray-700 text-sm font-semibold group-hover:text-blue-600 transition-colors duration-200">{category.title}</p>
+                  <p className="text-center text-gray-800 font-semibold group-hover:text-blue-600 transition-colors duration-200">{category.title}</p>
                 </Link>
               </div>
             ))}
