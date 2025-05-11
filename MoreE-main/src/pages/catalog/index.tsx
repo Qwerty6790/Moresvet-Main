@@ -2287,7 +2287,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                         onClick={() => handleBrandChange(brand)}
                       >
                         {brand.name !== 'Все товары' && brandLogoMap[brand.name] && (
-                          <div className="h-5 w-5 mr-2 flex-shrink-0">
+                          <div className="h-5 w-5 mr-2 bg-black flex-shrink-0">
                             <img 
                               src={brandLogoMap[brand.name]} 
                               alt={`${brand.name} logo`} 
