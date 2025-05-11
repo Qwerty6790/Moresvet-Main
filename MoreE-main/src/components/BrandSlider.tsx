@@ -25,7 +25,7 @@ const brands: Brand[] = [
   { id: 9, name: 'Werkel', image: '/images/werkellogo.png', link: '/brands/werkel' },
   { id: 10, name: 'Denkirs', image: '/images/denkirslogo1.png', link: '/brands/denkirs' },
   { id: 11, name: 'Novotech', image: '/images/novotechlogo.png', link: '/brands/novotech' },
-  { id: 12, name: 'Voltum', image: '/images/Voltumlogo.webp', link: '/brands/voltum' },
+  { id: 12, name: 'Voltum', image: '/images/Voltumlogo.png', link: '/brands/voltum' },
   { id: 13, name: 'Stluc', image: '/images/stlucelogo.png', link: '/brands/stluce' },
   { id: 14, name: 'Favourite', image: '/images/favouritelogo.png', link: '/brands/favourite' },
 ];
