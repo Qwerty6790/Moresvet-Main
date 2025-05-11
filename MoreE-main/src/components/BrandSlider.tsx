@@ -31,48 +31,16 @@ const brands: Brand[] = [
 
 export default function BrandSlider() {
   const sliderRef = useRef<HTMLDivElement>(null);
-  const [isPaused, setIsPaused] = useState(false);
   const [isReversed, setIsReversed] = useState(false);
-
-  useEffect(() => {
-    const slider = sliderRef.current;
-    if (!slider) return;
-
-    // Сохраняем текущее положение слайдера перед изменением анимации
-    let currentPosition = 0;
-    if (slider.style.animation !== 'none') {
-      const computedStyle = window.getComputedStyle(slider);
-      const matrix = new DOMMatrix(computedStyle.transform);
-      currentPosition = matrix.m41; // получаем текущее смещение по X
-    }
-
-    // Устанавливаем начальное положение для новой анимации
-    slider.style.transition = 'none';
-    slider.style.transform = `translateX(${currentPosition}px)`;
-    
-    // Удаляем предыдущую анимацию и добавляем новую с задержкой
-    slider.style.animation = 'none';
-    
-    // Небольшая задержка для применения стилей
-    setTimeout(() => {
-      slider.style.transition = 'transform 0.5s ease-in-out';
-      slider.style.transform = '';
-      
-      requestAnimationFrame(() => {
-        if (isReversed) {
-          slider.style.animation = 'slideReverse 90s linear infinite';
-        } else {
-          slider.style.animation = 'slide 30s linear infinite';
-        }
-      });
-    }, 50);
-
-    return () => {
-      if (slider) {
-        slider.style.animation = 'none';
-      }
-    };
-  }, [isReversed]);
+  
+  // Обработка плавного перехода без дерганий
+  const handleMouseEnter = () => {
+    setIsReversed(true);
+  };
+  
+  const handleMouseLeave = () => {
+    setIsReversed(false);
+  };
 
   return (
     <div className="w-full mb-12 py-8 overflow-hidden">
@@ -81,12 +49,12 @@ export default function BrandSlider() {
       <div className="relative mx-auto max-w-7xl overflow-hidden">
         <div 
           className="flex overflow-hidden"
-          onMouseEnter={() => setIsReversed(true)}
-          onMouseLeave={() => setIsReversed(false)}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         >
           <div 
             ref={sliderRef}
-            className="flex space-x-8 py-4 min-w-max"
+            className={`flex space-x-8 py-4 min-w-max slider-animation ${isReversed ? 'slider-reverse' : 'slider-forward'}`}
           >
             {/* Первый набор брендов */}
             {brands.map((brand) => (
@@ -127,6 +95,18 @@ export default function BrandSlider() {
       
       {/* CSS для анимации */}
       <style jsx global>{`
+        .slider-animation {
+          transition: animation 1s ease-in-out;
+        }
+        
+        .slider-forward {
+          animation: slide 30s linear infinite;
+        }
+        
+        .slider-reverse {
+          animation: slideReverse 90s linear infinite;
+        }
+        
         @keyframes slide {
           0% {
             transform: translateX(0);
