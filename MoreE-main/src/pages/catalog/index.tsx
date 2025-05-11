@@ -2281,7 +2281,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                         key={`brand-${index}`}
                         className={`flex items-center px-3 py-2 rounded transition-colors duration-200 ${
                           selectedBrand?.name === brand.name
-                            ? 'bg-black text-white font-medium' 
+                            ? 'bg-white text-white font-medium' 
                             : 'text-gray-700 hover:bg-gray-50 cursor-pointer'
                         }`}
                         onClick={() => handleBrandChange(brand)}
