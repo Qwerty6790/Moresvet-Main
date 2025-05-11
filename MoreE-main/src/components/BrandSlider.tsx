@@ -31,15 +31,19 @@ const brands: Brand[] = [
 
 export default function BrandSlider() {
   const sliderRef = useRef<HTMLDivElement>(null);
-  const [isReversed, setIsReversed] = useState(false);
+  const [direction, setDirection] = useState('normal');
+  const [speed, setSpeed] = useState('30s');
   
-  // Обработка плавного перехода без дерганий
   const handleMouseEnter = () => {
-    setIsReversed(true);
+    // При наведении - замедляем и меняем направление
+    setSpeed('90s');
+    setDirection('reverse');
   };
   
   const handleMouseLeave = () => {
-    setIsReversed(false);
+    // При уходе - возвращаем нормальную скорость и направление
+    setSpeed('30s');
+    setDirection('normal');
   };
 
   return (
@@ -54,7 +58,12 @@ export default function BrandSlider() {
         >
           <div 
             ref={sliderRef}
-            className={`flex space-x-8 py-4 min-w-max slider-animation ${isReversed ? 'slider-reverse' : 'slider-forward'}`}
+            className="flex space-x-8 py-4 min-w-max"
+            style={{
+              animation: `slide ${speed} linear infinite`,
+              animationDirection: direction,
+              transition: 'animation-duration 0.8s ease-out, animation-direction 0.8s ease-out'
+            }}
           >
             {/* Первый набор брендов */}
             {brands.map((brand) => (
@@ -95,33 +104,12 @@ export default function BrandSlider() {
       
       {/* CSS для анимации */}
       <style jsx global>{`
-        .slider-animation {
-          transition: animation 1s ease-in-out;
-        }
-        
-        .slider-forward {
-          animation: slide 30s linear infinite;
-        }
-        
-        .slider-reverse {
-          animation: slideReverse 90s linear infinite;
-        }
-        
         @keyframes slide {
           0% {
             transform: translateX(0);
           }
           100% {
             transform: translateX(-50%);
-          }
-        }
-        
-        @keyframes slideReverse {
-          0% {
-            transform: translateX(-50%);
-          }
-          100% {
-            transform: translateX(0);
           }
         }
       `}</style>
