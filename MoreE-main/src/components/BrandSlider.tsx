@@ -37,10 +37,10 @@ export default function BrandSlider() {
     const slider = sliderRef.current;
     if (!slider) return;
 
-    // Создаем CSS анимацию
+    // Создаем CSS анимацию с правильной остановкой
     slider.style.animation = 'none';
     requestAnimationFrame(() => {
-      slider.style.animation = isPaused ? 'none' : 'slide 30s linear infinite';
+      slider.style.animation = 'slide 30s linear infinite';
     });
 
     return () => {
@@ -48,10 +48,10 @@ export default function BrandSlider() {
         slider.style.animation = 'none';
       }
     };
-  }, [isPaused]);
+  }, []);
 
   return (
-    <div className="w-full mb-12 bg-black py-8 overflow-hidden">
+    <div className="w-full mb-12 py-8 overflow-hidden">
       <h2 className="text-2xl font-bold mb-6 text-center text-white">Популярные бренды</h2>
       
       <div className="relative mx-auto max-w-7xl overflow-hidden">
@@ -78,7 +78,7 @@ export default function BrandSlider() {
                   <img 
                     src={brand.image}
                     alt={`${brand.name} logo`}
-                    className="max-h-full max-w-full object-contain filter invert"
+                    className="max-h-full max-w-full object-contain "
                   />
                 </div>
               </Link>
@@ -95,7 +95,7 @@ export default function BrandSlider() {
                   <img 
                     src={brand.image}
                     alt={`${brand.name} logo`}
-                    className="max-h-full max-w-full object-contain filter invert"
+                    className="max-h-full max-w-full object-contain "
                   />
                 </div>
               </Link>
