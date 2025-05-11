@@ -92,7 +92,7 @@ export default function BrandSlider() {
                 href={brand.link}
                 className="flex-shrink-0 transition-transform duration-300 hover:scale-105"
               >
-                <div className="w-32 h-20 flex items-center justify-center bg-white p-2 rounded-lg shadow-sm">
+                <div className="w-32 h-20 flex items-center justify-center bg-black p-2 rounded-lg shadow-sm">
                   <img 
                     src={brand.image}
                     alt={`${brand.name} logo`}
