@@ -256,29 +256,33 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({
     return (
       <div 
         ref={!isLCPCandidate ? cardRef : undefined}
-        className="group bg-white text-black flex flex-col h-full overflow-hidden transition-all duration-300 hover:shadow-lg"
+        className="group bg-gray-50 text-black flex flex-col h-full overflow-hidden transition-all duration-300 hover:shadow-md"
       >
         <Link href={`/products/${product.source}/${encodeURIComponent(product.article)}`} className="flex flex-col h-full" prefetch={false}>
+          {/* Маркер новинки */}
+          {product.isNew && (
+            <div className="absolute top-0 left-0 bg-black text-white text-xs px-2 py-1 font-medium z-10">
+              NEW
+            </div>
+          )}
+          
           {/* Контейнер изображения */}
-          <div className="relative w-full aspect-square overflow-hidden flex items-center justify-center">
-            {/* Логика рендера изображения (LCP vs non-LCP) */}
+          <div className="relative w-full aspect-square overflow-hidden flex items-center justify-center bg-white p-3">
             {isLCPCandidate ? (
-              // LCP Изображение
               finalImageSrc ? (
                 <img
                   src={finalImageSrc}
                   alt={product.name || 'Товар'}
-                  className="w-full h-full object-contain p-3"
+                  className="w-full h-full object-contain"
                   loading="eager"
                   fetchPriority="high"
                   decoding={isFirstProduct ? "sync" : "async"}
                   style={{ display: 'block' }}
                 />
               ) : (
-                <div className="w-full h-full bg-gray-50 animate-pulse"></div>
+                <div className="w-full h-full bg-white animate-pulse"></div>
               )
             ) : (
-              // Non-LCP Изображение
               <div
                 style={{
                   width: '100%',
@@ -287,48 +291,64 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({
                   backgroundRepeat: 'no-repeat',
                   backgroundPosition: 'center',
                   backgroundImage: (shouldLoad && finalImageSrc) ? `url('${finalImageSrc.replace(/'/g, "\'")}')` : 'none',
-                  backgroundColor: 'white',
-                  padding: '12px'
+                  backgroundColor: 'white'
                 }}
                 className={`transition-opacity duration-300 ${!shouldLoad || !finalImageSrc ? 'opacity-0 animate-pulse' : 'opacity-100'}`}
                 role="img"
                 aria-label={product.name || 'Товар'}
               > 
-                {(!shouldLoad || !finalImageSrc) && <div style={{ aspectRatio: '1 / 1' }} className="w-full h-auto bg-gray-50"></div>}
-              </div>
-            )}
-            
-            {/* Маркер новинки */}
-            {product.isNew && (
-              <div className="absolute top-2 left-2 bg-black text-white text-xs px-2 py-1 font-medium">
-                NEW
+                {(!shouldLoad || !finalImageSrc) && <div style={{ aspectRatio: '1 / 1' }} className="w-full h-auto bg-white"></div>}
               </div>
             )}
           </div>
           
-          {/* Текстовый контент */}
+          {/* Информация о товаре */}
           <div className="p-4 flex flex-col flex-grow">
-            <h3 className="text-sm text-black font-medium mb-1 line-clamp-2 transition-colors">
+            <div className="text-xs text-gray-500 mb-1">{product.article}</div>
+            
+            <h3 className="text-sm text-black font-medium mb-3 line-clamp-2">
               {product.name}
             </h3>
             
-            <p className="text-xs text-gray-600 mb-2">{product.article}</p>
-            
             {/* Блок с ценой */}
             {product.price > 0 && (
-              <div className="mt-auto flex flex-col gap-1">
-                <div className="flex items-center justify-between">
-                  <p className="text-lg font-medium text-black">{product.price} ₽</p>
+              <div className="mt-auto flex items-center justify-between">
+                <p className="text-sm font-medium text-black">{product.price} ₽</p>
+                
+                <div className="flex items-center">
+                  <button 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      // Добавить логику "минус"
+                    }}
+                    className="w-7 h-7 flex items-center justify-center bg-gray-100 text-black"
+                  >
+                    −
+                  </button>
+                  <div className="w-8 h-7 flex items-center justify-center bg-white border-t border-b border-gray-200">
+                    1
+                  </div>
+                  <button 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      // Добавить логику "плюс"
+                    }}
+                    className="w-7 h-7 flex items-center justify-center bg-gray-100 text-black"
+                  >
+                    +
+                  </button>
                   
                   <button 
                     onClick={handleAddToCart} 
-                    className={`relative flex items-center justify-center p-2 rounded-full ${isPurchasable ? 'bg-black text-white hover:bg-gray-800' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}
+                    className={`ml-2 relative flex items-center justify-center w-9 h-9 rounded-none ${isPurchasable ? 'bg-black text-white' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}
                     disabled={!isPurchasable}
-                    title={isPurchasable ? "Добавить в корзину" : "Нет в наличии"}
+                    title="Добавить в корзину"
                     aria-label="Добавить в корзину"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
                     </svg>
                   </button>
                 </div>
@@ -346,14 +366,19 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({
       return (
         <div className="grid auto-rows-auto w-full grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-2 md:grid-cols-3 md:gap-3 lg:grid-cols-4 lg:gap-3 xl:grid-cols-4 xl:gap-3">
           {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="bg-white flex flex-col h-full">
-              <div className="relative aspect-square bg-gray-50 animate-pulse min-h-[150px] sm:min-h-[180px]"></div>
+            <div key={i} className="bg-gray-50 flex flex-col h-full">
+              <div className="relative aspect-square bg-white animate-pulse min-h-[150px] sm:min-h-[180px]"></div>
               <div className="p-4 flex flex-col flex-grow">
-                <div className="h-4 bg-gray-100 rounded w-3/4 mb-2 animate-pulse min-h-[1rem]"></div>
-                <div className="h-3 bg-gray-100 rounded w-1/2 mb-3 animate-pulse min-h-[0.75rem]"></div>
+                <div className="h-3 bg-gray-200 rounded w-1/4 mb-2 animate-pulse"></div>
+                <div className="h-4 bg-gray-200 rounded w-3/4 mb-3 animate-pulse"></div>
                 <div className="mt-auto flex items-center justify-between">
-                  <div className="h-5 bg-gray-100 rounded w-1/3 animate-pulse min-h-[1.25rem]"></div>
-                  <div className="h-8 w-8 bg-gray-100 rounded-full animate-pulse"></div>
+                  <div className="h-5 bg-gray-200 rounded w-1/4 animate-pulse"></div>
+                  <div className="flex items-center">
+                    <div className="h-7 w-7 bg-gray-200 animate-pulse"></div>
+                    <div className="h-7 w-8 bg-gray-200 animate-pulse mx-px"></div>
+                    <div className="h-7 w-7 bg-gray-200 animate-pulse"></div>
+                    <div className="h-9 w-9 bg-gray-200 animate-pulse ml-2"></div>
+                  </div>
                 </div>
               </div>
             </div>
