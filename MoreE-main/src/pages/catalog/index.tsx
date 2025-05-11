@@ -858,20 +858,20 @@ const combineProductsFromMultiplePages = async (
 
 // Добавляем маппинг для логотипов брендов
 const brandLogoMap: Record<string, string> = {
-  'Artelamp': '/images/brands/artelamp-logo.png',
-  'KinkLight': '/images/brands/kinklight-logo.png',
-  'Favourite': '/images/brands/favourite-logo.png',
-  'Lumion': '/images/brands/lumion-logo.png',
-  'LightStar': '/images/brands/lightstar-logo.png',
-  'OdeonLight': '/images/brands/odeonlight-logo.png',
-  'Maytoni': '/images/brands/maytoni-logo.png',
-  'Sonex': '/images/brands/sonex-logo.png',
-  'ElektroStandard': '/images/brands/elektrostandard-logo.png',
-  'Novotech': '/images/brands/novotech-logo.png',
-  'Denkirs': '/images/brands/denkirs-logo.png',
-  'Werkel': '/images/brands/werkel-logo.png',
-  'Voltum': '/images/brands/voltum-logo.png',
-  'Stluce': '/images/brands/stluce-logo.png',
+  'Artelamp': '/images/artelamplogo.png',
+  'KinkLight': '/images/kinklightlogo.png',
+  'Favourite': '/images/favouritelogo.png',
+  'Lumion': '/images/lumionlogo.png',
+  'LightStar': '/images/lightstarlogo.png',
+  'OdeonLight': '/images/odeonlightlogo.png',
+  'Maytoni': '/images/maytonilogo.png',
+  'Sonex': '/images/sonexlogo.png',
+  'ElektroStandard': '/images/elektrostandardlogo.png',
+  'Novotech': '/images/novotechlogo.png',
+  'Denkirs': '/images/denkirslogo1.png',
+  'Werkel': '/images/werkellogo.png',
+  'Voltum': '/images/voltumlogo.png',
+  'Stluc': '/images/stlucelogo.png',
   // Добавьте логотипы для других брендов по необходимости
 };
 
