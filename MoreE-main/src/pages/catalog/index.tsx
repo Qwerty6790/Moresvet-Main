@@ -2470,7 +2470,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                   </div>
                   
                   {/* Переключатель отображения продукт/коллекция - улучшенный дизайн */}
-                  <div className="flex bg-white rounded-md border border-gray-200 shadow-sm overflow-hidden">
+                  <div className="flex bg-white rounded-rounded  shadow-sm overflow-hidden">
                     <button 
                       onClick={() => setDisplayMode('product')}
                       className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-all ${
