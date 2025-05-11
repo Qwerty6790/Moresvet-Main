@@ -262,7 +262,7 @@ export default function Banner() {
                    }
                  }}
                  className={`h-1 rounded-sm transition-all duration-300 cursor-pointer ${ 
-                   index === currentMainSlideIndex ? 'w-12 bg-blue-400' : 'w-6 bg-white bg-opacity-30 hover:bg-opacity-50'
+                   index === currentMainSlideIndex ? 'w-12 bg-neutral-400' : 'w-6 bg-white bg-opacity-30 hover:bg-opacity-50'
                  }`}
                  aria-label={`Перейти к слайду ${index + 1}`}
                />
