@@ -342,7 +342,7 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({
                   
                   <button 
                     onClick={handleAddToCart} 
-                    className={`ml-2 relative flex items-center justify-center w-9 h-9 rounded-none ${isPurchasable ? 'bg-black text-white' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}
+                    className={`ml-2 relative flex items-center justify-center w-9 h-9 rounded-none ${isPurchasable ? ' text-white' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}
                     disabled={!isPurchasable}
                     title="Добавить в корзину"
                     aria-label="Добавить в корзину"
