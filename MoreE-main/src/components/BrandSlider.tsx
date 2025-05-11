@@ -31,19 +31,52 @@ const brands: Brand[] = [
 
 export default function BrandSlider() {
   const sliderRef = useRef<HTMLDivElement>(null);
-  const [direction, setDirection] = useState('normal');
-  const [speed, setSpeed] = useState('30s');
+  const [position, setPosition] = useState(0);
+  const [hovering, setHovering] = useState(false);
+  const animationRef = useRef<number | null>(null);
+  
+  // Функция для анимации слайдера
+  const animate = () => {
+    if (!sliderRef.current) return;
+    
+    // Получаем ширину контента
+    const contentWidth = sliderRef.current.scrollWidth / 2;
+    
+    // Обновляем позицию
+    setPosition(prev => {
+      let newPos;
+      if (hovering) {
+        // При наведении двигаемся назад медленно (1px за кадр)
+        newPos = prev + 0.2;
+        if (newPos > 0) newPos = -contentWidth;
+      } else {
+        // Обычная скорость (2px за кадр)
+        newPos = prev - 1;
+        if (newPos < -contentWidth) newPos = 0;
+      }
+      return newPos;
+    });
+    
+    // Продолжаем анимацию
+    animationRef.current = requestAnimationFrame(animate);
+  };
+  
+  // Запускаем и останавливаем анимацию
+  useEffect(() => {
+    animationRef.current = requestAnimationFrame(animate);
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [hovering]);
   
   const handleMouseEnter = () => {
-    // При наведении - замедляем и меняем направление
-    setSpeed('90s');
-    setDirection('reverse');
+    setHovering(true);
   };
   
   const handleMouseLeave = () => {
-    // При уходе - возвращаем нормальную скорость и направление
-    setSpeed('30s');
-    setDirection('normal');
+    setHovering(false);
   };
 
   return (
@@ -60,9 +93,8 @@ export default function BrandSlider() {
             ref={sliderRef}
             className="flex space-x-8 py-4 min-w-max"
             style={{
-              animation: `slide ${speed} linear infinite`,
-              animationDirection: direction,
-              transition: 'animation-duration 0.8s ease-out, animation-direction 0.8s ease-out'
+              transform: `translateX(${position}px)`,
+              transition: hovering ? 'transform 0.5s ease-out' : 'none'
             }}
           >
             {/* Первый набор брендов */}
@@ -101,18 +133,6 @@ export default function BrandSlider() {
           </div>
         </div>
       </div>
-      
-      {/* CSS для анимации */}
-      <style jsx global>{`
-        @keyframes slide {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
-        }
-      `}</style>
     </div>
   );
 } 
