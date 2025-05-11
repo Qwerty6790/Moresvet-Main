@@ -13,20 +13,20 @@ interface Brand {
 
 // Данные брендов (используя найденные изображения логотипов)
 const brands: Brand[] = [
-  { id: 1, name: 'Maytoni', image: '/images/maytonilogo.png', link: '/brands/maytoni' },
-  { id: 2, name: 'LightStar', image: '/images/lightstarlogo.png', link: '/brands/lightstar' },
-  { id: 3, name: 'Sonex', image: '/images/sonexlogo1.png', link: '/brands/sonex' },
-  { id: 4, name: 'Kink Light', image: '/images/kinklightlogo.png', link: '/brands/kinklight' },
-  { id: 5, name: 'Arte Lamp', image: '/images/artelamplogo.png', link: '/brands/artelamp' },
-  { id: 6, name: 'Elektrostandart', image: '/images/elektrostandartlogo.png', link: '/brands/elektrostandart' },
-  { id: 7, name: 'Lumion', image: '/images/lumionlogo.png', link: '/brands/lumion' },
-  { id: 8, name: 'Odeon Light', image: '/images/odeonlightlogo.png', link: '/brands/odeonlight' },
-  { id: 9, name: 'Werkel', image: '/images/werkellogo.png', link: '/brands/werkel' },
-  { id: 10, name: 'Denkirs', image: '/images/denkirslogo1.png', link: '/brands/denkirs' },
-  { id: 11, name: 'Novotech', image: '/images/novotechlogo.png', link: '/brands/novotech' },
-  { id: 12, name: 'Voltum', image: '/images/voltumlogo.png', link: '/brands/voltum' },
-  { id: 13, name: 'Stluc', image: '/images/stlucelogo.png', link: '/brands/stluce' },
-  { id: 14, name: 'Favourite', image: '/images/favouritelogo.png', link: '/brands/favourite' },
+  { id: 1, name: 'Maytoni', image: '/images/maytonilogo.png', link: '/catalog?source=Maytoni&category=Все+товары&page=1' },
+  { id: 2, name: 'LightStar', image: '/images/lightstarlogo.png', link: '/catalog?source=LightStar&category=Все+товары&page=1' },
+  { id: 3, name: 'Sonex', image: '/images/sonexlogo1.png', link: '/catalog?source=Sonex&category=Все+товары&page=1' },
+  { id: 4, name: 'Kink Light', image: '/images/kinklightlogo.png', link: '/catalog?source=Kink Light&category=Все+товары&page=1' },
+  { id: 5, name: 'Arte Lamp', image: '/images/artelamplogo.png', link: '/catalog?source=Arte Lamp&category=Все+товары&page=1' },
+  { id: 6, name: 'Elektrostandart', image: '/images/elektrostandartlogo.png', link: '/catalog?source=Elektrostandart&category=Все+товары&page=1' },
+  { id: 7, name: 'Lumion', image: '/images/lumionlogo.png', link: '/catalog/index2?source=Lumion' },
+  { id: 8, name: 'Odeon Light', image: '/images/odeonlightlogo.png', link: '/catalog/index2?source=Odeon Light' },
+  { id: 9, name: 'Werkel', image: '/images/werkellogo.png', link: '/catalog?source=Werkel&category=Все+товары&page=1' },
+  { id: 10, name: 'Denkirs', image: '/images/denkirslogo1.png', link: '/catalog?source=Denkirs&category=Все+товары&page=1' },
+  { id: 11, name: 'Novotech', image: '/images/novotechlogo.png', link: '/catalog?source=Novotech&category=Все+товары&page=1' },
+  { id: 12, name: 'Voltum', image: '/images/voltumlogo.png', link: '/catalog?source=Voltum&category=Все+товары&page=1' },
+  { id: 13, name: 'Stluc', image: '/images/stlucelogo.png', link: '/catalog?source=Stluc&category=Все+товары&page=1' },
+  { id: 14, name: 'Favourite', image: '/images/favouritelogo.png', link: '/catalog?source=Favourite&category=Все+товары&page=1' },
 ];
 
 export default function BrandSlider() {
