@@ -305,82 +305,82 @@ const Header = () => {
 
   // Массив категорий каталога
   const catalogCategories: CatalogCategory[] = [
-    { title: "Люстры", link: "/catalog/Люстра", icon: "/images/Kackandy.png" },
-    { title: "Cветильники", link: "/catlog/potolochnie-svetilniki", icon: "/images/nastenni.png" },
-    { title: "Торшеры", link: "/category/torshery", icon: "/images/Torher.png" },
-    { title: "Настольные лампы", link: "/category/nastolnye-lampy", icon: "/images/nastolyna Lampa.png" },
-    { title: "Точечные светильники", link: "/category/tochechnye-svetilniki", icon: "/api/placeholder/30/30" },
-    { title: "Споты", link: "/category/spoty", icon: "/api/placeholder/30/30" },
-    { title: "Светильники для картин, зеркал и ступеней", link: "/category/dlya-kartin", icon: "/api/placeholder/30/30" },
-    { title: "Детские светильники", link: "/category/detskie-svetilniki", icon: "/api/placeholder/30/30" },
-    { title: "Садово-парковые светильники", link: "/category/sadovo-parkovye", icon: "/api/placeholder/30/30" },
-    { title: "Уличное освещение", link: "/category/ulichnoe-osveschenie", icon: "/api/placeholder/30/30" },
-    { title: "Шинные и струнные системы", link: "/category/shinnye-systemy", icon: "/api/placeholder/30/30" },
+    { title: "Люстры", link: "/catalog/Люстра", icon: "" },
+    { title: "Cветильники", link: "/catlog/potolochnie-svetilniki", icon: "" },
+    { title: "Торшеры", link: "/category/torshery", icon: "" },
+    { title: "Настольные лампы", link: "/category/nastolnye-lampy", icon: "" },
+    { title: "Точечные светильники", link: "/category/tochechnye-svetilniki", icon: "" },
+    { title: "Споты", link: "/category/spoty", icon: "" },
+    { title: "Светильники для картин, зеркал и ступеней", link: "/category/dlya-kartin", icon: "" },
+    { title: "Детские светильники", link: "/category/detskie-svetilniki", icon: "" },
+    { title: "Садово-парковые светильники", link: "/category/sadovo-parkovye", icon: "" },
+    { title: "Уличное освещение", link: "/category/ulichnoe-osveschenie", icon: "" },
+    { title: "Шинные и струнные системы", link: "/category/shinnye-systemy", icon: "" },
   ];
 
   // Объект с массивами подкатегорий для каждой основной категории
   const catalogSubCategories: Record<string, SubCategory[]> = {
     "Люстры": [
-      { title: "Каскадная", image: "/images/Kackandy.png" },
-      { title: "Люстра на штанге", image: "/images/Htange.png" },
-      { title: "потолочная", image: "/images/Potolohny.png" },
-      { title: "подвесная", image: "/images/Podvesny.png" }
+      { title: "Каскадная", image: "" },
+      { title: "Люстра на штанге", image: "" },
+      { title: "потолочная", image: "" },
+      { title: "подвесная", image: "" }
     ],
     "Cветильники": [
-      { title: "Настенный светильник", image: "/images/nastenni.png" },
-      { title: "Бра", image: "/images/bra.png" },
-      { title: "Потолочный светильник", image: "/images/Potolcny svetlynik.png" },
-      { title: "напольный", image: "/images/Napolyny svetilnik.png" }
+      { title: "Настенный светильник", image: "" },
+      { title: "Бра", image: "" },
+      { title: "Потолочный светильник", image: "" },
+      { title: "напольный", image: "" }
     ],
     "Торшеры": [
-      { title: "Торшер", image: "/images/Torher.png" },
+      { title: "Торшер", image: "" },
     ],
     "Настольные лампы": [
-      { title: "Настольная лампа", image: "/images/nastolyna Lampa.png" },
-      { title: "Прикроватная лампа", image: "/images/Prikrovatnt lampa.png" },
-      { title: "Офисная настольная лампа", image: "/images/Oficny lampa.png" },
+      { title: "Настольная лампа", image: "" },
+      { title: "Прикроватная лампа", image: "" },
+      { title: "Офисная настольная лампа", image: "" },
     ],
     "Точечные светильники": [
-      { title: "Точечный 1", image: "/images/sub1.png" },
-      { title: "Точечный 2", image: "/images/sub2.png" },
-      { title: "Точечный 3", image: "/images/sub3.png" },
-      { title: "Точечный 4", image: "/images/sub4.png" }
+      { title: "Точечный 1", image: "" },
+      { title: "Точечный 2", image: "" },
+      { title: "Точечный 3", image: "" },
+      { title: "Точечный 4", image: "" }
     ],
     "Споты": [
-      { title: "Спот 1", image: "/images/sub1.png" },
-      { title: "Спот 2", image: "/images/sub2.png" },
-      { title: "Спот 3", image: "/images/sub3.png" },
-      { title: "Спот 4", image: "/images/sub4.png" }
+      { title: "Спот 1", image: "" },
+      { title: "Спот 2", image: "" },
+      { title: "Спот 3", image: "" },
+      { title: "Спот 4", image: "" }
     ],
     "Светильники для картин, зеркал и ступеней": [
-      { title: "Тип 1", image: "/images/sub1.png" },
-      { title: "Тип 2", image: "/images/sub2.png" },
-      { title: "Тип 3", image: "/images/sub3.png" },
-      { title: "Тип 4", image: "/images/sub4.png" }
+      { title: "Тип 1", image: "" },
+      { title: "Тип 2", image: "" },
+      { title: "Тип 3", image: "" },
+      { title: "Тип 4", image: "" }
     ],
     "Детские светильники": [
-      { title: "Детский 1", image: "/images/sub1.png" },
-      { title: "Детский 2", image: "/images/sub2.png" },
-      { title: "Детский 3", image: "/images/sub3.png" },
-      { title: "Детский 4", image: "/images/sub4.png" }
+      { title: "Детский 1", image: "" },
+      { title: "Детский 2", image: "" },
+      { title: "Детский 3", image: "" },
+      { title: "Детский 4", image: "" }
     ],
     "Садово-парковые светильники": [
-      { title: "Садовый 1", image: "/images/sub1.png" },
-      { title: "Садовый 2", image: "/images/sub2.png" },
-      { title: "Садовый 3", image: "/images/sub3.png" },
-      { title: "Садовый 4", image: "/images/sub4.png" }
+      { title: "Садовый 1", image: "" },
+      { title: "Садовый 2", image: "" },
+      { title: "Садовый 3", image: "" },
+      { title: "Садовый 4", image: "" }
     ],
     "Уличное освещение": [
-      { title: "Уличный 1", image: "/images/sub1.png" },
-      { title: "Уличный 2", image: "/images/sub2.png" },
-      { title: "Уличный 3", image: "/images/sub3.png" },
-      { title: "Уличный 4", image: "/images/sub4.png" }
+      { title: "Уличный 1", image: "" },
+      { title: "Уличный 2", image: "" },
+      { title: "Уличный 3", image: "" },
+      { title: "Уличный 4", image: "" }
     ],
     "Шинные и струнные системы": [
-      { title: "Система 1", image: "/images/sub1.png" },
-      { title: "Система 2", image: "/images/sub2.png" },
-      { title: "Система 3", image: "/images/sub3.png" },
-      { title: "Система 4", image: "/images/sub4.png" }
+      { title: "Система 1", image: "" },
+      { title: "Система 2", image: "" },
+      { title: "Система 3", image: "" },
+      { title: "Система 4", image: "" }
     ]
   };
   
@@ -697,7 +697,6 @@ const Header = () => {
                       onMouseEnter={() => handleCategoryHover(index)}
                       onClick={() => handleCategoryClick(category.title)}
                     >
-                      <img src={category.icon} className="w-5 h-5 mr-3" alt={category.title} />
                       {category.title}
                       <ChevronRight className="w-4 h-4 ml-auto text-gray-400" />
                     </button>
@@ -735,15 +734,10 @@ const Header = () => {
                         className="group"
                       >
                         <div className="aspect-square bg-gray-50 rounded-lg overflow-hidden mb-3 flex items-center justify-center border border-gray-100 group-hover:border-red-200 transition-colors">
-                          <img
-                            src={sub.image}
-                            alt={sub.title}
-                            className="w-20 h-20 object-contain group-hover:scale-110 transition-transform duration-300"
-                          />
+                          <p className="text-sm text-center text-gray-700 group-hover:text-red-600 font-medium transition-colors">
+                            {sub.title}
+                          </p>
                         </div>
-                        <p className="text-sm text-center text-gray-700 group-hover:text-red-600 font-medium transition-colors">
-                          {sub.title}
-                        </p>
                       </Link>
                     ))}
                   </div>
@@ -879,13 +873,6 @@ const Header = () => {
                                 handleCategoryClick(category.title);
                               }}
                             >
-                              <Image
-                                src={category.icon}
-                                alt={category.title}
-                                width={20}
-                                height={20}
-                                className="mr-2"
-                              />
                               <span>{category.title}</span>
                             </div>
                             {expandedAccordionItems.includes(index) ? (
