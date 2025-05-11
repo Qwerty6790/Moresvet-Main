@@ -18,7 +18,7 @@ const brands: Brand[] = [
   { id: 2, name: 'LightStar', image: '/images/lightstarlogo.png', link: '/brands/lightstar' },
   { id: 3, name: 'Sonex', image: '/images/sonexlogo1.png', link: '/brands/sonex' },
   { id: 4, name: 'Kink Light', image: '/images/kinklightlogo.png', link: '/brands/kinklight' },
-  { id: 5, name: 'Arte Lamp', image: '/images/Artelamp.png', link: '/brands/artelamp' },
+  { id: 5, name: 'Arte Lamp', image: '/images/artelamplogo.png', link: '/brands/artelamp' },
   { id: 6, name: 'Elektrostandart', image: '/images/elektrostandartlogo.png', link: '/brands/elektrostandart' },
   { id: 7, name: 'Lumion', image: '/images/lumionlogo.png', link: '/brands/lumion' },
   { id: 8, name: 'Odeon Light', image: '/images/odeonlightlogo.png', link: '/brands/odeonlight' },
