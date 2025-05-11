@@ -856,6 +856,25 @@ const combineProductsFromMultiplePages = async (
   };
 };
 
+// Добавляем маппинг для логотипов брендов
+const brandLogoMap: Record<string, string> = {
+  'Artelamp': '/images/brands/artelamp-logo.png',
+  'KinkLight': '/images/brands/kinklight-logo.png',
+  'Favourite': '/images/brands/favourite-logo.png',
+  'Lumion': '/images/brands/lumion-logo.png',
+  'LightStar': '/images/brands/lightstar-logo.png',
+  'OdeonLight': '/images/brands/odeonlight-logo.png',
+  'Maytoni': '/images/brands/maytoni-logo.png',
+  'Sonex': '/images/brands/sonex-logo.png',
+  'ElektroStandard': '/images/brands/elektrostandard-logo.png',
+  'Novotech': '/images/brands/novotech-logo.png',
+  'Denkirs': '/images/brands/denkirs-logo.png',
+  'Werkel': '/images/brands/werkel-logo.png',
+  'Voltum': '/images/brands/voltum-logo.png',
+  'Stluce': '/images/brands/stluce-logo.png',
+  // Добавьте логотипы для других брендов по необходимости
+};
+
 const CatalogIndex: React.FC<CatalogIndexProps> = ({
   initialProducts,
   initialTotalPages,
@@ -2070,6 +2089,87 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
     };
   }, []);
 
+  // Компонент для отображения бренда и его категорий
+  const BrandPanel = () => {
+    if (!selectedBrand || selectedBrand.name === 'Все товары') return null;
+    
+    // Получаем URL логотипа бренда (или используем заглушку)
+    const brandLogo = brandLogoMap[selectedBrand.name] || '/images/brands/placeholder-logo.png';
+    
+    return (
+      <div className="bg-white rounded-lg p-4 mb-4 shadow-sm border border-gray-100">
+        <div className="flex items-center mb-4">
+          <div className="flex-1 flex items-center gap-3">
+            <div className="relative h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0 bg-white rounded-md overflow-hidden border border-gray-100">
+              <img 
+                src={brandLogo} 
+                alt={`${selectedBrand.name} logo`} 
+                className="w-full h-full object-contain p-1"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = '/images/brands/placeholder-logo.png';
+                }}
+              />
+            </div>
+            <div>
+              <h2 className="font-semibold text-gray-900">{selectedBrand.name}</h2>
+              <p className="text-xs text-gray-500">Официальный дилер</p>
+            </div>
+          </div>
+          {/* Кнопка сброса бренда */}
+          <button 
+            onClick={() => {
+              const globalBrand = brands.find(b => b.name === 'Все товары');
+              if (globalBrand) handleBrandChange(globalBrand);
+            }}
+            className="p-1.5 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-700 transition-colors"
+            title="Сбросить бренд"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+            </svg>
+          </button>
+        </div>
+        
+        {/* Категории бренда с визуальным разделением */}
+        {selectedBrand.categories.length > 0 && (
+          <div className="mt-1">
+            <div className="text-xs uppercase text-gray-500 font-medium mb-2">Категории {selectedBrand.name}</div>
+            <div className="space-y-1.5">
+              {selectedBrand.categories
+                .filter(category => category.label !== 'Все товары')
+                .map((category, idx) => (
+                  <div
+                    key={`brand-cat-${idx}`}
+                    onClick={() => {
+                      setSelectedCategory(category);
+                      router.push({
+                        pathname: router.pathname,
+                        query: {
+                          ...router.query,
+                          source: selectedBrand.name === 'Все товары' ? undefined : selectedBrand.name,
+                          category: category.searchName,
+                          page: 1
+                        },
+                      }, undefined, { shallow: true });
+                      fetchProducts(selectedBrand.name === 'Все товары' ? '' : selectedBrand.name, 1);
+                    }}
+                    className={`px-3 py-2 rounded-md text-sm cursor-pointer transition-colors ${
+                      selectedCategory?.label === category.label
+                        ? 'bg-black text-white font-medium'
+                        : 'bg-gray-50 text-gray-800 hover:bg-gray-100'
+                    }`}
+                  >
+                    {category.label}
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Head>
@@ -2148,7 +2248,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
             {/* Left Sidebar - Улучшенный мобильный фильтр */}
             <div className={`
               ${isMobileFilterOpen ? 'fixed inset-0 z-50 bg-white overflow-y-auto p-4' : 'hidden'} 
-              lg:block lg:relative lg:z-auto lg:w-[220px] lg:flex-shrink-0
+              lg:block lg:relative lg:z-auto lg:w-[280px] lg:flex-shrink-0
             `}>
               {/* Mobile Filter Header с кнопкой закрытия */}
               {isMobileFilterOpen && (
@@ -2165,18 +2265,65 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                 </div>
               )}
 
+              {/* Панель бренда (если выбран конкретный бренд) */}
+              {isClient && <BrandPanel />}
+
+              {/* Блок брендов - показываем только если не выбран конкретный бренд */}
+              {(!selectedBrand || selectedBrand.name === 'Все товары') && (
+                <div className="bg-white rounded-lg p-4 mb-4 shadow-sm border border-gray-100">
+                  <div className="flex items-center mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                    <span className="font-medium text-sm uppercase">Бренды</span>
+                  </div>
+                  <div className="space-y-1.5 max-h-[200px] overflow-y-auto pr-1">
+                    {brands.slice(0, 10).map((brand, index) => (
+                      <div
+                        key={`brand-${index}`}
+                        className={`flex items-center px-3 py-2 rounded transition-colors duration-200 ${
+                          selectedBrand?.name === brand.name
+                            ? 'bg-black text-white font-medium' 
+                            : 'text-gray-700 hover:bg-gray-50 cursor-pointer'
+                        }`}
+                        onClick={() => handleBrandChange(brand)}
+                      >
+                        {brand.name !== 'Все товары' && brandLogoMap[brand.name] && (
+                          <div className="h-5 w-5 mr-2 flex-shrink-0">
+                            <img 
+                              src={brandLogoMap[brand.name]} 
+                              alt={`${brand.name} logo`} 
+                              className="h-full w-full object-contain"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).style.display = 'none';
+                              }}
+                            />
+                          </div>
+                        )}
+                        <span className="text-sm">{brand.name}</span>
+                      </div>
+                    ))}
+                    {brands.length > 10 && (
+                      <button className="w-full text-center text-xs text-blue-600 hover:text-blue-800 mt-2">
+                        Показать все бренды
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+
               {/* Кнопка фильтров */}
-              <div className="bg-white rounded-md p-3 shadow-sm mb-4 border border-gray-200">
-                <div className="flex items-center mb-4">
+              <div className="bg-white rounded-md p-4 shadow-sm mb-4 border border-gray-200">
+                <div className="flex items-center mb-3">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                   </svg>
-                  <span className="font-medium text-sm uppercase">Фильтры</span>
+                  <span className="font-medium text-sm uppercase">Категории</span>
                 </div>
                 <div className="space-y-0.5 max-h-[400px] overflow-y-auto pr-1">
                   {/* Опции фильтра "Показывать только" */}
                   <div className="py-2">
-                    <div className="text-sm font-medium mb-2">Показывать только</div>
+                    <div className="text-xs uppercase text-gray-500 font-medium mb-2">Показывать только</div>
                     <div className="flex flex-col gap-2 ml-1">
                       <label className="flex items-center gap-2 cursor-pointer">
                         <input type="checkbox" className="form-checkbox h-4 w-4 text-black rounded-sm border-gray-300" />
@@ -2186,29 +2333,21 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                         <input type="checkbox" className="form-checkbox h-4 w-4 text-black rounded-sm border-gray-300" />
                         <span className="text-sm text-gray-700">Популярные</span>
                       </label>
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox" className="form-checkbox h-4 w-4 text-black rounded-sm border-gray-300" />
-                        <span className="text-sm text-gray-700">3D</span>
-                      </label>
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox" className="form-checkbox h-4 w-4 text-black rounded-sm border-gray-300" />
-                        <span className="text-sm text-gray-700">Новинка</span>
-                      </label>
                     </div>
                   </div>
                   
                   {/* Категории в боковой панели */}
                   <div className="py-2 border-t border-gray-100 mt-2">
-                    <div className="text-sm font-medium mb-2">Категории</div>
+                    <div className="text-xs uppercase text-gray-500 font-medium mb-2">Все категории</div>
                     <div className="space-y-1">
                       {productCategoriesState.map((category) => (
                         <div key={category.id} className="mb-1">
                           <div 
-                            className={`flex items-center justify-between px-2 py-1.5 rounded transition-colors duration-200 ${
+                            className={`flex items-center justify-between px-3 py-2 rounded transition-colors duration-200 ${
                               (selectedCategory?.label === category.label || 
                               selectedCategory?.searchName === category.searchName) 
-                                ? 'font-bold text-black bg-gray-100' 
-                                : 'text-gray-600 hover:text-black hover:bg-gray-50 cursor-pointer'
+                                ? 'bg-black text-white' 
+                                : 'text-gray-700 hover:bg-gray-50 cursor-pointer'
                             }`}
                             onClick={() => category.subcategories && category.subcategories.length > 0
                               ? toggleCategoryAccordion(category.id)
@@ -2237,11 +2376,11 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                               {category.subcategories.map((subcat, subIndex) => (
                                 <div 
                                   key={`${subcat.label}-${subIndex}`}
-                                  className={`flex items-center px-2 py-1 rounded transition-colors duration-200 ${
+                                  className={`flex items-center px-3 py-2 rounded transition-colors duration-200 ${
                                     selectedCategory?.label === subcat.label || 
                                     selectedCategory?.searchName === subcat.searchName
-                                      ? 'font-bold text-black bg-gray-100' 
-                                      : 'text-gray-600 hover:text-black hover:bg-gray-50 cursor-pointer'
+                                      ? 'bg-black text-white' 
+                                      : 'text-gray-700 hover:bg-gray-50 cursor-pointer'
                                   }`}
                                   onClick={() => handleCategoryChange(subcat)}
                                 >
@@ -2279,140 +2418,6 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                   >
                     Показать результаты ({totalProducts})
                   </button>
-                </div>
-              )}
-
-              {/* Добавляем блок брендов в мобильный фильтр */}
-              {isMobileFilterOpen && (
-                <div className="lg:hidden">
-                  {/* Блок категорий для мобильного фильтра */}
-                  <div className="bg-white rounded-lg p-4 shadow-sm mb-4 border border-gray-100">
-                    <h2 className="font-bold mb-3 text-gray-900 uppercase text-sm">Категории</h2>
-                    <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
-                      {productCategoriesState.map((category) => (
-                        <div key={category.id} className="mb-1">
-                          <div 
-                            className={`flex items-center justify-between px-2 py-1.5 rounded transition-colors duration-200 ${
-                              (selectedCategory?.label === category.label || 
-                              selectedCategory?.searchName === category.searchName) 
-                                ? 'font-bold text-black bg-gray-100' 
-                                : 'text-gray-600 hover:text-black hover:bg-gray-50 cursor-pointer'
-                            }`}
-                            onClick={() => category.subcategories && category.subcategories.length > 0
-                              ? toggleCategoryAccordion(category.id)
-                              : handleCategoryChange(category)
-                            }
-                          >
-                            <span className="text-sm">{category.label}</span>
-                            {category.subcategories && category.subcategories.length > 0 && (
-                              <span className="transform transition-transform duration-200 text-gray-400">
-                                {category.isOpen ? (
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                    <path fillRule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
-                                  </svg>
-                                ) : (
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                    <path fillRule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                                  </svg>
-                                )}
-                              </span>
-                            )}
-                          </div>
-                          
-                          {/* Подкатегории в аккордеоне для мобильного фильтра */}
-                          {category.subcategories && category.subcategories.length > 0 && category.isOpen && (
-                            <div className="pl-4 mt-1 space-y-1 border-l-2 border-gray-100 ml-2">
-                              {category.subcategories.map((subcat, subIndex) => (
-                                <div 
-                                  key={`${subcat.label}-${subIndex}`}
-                                  className={`flex items-center px-2 py-1 rounded transition-colors duration-200 ${
-                                    selectedCategory?.label === subcat.label || 
-                                    selectedCategory?.searchName === subcat.searchName
-                                      ? 'font-bold text-black bg-gray-100' 
-                                      : 'text-gray-600 hover:text-black hover:bg-gray-50 cursor-pointer'
-                                  }`}
-                                  onClick={() => handleCategoryChange(subcat)}
-                                >
-                                  <span className="text-sm">{subcat.label}</span>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <div className="bg-white rounded-lg p-4 shadow-sm mb-4 border border-gray-100">
-                    <h2 className="font-bold mb-3 text-gray-900 uppercase text-sm">Бренды</h2>
-                    <div className="space-y-2 max-h-[200px] overflow-y-auto pr-1">
-                      {/* Если есть source, показываем только выбранный бренд */}
-                      {router.query.source && selectedBrand ? (
-                        <div
-                          className="flex items-center px-2 py-1.5 rounded transition-colors duration-200 font-bold text-black bg-gray-100"
-                        >
-                          {selectedBrand.name}
-                        </div>
-                      ) : (
-                        // Иначе показываем все бренды
-                        brands.map((brand, index) => (
-                          <div
-                            key={index}
-                            className={`flex items-center px-2 py-1.5 rounded transition-colors duration-200 ${
-                              selectedBrand?.name === brand.name
-                                ? 'font-bold text-black bg-gray-100' 
-                                : 'text-gray-600 hover:text-black hover:bg-gray-50 cursor-pointer'
-                            }`}
-                            onClick={() => handleBrandChange(brand)}
-                          >
-                            {brand.name}
-                          </div>
-                        ))
-                      )}
-                    </div>
-                    
-                    {/* Показываем категории выбранного бренда в мобильном фильтре */}
-                    {selectedBrand && selectedBrand.name !== 'Все товары' && selectedBrand.categories.length > 0 && (
-                      <div className="mt-4 pt-4 border-t border-gray-100">
-                        <h3 className="font-medium text-sm text-gray-700 mb-2">Категории {selectedBrand.name}</h3>
-                        <div className="space-y-1.5">
-                          {selectedBrand.categories
-                            .filter(category => category.label !== 'Все товары')
-                            .map((category, idx) => (
-                              <div
-                                key={idx}
-                                onClick={() => {
-                                  // При клике на категорию бренда мы меняем только выбранную категорию
-                                  setSelectedCategory(category);
-                                  
-                                  // Обновляем URL с сохранением источника (бренда)
-                                  router.push({
-                                    pathname: router.pathname,
-                                    query: {
-                                      ...router.query,
-                                      source: selectedBrand.name === 'Все товары' ? undefined : selectedBrand.name,
-                                      category: category.searchName,
-                                      page: 1
-                                    },
-                                  }, undefined, { shallow: true });
-                                  
-                                  // Загружаем товары и закрываем мобильный фильтр
-                                  fetchProducts(selectedBrand.name === 'Все товары' ? '' : selectedBrand.name, 1);
-                                  setIsMobileFilterOpen(false);
-                                }}
-                                className={`px-3 py-2 rounded-md text-sm ${
-                                  selectedCategory?.label === category.label
-                                    ? 'bg-gray-800 text-white font-medium'
-                                    : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                                }`}
-                              >
-                                {category.label}
-                              </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
                 </div>
               )}
             </div>
