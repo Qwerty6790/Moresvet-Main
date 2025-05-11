@@ -2270,7 +2270,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
 
               {/* Блок брендов - показываем только если не выбран конкретный бренд */}
               {(!selectedBrand || selectedBrand.name === 'Все товары') && (
-                <div className="bg-white rounded-lg p-4 mb-4 shadow-sm border border-gray-100">
+                <div className="bg-black rounded-lg p-4 mb-4 shadow-sm border border-gray-100">
                   <div className="flex items-center mb-3">
                     
                     <span className="font-medium text-sm uppercase">Бренды</span>
