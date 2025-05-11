@@ -2170,6 +2170,26 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
     );
   };
 
+  // Добавляем вспомогательную функцию для склонения слова "товар"
+  const getTotalProductsText = (count: number): string => {
+    const lastDigit = count % 10;
+    const lastTwoDigits = count % 100;
+    
+    if (lastTwoDigits >= 11 && lastTwoDigits <= 19) {
+      return 'товаров';
+    }
+    
+    if (lastDigit === 1) {
+      return 'товар';
+    }
+    
+    if (lastDigit >= 2 && lastDigit <= 4) {
+      return 'товара';
+    }
+    
+    return 'товаров';
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Head>
@@ -2715,6 +2735,56 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
 
               {/* Products Grid */}
               <div className="flex-1 bg-white rounded-lg p-4 sm:p-5 shadow-sm border border-gray-100 overflow-hidden">
+                {/* Добавляем заголовок с логотипом бренда над товарами */}
+                {selectedBrand && selectedBrand.name !== 'Все товары' && (
+                  <div className="mb-6 flex flex-col sm:flex-row items-center gap-3 sm:gap-5 border-b pb-4">
+                    <div className="h-14 w-14 sm:h-16 sm:w-16 bg-white rounded-lg border overflow-hidden p-1.5 flex-shrink-0">
+                      <img 
+                        src={brandLogoMap[selectedBrand.name] || '/images/placeholder-logo.png'} 
+                        alt={`${selectedBrand.name} logo`}
+                        className="w-full h-full object-contain" 
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = '/images/placeholder-logo.png';
+                        }}
+                      />
+                    </div>
+                    <div className="text-center sm:text-left">
+                      <h1 className="text-xl sm:text-2xl font-bold text-gray-900">{selectedBrand.name}</h1>
+                      <div className="text-sm text-gray-500 mt-1">
+                        {selectedCategory?.label !== 'Все товары' ? (
+                          <>
+                            <span className="font-medium">{selectedCategory?.label}</span>
+                            <span className="mx-1">•</span>
+                          </>
+                        ) : null}
+                        <span>{totalProducts} {getTotalProductsText(totalProducts)}</span>
+                      </div>
+                    </div>
+                    <div className="ml-auto hidden sm:block">
+                      {selectedBrand && selectedBrand.categories.length > 0 && (
+                        <div className="flex flex-wrap gap-2 justify-end">
+                          {selectedBrand.categories
+                            .filter(category => category.label !== 'Все товары')
+                            .slice(0, 5)
+                            .map((category, idx) => (
+                              <button
+                                key={idx}
+                                onClick={() => handleCategoryChange(category)}
+                                className={`px-3 py-1.5 rounded-md text-xs ${
+                                  selectedCategory?.label === category.label
+                                    ? 'bg-black text-white font-medium'
+                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                }`}
+                              >
+                                {category.label}
+                              </button>
+                            ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+                
                 {/* --- Измененный блок загрузки --- */}
                 {(isLoading || !isClient) ? (
                   // Всегда рендерим скелетон сетки, чтобы избежать CLS=null
