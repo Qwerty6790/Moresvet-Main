@@ -2678,61 +2678,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
               {/* Отображаем связанные категории - убираем условный рендеринг */}
               <RelatedCategories />
 
-              {/* Блок брендов: показываем только если есть source в URL */}
-              {router.query.source ? (
-                <div className="flex-1 bg-white rounded-lg p-3 sm:p-4 mb-4 shadow-sm border border-gray-100">
-                  <h2 className="font-medium text-lg mb-3">Бренд</h2>
-                  <div className="flex items-center">
-                    {selectedBrand && (
-                      <div className="flex-shrink-0">
-                        <div className="whitespace-nowrap px-4 py-2 rounded-md text-sm bg-black text-white font-medium">
-                          {selectedBrand.name}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* Показываем категории выбранного бренда - всегда раскрыты */}
-                  {selectedBrand && selectedBrand.name !== 'Все товары' && selectedBrand.categories.length > 0 && (
-                    <div className="mt-4 pt-2">
-                      <h3 className="font-medium text-sm text-gray-700 mb-3">Категории {selectedBrand.name}</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {selectedBrand.categories.map((category, idx) => (
-                          <button
-                            key={idx}
-                            onClick={() => {
-                              // При клике на категорию бренда меняем только выбранную категорию
-                              setSelectedCategory(category);
-                              
-                              // Обновляем URL с сохранением источника (бренда)
-                              router.push({
-                                pathname: router.pathname,
-                                query: {
-                                  ...router.query,
-                                  source: selectedBrand.name === 'Все товары' ? undefined : selectedBrand.name,
-                                  category: category.searchName,
-                                  page: 1
-                                },
-                              }, undefined, { shallow: true });
-                              
-                              // Загружаем товары
-                              fetchProducts(selectedBrand.name === 'Все товары' ? '' : selectedBrand.name, 1);
-                            }}
-                            className={`px-3 py-1.5 rounded-md text-xs ${
-                              selectedCategory?.label === category.label
-                                ? 'bg-gray-800 text-white font-medium'
-                                : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                            }`}
-                          >
-                            {category.label}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ) : null}
-
+             
               {/* Products Grid */}
               <div className="flex-1 bg-white rounded-lg p-4 sm:p-5 shadow-sm border border-gray-100 overflow-hidden">
                 {/* Добавляем заголовок с логотипом бренда над товарами */}
