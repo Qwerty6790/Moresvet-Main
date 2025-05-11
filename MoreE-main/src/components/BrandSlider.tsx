@@ -51,7 +51,7 @@ export default function BrandSlider() {
         if (newPos > 0) newPos = -contentWidth;
       } else {
         // Обычная скорость (2px за кадр)
-        newPos = prev - 1;
+        newPos = prev - 0.5;
         if (newPos < -contentWidth) newPos = 0;
       }
       return newPos;
