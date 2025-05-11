@@ -236,34 +236,18 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({
       return () => observer.disconnect();
     }, [shouldLoad, isLCPCandidate]); 
 
-    // Обработчики для увеличения и уменьшения количества
-    const handleIncrement = useCallback((e: React.MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      if (!isPurchasable) return;
-      setQuantity(prev => prev + 1);
-    }, [isPurchasable]);
-
-    const handleDecrement = useCallback((e: React.MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      if (!isPurchasable) return;
-      setQuantity(prev => Math.max(1, prev - 1));
-    }, [isPurchasable]);
-
     const handleAddToCart = useCallback((e: React.MouseEvent) => {
       e.preventDefault(); e.stopPropagation();
       if (!isPurchasable || !product) return;
       try {
         const cart = JSON.parse(localStorage.getItem('cart') || '{"products": []}');
         const idx = cart.products.findIndex((item: any) => item.article === product.article);
-        if (idx > -1) cart.products[idx].quantity += quantity;
-        else cart.products.push({ article: product.article, source: product.source, name: product.name || 'Товар', quantity, imageUrl: targetImageSrc });
+        if (idx > -1) cart.products[idx].quantity += 1;
+        else cart.products.push({ article: product.article, source: product.source, name: product.name || 'Товар', quantity: 1, imageUrl: targetImageSrc });
         localStorage.setItem('cart', JSON.stringify(cart));
-        toast.success(`Добавлено: ${quantity} шт.`);
-        setQuantity(1);
+        toast.success('Товар добавлен');
       } catch (err) { console.error('Ошибка добавления в корзину (grid):', err); toast.error('Ошибка'); }
-    }, [product, targetImageSrc, isPurchasable, quantity]); 
+    }, [product, targetImageSrc, isPurchasable]); 
 
     if (!product) return null;
     
@@ -272,13 +256,11 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({
     return (
       <div 
         ref={!isLCPCandidate ? cardRef : undefined}
-        className="group bg-[#1a1a1a] text-white rounded-xl border border-zinc-800 flex flex-col h-full overflow-hidden transition-all duration-300 hover:border-red-600 hover:shadow-lg hover:shadow-red-900/20"
+        className="group bg-white text-black flex flex-col h-full overflow-hidden transition-all duration-300 hover:shadow-lg"
       >
         <Link href={`/products/${product.source}/${encodeURIComponent(product.article)}`} className="flex flex-col h-full" prefetch={false}>
-          {/* Контейнер изображения (белый фон для контраста с темной карточкой) */}
-          <div 
-            className={`relative w-full aspect-square overflow-hidden flex items-center justify-center rounded-t-lg ${product.article?.toString().startsWith('D') ? 'p-3 sm:p-4' : ''}`} 
-          >
+          {/* Контейнер изображения */}
+          <div className="relative w-full aspect-square overflow-hidden flex items-center justify-center">
             {/* Логика рендера изображения (LCP vs non-LCP) */}
             {isLCPCandidate ? (
               // LCP Изображение
@@ -286,16 +268,14 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({
                 <img
                   src={finalImageSrc}
                   alt={product.name || 'Товар'}
-                  className={`w-full h-full ${product.article?.toString().startsWith('D') ? 'object-contain scale-90' : 'object-contain'} ${isFirstProduct ? 'first-product-img' : ''}`}
+                  className="w-full h-full object-contain p-3"
                   loading="eager"
                   fetchPriority="high"
                   decoding={isFirstProduct ? "sync" : "async"}
-                  width={product.article?.toString().startsWith('D') ? IMAGE_SIZES.D_ARTICLE_SIZE : (isFirstProduct ? IMAGE_SIZES.SMALL_LCP : IMAGE_SIZES.SMALL_LCP)}
-                  height={product.article?.toString().startsWith('D') ? IMAGE_SIZES.D_ARTICLE_SIZE : (isFirstProduct ? IMAGE_SIZES.SMALL_LCP : IMAGE_SIZES.SMALL_LCP)}
                   style={{ display: 'block' }}
                 />
               ) : (
-                <div className="w-full h-full bg-gray-100 animate-pulse"></div>
+                <div className="w-full h-full bg-gray-50 animate-pulse"></div>
               )
             ) : (
               // Non-LCP Изображение
@@ -303,88 +283,57 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({
                 style={{
                   width: '100%',
                   height: '100%',
-                  backgroundSize: product.article?.toString().startsWith('D') ? '85%' : 'contain',
+                  backgroundSize: 'contain',
                   backgroundRepeat: 'no-repeat',
                   backgroundPosition: 'center',
                   backgroundImage: (shouldLoad && finalImageSrc) ? `url('${finalImageSrc.replace(/'/g, "\'")}')` : 'none',
-                  backgroundColor: (shouldLoad && finalImageSrc) ? 'transparent' : '#f3f4f6'
+                  backgroundColor: 'white',
+                  padding: '12px'
                 }}
                 className={`transition-opacity duration-300 ${!shouldLoad || !finalImageSrc ? 'opacity-0 animate-pulse' : 'opacity-100'}`}
                 role="img"
                 aria-label={product.name || 'Товар'}
               > 
-                {(!shouldLoad || !finalImageSrc) && <div style={{ aspectRatio: '1 / 1' }} className="w-full h-auto bg-gray-100"></div>}
+                {(!shouldLoad || !finalImageSrc) && <div style={{ aspectRatio: '1 / 1' }} className="w-full h-auto bg-gray-50"></div>}
               </div>
             )}
             
-            {/* Маркер новинки или скидки */}
+            {/* Маркер новинки */}
             {product.isNew && (
-              <div className="absolute top-2 left-2 bg-red-800 text-white text-xs px-2 py-1 rounded-md font-medium">
-                Новинка
+              <div className="absolute top-2 left-2 bg-black text-white text-xs px-2 py-1 font-medium">
+                NEW
               </div>
             )}
           </div>
           
           {/* Текстовый контент */}
-          <div className="p-3 sm:p-4 flex flex-col flex-grow">
-            <div className="flex flex-wrap items-center gap-1 mb-2">
-              {/* Индикатор наличия */}
-              <div className="flex items-center gap-1">
-                <div className={`w-2 h-2 rounded-full ${isPurchasable ? 'bg-green-500' : 'bg-red-800'}`}></div>
-                <span className="text-xs text-gray-300">{isPurchasable ? 'В наличии' : 'Нет в наличии'}</span>
-              </div>
-            </div>
-            <h3 className="text-sm font-medium text-white line-clamp-2 product-name group-hover:text-red-400 transition-colors">
+          <div className="p-4 flex flex-col flex-grow">
+            <h3 className="text-sm text-black font-medium mb-1 line-clamp-2 transition-colors">
               {product.name}
             </h3>
-            <p className="text-xs text-white mb-3">Арт: {product.article}</p>
             
-            {/* Цена и кнопка */}
-            <div className="mt-auto flex flex-col gap-3 pt-3 border-t border-zinc-700">
-              {/* Цена */}
-              {product.price > 0 ? (
-                <div className="flex justify-between items-center">
-                  <p className="text-lg font-bold text-white price-text whitespace-nowrap">{product.price} ₽</p>
+            <p className="text-xs text-gray-600 mb-2">{product.article}</p>
+            
+            {/* Блок с ценой */}
+            {product.price > 0 && (
+              <div className="mt-auto flex flex-col gap-1">
+                <div className="flex items-center justify-between">
+                  <p className="text-lg font-medium text-black">{product.price} ₽</p>
                   
-                  {/* Блок с количеством */}
-                  <div className="flex items-center">
-                    <button 
-                      onClick={handleDecrement}
-                      disabled={!isPurchasable || quantity <= 1}
-                      className={`w-8 h-8 flex items-center justify-center rounded-l-md ${isPurchasable ? 'bg-zinc-800 text-white hover:bg-zinc-700 active:bg-zinc-600' : 'bg-zinc-900 text-gray-500 cursor-not-allowed'}`}
-                      aria-label="Уменьшить"
-                    >
-                      <span className="text-lg font-bold">-</span>
-                    </button>
-                    <div className="w-10 h-8 flex items-center justify-center bg-zinc-800 text-white">
-                      {quantity}
-                    </div>
-                    <button 
-                      onClick={handleIncrement}
-                      disabled={!isPurchasable}
-                      className={`w-8 h-8 flex items-center justify-center rounded-r-md ${isPurchasable ? 'bg-zinc-800 text-white hover:bg-zinc-700 active:bg-zinc-600' : 'bg-zinc-900 text-gray-500 cursor-not-allowed'}`}
-                      aria-label="Увеличить"
-                    >
-                      <span className="text-lg font-bold">+</span>
-                    </button>
-                  </div>
+                  <button 
+                    onClick={handleAddToCart} 
+                    className={`relative flex items-center justify-center p-2 rounded-full ${isPurchasable ? 'bg-black text-white hover:bg-gray-800' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}
+                    disabled={!isPurchasable}
+                    title={isPurchasable ? "Добавить в корзину" : "Нет в наличии"}
+                    aria-label="Добавить в корзину"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                    </svg>
+                  </button>
                 </div>
-              ) : null}
-              
-              {/* Кнопка для добавления в корзину */}
-              <button 
-                onClick={handleAddToCart} 
-                className={`relative w-full inline-flex items-center justify-center px-6 py-3 text-sm font-medium rounded-md text-white cart-button transition-all duration-200 overflow-hidden group/btn ${isPurchasable ? 'bg-[#812626] hover:bg-red-700 active:bg-red-800 shadow-sm hover:shadow-md' : 'bg-gray-700 text-gray-300 cursor-not-allowed'}`}
-                disabled={!isPurchasable} 
-                title={isPurchasable ? "Добавить в корзину" : "Нет в наличии"}
-              >
-                <span className="relative z-10">В корзину</span>
-                {/* Эффект при наведении */} 
-                {isPurchasable && (
-                  <span className="absolute inset-0 bg-white/10 transform scale-0 origin-center transition-transform duration-300 group-hover/btn:scale-100 rounded-md"></span>
-                )}
-              </button>
-            </div>
+              </div>
+            )}
           </div>
         </Link>
       </div>
@@ -397,14 +346,14 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({
       return (
         <div className="grid auto-rows-auto w-full grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-2 md:grid-cols-3 md:gap-3 lg:grid-cols-4 lg:gap-3 xl:grid-cols-4 xl:gap-3">
           {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="bg-black rounded-lg border border-zinc-800 flex flex-col h-full">
-              <div className="relative aspect-square bg-zinc-800 animate-pulse rounded-t-lg min-h-[150px] sm:min-h-[180px]"></div>
+            <div key={i} className="bg-white flex flex-col h-full">
+              <div className="relative aspect-square bg-gray-50 animate-pulse min-h-[150px] sm:min-h-[180px]"></div>
               <div className="p-4 flex flex-col flex-grow">
-                <div className="h-4 bg-zinc-700 rounded w-3/4 mb-2 animate-pulse min-h-[1rem]"></div>
-                <div className="h-3 bg-zinc-700 rounded w-1/2 mb-3 animate-pulse min-h-[0.75rem]"></div>
-                <div className="mt-auto flex items-start justify-between gap-2 pt-3 border-t border-zinc-700">
-                  <div className="h-5 bg-zinc-700 rounded w-1/3 animate-pulse min-h-[1.25rem]"></div>
-                  <div className="h-10 bg-red-900/50 rounded w-1/2 animate-pulse min-h-[2.5rem]"></div>
+                <div className="h-4 bg-gray-100 rounded w-3/4 mb-2 animate-pulse min-h-[1rem]"></div>
+                <div className="h-3 bg-gray-100 rounded w-1/2 mb-3 animate-pulse min-h-[0.75rem]"></div>
+                <div className="mt-auto flex items-center justify-between">
+                  <div className="h-5 bg-gray-100 rounded w-1/3 animate-pulse min-h-[1.25rem]"></div>
+                  <div className="h-8 w-8 bg-gray-100 rounded-full animate-pulse"></div>
                 </div>
               </div>
             </div>
