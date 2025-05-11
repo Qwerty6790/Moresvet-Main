@@ -273,46 +273,7 @@ const About = () => {
         </div>
       </div>
 
-      {/* Store Map Section */}
-      <div className="w-full bg-gray-100 py-16">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-10"
-          >
-            <h2 className="text-4xl font-bold mb-6 text-gray-900">Наш магазин</h2>
-            <p className="text-lg text-gray-600 mb-8">
-              Посетите наш шоурум, чтобы увидеть всё разнообразие предлагаемой продукции
-            </p>
-          </motion.div>
-          
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-            <div className="h-[400px] w-full">
-              {/* Здесь будет карта - можно заменить на реальный компонент карты */}
-              <div className="w-full h-full bg-gray-300 flex items-center justify-center">
-                <MapPin className="w-12 h-12 text-yellow-400" />
-                <span className="ml-4 text-lg font-medium">Карта загружается...</span>
-              </div>
-            </div>
-            
-            <div className="p-6">
-              <div className="flex items-center mb-4">
-                <MapPin className="w-5 h-5 text-yellow-400 mr-2" />
-                <p className="text-gray-800">г. Москва, ул. Электрическая, д. 42</p>
-              </div>
-              <div className="flex items-center mb-4">
-                <Phone className="w-5 h-5 text-yellow-400 mr-2" />
-                <p className="text-gray-800">+7 (495) 123-45-67</p>
-              </div>
-              <div className="flex items-center">
-                <Clock className="w-5 h-5 text-yellow-400 mr-2" />
-                <p className="text-gray-800">Пн-Пт: 9:00-20:00, Сб-Вс: 10:00-18:00</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+     
     </div>
   );
 };
