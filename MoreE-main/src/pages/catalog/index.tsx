@@ -2272,9 +2272,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
               {(!selectedBrand || selectedBrand.name === 'Все товары') && (
                 <div className="bg-white rounded-lg p-4 mb-4 shadow-sm border border-gray-100">
                   <div className="flex items-center mb-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                    </svg>
+                    
                     <span className="font-medium text-sm uppercase">Бренды</span>
                   </div>
                   <div className="space-y-1.5 max-h-[200px] overflow-y-auto pr-1">
@@ -2315,9 +2313,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
               {/* Кнопка фильтров */}
               <div className="bg-white rounded-md p-4 shadow-sm mb-4 border border-gray-200">
                 <div className="flex items-center mb-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                  </svg>
+                 
                   <span className="font-medium text-sm uppercase">Категории</span>
                 </div>
                 <div className="space-y-0.5 max-h-[400px] overflow-y-auto pr-1">
