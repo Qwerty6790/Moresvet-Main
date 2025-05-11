@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
 
 // Интерфейс для брендов
 interface Brand {
@@ -99,7 +98,7 @@ export default function BrandSlider() {
           >
             {/* Первый набор брендов */}
             {brands.map((brand) => (
-              <Link 
+              <a 
                 key={brand.id} 
                 href={brand.link}
                 className="flex-shrink-0 transition-transform duration-300 hover:scale-110"
@@ -111,12 +110,12 @@ export default function BrandSlider() {
                     className="max-h-full max-w-full object-contain "
                   />
                 </div>
-              </Link>
+              </a>
             ))}
             
             {/* Дублируем бренды для бесконечной прокрутки */}
             {brands.map((brand) => (
-              <Link 
+              <a 
                 key={`duplicate-${brand.id}`} 
                 href={brand.link}
                 className="flex-shrink-0 transition-transform duration-300 hover:scale-110"
@@ -128,7 +127,7 @@ export default function BrandSlider() {
                     className="max-h-full max-w-full object-contain "
                   />
                 </div>
-              </Link>
+              </a>
             ))}
           </div>
         </div>
