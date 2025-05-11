@@ -2480,12 +2480,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                       }`}
                     >
                       <div className="flex items-center gap-1.5">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                          <rect x="3" y="3" width="7" height="7" rx="1" strokeWidth="1.5" />
-                          <rect x="14" y="3" width="7" height="7" rx="1" strokeWidth="1.5" />
-                          <rect x="3" y="14" width="7" height="7" rx="1" strokeWidth="1.5" />
-                          <rect x="14" y="14" width="7" height="7" rx="1" strokeWidth="1.5" />
-                        </svg>
+                       
                         <span>Товары</span>
                       </div>
                     </button>
@@ -2498,12 +2493,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                       }`}
                     >
                       <div className="flex items-center gap-1.5">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                          <path d="M9 6l3 3 3-3" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M9 12h6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M9 18h6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                          <rect x="3" y="4" width="18" height="16" rx="2" strokeWidth="1.5" />
-                        </svg>
+                        
                         <span>Коллекции</span>
                       </div>
                     </button>
