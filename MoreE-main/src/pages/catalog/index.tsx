@@ -2100,7 +2100,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
       <div className="bg-white rounded-lg p-4 mb-4 shadow-sm border border-gray-100">
         <div className="flex items-center mb-4">
           <div className="flex-1 flex items-center gap-3">
-            <div className="relative h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0 bg-white rounded-md overflow-hidden border border-gray-100">
+            <div className="relative h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0 bg-black rounded-md overflow-hidden border border-gray-100">
               <img 
                 src={brandLogo} 
                 alt={`${selectedBrand.name} logo`} 
@@ -2270,7 +2270,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
 
               {/* Блок брендов - показываем только если не выбран конкретный бренд */}
               {(!selectedBrand || selectedBrand.name === 'Все товары') && (
-                <div className="bg-black rounded-lg p-4 mb-4 shadow-sm border border-gray-100">
+                <div className="bg-white rounded-lg p-4 mb-4 shadow-sm border border-gray-100">
                   <div className="flex items-center mb-3">
                     
                     <span className="font-medium text-sm uppercase">Бренды</span>
