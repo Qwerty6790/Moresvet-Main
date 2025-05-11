@@ -158,11 +158,11 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({
                     </div>
                   </td>
                   <td className="px-2 py-2">
-                    <Link href={`/products/${product.source}/${encodeURIComponent(product.article)}`} className="text-xs sm:text-sm font-medium text-white hover:text-red-400 hover:underline truncate block max-w-[120px] sm:max-w-[200px]">
+                    <Link href={`/products/${product.source}/${encodeURIComponent(product.article)}`} className="text-xs sm:text-sm font-medium text-black hover:text-red-400 hover:underline truncate block max-w-[120px] sm:max-w-[200px]">
                       {product.name}
                     </Link>
                   </td>
-                  <td className="px-2 py-2 hidden sm:table-cell"><span className="text-xs text-white">{product.article}</span></td>
+                  <td className="px-2 py-2 hidden sm:table-cell"><span className="text-xs text-black">{product.article}</span></td>
                   <td className="px-2 py-2">
                     {product.price > 0 ? (
                       <span className="text-xs sm:text-sm font-medium">{product.price} ₽</span>
@@ -182,7 +182,7 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({
                           toast.success('Товар добавлен');
                         } catch (err) { console.error('Ошибка добавления в корзину (table):', err); toast.error('Ошибка'); }
                       }}
-                      className={`text-[10px] sm:text-xs py-1 px-1 sm:px-2 rounded ${isPurchasable ? 'bg-black text-white hover:bg-gray-800' : 'bg-gray-300 text-white cursor-not-allowed'}`}
+                      className={`text-[10px] sm:text-xs py-1 px-1 sm:px-2 rounded ${isPurchasable ? 'bg-black text-white hover:bg-gray-800' : 'bg-gray-300 text-black cursor-not-allowed'}`}
                       disabled={!isPurchasable}
                     >
                       В корзину
