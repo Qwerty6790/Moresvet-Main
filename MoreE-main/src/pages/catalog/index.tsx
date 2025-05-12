@@ -1122,13 +1122,15 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
       
       console.log(`Выбрана категория ${category.label}. Перенаправляем на подкатегорию:`, firstSubcategory.label);
       
-      // Переходим на первую подкатегорию
+      // Переходим на первую подкатегорию, сохраняя выбранный бренд
       router.push({
         pathname: router.pathname,
         query: { 
           ...router.query, 
           category: firstSubcategory.searchName,
           subcategory: firstSubcategory.label,
+          // Сохраняем source (бренд), если он есть
+          source: selectedBrand && selectedBrand.name !== 'Все товары' ? selectedBrand.name : undefined,
           page: '1'
         },
       }, undefined, { shallow: true });
@@ -1143,6 +1145,8 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
           query: { 
             ...router.query, 
             category: category.searchName || category.label,
+            // Сохраняем source (бренд), если он есть
+            source: selectedBrand && selectedBrand.name !== 'Все товары' ? selectedBrand.name : undefined,
             page: '1',
             // Удаляем subcategory, если есть
             subcategory: undefined
@@ -1166,7 +1170,8 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
       sourceName, 
       page, 
       category: selectedCategory?.label || 'не выбрана',
-      searchName: selectedCategory?.searchName || 'не указано'
+      searchName: selectedCategory?.searchName || 'не указано',
+      brandFilter: sourceName ? true : false
     });
     
     setIsLoading(true);
@@ -1205,6 +1210,11 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
         } else {
           params.name = decodedCategory;
         }
+      }
+      
+      // Добавляем параметр источника (бренда), если он указан
+      if (sourceName) {
+        params.source = sourceName;
       }
       
       // Добавляем остальные фильтры
@@ -1463,7 +1473,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
           {relatedCategories.map((category, index) => (
             <div 
               key={`related-${index}`}
-              onClick={() => handleCategoryChange(category)}
+              onClick={() => handleCategoryClickWithBrandContext(category)}
               className="bg-white border border-gray-100 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer text-center"
             >
               <div className="text-sm font-medium">{category.label}</div>
@@ -1557,6 +1567,35 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
     
     // Если это не "Все товары" бренд
     if (brand.name !== 'Все товары') {
+      // Если уже выбрана категория, проверяем, существует ли она в новом бренде
+      if (selectedCategory && selectedCategory.label !== 'Все товары') {
+        // Ищем аналогичную категорию в новом бренде
+        const matchingCategory = brand.categories.find(cat => 
+          cat.label === selectedCategory.label || 
+          cat.searchName === selectedCategory.searchName ||
+          (cat.aliases && cat.aliases.includes(selectedCategory.label)) ||
+          (selectedCategory.aliases && selectedCategory.aliases.some(alias => cat.label.includes(alias)))
+        );
+        
+        if (matchingCategory) {
+          // Если нашли подходящую категорию в новом бренде, используем её
+          setSelectedCategory(matchingCategory);
+          
+          router.push({
+            pathname: router.pathname,
+            query: {
+              ...router.query,
+              source: brand.name,
+              category: matchingCategory.searchName,
+              page: 1
+            },
+          }, undefined, { shallow: true });
+          
+          fetchProducts(brand.name, 1);
+          return;
+        }
+      }
+      
       // Проверяем наличие категории "Все товары" в списке категорий бренда
       const allProductsCategory = brand.categories.find(cat => cat.label === 'Все товары');
       
@@ -1711,7 +1750,13 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
   };
   
   const handleResetFilters = () => {
+    // Сохраняем текущий бренд, если он выбран
+    const currentBrand = selectedBrand && selectedBrand.name !== 'Все товары' ? selectedBrand : null;
+    
+    // Устанавливаем категорию "Все товары", но сохраняем бренд
     setSelectedCategory({ label: 'Все товары', searchName: 'Все товары' });
+    
+    // Сбрасываем все остальные фильтры
     setMinPrice(10);
     setMaxPrice(1000000);
     setSelectedColor(null);
@@ -1721,13 +1766,14 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
     setSearchQuery('');
     setCurrentPage(1);
     
-    // Сбрасываем параметры в URL, оставляя только source если он есть
-    const sourceName = source || '';
+    // Сбрасываем параметры в URL, но сохраняем source, если текущий бренд не null
+    const sourceName = currentBrand ? currentBrand.name : '';
     router.push({
       pathname: router.pathname,
-      query: sourceName ? { source: sourceName } : {},
+      query: currentBrand ? { source: sourceName } : {},
     }, undefined, { shallow: true });
     
+    // Запускаем поиск товаров с учетом бренда
     fetchProducts(sourceName, 1);
   };
 
@@ -2190,6 +2236,30 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
     return 'товаров';
   };
 
+  // Вспомогательная функция для обработки клика по категории с учетом бренда
+  const handleCategoryClickWithBrandContext = (category: Category) => {
+    // Если есть выбранный бренд и это не "Все товары"
+    if (selectedBrand && selectedBrand.name !== 'Все товары') {
+      // Проверяем, есть ли такая категория в выбранном бренде
+      const brandCategory = selectedBrand.categories.find(cat => 
+        cat.label === category.label || 
+        cat.searchName === category.searchName || 
+        (cat.aliases && cat.aliases.includes(category.label)) ||
+        (category.aliases && category.aliases.some(alias => cat.label.includes(alias)))
+      );
+      
+      if (brandCategory) {
+        // Если нашли категорию в бренде, используем её (сохраняя source в URL)
+        handleCategoryChange(brandCategory);
+        return;
+      }
+    }
+    
+    // Если бренд не выбран или категория не найдена в бренде,
+    // ищем эту категорию в общем списке категорий
+    handleCategoryChange(category);
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Head>
@@ -2242,7 +2312,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                 { id: 'napolnye', label: 'Торшер', searchName: 'Напольные светильники' },
                 { id: 'komplektuyuschie', label: 'Уличный светильник', searchName: 'Уличный светильник' }
               ]} 
-              onCategoryClick={handleCategoryChange}
+              onCategoryClick={handleCategoryClickWithBrandContext}
             />
           )}
           
@@ -2356,57 +2426,101 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                   <div className="py-2 border-t border-gray-100 mt-2">
                     <div className="text-xs uppercase text-gray-500 font-medium mb-2">Все категории</div>
                     <div className="space-y-1">
-                      {productCategoriesState.map((category) => (
-                        <div key={category.id} className="mb-1">
-                          <div 
-                            className={`flex items-center justify-between px-3 py-2 rounded transition-colors duration-200 ${
-                              (selectedCategory?.label === category.label || 
-                              selectedCategory?.searchName === category.searchName) 
-                                ? 'bg-black text-white' 
-                                : 'text-gray-700 hover:bg-gray-50 cursor-pointer'
-                            }`}
-                            onClick={() => category.subcategories && category.subcategories.length > 0
-                              ? toggleCategoryAccordion(category.id)
-                              : handleCategoryChange(category)
-                            }
-                          >
-                            <span className="text-sm">{category.label}</span>
-                            {category.subcategories && category.subcategories.length > 0 && (
-                              <span className="transform transition-transform duration-200 text-gray-400">
-                                {category.isOpen ? (
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                    <path fillRule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
-                                  </svg>
-                                ) : (
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                    <path fillRule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                                  </svg>
-                                )}
-                              </span>
+                      {productCategoriesState.map((category) => {
+                        if (category.label === 'Все товары') return null;
+                        
+                        const hasSubcategories = category.subcategories && category.subcategories.length > 0;
+                        
+                        return (
+                          <div key={category.id} className="mb-1">
+                            <div 
+                              className={`flex items-center justify-between px-3 py-2 rounded transition-colors duration-200 ${
+                                (selectedCategory?.label === category.label || 
+                                selectedCategory?.searchName === category.searchName) 
+                                  ? 'bg-black text-white' 
+                                  : 'text-gray-700 hover:bg-gray-50 cursor-pointer'
+                              }`}
+                              onClick={() => {
+                                if (hasSubcategories) {
+                                  toggleCategoryAccordion(category.id);
+                                } else {
+                                  // Учитываем выбранный бренд при клике на категорию
+                                  const brandName = selectedBrand && selectedBrand.name !== 'Все товары' 
+                                    ? selectedBrand.name 
+                                    : undefined;
+                                  
+                                  // Создаем новый объект категории
+                                  const categoryToSelect = {
+                                    ...category,
+                                    // Если есть выбранный бренд, проверяем наличие этой категории у бренда
+                                    // Если категория существует у бренда, используем её данные
+                                    ...(brandName && selectedBrand?.categories.find(c => 
+                                      c.label === category.label || 
+                                      c.searchName === category.searchName || 
+                                      (c.aliases && c.aliases.includes(category.label))
+                                    ))
+                                  };
+                                  
+                                  handleCategoryChange(categoryToSelect);
+                                }
+                              }}
+                            >
+                              <span className="text-sm">{category.label}</span>
+                              {hasSubcategories && (
+                                <span className="transform transition-transform duration-200 text-gray-400">
+                                  {category.isOpen ? (
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                      <path fillRule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+                                    </svg>
+                                  ) : (
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                      <path fillRule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                    </svg>
+                                  )}
+                                </span>
+                              )}
+                            </div>
+                            
+                            {/* Подкатегории в аккордеоне */}
+                            {hasSubcategories && category.isOpen && (
+                              <div className="pl-4 mt-1 space-y-1 border-l-2 border-gray-100 ml-2">
+                                {category.subcategories.map((subcat, subIndex) => (
+                                  <div 
+                                    key={`${subcat.label}-${subIndex}`}
+                                    className={`flex items-center px-3 py-2 rounded transition-colors duration-200 ${
+                                      selectedCategory?.label === subcat.label || 
+                                      selectedCategory?.searchName === subcat.searchName
+                                        ? 'bg-black text-white' 
+                                        : 'text-gray-700 hover:bg-gray-50 cursor-pointer'
+                                    }`}
+                                    onClick={() => {
+                                      // Учитываем выбранный бренд при клике на подкатегорию
+                                      const brandName = selectedBrand && selectedBrand.name !== 'Все товары' 
+                                        ? selectedBrand.name 
+                                        : undefined;
+                                      
+                                      // Для подкатегорий также проверяем наличие в бренде
+                                      const categoryToSelect = {
+                                        ...subcat,
+                                        // Проверяем, есть ли категория с таким именем в выбранном бренде
+                                        ...(brandName && selectedBrand?.categories.find(c => 
+                                          c.label === subcat.label || 
+                                          c.searchName === subcat.searchName || 
+                                          (c.aliases && c.aliases.includes(subcat.label))
+                                        ))
+                                      };
+                                      
+                                      handleCategoryChange(categoryToSelect);
+                                    }}
+                                  >
+                                    <span className="text-sm">{subcat.label}</span>
+                                  </div>
+                                ))}
+                              </div>
                             )}
                           </div>
-                          
-                          {/* Подкатегории в аккордеоне */}
-                          {category.subcategories && category.subcategories.length > 0 && category.isOpen && (
-                            <div className="pl-4 mt-1 space-y-1 border-l-2 border-gray-100 ml-2">
-                              {category.subcategories.map((subcat, subIndex) => (
-                                <div 
-                                  key={`${subcat.label}-${subIndex}`}
-                                  className={`flex items-center px-3 py-2 rounded transition-colors duration-200 ${
-                                    selectedCategory?.label === subcat.label || 
-                                    selectedCategory?.searchName === subcat.searchName
-                                      ? 'bg-black text-white' 
-                                      : 'text-gray-700 hover:bg-gray-50 cursor-pointer'
-                                  }`}
-                                  onClick={() => handleCategoryChange(subcat)}
-                                >
-                                  <span className="text-sm">{subcat.label}</span>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
