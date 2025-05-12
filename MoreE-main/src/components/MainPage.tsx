@@ -363,12 +363,7 @@ export default function Banner() {
           </div>
         </div>
       </div>
-         {/* Секция с Maytoni */}
-     <div className="mb-12">
-        <div className="container mx-auto">
-            <Maytoni />
-        </div>
-     </div>
+       
     
      
       </div>
