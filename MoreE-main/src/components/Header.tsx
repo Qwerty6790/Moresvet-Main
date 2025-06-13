@@ -432,14 +432,13 @@ const Header = () => {
 
   return (
     <>
-      {/* Фоновое изображение для всей страницы (статичное) */}
-      <div className="fixed inset-0 z-0 bg-cover bg-center" style={{
+      {/* Фоновое изображение только для верхней части страницы */}
+      <div className="absolute top-0 left-0 right-0 h-screen z-0 bg-cover bg-center" style={{
         backgroundImage: `url('/images/assets_task_01jrdh7qpqf7ftcpemen2q4j7c_img_0.webp')`,
-        backgroundAttachment: 'fixed'
       }}>
       </div>
       
-      <div className="container mx-auto px-4 pt-4">
+      <div className="container mx-auto px-4 pt-4 relative z-10">
         <header className="fixed top-4 left-0 right-0 z-50 w-full">
           <div className="max-w-7xl mx-auto px-4">
             {/* Основной хедер с прозрачным фоном и закругленными краями */}
@@ -583,6 +582,20 @@ const Header = () => {
             <button className="bg-white text-black font-medium px-8 py-4 rounded-md hover:bg-opacity-90 transition-colors">
               Подробности скоро...
             </button>
+          </div>
+        </div>
+      </div>
+      
+      {/* Белый блок для контента под баннером */}
+      <div className="relative z-20 bg-white w-full">
+        <div className="max-w-7xl mx-auto px-4 py-16">
+          {/* Здесь будет основной контент страницы */}
+          <h2 className="text-3xl font-bold mb-8">Популярные категории</h2>
+          <div className="grid grid-cols-4 gap-6">
+            {/* Примеры категорий */}
+            {[1, 2, 3, 4].map((item) => (
+              <div key={item} className="bg-gray-100 p-4 rounded-lg h-64"></div>
+            ))}
           </div>
         </div>
       </div>
