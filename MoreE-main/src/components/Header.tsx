@@ -448,17 +448,17 @@ const Header = () => {
         <header className="fixed top-4 left-0 right-0 z-50 w-full">
           <div className="max-w-7xl mx-auto px-4">
             {/* Основной хедер с темно-синим фоном и закругленными краями */}
-            <div className="bg-white text-white rounded-xl overflow-hidden shadow-xl">
+            <div className="bg-transparent backdrop-blur-lg text-black rounded-xl overflow-hidden shadow-xl">
               <div className="px-6">
                 <div className="flex items-center justify-between h-16">
                   {/* Логотип */}
-                  <Link href="/" className="flex-shrink-0 text-white text-2xl font-bold flex items-center">
+                  <Link href="/" className="flex-shrink-0 text-black text-2xl font-bold flex items-center">
                     <span className="mr-1">D</span>
                     <span className="inline-block w-4 h-4 relative">
                       <span className="absolute inset-0 flex items-center justify-center">
-                        <span className="block w-1 h-1 bg-white rounded-full"></span>
+                        <span className="block w-1 h-1 bg-black rounded-full"></span>
                       </span>
-                      <span className="absolute inset-0 border border-white rounded-full"></span>
+                      <span className="absolute inset-0 border border-black rounded-full"></span>
                     </span>
                     <span>nel</span>
                   </Link>
