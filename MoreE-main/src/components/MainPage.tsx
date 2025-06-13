@@ -31,7 +31,7 @@ interface SideBannerSlide {
 const mainBannerSlides: MainBannerSlide[] = [
   {
     id: 1,
-    bgImage: "/images/blue-orange-paint.jpg", // Синий фон с оранжевыми брызгами как на изображении
+    bgImage: "/images/assets_task_01jrdh7qpqf7ftcpemen2q4j7c_img_0.webp", // Синий фон с оранжевыми брызгами как на изображении
     alt: "Серия R98 Trendy Colors",
     title1: "Серия R98",
     title2: "Trendy Colors",
