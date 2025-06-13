@@ -453,14 +453,7 @@ const Header = () => {
                 <div className="flex items-center justify-between h-16">
                   {/* Логотип */}
                   <Link href="/" className="flex-shrink-0 text-black text-2xl font-bold flex items-center">
-                    <span className="mr-1">D</span>
-                    <span className="inline-block w-4 h-4 relative">
-                      <span className="absolute inset-0 flex items-center justify-center">
-                        <span className="block w-1 h-1 bg-black rounded-full"></span>
-                      </span>
-                      <span className="absolute inset-0 border border-black rounded-full"></span>
-                    </span>
-                    <span>nel</span>
+                  <img src="/images/logo.png" alt="StLuce" className="h-10 w-20" />
                   </Link>
 
                   {/* Основное меню - десктоп */}
