@@ -448,7 +448,7 @@ const Header = () => {
         <header className="fixed top-4 left-0 right-0 z-50 w-full">
           <div className="max-w-7xl mx-auto px-4">
             {/* Основной хедер с темно-синим фоном и закругленными краями */}
-            <div className="bg-[#0a1f38] text-white rounded-xl overflow-hidden shadow-xl">
+            <div className="bg-white text-white rounded-xl overflow-hidden shadow-xl">
               <div className="px-6">
                 <div className="flex items-center justify-between h-16">
                   {/* Логотип */}
