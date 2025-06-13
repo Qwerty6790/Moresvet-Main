@@ -79,7 +79,7 @@ export default function Banner() {
   const mainBannerSlides: MainBannerSlide[] = [
     {
       id: 1,
-      bgImage: "/images/blue-orange-paint.jpg", // Синий фон с оранжевыми брызгами как на изображении
+      bgImage: "/images/assets_task_01jrdh7qpqf7ftcpemen2q4j7c_img_0.webp", // Синий фон с оранжевыми брызгами как на изображении
       alt: "Серия R98 Trendy Colors",
       title1: "Серия R98",
       title2: "Trendy Colors",
@@ -118,18 +118,18 @@ export default function Banner() {
   const sideBannerBottom = sideBannerSlides[1]; // Второй элемент для нижнего
 
   return (
-    <div className="w-full  pt-28">
+    <div className="relative pt-28">
+      {/* Фоновое изображение для всей страницы */}
+      <div className="fixed inset-0 z-0">
+        <img 
+          src="/images/assets_task_01jrdh7qpqf7ftcpemen2q4j7c_img_0.webp" 
+          alt="Background" 
+          className="w-full h-full object-cover"
+        />
+      </div>
+      
       {/* Главный баннер */}
-      <div className="relative w-full h-[calc(100vh-112px)] overflow-hidden">
-        {/* Фоновое изображение */}
-        <div className="absolute inset-0 w-full h-full">
-          <img 
-            src={currentMainSlide.bgImage} 
-            alt={currentMainSlide.alt} 
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-        </div>
-        
+      <div className="relative z-10 w-full h-[calc(100vh-112px)] overflow-hidden">
         {/* Контент поверх фона */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 h-full flex items-center">
           <div className="w-1/2">
@@ -153,7 +153,7 @@ export default function Banner() {
         </div>
         
         {/* Кнопки навигации */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
           <button 
             onClick={prevMainSlide}
             className="w-10 h-10 rounded-full flex items-center justify-center bg-white bg-opacity-20 hover:bg-opacity-30 transition-colors"
@@ -174,7 +174,7 @@ export default function Banner() {
       </div>
 
       {/* Контент под баннером */}
-      <div className="bg-white py-12">
+      <div className="relative z-10 bg-white py-12">
         <div className="max-w-7xl mx-auto px-4">
           {/* Слайдер брендов с автоматической прокруткой */}
           <div className="mb-12">
