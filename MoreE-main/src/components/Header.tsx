@@ -100,9 +100,44 @@ const Header = () => {
   const router = useRouter();
   const catalogRef = useRef<HTMLDivElement | null>(null);
   const catalogButtonRef = useRef<HTMLButtonElement | null>(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   // Хук для поиска товаров
   const { products, loading } = useSearchProducts(searchQuery);
+
+  // Данные для слайдера
+  const sliderData = [
+    {
+      image: '/images/assets_task_01jrdh7qpqf7ftcpemen2q4j7c_img_0.webp',
+      title: 'Серия R98',
+      subtitle: 'Trendy Colors',
+      description: '24 трендовых оттенка стандарта NCS',
+      buttonText: 'Подробности скоро...'
+    },
+    {
+      image: '/images/assets_task_01jrdh7qpqf7ftcpemen2q4j7c_img_0.webp', // Замените на другие изображения
+      title: 'Новая коллекция',
+      subtitle: 'Весна 2024',
+      description: 'Элегантные решения для вашего интерьера',
+      buttonText: 'Смотреть каталог'
+    },
+    {
+      image: '/images/assets_task_01jrdh7qpqf7ftcpemen2q4j7c_img_0.webp', // Замените на другие изображения
+      title: 'Специальное предложение',
+      subtitle: 'Скидки до 30%',
+      description: 'На избранные модели светильников',
+      buttonText: 'Узнать больше'
+    }
+  ];
+
+  // Автоматическое переключение слайдов
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % sliderData.length);
+    }, 5000); // Меняем слайд каждые 5 секунд
+
+    return () => clearInterval(interval);
+  }, [sliderData.length]);
 
   // Отслеживание скролла для скрытия верхней панели
   useEffect(() => {
@@ -430,12 +465,24 @@ const Header = () => {
     );
   };
 
+  // Функция для переключения на конкретный слайд
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+  };
+
   return (
     <>
-      {/* Фоновое изображение только для верхней части страницы */}
-      <div className="absolute top-0 left-0 right-0 h-screen z-0 bg-cover bg-center" style={{
-        backgroundImage: `url('/images/assets_task_01jrdh7qpqf7ftcpemen2q4j7c_img_0.webp')`,
-      }}>
+      {/* Фоновое изображение только для верхней части страницы - слайдер */}
+      <div className="absolute top-0 left-0 right-0 h-screen z-0">
+        {sliderData.map((slide, index) => (
+          <div 
+            key={index}
+            className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out ${currentSlide === index ? 'opacity-100' : 'opacity-0'}`}
+            style={{
+              backgroundImage: `url('${slide.image}')`,
+            }}
+          />
+        ))}
       </div>
       
       <div className="container mx-auto px-4 pt-4 relative z-10">
@@ -571,17 +618,34 @@ const Header = () => {
         </header>
       </div>
       
-      {/* Баннер под хедером */}
+      {/* Баннер под хедером с автоматическим слайдером */}
       <div className="relative z-10 pt-36 w-full h-screen">
         <div className="max-w-7xl mx-auto px-4 h-[calc(100vh-112px)] flex items-center">
-          <div className="w-1/2">
-            <h1 className="text-white text-7xl font-bold mb-2">Серия R98</h1>
-            <h2 className="text-white text-7xl font-bold mb-8">Trendy Colors</h2>
-            <p className="text-white text-xl mb-8">24 трендовых оттенка стандарта NCS</p>
-            
-            <button className="bg-white text-black font-medium px-8 py-4 rounded-md hover:bg-opacity-90 transition-colors">
-              Подробности скоро...
-            </button>
+          {sliderData.map((slide, index) => (
+            <div 
+              key={index} 
+              className={`w-1/2 transition-opacity duration-1000 ease-in-out absolute ${currentSlide === index ? 'opacity-100' : 'opacity-0'}`}
+            >
+              <h1 className="text-white text-7xl font-bold mb-2">{slide.title}</h1>
+              <h2 className="text-white text-7xl font-bold mb-8">{slide.subtitle}</h2>
+              <p className="text-white text-xl mb-8">{slide.description}</p>
+              
+              <button className="bg-white text-black font-medium px-8 py-4 rounded-md hover:bg-opacity-90 transition-colors">
+                {slide.buttonText}
+              </button>
+            </div>
+          ))}
+          
+          {/* Индикаторы слайдера */}
+          <div className="absolute bottom-10 left-4 flex space-x-2">
+            {sliderData.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={`w-3 h-3 rounded-full ${currentSlide === index ? 'bg-white' : 'bg-white bg-opacity-50'}`}
+                aria-label={`Перейти к слайду ${index + 1}`}
+              />
+            ))}
           </div>
         </div>
       </div>
