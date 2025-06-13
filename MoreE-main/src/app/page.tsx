@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Analytics } from "@vercel/analytics/react";
-import ImageHoverEffect from '@/components/MainPage';
+import ImageHoverEffect from '@/components/Hero';
 
 
 export default function Home() {

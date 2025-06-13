@@ -478,19 +478,8 @@ const Header = () => {
         </div>
       </div>
       
-      {/* Белый блок для контента под баннером */}
-      <div className="relative z-20 bg-white w-full">
-        <div className="max-w-7xl mx-auto px-4 py-16">
-          {/* Здесь будет основной контент страницы */}
-          <h2 className="text-3xl font-bold mb-8">Популярные категории</h2>
-          <div className="grid grid-cols-4 gap-6">
-            {/* Примеры категорий */}
-            {[1, 2, 3, 4].map((item) => (
-              <div key={item} className="bg-gray-100 p-4 rounded-lg h-64"></div>
-            ))}
-          </div>
-        </div>
-      </div>
+   
+     
     </>
   );
 };
