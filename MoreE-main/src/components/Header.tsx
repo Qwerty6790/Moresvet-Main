@@ -417,12 +417,9 @@ const Header = () => {
 
   // Массив основных пунктов меню
   const mainMenuItems = [
-    { title: "Продукция", link: "/products", hasSubmenu: true },
+    { title: "Каталог", link: "/products", hasSubmenu: true },
     { title: "О нас", link: "/about", hasSubmenu: true },
     { title: "Новости", link: "/news" },
-    { title: "Проекты", link: "/projects" },
-    { title: "Сотрудничество", link: "/partnership" },
-    { title: "Где купить", link: "/where-to-buy" },
   ];
 
   const toggleAccordionItem = (index: number) => {
