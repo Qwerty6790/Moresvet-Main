@@ -359,15 +359,6 @@ const Header = () => {
                     {/* Разделитель */}
                     <span className="h-6 w-px bg-white/50"></span>
                     
-                    {/* Сравнение */}
-                    <Link href="/compare" className="text-white hover:text-gray-300">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M16 20h4a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-4"></path>
-                        <path d="M4 4v16a2 2 0 0 0 2 2h4"></path>
-                        <path d="M12 14l4-4"></path>
-                        <path d="M8 8l4 4"></path>
-                      </svg>
-                    </Link>
                     
                     {/* Избранное */}
                     <Link href="/favorites" className="text-white hover:text-gray-300">
@@ -391,7 +382,7 @@ const Header = () => {
               </div>
               
               {/* Нижняя полоса с контактами */}
-              <div className="border-t border-gray-700 text-white">
+              <div className="border-t border-white/50 text-white">
                 <div className="px-6 flex justify-between items-center h-10">
                   <div className="hidden md:flex items-center">
                     <a href="tel:88005509084" className="text-sm text-white">8-800-550-90-84</a>
@@ -406,7 +397,7 @@ const Header = () => {
 
           {/* Мобильное меню */}
           {isMobileMenuOpen && (
-            <div className="fixed inset-0 z-50 bg-[#0a1f38] bg-opacity-95 backdrop-blur-sm overflow-y-auto rounded-lg">
+            <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-lg bg-opacity-95  overflow-y-auto rounded-lg">
               <div className="max-w-7xl mx-auto px-4 py-4">
                 {/* Верхняя панель с логотипом и кнопкой закрытия */}
                 <div className="flex items-center justify-between py-4 border-b border-gray-700">
