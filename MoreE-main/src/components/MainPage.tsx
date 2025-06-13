@@ -44,7 +44,7 @@ const mainBannerSlides: MainBannerSlide[] = [
 const sideBannerSlides: SideBannerSlide[] = [
  {
     id: 1,
-    image: "/images/assets_task_01jrdm30zaf5cvz42m590jpvgj_img_0.webp",
+    image: "/images/assets_task_01jrdh7qpqf7ftcpemen2q4j7c_img_0.webp",
     alt: "Специальное предложение",
     title1: "СПЕЦИАЛЬНОЕ",
     title2: "ПРЕДЛОЖЕНИЕ",
@@ -118,7 +118,7 @@ export default function Banner() {
   const sideBannerBottom = sideBannerSlides[1]; // Второй элемент для нижнего
 
   return (
-    <div className="w-full bg-[#0a1f38] pt-28">
+    <div className="w-full  pt-28">
       {/* Главный баннер */}
       <div className="relative w-full h-[calc(100vh-112px)] overflow-hidden">
         {/* Фоновое изображение */}
