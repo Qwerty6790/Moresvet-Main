@@ -434,98 +434,22 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 w-full">
-      {/* Основной хедер с темно-синим фоном */}
-      <div className="bg-[#0a1f38] text-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            {/* Логотип */}
-            <Link href="/" className="flex-shrink-0 text-white text-2xl font-bold flex items-center">
-              <span className="mr-1">D</span>
-              <span className="inline-block w-4 h-4 relative">
-                <span className="absolute inset-0 flex items-center justify-center">
-                  <span className="block w-1 h-1 bg-white rounded-full"></span>
-                </span>
-                <span className="absolute inset-0 border border-white rounded-full"></span>
-              </span>
-              <span>nel</span>
-            </Link>
-
-            {/* Основное меню - десктоп */}
-            <nav className="hidden lg:flex items-center space-x-8 mx-4">
-              {mainMenuItems.map((item, index) => (
-                <div key={index} className="relative group">
-                  <Link
-                    href={item.link}
-                    className="text-white hover:text-gray-300 text-base font-medium transition-colors flex items-center"
-                  >
-                    {item.title}
-                    {item.hasSubmenu && <ChevronDown className="w-4 h-4 ml-1" />}
-                  </Link>
-                </div>
-              ))}
-            </nav>
-
-            {/* Правая часть - поиск, сравнение, избранное, корзина */}
-            <div className="flex items-center space-x-6">
-              {/* Поиск */}
-              <button className="text-white hover:text-gray-300">
-                <Search className="w-5 h-5" />
-              </button>
-              
-              {/* Разделитель */}
-              <span className="h-6 w-px bg-gray-500"></span>
-              
-              {/* Сравнение */}
-              <Link href="/compare" className="text-white hover:text-gray-300">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M16 20h4a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-4"></path>
-                  <path d="M4 4v16a2 2 0 0 0 2 2h4"></path>
-                  <path d="M12 14l4-4"></path>
-                  <path d="M8 8l4 4"></path>
-                </svg>
-              </Link>
-              
-              {/* Избранное */}
-              <Link href="/favorites" className="text-white hover:text-gray-300">
-                <Heart className="w-5 h-5" />
-              </Link>
-              
-              {/* Корзина */}
-              <Link href="/cart" className="text-white hover:text-gray-300">
-                <ShoppingCart className="w-5 h-5" />
-              </Link>
-
-              {/* Мобильное меню */}
-              <button
-                onClick={() => setIsMobileMenuOpen(true)}
-                className="lg:hidden text-white hover:text-gray-300"
-              >
-                <MenuIcon className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-        </div>
+    <>
+      {/* Фоновое изображение для всей страницы */}
+      <div className="fixed inset-0 z-0">
+        <img 
+          src="/images/assets_task_01jrdh7qpqf7ftcpemen2q4j7c_img_0.webp" 
+          alt="Background" 
+          className="w-full h-full object-cover"
+        />
       </div>
       
-      {/* Нижняя полоса с контактами */}
-      <div className="bg-[#0a1f38] border-t border-gray-700 text-white">
-        <div className="max-w-7xl mx-auto px-4 flex justify-between items-center h-10">
-          <div className="hidden md:flex items-center">
-            <a href="tel:88005509084" className="text-sm text-white">8-800-550-90-84</a>
-          </div>
-          <div className="hidden md:flex items-center">
-            <a href="mailto:info@donel.su" className="text-sm text-white">info@donel.su</a>
-          </div>
-        </div>
-      </div>
-
-      {/* Мобильное меню */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 bg-[#0a1f38] bg-opacity-95 backdrop-blur-sm overflow-y-auto rounded-lg">
-          <div className="max-w-7xl mx-auto px-4 py-4">
-            {/* Верхняя панель с логотипом и кнопкой закрытия */}
-            <div className="flex items-center justify-between py-4 border-b border-gray-700">
+      <header className="fixed top-0 left-0 right-0 z-50 w-full">
+        {/* Основной хедер с темно-синим фоном */}
+        <div className="bg-[#0a1f38] text-white">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="flex items-center justify-between h-16">
+              {/* Логотип */}
               <Link href="/" className="flex-shrink-0 text-white text-2xl font-bold flex items-center">
                 <span className="mr-1">D</span>
                 <span className="inline-block w-4 h-4 relative">
@@ -536,46 +460,157 @@ const Header = () => {
                 </span>
                 <span>nel</span>
               </Link>
-              <button
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="p-2 rounded-full hover:bg-gray-800"
-              >
-                <X className="w-6 h-6 text-white" />
-              </button>
-            </div>
 
-            {/* Навигация */}
-            <div className="mt-4">
-              <div className="flex flex-col space-y-1">
+              {/* Основное меню - десктоп */}
+              <nav className="hidden lg:flex items-center space-x-8 mx-4">
                 {mainMenuItems.map((item, index) => (
-                  <Link 
-                    key={index}
-                    href={item.link}
-                    className="flex items-center justify-between py-3 px-2 text-lg font-medium text-white hover:bg-gray-800 rounded-lg"
-                  >
-                    <span>{item.title}</span>
-                  </Link>
+                  <div key={index} className="relative group">
+                    <Link
+                      href={item.link}
+                      className="text-white hover:text-gray-300 text-base font-medium transition-colors flex items-center"
+                    >
+                      {item.title}
+                      {item.hasSubmenu && <ChevronDown className="w-4 h-4 ml-1" />}
+                    </Link>
+                  </div>
                 ))}
-              </div>
-            </div>
+              </nav>
 
-            {/* Контактная информация */}
-            <div className="mt-8 border-t border-gray-700 pt-6">
-              <div className="flex flex-col space-y-4">
-                <Link href="tel:88005509084" className="flex items-center text-white">
-                  <span className="h-5 w-5 mr-3">📞</span>
-                  8-800-550-90-84
+              {/* Правая часть - поиск, сравнение, избранное, корзина */}
+              <div className="flex items-center space-x-6">
+                {/* Поиск */}
+                <button className="text-white hover:text-gray-300">
+                  <Search className="w-5 h-5" />
+                </button>
+                
+                {/* Разделитель */}
+                <span className="h-6 w-px bg-gray-500"></span>
+                
+                {/* Сравнение */}
+                <Link href="/compare" className="text-white hover:text-gray-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M16 20h4a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-4"></path>
+                    <path d="M4 4v16a2 2 0 0 0 2 2h4"></path>
+                    <path d="M12 14l4-4"></path>
+                    <path d="M8 8l4 4"></path>
+                  </svg>
                 </Link>
-                <Link href="mailto:info@donel.su" className="flex items-center text-white">
-                  <span className="h-5 w-5 mr-3">✉️</span>
-                  info@donel.su
+                
+                {/* Избранное */}
+                <Link href="/favorites" className="text-white hover:text-gray-300">
+                  <Heart className="w-5 h-5" />
                 </Link>
+                
+                {/* Корзина */}
+                <Link href="/cart" className="text-white hover:text-gray-300">
+                  <ShoppingCart className="w-5 h-5" />
+                </Link>
+
+                {/* Мобильное меню */}
+                <button
+                  onClick={() => setIsMobileMenuOpen(true)}
+                  className="lg:hidden text-white hover:text-gray-300"
+                >
+                  <MenuIcon className="w-5 h-5" />
+                </button>
               </div>
             </div>
           </div>
         </div>
-      )}
-    </header>
+        
+        {/* Нижняя полоса с контактами */}
+        <div className="bg-[#0a1f38] border-t border-gray-700 text-white">
+          <div className="max-w-7xl mx-auto px-4 flex justify-between items-center h-10">
+            <div className="hidden md:flex items-center">
+              <a href="tel:88005509084" className="text-sm text-white">8-800-550-90-84</a>
+            </div>
+            <div className="hidden md:flex items-center">
+              <a href="mailto:info@donel.su" className="text-sm text-white">info@donel.su</a>
+            </div>
+          </div>
+        </div>
+
+        {/* Мобильное меню */}
+        {isMobileMenuOpen && (
+          <div className="fixed inset-0 z-50 bg-[#0a1f38] bg-opacity-95 backdrop-blur-sm overflow-y-auto rounded-lg">
+            <div className="max-w-7xl mx-auto px-4 py-4">
+              {/* Верхняя панель с логотипом и кнопкой закрытия */}
+              <div className="flex items-center justify-between py-4 border-b border-gray-700">
+                <Link href="/" className="flex-shrink-0 text-white text-2xl font-bold flex items-center">
+                  <span className="mr-1">D</span>
+                  <span className="inline-block w-4 h-4 relative">
+                    <span className="absolute inset-0 flex items-center justify-center">
+                      <span className="block w-1 h-1 bg-white rounded-full"></span>
+                    </span>
+                    <span className="absolute inset-0 border border-white rounded-full"></span>
+                  </span>
+                  <span>nel</span>
+                </Link>
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-2 rounded-full hover:bg-gray-800"
+                >
+                  <X className="w-6 h-6 text-white" />
+                </button>
+              </div>
+
+              {/* Навигация */}
+              <div className="mt-4">
+                <div className="flex flex-col space-y-1">
+                  {mainMenuItems.map((item, index) => (
+                    <Link 
+                      key={index}
+                      href={item.link}
+                      className="flex items-center justify-between py-3 px-2 text-lg font-medium text-white hover:bg-gray-800 rounded-lg"
+                    >
+                      <span>{item.title}</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* Контактная информация */}
+              <div className="mt-8 border-t border-gray-700 pt-6">
+                <div className="flex flex-col space-y-4">
+                  <Link href="tel:88005509084" className="flex items-center text-white">
+                    <span className="h-5 w-5 mr-3">📞</span>
+                    8-800-550-90-84
+                  </Link>
+                  <Link href="mailto:info@donel.su" className="flex items-center text-white">
+                    <span className="h-5 w-5 mr-3">✉️</span>
+                    info@donel.su
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </header>
+      
+      {/* Баннер под хедером */}
+      <div className="relative z-10 pt-28 w-full h-screen">
+        <div className="max-w-7xl mx-auto px-4 h-[calc(100vh-112px)] flex items-center">
+          <div className="w-1/2">
+            <h1 className="text-white text-7xl font-bold mb-2">Серия R98</h1>
+            <h2 className="text-white text-7xl font-bold mb-8">Trendy Colors</h2>
+            <p className="text-white text-xl mb-8">24 трендовых оттенка стандарта NCS</p>
+            
+            <button className="bg-white text-black font-medium px-8 py-4 rounded-md hover:bg-opacity-90 transition-colors">
+              Подробности скоро...
+            </button>
+          </div>
+          
+          {/* Правая часть с изображением устройства */}
+          <div className="w-1/2 relative">
+            <div className="absolute right-0 top-1/2 transform -translate-y-1/2">
+              <div className="relative w-96 h-96 bg-transparent border-4 border-[#0a1f38] rounded-lg overflow-hidden">
+                {/* Здесь можно добавить изображение устройства, если нужно */}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 

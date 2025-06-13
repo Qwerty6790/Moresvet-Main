@@ -75,106 +75,10 @@ export default function Banner() {
     { id: 7, title: 'УЛИЧНОЕ ОСВЕЩЕНИЕ', image: '/images/УличныйСветME.png', link: '/catalog/Уличный светильник' }
   ];
 
-  // Слайды для основного баннера
-  const mainBannerSlides: MainBannerSlide[] = [
-    {
-      id: 1,
-      bgImage: "/images/assets_task_01jrdh7qpqf7ftcpemen2q4j7c_img_0.webp", // Синий фон с оранжевыми брызгами как на изображении
-      alt: "Серия R98 Trendy Colors",
-      title1: "Серия R98",
-      title2: "Trendy Colors",
-      buttonText: "Подробности скоро...",
-      subText: "24 трендовых оттенка стандарта NCS"
-    }
-  ];
-
-  // Состояния для индексов текущих слайдов
-  const [currentMainSlideIndex, setCurrentMainSlideIndex] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-
-  // Функции для ручного переключения
-  const nextMainSlide = () => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    setCurrentMainSlideIndex((prevIndex) =>
-      prevIndex === mainBannerSlides.length - 1 ? 0 : prevIndex + 1
-    );
-    setTimeout(() => setIsTransitioning(false), 800);
-  };
-  
-  const prevMainSlide = () => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    setCurrentMainSlideIndex((prevIndex) =>
-      prevIndex === 0 ? mainBannerSlides.length - 1 : prevIndex - 1
-    );
-    setTimeout(() => setIsTransitioning(false), 800);
-  };
-
-  // Получаем данные текущего слайда для основного баннера
-  const currentMainSlide = mainBannerSlides[currentMainSlideIndex];
-  // Получаем данные для двух боковых баннеров
-  const sideBannerTop = sideBannerSlides[0]; // Первый элемент для верхнего
-  const sideBannerBottom = sideBannerSlides[1]; // Второй элемент для нижнего
-
   return (
-    <div className="relative pt-28">
-      {/* Фоновое изображение для всей страницы */}
-      <div className="fixed inset-0 z-0">
-        <img 
-          src="/images/assets_task_01jrdh7qpqf7ftcpemen2q4j7c_img_0.webp" 
-          alt="Background" 
-          className="w-full h-full object-cover"
-        />
-      </div>
-      
-      {/* Главный баннер */}
-      <div className="relative z-10 w-full h-[calc(100vh-112px)] overflow-hidden">
-        {/* Контент поверх фона */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 h-full flex items-center">
-          <div className="w-1/2">
-            <h1 className="text-white text-7xl font-bold mb-2">{currentMainSlide.title1}</h1>
-            <h2 className="text-white text-7xl font-bold mb-8">{currentMainSlide.title2}</h2>
-            <p className="text-white text-xl mb-8">{currentMainSlide.subText}</p>
-            
-            <button className="bg-white text-black font-medium px-8 py-4 rounded-md hover:bg-opacity-90 transition-colors">
-              {currentMainSlide.buttonText}
-            </button>
-          </div>
-          
-          {/* Правая часть с изображением устройства */}
-          <div className="w-1/2 relative">
-            <div className="absolute right-0 top-1/2 transform -translate-y-1/2">
-              <div className="relative w-96 h-96 bg-[#0a1f38] border-4 border-[#0a1f38] rounded-lg overflow-hidden">
-                {/* Здесь можно добавить изображение устройства, если нужно */}
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        {/* Кнопки навигации */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
-          <button 
-            onClick={prevMainSlide}
-            className="w-10 h-10 rounded-full flex items-center justify-center bg-white bg-opacity-20 hover:bg-opacity-30 transition-colors"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="white" className="w-6 h-6">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-            </svg>
-          </button>
-          <button 
-            onClick={nextMainSlide}
-            className="w-10 h-10 rounded-full flex items-center justify-center bg-white bg-opacity-20 hover:bg-opacity-30 transition-colors"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="white" className="w-6 h-6">
-              <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-            </svg>
-          </button>
-        </div>
-      </div>
-
+    <div className="w-full pt-screen">
       {/* Контент под баннером */}
-      <div className="relative z-10 bg-white py-12">
+      <div className="bg-white py-12">
         <div className="max-w-7xl mx-auto px-4">
           {/* Слайдер брендов с автоматической прокруткой */}
           <div className="mb-12">
