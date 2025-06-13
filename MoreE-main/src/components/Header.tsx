@@ -330,8 +330,8 @@ const Header = () => {
               <div className="px-6">
                 <div className="flex items-center justify-between h-16">
                   {/* Логотип */}
-                  <Link href="/" className="flex-shrink-0 text-black text-2xl font-bold flex items-center">
-                  <span className='text-white text-3xl font-light'>MORELECKTRIKI</span>
+                  <Link href="/" className="flex-shrink-0 text-white text-3xl font-light text-2xl font-bold flex items-center">
+                  MORELECKTRIKI
                   </Link>
 
                   {/* Основное меню - десктоп */}
