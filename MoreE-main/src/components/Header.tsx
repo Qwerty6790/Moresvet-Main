@@ -436,370 +436,90 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-white shadow-md fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300">
-      {/* Верхняя панель навигации */}
-      <div className={`border-b border-gray-200  transition-all duration-300 ${hideTopBar ? 'h-0 overflow-hidden opacity-0' : 'h-12 opacity-100'}`}>
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="flex items-center justify-between h-12">
-            {/* Левое меню */}
-            <nav className="hidden md:flex items-center space-x-6">
-              <Link
-                href="/brands"
-                className="text-black hover:text-blue-400 text-sm font-medium transition-colors"
-              >
-                Бренды
-              </Link>
-              <div className="relative group">
-                <Link
-                  href="/company"
-                  className="text-black hover:text-blue-400 text-sm font-medium transition-colors flex items-center"
-                >
-                  Компания
-                  <ChevronDown className="w-4 h-4 ml-1" />
-                </Link>
-                <div className="absolute top-full left-0 w-48 bg-white shadow-lg rounded-md overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-                  <div className="py-2">
-                    <Link
-                      href="/company/about"
-                      className="block px-4 py-2 text-sm text-black hover:bg-gray-50 hover:text-blue-400"
-                    >
-                      О компании
-                    </Link>
-                    <Link
-                      href="/company/history"
-                      className="block px-4 py-2 text-sm text-black hover:bg-gray-50 hover:text-blue-400"
-                    >
-                      История
-                    </Link>
-                    <Link
-                      href="/company/team"
-                      className="block px-4 py-2 text-sm text-black hover:bg-gray-50 hover:text-blue-400"
-                    >
-                      Команда
-                    </Link>
-                  </div>
-                </div>
-              </div>
-              <Link
-                href="/blog"
-                className="text-black hover:text-blue-400 text-sm font-medium transition-colors"
-              >
-                Блог
-              </Link>
-              <div className="relative group">
-                <Link
-                  href="/customers"
-                  className="text-black hover:text-blue-400 text-sm font-medium transition-colors flex items-center"
-                >
-                  Покупателям
-                  <ChevronDown className="w-4 h-4 ml-1" />
-                </Link>
-                <div className="absolute top-full left-0 w-48 bg-white shadow-lg rounded-md overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-                  <div className="py-2">
-                    <Link
-                      href="/customers/delivery"
-                      className="block px-4 py-2 text-sm text-black hover:bg-gray-50 hover:text-blue-400"
-                    >
-                      Доставка
-                    </Link>
-                    <Link
-                      href="/customers/payment"
-                      className="block px-4 py-2 text-sm text-black hover:bg-gray-50 hover:text-blue-400"
-                    >
-                      Оплата
-                    </Link>
-                    <Link
-                      href="/customers/warranty"
-                      className="block px-4 py-2 text-sm text-black hover:bg-gray-50 hover:text-blue-400"
-                    >
-                      Гарантия
-                    </Link>
-                    <Link
-                      href="/customers/faq"
-                      className="block px-4 py-2 text-sm text-black hover:bg-gray-50 hover:text-blue-400"
-                    >
-                      Частые вопросы
-                    </Link>
-                  </div>
-                </div>
-              </div>
-              <Link
-                href="/contacts"
-                className="text-black hover:text-blue-400 text-sm font-medium transition-colors"
-              >
-                Контакты
-              </Link>
-              <Link
-                href="/sales"
-                className="text-black hover:text-blue-400 text-sm font-medium transition-colors"
-              >
-                Акции
-              </Link>
-            </nav>
-
-            {/* Телефон */}
-            <div className="hidden md:flex items-center ml-auto">
-              <Link
-                href="tel:+74956779569"
-                className="text-black font-medium text-sm hover:text-blue-400 transition-colors flex items-center"
-              >
-                <Phone className="w-4 h-4 mr-2 text-black" />
-                +7 (495) 677-95-69
-              </Link>
-              <span className="mx-2 text-gray-300">•</span>
-              <Link
-                href="/callback"
-                className="text-black text-sm hover:text-blue-400 transition-colors"
-              >
-                Заказать звонок
-              </Link>
-            </div>
+    <header className="fixed top-0 left-0 right-0 z-50 w-full">
+      {/* Верхняя черная панель */}
+      <div className="bg-black text-white">
+        <div className="max-w-7xl mx-auto px-4 flex justify-between items-center h-10">
+          <div className="hidden md:flex items-center">
+            <a href="tel:88005509084" className="text-sm text-white">8-800-550-90-84</a>
+          </div>
+          <div className="hidden md:flex items-center">
+            <a href="mailto:info@donel.su" className="text-sm text-white">info@donel.su</a>
           </div>
         </div>
       </div>
 
       {/* Основной хедер */}
-      <div className="max-w-[1200px] mx-auto px-4">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Логотип */}
-          <Link href="/" className="flex-shrink-0 transition-transform hover:scale-105">
-            <img src="/images/logo.png" alt="StLuce" className="h-10" />
-          </Link>
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-between h-16">
+            {/* Логотип */}
+            <Link href="/" className="flex-shrink-0 text-2xl font-bold">
+              Donel
+            </Link>
 
-          {/* Кнопка каталога */}
-          <button
-            ref={catalogButtonRef}
-            onClick={() => setIsCatalogOpen(!isCatalogOpen)}
-            className="hidden md:flex items-center bg-black hover:bg-neutral-400 text-white px-6 py-3 rounded-lg transition-all ml-4 font-medium"
-          >
-            {isCatalogOpen ? <X className="w-5 h-5 mr-2" /> : <MenuIcon className="w-5 h-5 mr-2" />}
-            Каталог
-          </button>
+            {/* Основное меню - десктоп */}
+            <nav className="hidden lg:flex items-center space-x-8 mx-4">
+              {navigationItems.map((item, index) => (
+                <div key={index} className="relative group">
+                  <Link
+                    href={item.link}
+                    className="text-black hover:text-gray-600 text-base font-medium transition-colors flex items-center"
+                  >
+                    {item.title}
+                    {item.hasSubmenu && <ChevronDown className="w-4 h-4 ml-1" />}
+                  </Link>
+                </div>
+              ))}
+            </nav>
 
-          {/* Поиск (десктоп) */}
-          <div className="hidden md:block flex-grow mx-6 max-w-xl relative">
-            <form onSubmit={handleSearchSubmit}>
-              <input
-                type="search"
-                placeholder="Найти светильник"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-black transition-all"
-              />
-              <button
-                type="submit"
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1.5 bg-black hover:bg-neutral-400 text-white rounded-lg transition-colors"
-              >
-                <Search className="w-4 h-4" />
+            {/* Правая часть - поиск, сравнение, избранное, корзина */}
+            <div className="flex items-center space-x-6">
+              {/* Поиск */}
+              <button className="text-gray-700 hover:text-gray-900">
+                <Search className="w-5 h-5" />
               </button>
-              {/* Новый дизайн выпадающего списка с товарами */}
-              {searchQuery.trim() && (
-                <div className="absolute top-full left-0 right-0 mt-2 z-50 bg-white rounded-lg border border-gray-300 shadow-lg max-h-80 overflow-y-auto">
-                  {searchResultsContent}
-                </div>
-              )}
-            </form>
-        </div>
-
-          {/* Пользовательские действия */}
-          <div className="hidden md:flex items-center space-x-6">
-            <Link
-              href="/auth/login"
-              className="flex flex-col items-center text-black hover:text-blue-400 transition-colors"
-            >
-              <FaUser className="w-6 h-6 mb-1 fill-current" />
               
-            </Link>
-            
-            <Link
-              href="/liked"
-              className="flex flex-col items-center text-black hover:text-blue-400 transition-colors"
-            >
-              <FaHeart className="w-6 h-6 mb-1 fill-current" />
-           
-            </Link>
-            <Link
-              href="/cart"
-              className="flex flex-col items-center text-black hover:text-blue-400 transition-colors relative"
-            >
-              <FaShoppingBag className="w-6 h-6 mb-1 fill-current" />
-            
-            </Link>
-          </div>
+              {/* Сравнение */}
+              <Link href="/compare" className="text-gray-700 hover:text-gray-900">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M16 20h4a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-4"></path>
+                  <path d="M4 4v16a2 2 0 0 0 2 2h4"></path>
+                  <path d="M12 14l4-4"></path>
+                  <path d="M8 8l4 4"></path>
+                </svg>
+              </Link>
+              
+              {/* Избранное */}
+              <Link href="/favorites" className="text-gray-700 hover:text-gray-900">
+                <Heart className="w-5 h-5" />
+              </Link>
+              
+              {/* Корзина */}
+              <Link href="/cart" className="text-gray-700 hover:text-gray-900">
+                <ShoppingCart className="w-5 h-5" />
+              </Link>
 
-          {/* Мобильные кнопки */}
-          <div className="flex md:hidden items-center space-x-3">
-            <button
-              onClick={() => setIsSearchOpen(!isSearchOpen)}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-              aria-label="Поиск"
-            >
-              <Search className="w-5 h-5 text-gray-700" />
-            </button>
-            <Link href="/cart" className="p-2 hover:bg-gray-100 rounded-full transition-colors relative">
-              <ShoppingCart className="w-5 h-5 text-gray-700" />
-              <span className="absolute -top-1 -right-1 bg-black text-white text-xs w-4 h-4 flex items-center justify-center rounded-full"></span>
-            </Link>
-            <button
-              onClick={() => setIsMobileMenuOpen(true)}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-              aria-label="Меню"
-            >
-              <MenuIcon className="w-5 h-5 text-gray-700" />
-            </button>
+              {/* Мобильное меню */}
+              <button
+                onClick={() => setIsMobileMenuOpen(true)}
+                className="lg:hidden text-gray-700 hover:text-gray-900"
+              >
+                <MenuIcon className="w-5 h-5" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
-
-      {/* Мобильная строка поиска */}
-      {isSearchOpen && (
-        <div className="md:hidden py-3 px-4 border-t border-gray-200 animate-fadeIn relative">
-          <form onSubmit={handleSearchSubmit}>
-            <input
-              type="search"
-              placeholder="Найти светильник"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none"
-              autoFocus
-            />
-            <button
-              type="submit"
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1.5 bg-black text-white rounded-lg"
-            >
-              <Search className="w-4 h-4" />
-            </button>
-            {/* Выпадающий список с товарами для мобильного поиска с новым дизайном */}
-            {searchQuery.trim() && (
-              <div className="absolute top-full left-0 right-0 mt-2 z-50 bg-white rounded-lg border border-gray-300 shadow-lg max-h-80 overflow-y-auto">
-                {searchResultsContent}
-              </div>
-            )}
-          </form>
-        </div>
-      )}
-
-      {/* Выпадающее меню каталога */}
-      {isCatalogOpen && (
-        <div ref={catalogRef} className="absolute left-0 right-0 bg-white shadow-xl z-40 border-t border-gray-200">
-          <div className="max-w-6xl mx-auto grid grid-cols-12 gap-6 py-8 px-4">
-            {/* Левый блок категорий */}
-            <div className="col-span-3 border-r border-gray-200 pr-4">
-              <ul className="space-y-1">
-                {catalogCategories.map((category, index) => (
-                  <li key={index}>
-                    <button
-                      className={`flex items-center py-2.5 px-3 rounded-lg text-sm transition-colors w-full text-left ${
-                        activeCategory === index
-                          ? 'bg-red-50 text-black font-medium'
-                          : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                      onMouseEnter={() => handleCategoryHover(index)}
-                      onClick={() => handleCategoryClick(category.title)}
-                    >
-                      {category.title}
-                      <ChevronRight className="w-4 h-4 ml-auto text-gray-400" />
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Основной блок категорий */}
-            <div className="col-span-9">
-              {activeCategory !== null && catalogSubCategories[catalogCategories[activeCategory].title] &&
-              catalogSubCategories[catalogCategories[activeCategory].title].length > 0 ? (
-                <>
-                  {/* Заголовок подкатегории */}
-                  <div className="mb-6 flex items-center">
-                    <Link
-                      href={`/search/${encodeURIComponent(catalogCategories[activeCategory].title)}?query=${encodeURIComponent(catalogCategories[activeCategory].title)}`}
-                      className="text-xl font-medium text-gray-900 hover:text-red-600 transition-colors flex items-center"
-                    >
-                      {catalogCategories[activeCategory].title}
-                      <ChevronRight className="w-5 h-5 ml-2 text-gray-400" />
-                    </Link>
-                  </div>
-
-                  {/* Сетка подкатегорий */}
-                  <div className="grid grid-cols-4 gap-6">
-                    {catalogSubCategories[catalogCategories[activeCategory].title].map((sub, index) => (
-                      <Link
-                        key={index}
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleSubCategoryClick(catalogCategories[activeCategory].title, sub.title);
-                        }}
-                        className="group"
-                      >
-                        <div className="aspect-square bg-gray-50 rounded-lg overflow-hidden mb-3 flex items-center justify-center border border-gray-100 group-hover:border-red-200 transition-colors">
-                          <p className="text-sm text-center text-gray-700 group-hover:text-red-600 font-medium transition-colors">
-                            {sub.title}
-                          </p>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-
-                  {/* Фильтры */}
-                  <div className="mt-10 grid grid-cols-5 gap-6">
-                    {filterCategories.map((filterCat, index) => (
-                      <div key={index}>
-                        <h3 className="font-medium text-gray-900 mb-3">{filterCat.title}</h3>
-                        <ul className="space-y-2">
-                          {filterCat.options.map((option, optIndex) => (
-                            <li key={optIndex}>
-                              <Link
-                                href={`${filterCat.allLink}/${encodeURIComponent(option.toLowerCase())}`}
-                                className="text-sm text-gray-600 hover:text-red-600 transition-colors"
-                              >
-                                {option}
-                              </Link>
-                            </li>
-                          ))}
-                          <li>
-                            <Link
-                              href={filterCat.allLink}
-                              className="text-sm text-black hover:text-red-700 transition-colors font-medium"
-                            >
-                              Посмотреть все →
-                            </Link>
-                          </li>
-                        </ul>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              ) : activeCategory !== null ? (
-                <div className="flex items-center justify-center h-full">
-                  <div className="text-center">
-                    <h3 className="text-xl font-medium mb-4">{catalogCategories[activeCategory].title}</h3>
-                    <Link
-                      href={`/search/${encodeURIComponent(catalogCategories[activeCategory].title)}?query=${encodeURIComponent(catalogCategories[activeCategory].title)}`}
-                      className="inline-block px-5 py-2.5 bg-black text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
-                    >
-                      Перейти в категорию
-                    </Link>
-                  </div>
-                </div>
-              ) : null}
-            </div>
-          </div>
-      </div>
-      )}
 
       {/* Мобильное меню */}
       {isMobileMenuOpen && (
-      <div 
-        id="mobile-menu"
-          className="fixed inset-0 z-50 bg-white overflow-y-auto"
-        >
-          <div className="container mx-auto px-4 py-4">
+        <div className="fixed inset-0 z-50 bg-white bg-opacity-95 backdrop-blur-sm overflow-y-auto rounded-lg">
+          <div className="max-w-7xl mx-auto px-4 py-4">
             {/* Верхняя панель с логотипом и кнопкой закрытия */}
             <div className="flex items-center justify-between py-4 border-b border-gray-100">
-              <Link href="/" className="flex-shrink-0">
-                <img src="/logo.svg" alt="Logo" className="h-8" />
+              <Link href="/" className="flex-shrink-0 text-2xl font-bold">
+                Donel
               </Link>
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
@@ -807,181 +527,35 @@ const Header = () => {
               >
                 <X className="w-6 h-6 text-black" />
               </button>
-          </div>
-
-            {/* Поиск */}
-            <div className="mt-4 mb-6">
-              <form onSubmit={handleSearchSubmit} className="relative">
-                <input
-                  type="search"
-                  placeholder="Поиск товаров..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-4 py-3 pl-10 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-black"
-                />
-                <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-                <button
-                  type="submit"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1.5 bg-black text-white rounded-lg"
-                >
-                  <Search className="w-4 h-4" />
-                </button>
-              </form>
             </div>
 
             {/* Навигация */}
             <div className="mt-4">
               <div className="flex flex-col space-y-1">
-                <Link href="/" className="flex items-center py-3 px-2 text-lg font-medium text-black hover:bg-gray-50 rounded-lg">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                  </svg>
-                  Главная
-                </Link>
-                
-                {/* Каталог с аккордеоном */}
-                <div className="border-b border-gray-100 py-1">
-                  <button
-                    onClick={() => setIsMobileCatalogOpen(!isMobileCatalogOpen)}
-                    className="flex items-center justify-between w-full py-3 px-2 text-lg font-medium text-black hover:bg-gray-50 rounded-lg"
+                {navigationItems.map((item, index) => (
+                  <Link 
+                    key={index}
+                    href={item.link}
+                    className="flex items-center justify-between py-3 px-2 text-lg font-medium text-black hover:bg-gray-50 rounded-lg"
                   >
-                    <div className="flex items-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
-                      </svg>
-                      Каталог
-                      </div>
-                    {isMobileCatalogOpen ? (
-                      <ChevronUp className="w-5 h-5 text-black" />
-                    ) : (
-                      <ChevronDown className="w-5 h-5 text-black" />
-                    )}
-                  </button>
-                  
-                  {isMobileCatalogOpen && (
-                    <div className="pl-10 py-2 space-y-1 mt-1 mb-2">
-                      {catalogCategories.map((category, index) => (
-                        <div key={index} className="mb-1">
-                          <button
-                            onClick={() => toggleAccordionItem(index)}
-                            className="flex items-center justify-between w-full py-2 px-2 text-md text-black hover:bg-gray-50 rounded-lg"
-                          >
-                            <div 
-                              className="flex items-center"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleCategoryClick(category.title);
-                              }}
-                            >
-                              <span>{category.title}</span>
-                            </div>
-                            {expandedAccordionItems.includes(index) ? (
-                              <ChevronUp className="w-4 h-4 text-black" />
-                            ) : (
-                              <ChevronDown className="w-4 h-4 text-black" />
-                            )}
-                          </button>
-                          
-                          {expandedAccordionItems.includes(index) && (
-                            <div className="pl-8 py-1 space-y-1 ml-2">
-                              {Object.keys(catalogSubCategories).includes(category.title) && 
-                                catalogSubCategories[category.title as keyof typeof catalogSubCategories].map((sub, subIndex) => (
-                                  <Link
-                                    key={subIndex}
-                                    href="#"
-                                    className="block py-2 px-2 text-sm text-black hover:bg-gray-50 rounded-lg"
-                                    onClick={(e) => {
-                                      e.preventDefault();
-                                      handleSubCategoryClick(category.title, sub.title);
-                                    }}
-                                  >
-                                    {sub.title}
-                                  </Link>
-                                ))
-                              }
-                              <Link
-                                href="#"
-                                className="block py-2 px-2 text-sm font-medium text-black hover:bg-gray-50 rounded-lg"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  handleCategoryClick(category.title);
-                                }}
-                              >
-                                Все {category.title.toLowerCase()}
-                              </Link>
-                            </div>
-                    )}
-                  </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-                
-                <Link href="/about" className="flex items-center py-3 px-2 text-lg font-medium text-black hover:bg-gray-50 rounded-lg">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  О компании
-                </Link>
-                
-                <Link href="/delivery" className="flex items-center py-3 px-2 text-lg font-medium text-black hover:bg-gray-50 rounded-lg">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
-                  </svg>
-                  Доставка и оплата
-                </Link>
-                
-                <Link href="/contacts" className="flex items-center py-3 px-2 text-lg font-medium text-black hover:bg-gray-50 rounded-lg">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                  </svg>
-                  Контакты
-                </Link>
+                    <span>{item.title}</span>
+                  </Link>
+                ))}
               </div>
-              </div>
+            </div>
 
             {/* Контактная информация */}
             <div className="mt-8 border-t border-gray-100 pt-6">
               <div className="flex flex-col space-y-4">
-                <Link href="tel:+74956779569" className="flex items-center text-black">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                  </svg>
-                  +7 (495) 677-95-69
+                <Link href="tel:88005509084" className="flex items-center text-black">
+                  <span className="h-5 w-5 mr-3">📞</span>
+                  8-800-550-90-84
                 </Link>
-                <div className="flex items-center text-black">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  Пн-Пт: 9:00-18:00
-              </div>
-                <Link href="mailto:info@example.com" className="flex items-center text-black">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                  info@example.com
+                <Link href="mailto:info@donel.su" className="flex items-center text-black">
+                  <span className="h-5 w-5 mr-3">✉️</span>
+                  info@donel.su
                 </Link>
               </div>
-            </div>
-
-            {/* Иконки корзины и избранного */}
-            <div className="mt-8 grid grid-cols-2 gap-4">
-              <Link
-                href="/favorites"
-                className="flex flex-col items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-              >
-                <Heart className="w-6 h-6 text-black mb-2" />
-                <span className="text-sm font-medium text-black">Избранное</span>
-              </Link>
-              <Link
-                href="/cart"
-                className="flex flex-col items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors relative"
-              >
-                <ShoppingCart className="w-6 h-6 text-black mb-2" />
-                <span className="absolute top-2 right-1/4 bg-black text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">3</span>
-                <span className="text-sm font-medium text-black">Корзина</span>
-              </Link>
             </div>
           </div>
         </div>
