@@ -108,13 +108,6 @@ const Header = () => {
   // Данные для слайдера
   const sliderData = [
     {
-      image: '/images/assets_task_01jrdh7qpqf7ftcpemen2q4j7c_img_0.webp',
-      title: 'Серия R98',
-      subtitle: 'Trendy Colors',
-      description: '24 трендовых оттенка стандарта NCS',
-      buttonText: 'Подробности скоро...'
-    },
-    {
       image: '/images/assets_task_01jrdpq6eef67argn1c1279zna_img_0.webp', // Замените на другие изображения
       title: 'Новая коллекция',
       subtitle: 'Весна 2024',
