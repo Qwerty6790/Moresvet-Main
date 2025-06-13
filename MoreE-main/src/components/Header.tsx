@@ -381,17 +381,7 @@ const Header = () => {
                 </div>
               </div>
               
-              {/* Нижняя полоса с контактами */}
-              <div className="border-t border-white/50 text-white">
-                <div className="px-6 flex justify-between items-center h-10">
-                  <div className="hidden md:flex items-center">
-                    <a href="tel:88005509084" className="text-sm text-white">8-800-550-90-84</a>
-                  </div>
-                  <div className="hidden md:flex items-center">
-                    <a href="mailto:info@donel.su" className="text-sm text-white">info@donel.su</a>
-                  </div>
-                </div>
-              </div>
+            
             </div>
           </div>
 

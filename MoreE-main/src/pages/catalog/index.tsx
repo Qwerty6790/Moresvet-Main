@@ -1313,14 +1313,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
     setIsMobileFilterOpen(!isMobileFilterOpen);
   };
   
-  // Функция для фильтрации популярных поисковых запросов в зависимости от категории и бренда - УДАЛЕНА
-  // const getRelevantPopularSearches = () => { ... };
 
-  // Функция для обработки клика по популярному поисковому запросу - УДАЛЕНА
-  // const handlePopularSearchClick = (queryParam: string) => { ... };
-
-  // Компонент для отображения популярных запросов - УДАЛЕН
-  // const PopularSearches = () => { ... };
 
   // Функция для поиска связанных категорий
   const findRelatedCategories = (currentCategory: Category): Category[] => {
@@ -1814,7 +1807,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
   ].filter(Boolean).join(', '); // Удаляем пустые значения и объединяем
 
   // Замените 'https://yourdomain.com' на ваш реальный домен
-  const canonicalUrl = `https://moresvet.vercel.app${router.asPath}`;
+  const canonicalUrl = `https://morelektriki.ru${router.asPath}`;
 
   // Функция для рендера пагинации с эллипсисами
   const renderPagination = () => {
