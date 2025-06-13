@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import Maytoni from '@/app/cardproducts/page';
 import BrandSlider from './BrandSlider';
 
 // --- ТИПЫ ДАННЫХ ---
@@ -13,13 +12,8 @@ interface MainBannerSlide {
   alt: string;
   title1: string;
   title2: string;
-  date: string;
   buttonText: string;
-  subText1: string;
-  subText2: string;
-  subText3: string;
-  bgPosition: string;
-  earthImage?: string | null; // Делаем необязательным
+  subText: string;
 }
 
 interface SideBannerSlide {
@@ -36,43 +30,13 @@ interface SideBannerSlide {
 const mainBannerSlides: MainBannerSlide[] = [
   {
     id: 1,
-    bgImage: "/images/assets_task_01jrdh7qpqf7ftcpemen2q4j7c_img_0.webp",
-    alt: "",
-    title1: "КОСМИЧЕСКИЕ",
-    title2: "НОВИНКИ VOLTUM",
-    date: "",
-    buttonText: "ПОЛЕТЕЛИ",
-    subText1: "",
-    subText2: "VOLTUM встраиваемые выключатели и регуляторы",
-    subText3: "",
-    bgPosition: "object-top",
-  },
-  {
-    id: 2,
-    bgImage: "/images/assets_task_01jrdr96hce8gvc3yrrapknvq8_img_0.webp",
-    alt: "",
-    title1: "Сакуры цветут?",
-    title2: "Трековые системы PRO здесь",
-    date: "",
-    buttonText: "ПОЛЕТЕЛИ",
-    subText1: "",
-    subText2: "PRO трековые системы",
-    subText3: "",
-    bgPosition: "object-top",
-  },
-  {
-    id: 3,
-    bgImage: "/images/assets_task_01jrdpq6eef67argn1c1279zna_img_0.webp",
-    alt: "",
-    title1: "Не мерзни",
-    title2: "Давай утеплим комнату ?",
-    date: "",
-    buttonText: "ПОЛЕТЕЛИ",
-    subText1: "",
-    subText2: "",
-    subText3: "",
-    bgPosition: "object-top",
-  },
+    bgImage: "/images/blue-orange-paint.jpg", // Синий фон с оранжевыми брызгами как на изображении
+    alt: "Серия R98 Trendy Colors",
+    title1: "Серия R98",
+    title2: "Trendy Colors",
+    buttonText: "Подробности скоро...",
+    subText: "24 трендовых оттенка стандарта NCS"
+  }
 ];
 
 const sideBannerSlides: SideBannerSlide[] = [
@@ -99,35 +63,23 @@ const sideBannerSlides: SideBannerSlide[] = [
 // --- КОНЕЦ ДАННЫХ ДЛЯ СЛАЙДЕРОВ ---
 
 export default function Banner() {
-  // Популярные категории для каталога
-  const popularCategories = [
-    { id: 1, title: 'ЛЮСТРЫ', image: '/images/ЛюстраME.webp', link: '/catalog?category=Люстра&page=1' },
-    { id: 2, title: 'СВЕТИЛЬНИКИ', image: '/images/светильникME.webp', link: '/catalog/Светильник' },
-    { id: 3, title: 'БРА И ПОДСВЕТКИ', image: '/images/БраME.webp', link: '/catalog/Бра' },
-    { id: 3, title: 'Лампочки', image: '/images/светоидоднаялампаME.webp', link: '/catalog/Лампочка' },
-    { id: 5, title: 'НАСТОЛЬНЫЕ ЛАМПЫ', image: '/images/настольнаялампаME.webp', link: '/catalog/Настольная лампа' },
-    { id: 6, title: 'ТОРШЕРЫ', image: '/images/ТоршерME.webp', link: '/catalog/Торшер' },
-    { id: 7, title: 'УЛИЧНОЕ ОСВЕЩЕНИЕ', image: '/images/УличныйСветME.png', link: '/catalog/Уличный светильник' }
-    
+  // Слайды для основного баннера
+  const mainBannerSlides: MainBannerSlide[] = [
+    {
+      id: 1,
+      bgImage: "/images/blue-orange-paint.jpg", // Синий фон с оранжевыми брызгами как на изображении
+      alt: "Серия R98 Trendy Colors",
+      title1: "Серия R98",
+      title2: "Trendy Colors",
+      buttonText: "Подробности скоро...",
+      subText: "24 трендовых оттенка стандарта NCS"
+    }
   ];
 
- 
-
-
-  // Товар дня
- 
   // Состояния для индексов текущих слайдов
   const [currentMainSlideIndex, setCurrentMainSlideIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  // Автоматическая смена слайдов для основного баннера
-  useEffect(() => {
-    const timer = setInterval(() => {
-      nextMainSlide();
-    }, 5000); // Смена каждые 5 секунд
-    return () => clearInterval(timer); // Очистка интервала
-  }, []);
-  
   // Функции для ручного переключения
   const nextMainSlide = () => {
     if (isTransitioning) return;
@@ -149,230 +101,62 @@ export default function Banner() {
 
   // Получаем данные текущего слайда для основного баннера
   const currentMainSlide = mainBannerSlides[currentMainSlideIndex];
-  // Получаем данные для двух боковых баннеров
-  const sideBannerTop = sideBannerSlides[0]; // Первый элемент для верхнего
-  const sideBannerBottom = sideBannerSlides[1]; // Второй элемент для нижнего
 
   return (
-    <div className="w-full max-w-7xl mt-40 mx-auto px-4">
-       {/* Главный баннер и ДВА дополнительных мини-баннера */} 
-       <div 
-         className="flex gap-4 mb-4"
-       >
-         {/* Левый баннер - Космические скидки (с фоновым изображением) */}
-         <div className="w-3/4 h-[450px] relative rounded-lg overflow-hidden">
-           <div className="absolute inset-0 w-full h-full">
-             {mainBannerSlides.map((slide, index) => (
-               <div 
-                 key={slide.id}
-                 className={`absolute inset-0 transition-opacity duration-800 ease-in-out ${
-                   index === currentMainSlideIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
-                 }`}
-               >
-                 <img 
-                   src={slide.bgImage} 
-                   alt={slide.alt} 
-                   className={`absolute inset-0 w-full h-full object-cover ${slide.bgPosition || 'object-center'}`}
-                 />
-               </div>
-             ))}
-           </div>
-           
-           {/* Кнопка навигации влево */} 
-           <div 
-             onClick={prevMainSlide}
-             className={`absolute left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-white bg-opacity-70 hover:bg-opacity-90 rounded-full flex items-center justify-center z-20 text-gray-700 cursor-pointer transition-colors duration-200 ${isTransitioning ? 'pointer-events-none opacity-50' : ''}`}
-           >
-             {/* Шеврон влево SVG */} 
-             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
-               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-             </svg>
-           </div>
-           
-           {/* Контент поверх фона */} 
-           <div 
-             className="relative z-10 flex h-full"
-           >
-               {mainBannerSlides.map((slide, index) => (
-                 <div 
-                   key={`content-${slide.id}`}
-                   className={`absolute inset-0 flex transition-opacity duration-800 ease-in-out ${
-                     index === currentMainSlideIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
-                   }`}
-                 >
-                   {/* Левый блок с текстом */} 
-                   <div className="w-5/12 p-8 flex flex-col justify-center">
-                     <h2 className="text-6xl font-bold text-white mb-1">{slide.title1}</h2>
-                     <h2 className="text-3xl font-bold text-white mb-4">{slide.title2}</h2>
-                     <p className="text-white text-sm mb-6">{slide.date}</p>
-                     
-                     <button 
-                       className="bg-black text-white font-bold px-6 py-3 rounded w-32 text-sm"
-                     >
-                       {slide.buttonText}
-                     </button>
-                     
-                     <div className="mt-4">
-                       <p className="text-white text-xs">{slide.subText1}</p>
-                       <p className="text-white text-xs">{slide.subText2}</p>
-                       <p className="text-white text-xs">{slide.subText3}</p>
-                     </div>
-                   </div>
-                   
-                   {/* Правый блок (для Земли/иконки) */} 
-                   <div className="w-7/12 relative">
-                     {/* Проверяем наличие earthImage в slide */} 
-                     {slide.earthImage && (
-                       <div 
-                         className="absolute right-12 bottom-8 bg-white rounded-full p-2 shadow-lg"
-                       >
-                         <img 
-                           src={slide.earthImage}
-                           alt="Иконка баннера" 
-                           className="w-20 h-20 rounded-full object-cover"
-                         />
-                       </div>
-                     )}
-                   </div>
-                 </div>
-               ))}
-            </div>
-           
-           {/* Кнопка навигации вправо */} 
-           <div 
-             onClick={nextMainSlide}
-             className={`absolute right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-white bg-opacity-70 hover:bg-opacity-90 rounded-full flex items-center justify-center z-20 text-gray-700 cursor-pointer transition-colors duration-200 ${isTransitioning ? 'pointer-events-none opacity-50' : ''}`}
-           >
-             {/* Шеврон вправо SVG */} 
-             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-              </svg>
-           </div>
-           
-           {/* Индикаторы слайдера */} 
-           <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1 z-10">
-             {mainBannerSlides.map((_, index) => (
-               <button
-                 key={index}
-                 onClick={() => {
-                   if (!isTransitioning) {
-                     setIsTransitioning(true);
-                     setCurrentMainSlideIndex(index);
-                     setTimeout(() => setIsTransitioning(false), 800);
-                   }
-                 }}
-                 className={`h-1 rounded-sm transition-all duration-300 cursor-pointer ${ 
-                   index === currentMainSlideIndex ? 'w-12 bg-neutral-400' : 'w-6 bg-white bg-opacity-30 hover:bg-opacity-50'
-                 }`}
-                 aria-label={`Перейти к слайду ${index + 1}`}
-               />
-             ))}
-           </div>
-         </div>
-         
-         {/* Правый блок - ДВА Мини-баннера */} 
-         <div className="w-1/4 flex flex-col gap-4"> {/* Контейнер для двух баннеров */} 
-           {/* Верхний мини-баннер */} 
-           {sideBannerTop && (
-             <div
-               className="h-[calc(50%-0.5rem)] relative rounded-lg overflow-hidden group cursor-pointer"
-             >
-               <img
-                 src={sideBannerTop.image} 
-                 alt={sideBannerTop.alt} 
-                 className="absolute inset-0 w-full h-full object-cover z-0 group-hover:scale-105 transition-transform duration-300"
-               />
-               {/* Оверлей с текстом и кнопкой */}
-               <div className="absolute z-10 inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-3">
-                 <h3 className="text-white text-sm font-bold">{sideBannerTop.title1}</h3>
-                 <h3 className="text-white text-3xl font-bold mb-1">{sideBannerTop.title2}</h3>
-                 {sideBannerTop.description && <p className="text-white text-xs mb-2">{sideBannerTop.description}</p>}
-                 {sideBannerTop.buttonText && (
-                   <button className="bg-black text-white text-xs font-bold px-3 py-1 rounded mt-1 self-start hover:bg-yellow-500 transition-colors duration-200">
-                     {sideBannerTop.buttonText}
-                   </button>
-                 )}
-               </div>
-             </div>
-           )}
-           
-           {/* Нижний мини-баннер */} 
-           {sideBannerBottom && (
-             <div 
-                className="h-[calc(50%-0.5rem)] relative rounded-lg overflow-hidden group cursor-pointer"
-             >
-               <img 
-                 src={sideBannerBottom.image} 
-                 alt={sideBannerBottom.alt} 
-                 className="absolute inset-0 w-full h-full object-cover z-0 group-hover:scale-105 transition-transform duration-300"
-               />
-               {/* Оверлей с текстом и кнопкой */}
-               <div className="absolute z-10 inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-3">
-                 <h3 className="text-white text-sm font-bold">{sideBannerBottom.title1}</h3>
-                 <h3 className="text-white text-3xl font-bold mb-1">{sideBannerBottom.title2}</h3>
-                 {sideBannerBottom.description && <p className="text-white text-xs mb-2">{sideBannerBottom.description}</p>}
-                  {sideBannerBottom.buttonText && (
-                    <button className="bg-black text-white text-xs font-bold px-3 py-1 rounded mt-1 self-start hover:bg-yellow-500 transition-colors duration-200">
-                      {sideBannerBottom.buttonText}
-                    </button>
-                  )}
-               </div>
-             </div>
-           )}
-         </div>
-       </div>
-       
-       {/* Слайдер брендов с автоматической прокруткой */}
-      <div className="mb-12">
-        <div className="container mx-auto">
-          <BrandSlider />
+    <div className="w-full bg-[#0a1f38] pt-28">
+      {/* Главный баннер */}
+      <div className="relative w-full h-[calc(100vh-112px)] overflow-hidden">
+        {/* Фоновое изображение */}
+        <div className="absolute inset-0 w-full h-full">
+          <img 
+            src={currentMainSlide.bgImage} 
+            alt={currentMainSlide.alt} 
+            className="absolute inset-0 w-full h-full object-cover"
+          />
         </div>
-        <div className="mb-12">
-        <div className="mx-auto">
-          <div className="grid grid-cols-8 gap-4 relative">
-            {popularCategories.map((category, index) => (
-              <div
-                key={category.id}
-                className={`transform transition-transform duration-200 hover:scale-105 ${
-                  index === 0 ? 'col-span-3 row-span-2' : 
-                  index === 1 ? 'col-span-1 row-span-1' : 
-                  index === 2 ? 'col-span-2 row-span-1' : 
-                  index === 3 ? 'col-span-2 row-span-1' : 
-                  index === 4 ? 'col-span-2 row-span-0' : 
-                  index === 5 ? 'col-span-1 row-span-1' : 
-                  'col-span-2 row-span-1'
-                }`}
-              >
-                <Link href={category.link} className="group block text-center h-full">
-                  <div className={`relative rounded-md overflow-hidden ${
-                    index === 0 || index === 4 ? 'h-full' : 'h-96'
-                  } mb-2`}>
-                    <img 
-                      src={category.image} 
-                      alt={category.title} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out p-2"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent group-hover:from-black/20 transition-all duration-300"></div>
-                    <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
-                      <p className="font-bold group-hover:text-yellow-300 transition-colors duration-200">{category.title}</p>
-                    </div>
-                  </div>
-                </Link>
+        
+        {/* Контент поверх фона */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 h-full flex items-center">
+          <div className="w-1/2">
+            <h1 className="text-white text-7xl font-bold mb-2">{currentMainSlide.title1}</h1>
+            <h2 className="text-white text-7xl font-bold mb-8">{currentMainSlide.title2}</h2>
+            <p className="text-white text-xl mb-8">{currentMainSlide.subText}</p>
+            
+            <button className="bg-white text-black font-medium px-8 py-4 rounded-md hover:bg-opacity-90 transition-colors">
+              {currentMainSlide.buttonText}
+            </button>
+          </div>
+          
+          {/* Правая часть с изображением устройства */}
+          <div className="w-1/2 relative">
+            <div className="absolute right-0 top-1/2 transform -translate-y-1/2">
+              <div className="relative w-96 h-96 bg-[#0a1f38] border-4 border-[#0a1f38] rounded-lg overflow-hidden">
+                {/* Здесь можно добавить изображение устройства, если нужно */}
               </div>
-            ))}
+            </div>
           </div>
         </div>
+        
+        {/* Кнопки навигации */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
+          <button 
+            onClick={prevMainSlide}
+            className="w-10 h-10 rounded-full flex items-center justify-center bg-white bg-opacity-20 hover:bg-opacity-30 transition-colors"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="white" className="w-6 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+            </svg>
+          </button>
+          <button 
+            onClick={nextMainSlide}
+            className="w-10 h-10 rounded-full flex items-center justify-center bg-white bg-opacity-20 hover:bg-opacity-30 transition-colors"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="white" className="w-6 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
+          </button>
+        </div>
       </div>
-       
-    
-     
-      </div>
-
-      
-    
-
-      
-
     </div>
   );
 }
