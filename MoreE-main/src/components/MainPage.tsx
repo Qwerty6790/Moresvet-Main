@@ -27,40 +27,8 @@ interface SideBannerSlide {
    buttonText: string;
 }
 
-// --- ДАННЫЕ ДЛЯ СЛАЙДЕРОВ ---
-const mainBannerSlides: MainBannerSlide[] = [
-  {
-    id: 1,
-    bgImage: "/images/assets_task_01jrdh7qpqf7ftcpemen2q4j7c_img_0.webp", // Синий фон с оранжевыми брызгами как на изображении
-    alt: "Серия R98 Trendy Colors",
-    title1: "Серия R98",
-    title2: "Trendy Colors",
-    buttonText: "Подробности скоро...",
-    subText: "24 трендовых оттенка стандарта NCS"
-  }
-];
 
-// Данные для боковых баннеров
-const sideBannerSlides: SideBannerSlide[] = [
- {
-    id: 1,
-    image: "/images/assets_task_01jrdh7qpqf7ftcpemen2q4j7c_img_0.webp",
-    alt: "Специальное предложение",
-    title1: "СПЕЦИАЛЬНОЕ",
-    title2: "ПРЕДЛОЖЕНИЕ",
-    description: "Скидка 20% на всю серию VOLTUM",
-    buttonText: "подробнее",
- },
- {
-    id: 2,
-    image: "/images/image.png",
-    alt: "О нас",
-    title1: "Рассказать?",
-    title2: "О нас",
-    description: "",
-    buttonText: "подробнее",
- },
-];
+
 // --- КОНЕЦ ДАННЫХ ДЛЯ СЛАЙДЕРОВ ---
 
 export default function Banner() {

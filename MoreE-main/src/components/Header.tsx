@@ -604,14 +604,8 @@ const Header = () => {
             </button>
           </div>
           
-          {/* Правая часть с изображением устройства */}
-          <div className="w-1/2 relative">
-            <div className="absolute right-0 top-1/2 transform -translate-y-1/2">
-              <div className="relative w-96 h-96 border-4 border-[#0a1f38] rounded-lg overflow-hidden">
-                {/* Здесь можно добавить изображение устройства, если нужно */}
-              </div>
-            </div>
-          </div>
+
+          
         </div>
       </div>
     </>
