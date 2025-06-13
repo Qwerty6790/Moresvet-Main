@@ -115,14 +115,14 @@ const Header = () => {
       buttonText: 'Подробности скоро...'
     },
     {
-      image: '/images/assets_task_01jrdh7qpqf7ftcpemen2q4j7c_img_0.webp', // Замените на другие изображения
+      image: '/images/assets_task_01jrdpq6eef67argn1c1279zna_img_0.webp', // Замените на другие изображения
       title: 'Новая коллекция',
       subtitle: 'Весна 2024',
       description: 'Элегантные решения для вашего интерьера',
       buttonText: 'Смотреть каталог'
     },
     {
-      image: '/images/assets_task_01jrdh7qpqf7ftcpemen2q4j7c_img_0.webp', // Замените на другие изображения
+      image: '/images/assets_task_01jrdr96hce8gvc3yrrapknvq8_img_0.webp', // Замените на другие изображения
       title: 'Специальное предложение',
       subtitle: 'Скидки до 30%',
       description: 'На избранные модели светильников',
@@ -276,16 +276,7 @@ const Header = () => {
     };
   }, [isMobileMenuOpen]);
 
-  // Обработчик отправки поиска (для формы)
-  const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      const encodedSearchQuery = encodeURIComponent(searchQuery);
-      router.push(`/search/${encodedSearchQuery}?query=${encodedSearchQuery}`);
-      setIsSearchOpen(false);
-      setIsMobileMenuOpen(false);
-    }
-  };
+
 
   // Обработчик клика по товару из выпадающего списка
   const handleProductClick = (query: string) => {
@@ -297,159 +288,12 @@ const Header = () => {
     }
   };
 
-  // Обработчик для перехода к категории
-  const handleCategoryClick = (categoryTitle: string) => {
-    const encodedCategory = encodeURIComponent(categoryTitle);
-    router.push(`/search/${encodedCategory}?query=${encodedCategory}`);
-    setIsCatalogOpen(false);
-    setIsMobileMenuOpen(false);
-    setIsMobileCatalogOpen(false);
-  };
 
-  // Обработчик для перехода к подкатегории
-  const handleSubCategoryClick = (categoryTitle: string, subCategoryTitle: string) => {
-    const encodedCategory = encodeURIComponent(categoryTitle);
-    const encodedSubCategory = encodeURIComponent(subCategoryTitle);
-    router.push(`/search/${encodedSubCategory}?query=${encodedSubCategory}&category=${encodedCategory}`);
-    setIsCatalogOpen(false);
-    setIsMobileMenuOpen(false);
-    setIsMobileCatalogOpen(false);
-  };
-
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-    // Здесь можно реализовать переключение темы
-  };
-
-  // Обработчик для открытия мобильного каталога
-  const handleMobileCatalogOpen = () => {
-    setMobileCatalogOpen(true);
-    setMobileSubcategoryOpen(false);
-  };
-
-  // Обработчик для выбора категории в мобильном каталоге
-  const handleMobileCategorySelect = (index: number) => {
-    setMobileSelectedCategory(index);
-    setMobileSubcategoryOpen(true);
-  };
-
-  // Обработчик для возврата к списку категорий
-  const handleBackToCategories = () => {
-    setMobileSubcategoryOpen(false);
-  };
-
-  // Массив категорий каталога
-  const catalogCategories: CatalogCategory[] = [
-    { title: "Люстры", link: "/catalog/Люстра", icon: "" },
-    { title: "Cветильники", link: "/catlog/potolochnie-svetilniki", icon: "" },
-    { title: "Торшеры", link: "/category/torshery", icon: "" },
-    { title: "Настольные лампы", link: "/category/nastolnye-lampy", icon: "" },
-    { title: "Точечные светильники", link: "/category/tochechnye-svetilniki", icon: "" },
-    { title: "Споты", link: "/category/spoty", icon: "" },
-    { title: "Светильники для картин, зеркал и ступеней", link: "/category/dlya-kartin", icon: "" },
-    { title: "Детские светильники", link: "/category/detskie-svetilniki", icon: "" },
-    { title: "Садово-парковые светильники", link: "/category/sadovo-parkovye", icon: "" },
-    { title: "Уличное освещение", link: "/category/ulichnoe-osveschenie", icon: "" },
-    { title: "Шинные и струнные системы", link: "/category/shinnye-systemy", icon: "" },
-  ];
-
-  // Объект с массивами подкатегорий для каждой основной категории
-  const catalogSubCategories: Record<string, SubCategory[]> = {
-    "Люстры": [
-      { title: "Каскадная", image: "" },
-      { title: "Люстра на штанге", image: "" },
-      { title: "потолочная", image: "" },
-      { title: "подвесная", image: "" }
-    ],
-    "Cветильники": [
-      { title: "Настенный светильник", image: "" },
-      { title: "Бра", image: "" },
-      { title: "Потолочный светильник", image: "" },
-      { title: "напольный", image: "" }
-    ],
-    "Торшеры": [
-      { title: "Торшер", image: "" },
-    ],
-    "Настольные лампы": [
-      { title: "Настольная лампа", image: "" },
-      { title: "Прикроватная лампа", image: "" },
-      { title: "Офисная настольная лампа", image: "" },
-    ],
-    "Точечные светильники": [
-      { title: "Точечный 1", image: "" },
-      { title: "Точечный 2", image: "" },
-      { title: "Точечный 3", image: "" },
-      { title: "Точечный 4", image: "" }
-    ],
-    "Споты": [
-      { title: "Спот 1", image: "" },
-      { title: "Спот 2", image: "" },
-      { title: "Спот 3", image: "" },
-      { title: "Спот 4", image: "" }
-    ],
-    "Светильники для картин, зеркал и ступеней": [
-      { title: "Тип 1", image: "" },
-      { title: "Тип 2", image: "" },
-      { title: "Тип 3", image: "" },
-      { title: "Тип 4", image: "" }
-    ],
-    "Детские светильники": [
-      { title: "Детский 1", image: "" },
-      { title: "Детский 2", image: "" },
-      { title: "Детский 3", image: "" },
-      { title: "Детский 4", image: "" }
-    ],
-    "Садово-парковые светильники": [
-      { title: "Садовый 1", image: "" },
-      { title: "Садовый 2", image: "" },
-      { title: "Садовый 3", image: "" },
-      { title: "Садовый 4", image: "" }
-    ],
-    "Уличное освещение": [
-      { title: "Уличный 1", image: "" },
-      { title: "Уличный 2", image: "" },
-      { title: "Уличный 3", image: "" },
-      { title: "Уличный 4", image: "" }
-    ],
-    "Шинные и струнные системы": [
-      { title: "Система 1", image: "" },
-      { title: "Система 2", image: "" },
-      { title: "Система 3", image: "" },
-      { title: "Система 4", image: "" }
-    ]
-  };
+  
   
 
 
-  // Массив для фильтров (без изменений)
-  const filterCategories: FilterCategory[] = [
-    {
-      title: "Форма",
-      options: ["Квадрат", "Круг", "Овал", "Пирамида"],
-      allLink: "/filters/forma"
-    },
-    {
-      title: "Цвет",
-      options: ["Бежевые", "Белые", "Хром", "Черные"],
-      allLink: "/filters/cvet"
-    },
-    {
-      title: "Материал",
-      options: ["Деревянные", "Металлические", "Пластиковые", "Стеклянные"],
-      allLink: "/filters/material"
-    },
-    {
-      title: "Стиль",
-      options: ["Восточные", "Дизайнерские", "Кантри", "Классические"],
-      allLink: "/filters/stil"
-    },
-    {
-      title: "Место",
-      options: ["Гостиная", "Зал", "Кухня", "Прихожая"],
-      allLink: "/filters/mesto"
-    }
-  ];
-
+ 
   // Массив основных пунктов меню
   const mainMenuItems = [
     { title: "Каталог", link: "/products", hasSubmenu: true },
