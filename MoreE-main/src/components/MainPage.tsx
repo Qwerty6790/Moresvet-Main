@@ -40,6 +40,7 @@ const mainBannerSlides: MainBannerSlide[] = [
   }
 ];
 
+// Данные для боковых баннеров
 const sideBannerSlides: SideBannerSlide[] = [
  {
     id: 1,
@@ -51,15 +52,14 @@ const sideBannerSlides: SideBannerSlide[] = [
     buttonText: "подробнее",
  },
  {
-    id: 2, // Добавляем ТРЕТИЙ баннер
-    image: "/images/image.png", // Пример изображения
+    id: 2,
+    image: "/images/image.png",
     alt: "О нас",
     title1: "Рассказать?",
     title2: "О нас",
     description: "",
     buttonText: "подробнее",
  },
- 
 ];
 // --- КОНЕЦ ДАННЫХ ДЛЯ СЛАЙДЕРОВ ---
 
