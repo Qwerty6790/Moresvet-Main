@@ -415,16 +415,14 @@ const Header = () => {
     }
   ];
 
-  // Пункты навигационного меню для мобильной версии
-  const navigationItems = [
-    { title: "Главная", link: "/" },
-    { title: "Каталог", link: "/catalog", hasSubmenu: true },
-    { title: "Бренды", link: "/brands" },
-    { title: "Компания", link: "/company", hasSubmenu: true },
-    { title: "Блог", link: "/blog" },
-    { title: "Покупателям", link: "/customers", hasSubmenu: true },
-    { title: "Контакты", link: "/contacts" },
-    { title: "Акции", link: "/sales" },
+  // Массив основных пунктов меню
+  const mainMenuItems = [
+    { title: "Продукция", link: "/products", hasSubmenu: true },
+    { title: "О нас", link: "/about", hasSubmenu: true },
+    { title: "Новости", link: "/news" },
+    { title: "Проекты", link: "/projects" },
+    { title: "Сотрудничество", link: "/partnership" },
+    { title: "Где купить", link: "/where-to-buy" },
   ];
 
   const toggleAccordionItem = (index: number) => {
@@ -460,7 +458,7 @@ const Header = () => {
 
             {/* Основное меню - десктоп */}
             <nav className="hidden lg:flex items-center space-x-8 mx-4">
-              {navigationItems.map((item, index) => (
+              {mainMenuItems.map((item, index) => (
                 <div key={index} className="relative group">
                   <Link
                     href={item.link}
@@ -532,7 +530,7 @@ const Header = () => {
             {/* Навигация */}
             <div className="mt-4">
               <div className="flex flex-col space-y-1">
-                {navigationItems.map((item, index) => (
+                {mainMenuItems.map((item, index) => (
                   <Link 
                     key={index}
                     href={item.link}
