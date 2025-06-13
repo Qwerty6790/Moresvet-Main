@@ -453,7 +453,7 @@ const Header = () => {
                 <div className="flex items-center justify-between h-16">
                   {/* Логотип */}
                   <Link href="/" className="flex-shrink-0 text-black text-2xl font-bold flex items-center">
-                  <img src="/images/logo.png" alt="StLuce" className="h-10 w-20" />
+                  <span className='text-white text-3xl font-light'>MORELECKTRIKI</span>
                   </Link>
 
                   {/* Основное меню - десктоп */}
