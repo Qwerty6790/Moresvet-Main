@@ -229,7 +229,7 @@ const Header = () => {
     };
   }, [isCatalogOpen]);
 
-  // Блокировка скролла, когда открыто мобильное меню
+  // Блокировка скролла при открытом мобильном меню
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.style.overflow = 'hidden';
@@ -432,19 +432,17 @@ const Header = () => {
 
   return (
     <>
-      {/* Фоновое изображение для всей страницы */}
-      <div className="fixed inset-0 z-0">
-        <img 
-          src="/images/assets_task_01jrdh7qpqf7ftcpemen2q4j7c_img_0.webp" 
-          alt="Background" 
-          className="w-full h-full object-cover"
-        />
+      {/* Фоновое изображение для всей страницы (статичное) */}
+      <div className="fixed inset-0 z-0 bg-cover bg-center" style={{
+        backgroundImage: `url('/images/assets_task_01jrdh7qpqf7ftcpemen2q4j7c_img_0.webp')`,
+        backgroundAttachment: 'fixed'
+      }}>
       </div>
       
       <div className="container mx-auto px-4 pt-4">
         <header className="fixed top-4 left-0 right-0 z-50 w-full">
           <div className="max-w-7xl mx-auto px-4">
-            {/* Основной хедер с темно-синим фоном и закругленными краями */}
+            {/* Основной хедер с прозрачным фоном и закругленными краями */}
             <div className="bg-transparent backdrop-blur-lg text-black rounded-xl overflow-hidden shadow-xl">
               <div className="px-6">
                 <div className="flex items-center justify-between h-16">
@@ -530,14 +528,7 @@ const Header = () => {
                 {/* Верхняя панель с логотипом и кнопкой закрытия */}
                 <div className="flex items-center justify-between py-4 border-b border-gray-700">
                   <Link href="/" className="flex-shrink-0 text-white text-2xl font-bold flex items-center">
-                    <span className="mr-1">D</span>
-                    <span className="inline-block w-4 h-4 relative">
-                      <span className="absolute inset-0 flex items-center justify-center">
-                        <span className="block w-1 h-1 bg-white rounded-full"></span>
-                      </span>
-                      <span className="absolute inset-0 border border-white rounded-full"></span>
-                    </span>
-                    <span>nel</span>
+                    <span className='text-white text-3xl font-light'>MORELECKTRIKI</span>
                   </Link>
                   <button
                     onClick={() => setIsMobileMenuOpen(false)}
@@ -593,9 +584,6 @@ const Header = () => {
               Подробности скоро...
             </button>
           </div>
-          
-
-          
         </div>
       </div>
     </>
