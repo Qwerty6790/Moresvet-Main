@@ -436,7 +436,7 @@ const Header = () => {
                     </Link>
                     <Link href="mailto:info@donel.su" className="flex items-center text-white">
                       <span className="h-5 w-5 mr-3">✉️</span>
-                      info@donel.su
+                      MORELECKTRIKI@gmail.com
                     </Link>
                   </div>
                 </div>
