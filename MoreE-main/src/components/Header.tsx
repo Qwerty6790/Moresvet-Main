@@ -357,7 +357,7 @@ const Header = () => {
                     </button>
                     
                     {/* Разделитель */}
-                    <span className="h-6 w-px bg-gray-500"></span>
+                    <span className="h-6 w-px bg-white/50"></span>
                     
                     {/* Сравнение */}
                     <Link href="/compare" className="text-white hover:text-gray-300">
