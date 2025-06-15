@@ -299,7 +299,7 @@ const Header = () => {
     <>
       
       <div className="container mx-auto px-4">
-        <header className="fixed top-4 left-0 right-0 z-50 w-full">
+        <header className="fixed top-4 left-0 right-0 z-50 w-full pointer-events-auto">
           <div className="max-w-7xl mx-auto px-4">
             {/* Основной хедер с прозрачным фоном и закругленными краями */}
             <div className="backdrop-blur-lg bg-black/50 text-black rounded-xl overflow-hidden shadow-xl">
@@ -328,31 +328,31 @@ const Header = () => {
                       
                       {/* Выпадающее меню каталога */}
                       {isCatalogMenuOpen && (
-                        <div className="absolute top-full left-0 mt-2 w-[800px] bg-white rounded-lg shadow-2xl border border-gray-200 z-[100]">
-                          <div className="flex">
+                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-[700px] bg-white rounded-lg shadow-2xl border border-gray-200 z-[100]">
+                          <div className="flex min-h-[400px]">
                             {/* Левая часть с изображением */}
                             <div className="w-1/3 bg-gradient-to-br from-blue-600 to-blue-800 rounded-l-lg p-6 text-white relative overflow-hidden">
                               <div className="relative z-10">
-                                <h3 className="text-2xl font-bold mb-2">СВЕТИЛЬНИКИ</h3>
-                                <p className="text-lg mb-4">для впечатляющих интерьеров</p>
-                                <div className="text-3xl font-bold">MAYTONI</div>
+                                <h3 className="text-xl font-bold mb-2">СВЕТИЛЬНИКИ</h3>
+                                <p className="text-sm mb-4">для впечатляющих<br/>интерьеров</p>
+                                <div className="text-2xl font-bold">MAYTONI</div>
                               </div>
                               {/* Декоративные светильники */}
-                              <div className="absolute top-4 right-4 w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
-                                <div className="w-8 h-8 bg-white/30 rounded-full"></div>
+                              <div className="absolute top-4 right-4 w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                                <div className="w-6 h-6 bg-white/30 rounded-full"></div>
                               </div>
-                              <div className="absolute top-20 right-8 w-12 h-12 bg-white/15 rounded-full flex items-center justify-center">
-                                <div className="w-6 h-6 bg-white/25 rounded-full"></div>
+                              <div className="absolute top-16 right-8 w-8 h-8 bg-white/15 rounded-full flex items-center justify-center">
+                                <div className="w-4 h-4 bg-white/25 rounded-full"></div>
                               </div>
-                              <div className="absolute bottom-8 right-6 w-20 h-20 bg-white/10 rounded-full flex items-center justify-center">
-                                <div className="w-10 h-10 bg-white/20 rounded-full"></div>
+                              <div className="absolute bottom-8 right-6 w-16 h-16 bg-white/10 rounded-full flex items-center justify-center">
+                                <div className="w-8 h-8 bg-white/20 rounded-full"></div>
                               </div>
                             </div>
                             
                             {/* Правая часть с категориями */}
                             <div className="w-2/3 p-6">
                               <h4 className="text-lg font-bold mb-4 text-gray-800">ВИДЫ</h4>
-                              <div className="grid grid-cols-2 gap-2">
+                              <div className="grid grid-cols-2 gap-1">
                                 {catalogCategories.map((category, index) => (
                                   <Link
                                     key={index}
@@ -393,7 +393,7 @@ const Header = () => {
                       
                       {/* Выпадающее меню брендов */}
                       {isBrandsMenuOpen && (
-                        <div className="absolute top-full left-0 mt-2 w-[600px] bg-white rounded-lg shadow-2xl border border-gray-200 z-[100]">
+                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-[500px] bg-white rounded-lg shadow-2xl border border-gray-200 z-[100]">
                           <div className="p-6">
                             <h4 className="text-lg font-bold mb-4 text-gray-800">Популярные бренды</h4>
                             <div className="grid grid-cols-3 gap-4">
