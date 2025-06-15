@@ -27,11 +27,43 @@ interface SideBannerSlide {
    buttonText: string;
 }
 
-
-
 // --- КОНЕЦ ДАННЫХ ДЛЯ СЛАЙДЕРОВ ---
 
 export default function Banner() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // Данные для слайдера баннера
+  const sliderData = [
+    {
+      image: '/images/assets_task_01jrdpq6eef67argn1c1279zna_img_0.webp',
+      title: 'Новая коллекция',
+      subtitle: 'Весна 2024',
+      description: 'Элегантные решения для вашего интерьера',
+      buttonText: 'Смотреть каталог'
+    },
+    {
+      image: '/images/assets_task_01jrdr96hce8gvc3yrrapknvq8_img_0.webp',
+      title: 'Специальное предложение',
+      subtitle: 'Скидки до 30%',
+      description: 'На избранные модели светильников',
+      buttonText: 'Узнать больше'
+    }
+  ];
+
+  // Автоматическое переключение слайдов
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % sliderData.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [sliderData.length]);
+
+  // Функция для переключения на конкретный слайд
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+  };
+
   // Популярные категории для каталога
   const popularCategories = [
     { id: 1, title: 'ЛЮСТРЫ', image: '/images/ЛюстраME.webp', link: '/catalog?category=Люстра&page=1' },
@@ -44,9 +76,54 @@ export default function Banner() {
   ];
 
   return (
-    <div className="w-full pt-screen">
+    <div className="w-full">
+      {/* Фоновое изображение для слайдера */}
+      <div className="absolute top-0 left-0 right-0 h-screen z-0">
+        {sliderData.map((slide, index) => (
+          <div 
+            key={index}
+            className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out ${currentSlide === index ? 'opacity-100' : 'opacity-0'}`}
+            style={{
+              backgroundImage: `url('${slide.image}')`,
+            }}
+          />
+        ))}
+      </div>
+      
+      {/* Баннер-слайдер */}
+      <div className="relative z-10 pt-36 w-full h-screen">
+        <div className="max-w-7xl mx-auto px-4 h-[calc(100vh-112px)] flex items-center">
+          {sliderData.map((slide, index) => (
+            <div 
+              key={index} 
+              className={`w-1/2 transition-opacity duration-1000 ease-in-out absolute ${currentSlide === index ? 'opacity-100' : 'opacity-0'}`}
+            >
+              <h1 className="text-white text-7xl font-bold mb-2">{slide.title}</h1>
+              <h2 className="text-white text-7xl font-bold mb-8">{slide.subtitle}</h2>
+              <p className="text-white text-xl mb-8">{slide.description}</p>
+              
+              <button className="bg-white text-black font-medium px-8 py-4 rounded-md hover:bg-opacity-90 transition-colors">
+                {slide.buttonText}
+              </button>
+            </div>
+          ))}
+          
+          {/* Индикаторы слайдера */}
+          <div className="absolute bottom-10 left-4 flex space-x-2">
+            {sliderData.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={`w-3 h-3 rounded-full ${currentSlide === index ? 'bg-white' : 'bg-white bg-opacity-50'}`}
+                aria-label={`Перейти к слайду ${index + 1}`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* Контент под баннером */}
-      <div className="bg-white py-12">
+      <div className="bg-white py-12 relative z-10">
         <div className="max-w-7xl mx-auto px-4">
           {/* Слайдер брендов с автоматической прокруткой */}
           <div className="mb-12">
