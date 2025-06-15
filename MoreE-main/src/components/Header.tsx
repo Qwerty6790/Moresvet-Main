@@ -619,7 +619,7 @@ const Header = () => {
       {typeof window !== 'undefined' && isBrandsMenuOpen && createPortal(
         <div 
           id="brands-menu"
-          className="fixed w-[500px] bg-white rounded-lg shadow-2xl border border-gray-200 transition-all duration-200 ease-in-out"
+          className="fixed w-[400px] bg-white rounded-lg shadow-2xl border border-gray-200 transition-all duration-200 ease-in-out"
           style={{
             top: brandsMenuPosition.top,
             left: brandsMenuPosition.left,
@@ -631,19 +631,20 @@ const Header = () => {
         >
           <div className="p-6">
             <h4 className="text-lg font-bold mb-4 text-gray-800">Популярные бренды</h4>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 gap-3">
               {brandCategories.map((brand, index) => (
                 <Link
                   key={index}
                   href={brand.link}
                   className="flex flex-col items-center p-3 hover:bg-gray-50 rounded-lg transition-colors group"
                 >
-                  <div className="w-16 h-16 bg-gray-100 rounded-lg mb-2 flex items-center justify-center overflow-hidden">
+                  <div className="w-20 h-20 bg-black rounded-lg mb-2 flex items-center justify-center overflow-hidden relative">
                     <img 
                       src={brand.image} 
                       alt={brand.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                      className="w-full h-full object-contain group-hover:scale-105 transition-transform filter brightness-110"
                     />
+                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
                   </div>
                   <span className="text-xs font-medium text-gray-600 group-hover:text-gray-800 text-center">
                     {brand.title}
