@@ -422,7 +422,7 @@ const Header = () => {
                         className="text-white hover:text-gray-300 text-base font-medium transition-colors flex items-center"
                       >
                         Каталог
-                        <ChevronDown className="w-4 h-4 ml-1" />
+                      
                       </Link>
                     </div>
 
@@ -446,7 +446,7 @@ const Header = () => {
                         className="text-white hover:text-gray-300 text-base font-medium transition-colors flex items-center"
                       >
                         Бренды
-                        <ChevronDown className="w-4 h-4 ml-1" />
+                       
                       </Link>
                     </div>
 
