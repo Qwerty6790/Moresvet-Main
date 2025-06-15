@@ -344,7 +344,7 @@ const Header = () => {
       const rect = brandsLinkRef.current.getBoundingClientRect();
       setBrandsMenuPosition({
         top: rect.bottom + window.scrollY + 8,
-        left: rect.left + rect.width / 2 - 250 // 250 = половина ширины меню (500px)
+        left: rect.left + rect.width / 2 - 200 // 200 = половина ширины меню (400px)
       });
     }
     setIsBrandsMenuOpen(true);
