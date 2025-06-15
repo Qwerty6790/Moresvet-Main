@@ -111,21 +111,23 @@ const Header = () => {
   // Хук для поиска товаров
   const { products, loading } = useSearchProducts(searchQuery);
 
-  // Данные для каталога (виды светильников)
-  const catalogCategories = [
-    { title: 'Подвесные', image: '/images/ЛюстраME.webp', link: '/catalog/Подвесные' },
-    { title: 'Потолочные', image: '/images/светильникME.webp', link: '/catalog/Потолочные' },
-    { title: 'Настенные', image: '/images/БраME.webp', link: '/catalog/Настенные' },
-    { title: 'Настенно-потолочные', image: '/images/светильникME.webp', link: '/catalog/Настенно-потолочные' },
-    { title: 'Накладные светильники', image: '/images/светильникME.webp', link: '/catalog/Накладные' },
-    { title: 'Встраиваемые', image: '/images/трековый-светильникME.webp', link: '/catalog/Встраиваемые' },
-    { title: 'Точечные светильники', image: '/images/трековый-светильникME.webp', link: '/catalog/Точечные' },
-    { title: 'Ночники', image: '/images/настольнаялампаME.webp', link: '/catalog/Ночники' },
-    { title: 'Мебельные', image: '/images/настольнаялампаME.webp', link: '/catalog/Мебельные' },
-    { title: 'Для растений', image: '/images/светоидоднаялампаME.webp', link: '/catalog/Для-растений' },
-    { title: 'Бактерицидные светильники и облучатели', image: '/images/УличныйСветME.png', link: '/catalog/Бактерицидные' },
-    { title: 'Элитные светильники', image: '/images/ЛюстраME.webp', link: '/catalog/Элитные' }
-  ];
+  // Данные для каталога
+  const catalogData = {
+    lighting: [
+      { title: 'Люстры', link: '/catalog/Люстры' },
+      { title: 'Светильники', link: '/catalog/Светильники' },
+      { title: 'Торшеры', link: '/catalog/Торшеры' },
+      { title: 'Бра', link: '/catalog/Бра' },
+      { title: 'Уличные светильники', link: '/catalog/Уличные-светильники' },
+      { title: 'Комплектующие', link: '/catalog/Комплектующие' },
+      { title: 'Светодиодные ленты', link: '/catalog/Светодиодные-ленты' },
+      { title: 'Светодиодные лампы', link: '/catalog/Светодиодные-лампы' }
+    ],
+    electrical: [
+      { title: 'Встраиваемые серии', link: '/catalog/Встраиваемые-серии' },
+      { title: 'Выдвижной блок', link: '/catalog/Выдвижной-блок' }
+    ]
+  };
 
   // Данные для брендов
   const brandCategories = [
@@ -306,7 +308,7 @@ const Header = () => {
       const rect = catalogLinkRef.current.getBoundingClientRect();
       setCatalogMenuPosition({
         top: rect.bottom + window.scrollY + 8,
-        left: rect.left + rect.width / 2 - 400 // 400 = половина ширины меню (800px)
+        left: rect.left + rect.width / 2 - 300 // 300 = половина ширины меню (600px)
       });
     }
     setIsCatalogMenuOpen(true);
@@ -555,7 +557,7 @@ const Header = () => {
       {typeof window !== 'undefined' && isCatalogMenuOpen && createPortal(
         <div 
           id="catalog-menu"
-          className="fixed w-[800px] bg-white rounded-lg shadow-2xl border border-gray-200 transition-all duration-200 ease-in-out"
+          className="fixed w-[600px] bg-white rounded-lg shadow-2xl border border-gray-200 transition-all duration-200 ease-in-out"
           style={{
             top: catalogMenuPosition.top,
             left: catalogMenuPosition.left,
@@ -565,38 +567,32 @@ const Header = () => {
           onMouseEnter={() => setIsCatalogMenuOpen(true)}
           onMouseLeave={() => setIsCatalogMenuOpen(false)}
         >
-          <div className="flex h-[500px]">
-            {/* Левая часть с изображением - точно как на фото */}
-            <div className="w-[320px] bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 rounded-l-lg p-8 text-white relative overflow-hidden">
-              <div className="relative z-10">
-                <h3 className="text-3xl font-bold mb-3 leading-tight">СВЕТИЛЬНИКИ</h3>
-                <p className="text-lg mb-6 leading-relaxed">для впечатляющих<br/>интерьеров</p>
-                <div className="text-4xl font-bold tracking-wide">MAYTONI</div>
-              </div>
-              
-              {/* Декоративные светильники - как на фото */}
-              <div className="absolute top-6 right-6 w-20 h-20 rounded-full overflow-hidden border-4 border-white/30">
+          <div className="flex h-[600px]">
+            {/* Левая часть только с изображением */}
+            <div className="w-[200px] bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 rounded-l-lg p-6 text-white relative overflow-hidden">
+              {/* Декоративные светильники */}
+              <div className="absolute top-8 right-4 w-16 h-16 rounded-full overflow-hidden border-3 border-white/30">
                 <div className="w-full h-full bg-gradient-to-br from-purple-400 via-pink-300 to-orange-300 rounded-full flex items-center justify-center">
-                  <div className="w-8 h-8 bg-white/40 rounded-full"></div>
-                </div>
-              </div>
-              
-              <div className="absolute top-32 right-12 w-16 h-16 rounded-full overflow-hidden border-4 border-white/30">
-                <div className="w-full h-full bg-gradient-to-br from-blue-400 via-teal-300 to-green-300 rounded-full flex items-center justify-center">
                   <div className="w-6 h-6 bg-white/40 rounded-full"></div>
                 </div>
               </div>
               
-              <div className="absolute bottom-12 right-8 w-24 h-24 rounded-full overflow-hidden border-4 border-white/30">
+              <div className="absolute top-32 right-6 w-12 h-12 rounded-full overflow-hidden border-3 border-white/30">
+                <div className="w-full h-full bg-gradient-to-br from-blue-400 via-teal-300 to-green-300 rounded-full flex items-center justify-center">
+                  <div className="w-4 h-4 bg-white/40 rounded-full"></div>
+                </div>
+              </div>
+              
+              <div className="absolute bottom-16 right-4 w-20 h-20 rounded-full overflow-hidden border-3 border-white/30">
                 <div className="w-full h-full bg-gradient-to-br from-indigo-400 via-purple-300 to-pink-300 rounded-full flex items-center justify-center">
-                  <div className="w-10 h-10 bg-white/40 rounded-full"></div>
+                  <div className="w-8 h-8 bg-white/40 rounded-full"></div>
                 </div>
               </div>
               
               {/* Сетка на фоне */}
               <div className="absolute inset-0 opacity-20">
-                <div className="grid grid-cols-8 grid-rows-8 h-full w-full">
-                  {Array.from({ length: 64 }).map((_, i) => (
+                <div className="grid grid-cols-6 grid-rows-12 h-full w-full">
+                  {Array.from({ length: 72 }).map((_, i) => (
                     <div key={i} className="border border-white/20"></div>
                   ))}
                 </div>
@@ -604,18 +600,37 @@ const Header = () => {
             </div>
             
             {/* Правая часть с категориями */}
-            <div className="flex-1 p-8">
-              <h4 className="text-xl font-bold mb-6 text-gray-800 tracking-wide">ВИДЫ</h4>
-              <div className="grid grid-cols-1 gap-3">
-                {catalogCategories.map((category, index) => (
-                  <Link
-                    key={index}
-                    href={category.link}
-                    className="flex items-center p-3 hover:bg-gray-50 rounded-lg transition-all duration-150 text-gray-600 hover:text-gray-800 group border-l-2 border-transparent hover:border-blue-500"
-                  >
-                    <span className="text-base group-hover:text-blue-600 transition-colors font-medium">{category.title}</span>
-                  </Link>
-                ))}
+            <div className="flex-1 p-6">
+              {/* Освещение */}
+              <div className="mb-8">
+                <h4 className="text-lg font-bold mb-4 text-gray-800 tracking-wide">ОСВЕЩЕНИЕ</h4>
+                <div className="grid grid-cols-1 gap-2">
+                  {catalogData.lighting.map((item, index) => (
+                    <Link
+                      key={index}
+                      href={item.link}
+                      className="flex items-center p-2 hover:bg-gray-50 rounded-lg transition-all duration-150 text-gray-600 hover:text-gray-800 group border-l-2 border-transparent hover:border-blue-500"
+                    >
+                      <span className="text-sm group-hover:text-blue-600 transition-colors font-medium">{item.title}</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* Электроустановочное оборудование */}
+              <div>
+                <h4 className="text-lg font-bold mb-4 text-gray-800 tracking-wide">ЭЛЕКТРОУСТАНОВОЧНОЕ ОБОРУДОВАНИЕ</h4>
+                <div className="grid grid-cols-1 gap-2">
+                  {catalogData.electrical.map((item, index) => (
+                    <Link
+                      key={index}
+                      href={item.link}
+                      className="flex items-center p-2 hover:bg-gray-50 rounded-lg transition-all duration-150 text-gray-600 hover:text-gray-800 group border-l-2 border-transparent hover:border-blue-500"
+                    >
+                      <span className="text-sm group-hover:text-blue-600 transition-colors font-medium">{item.title}</span>
+                    </Link>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
