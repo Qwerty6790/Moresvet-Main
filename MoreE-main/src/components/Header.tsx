@@ -569,34 +569,12 @@ const Header = () => {
         >
           <div className="flex h-[600px]">
             {/* Левая часть только с изображением */}
-            <div className="w-[200px] bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 rounded-l-lg p-6 text-white relative overflow-hidden">
-              {/* Декоративные светильники */}
-              <div className="absolute top-8 right-4 w-16 h-16 rounded-full overflow-hidden border-3 border-white/30">
-                <div className="w-full h-full bg-gradient-to-br from-purple-400 via-pink-300 to-orange-300 rounded-full flex items-center justify-center">
-                  <div className="w-6 h-6 bg-white/40 rounded-full"></div>
-                </div>
-              </div>
-              
-              <div className="absolute top-32 right-6 w-12 h-12 rounded-full overflow-hidden border-3 border-white/30">
-                <div className="w-full h-full bg-gradient-to-br from-blue-400 via-teal-300 to-green-300 rounded-full flex items-center justify-center">
-                  <div className="w-4 h-4 bg-white/40 rounded-full"></div>
-                </div>
-              </div>
-              
-              <div className="absolute bottom-16 right-4 w-20 h-20 rounded-full overflow-hidden border-3 border-white/30">
-                <div className="w-full h-full bg-gradient-to-br from-indigo-400 via-purple-300 to-pink-300 rounded-full flex items-center justify-center">
-                  <div className="w-8 h-8 bg-white/40 rounded-full"></div>
-                </div>
-              </div>
-              
-              {/* Сетка на фоне */}
-              <div className="absolute inset-0 opacity-20">
-                <div className="grid grid-cols-6 grid-rows-12 h-full w-full">
-                  {Array.from({ length: 72 }).map((_, i) => (
-                    <div key={i} className="border border-white/20"></div>
-                  ))}
-                </div>
-              </div>
+            <div className="w-[200px] rounded-l-lg relative overflow-hidden">
+              <img 
+                src="/images/assets_task_01jrdpq6eef67argn1c1279zna_img_0.webp" 
+                alt="Каталог светильников"
+                className="w-full h-full object-cover"
+              />
             </div>
             
             {/* Правая часть с категориями */}
