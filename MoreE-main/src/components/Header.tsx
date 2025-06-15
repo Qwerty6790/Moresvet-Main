@@ -306,9 +306,13 @@ const Header = () => {
   const handleCatalogMouseEnter = () => {
     if (catalogLinkRef.current) {
       const rect = catalogLinkRef.current.getBoundingClientRect();
+      const menuWidth = 600;
+      const centerPosition = rect.left + rect.width / 2 - menuWidth / 2;
+      const maxLeft = window.innerWidth - menuWidth - 10; // 10px отступ от правого края
+      
       setCatalogMenuPosition({
         top: rect.bottom + window.scrollY + 8,
-        left: rect.left + rect.width / 2 - 300 // 300 = половина ширины меню (600px)
+        left: Math.max(10, Math.min(centerPosition, maxLeft))
       });
     }
     setIsCatalogMenuOpen(true);
