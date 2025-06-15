@@ -298,7 +298,7 @@ const Header = () => {
                           className="text-white hover:text-gray-300 text-base font-medium transition-colors flex items-center"
                         >
                           {item.title}
-                          {item.hasSubmenu && <ChevronDown className="w-4 h-4 ml-1" />}
+                       
                         </Link>
                       </div>
                     ))}
