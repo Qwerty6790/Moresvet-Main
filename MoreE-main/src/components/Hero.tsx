@@ -91,7 +91,7 @@ export default function Banner() {
       </div>
       
       {/* Баннер-слайдер */}
-      <div className="relative z-10 pt-36 w-full h-screen">
+      <div className="relative pt-36 w-full h-screen">
         <div className="max-w-7xl mx-auto px-4 h-[calc(100vh-112px)] flex items-center">
           {sliderData.map((slide, index) => (
             <div 
@@ -123,7 +123,7 @@ export default function Banner() {
       </div>
 
       {/* Контент под баннером */}
-      <div className="bg-white py-12 relative z-10">
+      <div className="bg-white py-12 relative">
         <div className="max-w-7xl mx-auto px-4">
           {/* Слайдер брендов с автоматической прокруткой */}
           <div className="mb-12">
