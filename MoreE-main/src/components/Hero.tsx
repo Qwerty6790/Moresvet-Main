@@ -91,7 +91,7 @@ export default function Banner() {
       </div>
       
       {/* Баннер-слайдер */}
-      <div className="relative z-10 pt-30 w-full h-screen">
+      <div className="relative z-10 pt-36 w-full h-screen">
         <div className="max-w-7xl mx-auto px-4 h-[calc(100vh-112px)] flex items-center">
           {sliderData.map((slide, index) => (
             <div 
