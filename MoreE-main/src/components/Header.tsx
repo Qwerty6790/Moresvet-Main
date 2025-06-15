@@ -108,18 +108,18 @@ const Header = () => {
 
   // Данные для каталога (виды светильников)
   const catalogCategories = [
-    { title: 'Подвесные', image: '/images/подвесные.jpg', link: '/catalog/Подвесные' },
-    { title: 'Потолочные', image: '/images/потолочные.jpg', link: '/catalog/Потолочные' },
-    { title: 'Настенные', image: '/images/настенные.jpg', link: '/catalog/Настенные' },
-    { title: 'Настенно-потолочные', image: '/images/настенно-потолочные.jpg', link: '/catalog/Настенно-потолочные' },
-    { title: 'Накладные светильники', image: '/images/накладные.jpg', link: '/catalog/Накладные' },
-    { title: 'Встраиваемые', image: '/images/встраиваемые.jpg', link: '/catalog/Встраиваемые' },
-    { title: 'Точечные светильники', image: '/images/точечные.jpg', link: '/catalog/Точечные' },
-    { title: 'Ночники', image: '/images/ночники.jpg', link: '/catalog/Ночники' },
-    { title: 'Мебельные', image: '/images/мебельные.jpg', link: '/catalog/Мебельные' },
-    { title: 'Для растений', image: '/images/для-растений.jpg', link: '/catalog/Для-растений' },
-    { title: 'Бактерицидные светильники и облучатели', image: '/images/бактерицидные.jpg', link: '/catalog/Бактерицидные' },
-    { title: 'Элитные светильники', image: '/images/элитные.jpg', link: '/catalog/Элитные' }
+    { title: 'Подвесные', image: '/images/ЛюстраME.webp', link: '/catalog/Подвесные' },
+    { title: 'Потолочные', image: '/images/светильникME.webp', link: '/catalog/Потолочные' },
+    { title: 'Настенные', image: '/images/БраME.webp', link: '/catalog/Настенные' },
+    { title: 'Настенно-потолочные', image: '/images/светильникME.webp', link: '/catalog/Настенно-потолочные' },
+    { title: 'Накладные светильники', image: '/images/светильникME.webp', link: '/catalog/Накладные' },
+    { title: 'Встраиваемые', image: '/images/трековый-светильникME.webp', link: '/catalog/Встраиваемые' },
+    { title: 'Точечные светильники', image: '/images/трековый-светильникME.webp', link: '/catalog/Точечные' },
+    { title: 'Ночники', image: '/images/настольнаялампаME.webp', link: '/catalog/Ночники' },
+    { title: 'Мебельные', image: '/images/настольнаялампаME.webp', link: '/catalog/Мебельные' },
+    { title: 'Для растений', image: '/images/светоидоднаялампаME.webp', link: '/catalog/Для-растений' },
+    { title: 'Бактерицидные светильники и облучатели', image: '/images/УличныйСветME.png', link: '/catalog/Бактерицидные' },
+    { title: 'Элитные светильники', image: '/images/ЛюстраME.webp', link: '/catalog/Элитные' }
   ];
 
   // Данные для брендов
@@ -337,10 +337,16 @@ const Header = () => {
                                 <p className="text-lg mb-4">для впечатляющих интерьеров</p>
                                 <div className="text-3xl font-bold">MAYTONI</div>
                               </div>
-                              {/* Декоративные элементы */}
-                              <div className="absolute top-4 right-4 w-16 h-16 bg-white/20 rounded-full"></div>
-                              <div className="absolute top-20 right-8 w-12 h-12 bg-white/15 rounded-full"></div>
-                              <div className="absolute bottom-8 right-6 w-20 h-20 bg-white/10 rounded-full"></div>
+                              {/* Декоративные светильники */}
+                              <div className="absolute top-4 right-4 w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
+                                <div className="w-8 h-8 bg-white/30 rounded-full"></div>
+                              </div>
+                              <div className="absolute top-20 right-8 w-12 h-12 bg-white/15 rounded-full flex items-center justify-center">
+                                <div className="w-6 h-6 bg-white/25 rounded-full"></div>
+                              </div>
+                              <div className="absolute bottom-8 right-6 w-20 h-20 bg-white/10 rounded-full flex items-center justify-center">
+                                <div className="w-10 h-10 bg-white/20 rounded-full"></div>
+                              </div>
                             </div>
                             
                             {/* Правая часть с категориями */}
@@ -351,9 +357,9 @@ const Header = () => {
                                   <Link
                                     key={index}
                                     href={category.link}
-                                    className="flex items-center p-2 hover:bg-gray-50 rounded-md transition-colors text-gray-600 hover:text-gray-800"
+                                    className="flex items-center p-2 hover:bg-gray-50 rounded-md transition-colors text-gray-600 hover:text-gray-800 group"
                                   >
-                                    <span className="text-sm">{category.title}</span>
+                                    <span className="text-sm group-hover:text-blue-600 transition-colors">{category.title}</span>
                                   </Link>
                                 ))}
                               </div>
