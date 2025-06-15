@@ -342,9 +342,13 @@ const Header = () => {
   const handleBrandsMouseEnter = () => {
     if (brandsLinkRef.current) {
       const rect = brandsLinkRef.current.getBoundingClientRect();
+      const menuWidth = 400;
+      const centerPosition = rect.left + rect.width / 2 - menuWidth / 2;
+      const maxLeft = window.innerWidth - menuWidth - 10; // 10px отступ от правого края
+      
       setBrandsMenuPosition({
         top: rect.bottom + window.scrollY + 8,
-        left: rect.left + rect.width / 2 - 200 // 200 = половина ширины меню (400px)
+        left: Math.max(10, Math.min(centerPosition, maxLeft))
       });
     }
     setIsBrandsMenuOpen(true);

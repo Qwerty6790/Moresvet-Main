@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import BrandSlider from './BrandSlider';
+
 import Maytoni from '@/app/cardproducts/page';
 
 // --- ТИПЫ ДАННЫХ ---
@@ -125,13 +125,7 @@ export default function Banner() {
       {/* Контент под баннером */}
       <div className="bg-white py-12 relative">
         <div className="max-w-7xl mx-auto px-4">
-          {/* Слайдер брендов с автоматической прокруткой */}
-          <div className="mb-12">
-            <div className="container mx-auto">
-              <BrandSlider />
-            </div>
-          </div>
-
+         
           {/* Категории товаров */}
           <div className="mb-12">
             <div className="mx-auto">
