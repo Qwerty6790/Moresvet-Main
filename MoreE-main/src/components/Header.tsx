@@ -299,7 +299,7 @@ const Header = () => {
     <>
       
       <div className="container mx-auto px-4">
-        <header className="fixed top-4 left-0 right-0 z-50 w-full pointer-events-auto">
+        <header className="fixed top-4 left-0 right-0 z-[9998] w-full pointer-events-auto">
           <div className="max-w-7xl mx-auto px-4">
             {/* Основной хедер с прозрачным фоном и закругленными краями */}
             <div className="backdrop-blur-lg bg-black/50 text-black rounded-xl overflow-hidden shadow-xl">
