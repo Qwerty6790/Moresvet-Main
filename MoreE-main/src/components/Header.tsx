@@ -306,10 +306,35 @@ const Header = () => {
       const rect = catalogLinkRef.current.getBoundingClientRect();
       setCatalogMenuPosition({
         top: rect.bottom + window.scrollY + 8,
-        left: rect.left + rect.width / 2 - 350 // 350 = половина ширины меню (700px)
+        left: rect.left + rect.width / 2 - 400 // 400 = половина ширины меню (800px)
       });
     }
     setIsCatalogMenuOpen(true);
+  };
+
+  const handleCatalogMouseLeave = (e: React.MouseEvent) => {
+    // Добавляем небольшую задержку для плавного перехода
+    setTimeout(() => {
+      const catalogMenu = document.getElementById('catalog-menu');
+      const catalogLink = catalogLinkRef.current;
+      
+      if (catalogMenu && catalogLink) {
+        const menuRect = catalogMenu.getBoundingClientRect();
+        const linkRect = catalogLink.getBoundingClientRect();
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+        
+        // Проверяем, находится ли курсор в области меню или ссылки
+        const inMenu = mouseX >= menuRect.left && mouseX <= menuRect.right && 
+                      mouseY >= menuRect.top && mouseY <= menuRect.bottom;
+        const inLink = mouseX >= linkRect.left && mouseX <= linkRect.right && 
+                      mouseY >= linkRect.top && mouseY <= linkRect.bottom;
+        
+        if (!inMenu && !inLink) {
+          setIsCatalogMenuOpen(false);
+        }
+      }
+    }, 100);
   };
 
   const handleBrandsMouseEnter = () => {
@@ -323,8 +348,43 @@ const Header = () => {
     setIsBrandsMenuOpen(true);
   };
 
+  const handleBrandsMouseLeave = (e: React.MouseEvent) => {
+    setTimeout(() => {
+      const brandsMenu = document.getElementById('brands-menu');
+      const brandsLink = brandsLinkRef.current;
+      
+      if (brandsMenu && brandsLink) {
+        const menuRect = brandsMenu.getBoundingClientRect();
+        const linkRect = brandsLink.getBoundingClientRect();
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+        
+        const inMenu = mouseX >= menuRect.left && mouseX <= menuRect.right && 
+                      mouseY >= menuRect.top && mouseY <= menuRect.bottom;
+        const inLink = mouseX >= linkRect.left && mouseX <= linkRect.right && 
+                      mouseY >= linkRect.top && mouseY <= linkRect.bottom;
+        
+        if (!inMenu && !inLink) {
+          setIsBrandsMenuOpen(false);
+        }
+      }
+    }, 100);
+  };
+
   return (
     <>
+      <style jsx global>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
       
       <div className="container mx-auto px-4">
         <header className="fixed top-4 left-0 right-0 z-[9998] w-full pointer-events-auto">
@@ -344,7 +404,7 @@ const Header = () => {
                     <div 
                       className="relative"
                       onMouseEnter={handleCatalogMouseEnter}
-                      onMouseLeave={() => setIsCatalogMenuOpen(false)}
+                      onMouseLeave={handleCatalogMouseLeave}
                     >
                       <Link
                         ref={catalogLinkRef}
@@ -368,7 +428,7 @@ const Header = () => {
                     <div 
                       className="relative"
                       onMouseEnter={handleBrandsMouseEnter}
-                      onMouseLeave={() => setIsBrandsMenuOpen(false)}
+                      onMouseLeave={handleBrandsMouseLeave}
                     >
                       <Link
                         ref={brandsLinkRef}
@@ -494,46 +554,66 @@ const Header = () => {
       {/* Порталы для выпадающих меню */}
       {typeof window !== 'undefined' && isCatalogMenuOpen && createPortal(
         <div 
-          className="fixed w-[700px] bg-white rounded-lg shadow-2xl border border-gray-200"
+          id="catalog-menu"
+          className="fixed w-[800px] bg-white rounded-lg shadow-2xl border border-gray-200 transition-all duration-200 ease-in-out"
           style={{
             top: catalogMenuPosition.top,
             left: catalogMenuPosition.left,
-            zIndex: 99999
+            zIndex: 99999,
+            animation: 'fadeIn 0.2s ease-in-out'
           }}
           onMouseEnter={() => setIsCatalogMenuOpen(true)}
           onMouseLeave={() => setIsCatalogMenuOpen(false)}
         >
-          <div className="flex min-h-[400px]">
-            {/* Левая часть с изображением */}
-            <div className="w-1/3 bg-gradient-to-br from-blue-600 to-blue-800 rounded-l-lg p-6 text-white relative overflow-hidden">
+          <div className="flex h-[500px]">
+            {/* Левая часть с изображением - точно как на фото */}
+            <div className="w-[320px] bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 rounded-l-lg p-8 text-white relative overflow-hidden">
               <div className="relative z-10">
-                <h3 className="text-xl font-bold mb-2">СВЕТИЛЬНИКИ</h3>
-                <p className="text-sm mb-4">для впечатляющих<br/>интерьеров</p>
-                <div className="text-2xl font-bold">MAYTONI</div>
+                <h3 className="text-3xl font-bold mb-3 leading-tight">СВЕТИЛЬНИКИ</h3>
+                <p className="text-lg mb-6 leading-relaxed">для впечатляющих<br/>интерьеров</p>
+                <div className="text-4xl font-bold tracking-wide">MAYTONI</div>
               </div>
-              {/* Декоративные светильники */}
-              <div className="absolute top-4 right-4 w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                <div className="w-6 h-6 bg-white/30 rounded-full"></div>
+              
+              {/* Декоративные светильники - как на фото */}
+              <div className="absolute top-6 right-6 w-20 h-20 rounded-full overflow-hidden border-4 border-white/30">
+                <div className="w-full h-full bg-gradient-to-br from-purple-400 via-pink-300 to-orange-300 rounded-full flex items-center justify-center">
+                  <div className="w-8 h-8 bg-white/40 rounded-full"></div>
+                </div>
               </div>
-              <div className="absolute top-16 right-8 w-8 h-8 bg-white/15 rounded-full flex items-center justify-center">
-                <div className="w-4 h-4 bg-white/25 rounded-full"></div>
+              
+              <div className="absolute top-32 right-12 w-16 h-16 rounded-full overflow-hidden border-4 border-white/30">
+                <div className="w-full h-full bg-gradient-to-br from-blue-400 via-teal-300 to-green-300 rounded-full flex items-center justify-center">
+                  <div className="w-6 h-6 bg-white/40 rounded-full"></div>
+                </div>
               </div>
-              <div className="absolute bottom-8 right-6 w-16 h-16 bg-white/10 rounded-full flex items-center justify-center">
-                <div className="w-8 h-8 bg-white/20 rounded-full"></div>
+              
+              <div className="absolute bottom-12 right-8 w-24 h-24 rounded-full overflow-hidden border-4 border-white/30">
+                <div className="w-full h-full bg-gradient-to-br from-indigo-400 via-purple-300 to-pink-300 rounded-full flex items-center justify-center">
+                  <div className="w-10 h-10 bg-white/40 rounded-full"></div>
+                </div>
+              </div>
+              
+              {/* Сетка на фоне */}
+              <div className="absolute inset-0 opacity-20">
+                <div className="grid grid-cols-8 grid-rows-8 h-full w-full">
+                  {Array.from({ length: 64 }).map((_, i) => (
+                    <div key={i} className="border border-white/20"></div>
+                  ))}
+                </div>
               </div>
             </div>
             
             {/* Правая часть с категориями */}
-            <div className="w-2/3 p-6">
-              <h4 className="text-lg font-bold mb-4 text-gray-800">ВИДЫ</h4>
-              <div className="grid grid-cols-2 gap-1">
+            <div className="flex-1 p-8">
+              <h4 className="text-xl font-bold mb-6 text-gray-800 tracking-wide">ВИДЫ</h4>
+              <div className="grid grid-cols-1 gap-3">
                 {catalogCategories.map((category, index) => (
                   <Link
                     key={index}
                     href={category.link}
-                    className="flex items-center p-2 hover:bg-gray-50 rounded-md transition-colors text-gray-600 hover:text-gray-800 group"
+                    className="flex items-center p-3 hover:bg-gray-50 rounded-lg transition-all duration-150 text-gray-600 hover:text-gray-800 group border-l-2 border-transparent hover:border-blue-500"
                   >
-                    <span className="text-sm group-hover:text-blue-600 transition-colors">{category.title}</span>
+                    <span className="text-base group-hover:text-blue-600 transition-colors font-medium">{category.title}</span>
                   </Link>
                 ))}
               </div>
@@ -545,11 +625,13 @@ const Header = () => {
 
       {typeof window !== 'undefined' && isBrandsMenuOpen && createPortal(
         <div 
-          className="fixed w-[500px] bg-white rounded-lg shadow-2xl border border-gray-200"
+          id="brands-menu"
+          className="fixed w-[500px] bg-white rounded-lg shadow-2xl border border-gray-200 transition-all duration-200 ease-in-out"
           style={{
             top: brandsMenuPosition.top,
             left: brandsMenuPosition.left,
-            zIndex: 99999
+            zIndex: 99999,
+            animation: 'fadeIn 0.2s ease-in-out'
           }}
           onMouseEnter={() => setIsBrandsMenuOpen(true)}
           onMouseLeave={() => setIsBrandsMenuOpen(false)}
