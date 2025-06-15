@@ -263,7 +263,8 @@ const Header = () => {
   const mainMenuItems = [
     { title: "Каталог", link: "/products", hasSubmenu: true },
     { title: "О нас", link: "/about", hasSubmenu: true },
-    { title: "Новости", link: "/news" },
+    { title: "Бренды", link: "/news" },
+    { title: "Документация", link: "/news" },
   ];
 
   const toggleAccordionItem = (index: number) => {
