@@ -328,7 +328,7 @@ const Header = () => {
                       
                       {/* Выпадающее меню каталога */}
                       {isCatalogMenuOpen && (
-                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-[700px] bg-white rounded-lg shadow-2xl border border-gray-200 z-[9999]">
+                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-[700px] bg-white rounded-lg shadow-2xl border border-gray-200" style={{zIndex: 99999}}>
                           <div className="flex min-h-[400px]">
                             {/* Левая часть с изображением */}
                             <div className="w-1/3 bg-gradient-to-br from-blue-600 to-blue-800 rounded-l-lg p-6 text-white relative overflow-hidden">
@@ -393,7 +393,7 @@ const Header = () => {
                       
                       {/* Выпадающее меню брендов */}
                       {isBrandsMenuOpen && (
-                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-[500px] bg-white rounded-lg shadow-2xl border border-gray-200 z-[9999]">
+                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-[500px] bg-white rounded-lg shadow-2xl border border-gray-200" style={{zIndex: 99999}}>
                           <div className="p-6">
                             <h4 className="text-lg font-bold mb-4 text-gray-800">Популярные бренды</h4>
                             <div className="grid grid-cols-3 gap-4">
