@@ -97,12 +97,46 @@ const Header = () => {
   const [isMobileCatalogOpen, setIsMobileCatalogOpen] = useState(false);
   const [activeMobileCategory, setActiveMobileCategory] = useState<number | null>(null);
   const [expandedAccordionItems, setExpandedAccordionItems] = useState<number[]>([]);
+  const [isCatalogMenuOpen, setIsCatalogMenuOpen] = useState(false);
+  const [isBrandsMenuOpen, setIsBrandsMenuOpen] = useState(false);
   const router = useRouter();
   const catalogRef = useRef<HTMLDivElement | null>(null);
   const catalogButtonRef = useRef<HTMLButtonElement | null>(null);
 
   // Хук для поиска товаров
   const { products, loading } = useSearchProducts(searchQuery);
+
+  // Данные для каталога (виды светильников)
+  const catalogCategories = [
+    { title: 'Подвесные', image: '/images/подвесные.jpg', link: '/catalog/Подвесные' },
+    { title: 'Потолочные', image: '/images/потолочные.jpg', link: '/catalog/Потолочные' },
+    { title: 'Настенные', image: '/images/настенные.jpg', link: '/catalog/Настенные' },
+    { title: 'Настенно-потолочные', image: '/images/настенно-потолочные.jpg', link: '/catalog/Настенно-потолочные' },
+    { title: 'Накладные светильники', image: '/images/накладные.jpg', link: '/catalog/Накладные' },
+    { title: 'Встраиваемые', image: '/images/встраиваемые.jpg', link: '/catalog/Встраиваемые' },
+    { title: 'Точечные светильники', image: '/images/точечные.jpg', link: '/catalog/Точечные' },
+    { title: 'Ночники', image: '/images/ночники.jpg', link: '/catalog/Ночники' },
+    { title: 'Мебельные', image: '/images/мебельные.jpg', link: '/catalog/Мебельные' },
+    { title: 'Для растений', image: '/images/для-растений.jpg', link: '/catalog/Для-растений' },
+    { title: 'Бактерицидные светильники и облучатели', image: '/images/бактерицидные.jpg', link: '/catalog/Бактерицидные' },
+    { title: 'Элитные светильники', image: '/images/элитные.jpg', link: '/catalog/Элитные' }
+  ];
+
+  // Данные для брендов
+  const brandCategories = [
+    { title: 'MAYTONI', image: '/images/maytonilogo.png', link: '/brands/maytoni' },
+    { title: 'FAVOURITE', image: '/images/favouritelogo.png', link: '/brands/favourite' },
+    { title: 'ODEON LIGHT', image: '/images/odeonlightlogo.png', link: '/brands/odeon' },
+    { title: 'ARTE LAMP', image: '/images/artelamplogo.png', link: '/brands/arte' },
+    { title: 'LIGHTSTAR', image: '/images/lightstarlogo.png', link: '/brands/lightstar' },
+    { title: 'LUMION', image: '/images/lumionlogo.png', link: '/brands/lumion' },
+    { title: 'KINKLIGHT', image: '/images/kinklightlogo.png', link: '/brands/kinklight' },
+    { title: 'SONEX', image: '/images/sonexlogo1.png', link: '/brands/sonex' },
+    { title: 'NOVOTECH', image: '/images/novotechlogo.png', link: '/brands/novotech' },
+    { title: 'WERKEL', image: '/images/werkellogo.png', link: '/brands/werkel' },
+    { title: 'ST LUCE', image: '/images/stlucelogo.png', link: '/brands/stluce' },
+    { title: 'VOLTUM', image: '/images/voltumlogo.png', link: '/brands/voltum' }
+  ];
 
   // Отслеживание скролла для скрытия верхней панели
   useEffect(() => {
@@ -241,8 +275,6 @@ const Header = () => {
     };
   }, [isMobileMenuOpen]);
 
-
-
   // Обработчик клика по товару из выпадающего списка
   const handleProductClick = (query: string) => {
     if (query.trim()) {
@@ -254,18 +286,6 @@ const Header = () => {
   };
 
 
-  
-  
-
-
- 
-  // Массив основных пунктов меню
-  const mainMenuItems = [
-    { title: "Каталог", link: "/products", hasSubmenu: true },
-    { title: "О нас", link: "/about", hasSubmenu: true },
-    { title: "Бренды", link: "/news" },
-    { title: "Документация", link: "/news" },
-  ];
 
   const toggleAccordionItem = (index: number) => {
     setExpandedAccordionItems(prev => 
@@ -292,17 +312,116 @@ const Header = () => {
 
                   {/* Основное меню - десктоп */}
                   <nav className="hidden lg:flex items-center space-x-8 mx-4">
-                    {mainMenuItems.map((item, index) => (
-                      <div key={index} className="relative group">
-                        <Link
-                          href={item.link}
-                          className="text-white hover:text-gray-300 text-base font-medium transition-colors flex items-center"
-                        >
-                          {item.title}
-                       
-                        </Link>
-                      </div>
-                    ))}
+                    {/* Каталог с выпадающим меню */}
+                    <div 
+                      className="relative"
+                      onMouseEnter={() => setIsCatalogMenuOpen(true)}
+                      onMouseLeave={() => setIsCatalogMenuOpen(false)}
+                    >
+                      <Link
+                        href="/products"
+                        className="text-white hover:text-gray-300 text-base font-medium transition-colors flex items-center"
+                      >
+                        Каталог
+                        <ChevronDown className="w-4 h-4 ml-1" />
+                      </Link>
+                      
+                      {/* Выпадающее меню каталога */}
+                      {isCatalogMenuOpen && (
+                        <div className="absolute top-full left-0 mt-2 w-[800px] bg-white rounded-lg shadow-2xl border border-gray-200 z-50">
+                          <div className="flex">
+                            {/* Левая часть с изображением */}
+                            <div className="w-1/3 bg-gradient-to-br from-blue-600 to-blue-800 rounded-l-lg p-6 text-white relative overflow-hidden">
+                              <div className="relative z-10">
+                                <h3 className="text-2xl font-bold mb-2">СВЕТИЛЬНИКИ</h3>
+                                <p className="text-lg mb-4">для впечатляющих интерьеров</p>
+                                <div className="text-3xl font-bold">MAYTONI</div>
+                              </div>
+                              {/* Декоративные элементы */}
+                              <div className="absolute top-4 right-4 w-16 h-16 bg-white/20 rounded-full"></div>
+                              <div className="absolute top-20 right-8 w-12 h-12 bg-white/15 rounded-full"></div>
+                              <div className="absolute bottom-8 right-6 w-20 h-20 bg-white/10 rounded-full"></div>
+                            </div>
+                            
+                            {/* Правая часть с категориями */}
+                            <div className="w-2/3 p-6">
+                              <h4 className="text-lg font-bold mb-4 text-gray-800">ВИДЫ</h4>
+                              <div className="grid grid-cols-2 gap-2">
+                                {catalogCategories.map((category, index) => (
+                                  <Link
+                                    key={index}
+                                    href={category.link}
+                                    className="flex items-center p-2 hover:bg-gray-50 rounded-md transition-colors text-gray-600 hover:text-gray-800"
+                                  >
+                                    <span className="text-sm">{category.title}</span>
+                                  </Link>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* О нас */}
+                    <Link
+                      href="/about"
+                      className="text-white hover:text-gray-300 text-base font-medium transition-colors"
+                    >
+                      О нас
+                    </Link>
+
+                    {/* Бренды с выпадающим меню */}
+                    <div 
+                      className="relative"
+                      onMouseEnter={() => setIsBrandsMenuOpen(true)}
+                      onMouseLeave={() => setIsBrandsMenuOpen(false)}
+                    >
+                      <Link
+                        href="/brands"
+                        className="text-white hover:text-gray-300 text-base font-medium transition-colors flex items-center"
+                      >
+                        Бренды
+                        <ChevronDown className="w-4 h-4 ml-1" />
+                      </Link>
+                      
+                      {/* Выпадающее меню брендов */}
+                      {isBrandsMenuOpen && (
+                        <div className="absolute top-full left-0 mt-2 w-[600px] bg-white rounded-lg shadow-2xl border border-gray-200 z-50">
+                          <div className="p-6">
+                            <h4 className="text-lg font-bold mb-4 text-gray-800">Популярные бренды</h4>
+                            <div className="grid grid-cols-3 gap-4">
+                              {brandCategories.map((brand, index) => (
+                                <Link
+                                  key={index}
+                                  href={brand.link}
+                                  className="flex flex-col items-center p-3 hover:bg-gray-50 rounded-lg transition-colors group"
+                                >
+                                  <div className="w-16 h-16 bg-gray-100 rounded-lg mb-2 flex items-center justify-center overflow-hidden">
+                                    <img 
+                                      src={brand.image} 
+                                      alt={brand.title}
+                                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                                    />
+                                  </div>
+                                  <span className="text-xs font-medium text-gray-600 group-hover:text-gray-800 text-center">
+                                    {brand.title}
+                                  </span>
+                                </Link>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Документация */}
+                    <Link
+                      href="/documentation"
+                      className="text-white hover:text-gray-300 text-base font-medium transition-colors"
+                    >
+                      Документация
+                    </Link>
                   </nav>
 
                   {/* Правая часть - поиск, сравнение, избранное, корзина */}
@@ -361,15 +480,30 @@ const Header = () => {
                 {/* Навигация */}
                 <div className="mt-4">
                   <div className="flex flex-col space-y-1">
-                    {mainMenuItems.map((item, index) => (
-                      <Link 
-                        key={index}
-                        href={item.link}
-                        className="flex items-center justify-between py-3 px-2 text-lg font-medium text-white hover:bg-gray-800 rounded-lg"
-                      >
-                        <span>{item.title}</span>
-                      </Link>
-                    ))}
+                    <Link 
+                      href="/products"
+                      className="flex items-center justify-between py-3 px-2 text-lg font-medium text-white hover:bg-gray-800 rounded-lg"
+                    >
+                      <span>Каталог</span>
+                    </Link>
+                    <Link 
+                      href="/about"
+                      className="flex items-center justify-between py-3 px-2 text-lg font-medium text-white hover:bg-gray-800 rounded-lg"
+                    >
+                      <span>О нас</span>
+                    </Link>
+                    <Link 
+                      href="/brands"
+                      className="flex items-center justify-between py-3 px-2 text-lg font-medium text-white hover:bg-gray-800 rounded-lg"
+                    >
+                      <span>Бренды</span>
+                    </Link>
+                    <Link 
+                      href="/documentation"
+                      className="flex items-center justify-between py-3 px-2 text-lg font-medium text-white hover:bg-gray-800 rounded-lg"
+                    >
+                      <span>Документация</span>
+                    </Link>
                   </div>
                 </div>
 
