@@ -78,7 +78,7 @@ export default function Banner() {
   return (
     <div className="w-full">
       {/* Фоновое изображение для слайдера */}
-      <div className="absolute top-0 left-0 right-0 h-screen z-0">
+      <div className="absolute top-0 left-0 right-0 h-screen -z-10">
         {sliderData.map((slide, index) => (
           <div 
             key={index}
