@@ -468,7 +468,7 @@ const Header = () => {
 
           {/* Мобильное меню */}
           {isMobileMenuOpen && (
-            <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-lg bg-opacity-95  overflow-y-auto rounded-lg">
+            <div className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-lg bg-opacity-95  overflow-y-auto rounded-lg">
               <div className="max-w-7xl mx-auto px-4 py-4">
                 {/* Верхняя панель с логотипом и кнопкой закрытия */}
                 <div className="flex items-center justify-between py-4 border-b border-gray-700">
