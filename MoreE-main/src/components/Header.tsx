@@ -328,7 +328,7 @@ const Header = () => {
                       
                       {/* Выпадающее меню каталога */}
                       {isCatalogMenuOpen && (
-                        <div className="absolute top-full left-0 mt-2 w-[800px] bg-white rounded-lg shadow-2xl border border-gray-200 z-50">
+                        <div className="absolute top-full left-0 mt-2 w-[800px] bg-white rounded-lg shadow-2xl border border-gray-200 z-[100]">
                           <div className="flex">
                             {/* Левая часть с изображением */}
                             <div className="w-1/3 bg-gradient-to-br from-blue-600 to-blue-800 rounded-l-lg p-6 text-white relative overflow-hidden">
