@@ -393,7 +393,7 @@ const Header = () => {
                       
                       {/* Выпадающее меню брендов */}
                       {isBrandsMenuOpen && (
-                        <div className="absolute top-full left-0 mt-2 w-[600px] bg-white rounded-lg shadow-2xl border border-gray-200 z-50">
+                        <div className="absolute top-full left-0 mt-2 w-[600px] bg-white rounded-lg shadow-2xl border border-gray-200 z-[100]">
                           <div className="p-6">
                             <h4 className="text-lg font-bold mb-4 text-gray-800">Популярные бренды</h4>
                             <div className="grid grid-cols-3 gap-4">
