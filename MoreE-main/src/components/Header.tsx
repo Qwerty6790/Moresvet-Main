@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Search,
   User,
@@ -99,9 +100,13 @@ const Header = () => {
   const [expandedAccordionItems, setExpandedAccordionItems] = useState<number[]>([]);
   const [isCatalogMenuOpen, setIsCatalogMenuOpen] = useState(false);
   const [isBrandsMenuOpen, setIsBrandsMenuOpen] = useState(false);
+  const [catalogMenuPosition, setCatalogMenuPosition] = useState({ top: 0, left: 0 });
+  const [brandsMenuPosition, setBrandsMenuPosition] = useState({ top: 0, left: 0 });
   const router = useRouter();
   const catalogRef = useRef<HTMLDivElement | null>(null);
   const catalogButtonRef = useRef<HTMLButtonElement | null>(null);
+  const catalogLinkRef = useRef<HTMLAnchorElement | null>(null);
+  const brandsLinkRef = useRef<HTMLAnchorElement | null>(null);
 
   // Хук для поиска товаров
   const { products, loading } = useSearchProducts(searchQuery);
@@ -295,6 +300,29 @@ const Header = () => {
     );
   };
 
+  // Функции для обработки выпадающих меню
+  const handleCatalogMouseEnter = () => {
+    if (catalogLinkRef.current) {
+      const rect = catalogLinkRef.current.getBoundingClientRect();
+      setCatalogMenuPosition({
+        top: rect.bottom + window.scrollY + 8,
+        left: rect.left + rect.width / 2 - 350 // 350 = половина ширины меню (700px)
+      });
+    }
+    setIsCatalogMenuOpen(true);
+  };
+
+  const handleBrandsMouseEnter = () => {
+    if (brandsLinkRef.current) {
+      const rect = brandsLinkRef.current.getBoundingClientRect();
+      setBrandsMenuPosition({
+        top: rect.bottom + window.scrollY + 8,
+        left: rect.left + rect.width / 2 - 250 // 250 = половина ширины меню (500px)
+      });
+    }
+    setIsBrandsMenuOpen(true);
+  };
+
   return (
     <>
       
@@ -315,58 +343,17 @@ const Header = () => {
                     {/* Каталог с выпадающим меню */}
                     <div 
                       className="relative"
-                      onMouseEnter={() => setIsCatalogMenuOpen(true)}
+                      onMouseEnter={handleCatalogMouseEnter}
                       onMouseLeave={() => setIsCatalogMenuOpen(false)}
                     >
                       <Link
+                        ref={catalogLinkRef}
                         href="/products"
                         className="text-white hover:text-gray-300 text-base font-medium transition-colors flex items-center"
                       >
                         Каталог
                         <ChevronDown className="w-4 h-4 ml-1" />
                       </Link>
-                      
-                      {/* Выпадающее меню каталога */}
-                      {isCatalogMenuOpen && (
-                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-[700px] bg-white rounded-lg shadow-2xl border border-gray-200" style={{zIndex: 99999}}>
-                          <div className="flex min-h-[400px]">
-                            {/* Левая часть с изображением */}
-                            <div className="w-1/3 bg-gradient-to-br from-blue-600 to-blue-800 rounded-l-lg p-6 text-white relative overflow-hidden">
-                              <div className="relative z-10">
-                                <h3 className="text-xl font-bold mb-2">СВЕТИЛЬНИКИ</h3>
-                                <p className="text-sm mb-4">для впечатляющих<br/>интерьеров</p>
-                                <div className="text-2xl font-bold">MAYTONI</div>
-                              </div>
-                              {/* Декоративные светильники */}
-                              <div className="absolute top-4 right-4 w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                                <div className="w-6 h-6 bg-white/30 rounded-full"></div>
-                              </div>
-                              <div className="absolute top-16 right-8 w-8 h-8 bg-white/15 rounded-full flex items-center justify-center">
-                                <div className="w-4 h-4 bg-white/25 rounded-full"></div>
-                              </div>
-                              <div className="absolute bottom-8 right-6 w-16 h-16 bg-white/10 rounded-full flex items-center justify-center">
-                                <div className="w-8 h-8 bg-white/20 rounded-full"></div>
-                              </div>
-                            </div>
-                            
-                            {/* Правая часть с категориями */}
-                            <div className="w-2/3 p-6">
-                              <h4 className="text-lg font-bold mb-4 text-gray-800">ВИДЫ</h4>
-                              <div className="grid grid-cols-2 gap-1">
-                                {catalogCategories.map((category, index) => (
-                                  <Link
-                                    key={index}
-                                    href={category.link}
-                                    className="flex items-center p-2 hover:bg-gray-50 rounded-md transition-colors text-gray-600 hover:text-gray-800 group"
-                                  >
-                                    <span className="text-sm group-hover:text-blue-600 transition-colors">{category.title}</span>
-                                  </Link>
-                                ))}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
                     </div>
 
                     {/* О нас */}
@@ -380,45 +367,17 @@ const Header = () => {
                     {/* Бренды с выпадающим меню */}
                     <div 
                       className="relative"
-                      onMouseEnter={() => setIsBrandsMenuOpen(true)}
+                      onMouseEnter={handleBrandsMouseEnter}
                       onMouseLeave={() => setIsBrandsMenuOpen(false)}
                     >
                       <Link
+                        ref={brandsLinkRef}
                         href="/brands"
                         className="text-white hover:text-gray-300 text-base font-medium transition-colors flex items-center"
                       >
                         Бренды
                         <ChevronDown className="w-4 h-4 ml-1" />
                       </Link>
-                      
-                      {/* Выпадающее меню брендов */}
-                      {isBrandsMenuOpen && (
-                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-[500px] bg-white rounded-lg shadow-2xl border border-gray-200" style={{zIndex: 99999}}>
-                          <div className="p-6">
-                            <h4 className="text-lg font-bold mb-4 text-gray-800">Популярные бренды</h4>
-                            <div className="grid grid-cols-3 gap-4">
-                              {brandCategories.map((brand, index) => (
-                                <Link
-                                  key={index}
-                                  href={brand.link}
-                                  className="flex flex-col items-center p-3 hover:bg-gray-50 rounded-lg transition-colors group"
-                                >
-                                  <div className="w-16 h-16 bg-gray-100 rounded-lg mb-2 flex items-center justify-center overflow-hidden">
-                                    <img 
-                                      src={brand.image} 
-                                      alt={brand.title}
-                                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                                    />
-                                  </div>
-                                  <span className="text-xs font-medium text-gray-600 group-hover:text-gray-800 text-center">
-                                    {brand.title}
-                                  </span>
-                                </Link>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      )}
                     </div>
 
                     {/* Документация */}
@@ -531,6 +490,96 @@ const Header = () => {
           )}
         </header>
       </div>
+
+      {/* Порталы для выпадающих меню */}
+      {typeof window !== 'undefined' && isCatalogMenuOpen && createPortal(
+        <div 
+          className="fixed w-[700px] bg-white rounded-lg shadow-2xl border border-gray-200"
+          style={{
+            top: catalogMenuPosition.top,
+            left: catalogMenuPosition.left,
+            zIndex: 99999
+          }}
+          onMouseEnter={() => setIsCatalogMenuOpen(true)}
+          onMouseLeave={() => setIsCatalogMenuOpen(false)}
+        >
+          <div className="flex min-h-[400px]">
+            {/* Левая часть с изображением */}
+            <div className="w-1/3 bg-gradient-to-br from-blue-600 to-blue-800 rounded-l-lg p-6 text-white relative overflow-hidden">
+              <div className="relative z-10">
+                <h3 className="text-xl font-bold mb-2">СВЕТИЛЬНИКИ</h3>
+                <p className="text-sm mb-4">для впечатляющих<br/>интерьеров</p>
+                <div className="text-2xl font-bold">MAYTONI</div>
+              </div>
+              {/* Декоративные светильники */}
+              <div className="absolute top-4 right-4 w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                <div className="w-6 h-6 bg-white/30 rounded-full"></div>
+              </div>
+              <div className="absolute top-16 right-8 w-8 h-8 bg-white/15 rounded-full flex items-center justify-center">
+                <div className="w-4 h-4 bg-white/25 rounded-full"></div>
+              </div>
+              <div className="absolute bottom-8 right-6 w-16 h-16 bg-white/10 rounded-full flex items-center justify-center">
+                <div className="w-8 h-8 bg-white/20 rounded-full"></div>
+              </div>
+            </div>
+            
+            {/* Правая часть с категориями */}
+            <div className="w-2/3 p-6">
+              <h4 className="text-lg font-bold mb-4 text-gray-800">ВИДЫ</h4>
+              <div className="grid grid-cols-2 gap-1">
+                {catalogCategories.map((category, index) => (
+                  <Link
+                    key={index}
+                    href={category.link}
+                    className="flex items-center p-2 hover:bg-gray-50 rounded-md transition-colors text-gray-600 hover:text-gray-800 group"
+                  >
+                    <span className="text-sm group-hover:text-blue-600 transition-colors">{category.title}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {typeof window !== 'undefined' && isBrandsMenuOpen && createPortal(
+        <div 
+          className="fixed w-[500px] bg-white rounded-lg shadow-2xl border border-gray-200"
+          style={{
+            top: brandsMenuPosition.top,
+            left: brandsMenuPosition.left,
+            zIndex: 99999
+          }}
+          onMouseEnter={() => setIsBrandsMenuOpen(true)}
+          onMouseLeave={() => setIsBrandsMenuOpen(false)}
+        >
+          <div className="p-6">
+            <h4 className="text-lg font-bold mb-4 text-gray-800">Популярные бренды</h4>
+            <div className="grid grid-cols-3 gap-4">
+              {brandCategories.map((brand, index) => (
+                <Link
+                  key={index}
+                  href={brand.link}
+                  className="flex flex-col items-center p-3 hover:bg-gray-50 rounded-lg transition-colors group"
+                >
+                  <div className="w-16 h-16 bg-gray-100 rounded-lg mb-2 flex items-center justify-center overflow-hidden">
+                    <img 
+                      src={brand.image} 
+                      alt={brand.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                    />
+                  </div>
+                  <span className="text-xs font-medium text-gray-600 group-hover:text-gray-800 text-center">
+                    {brand.title}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
      
     </>
   );
