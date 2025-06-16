@@ -520,7 +520,7 @@ const Header = () => {
           onMouseEnter={() => setIsCatalogMenuOpen(true)}
           onMouseLeave={() => setIsCatalogMenuOpen(false)}
         >
-          <div className="flex h-[600px]">
+          <div className="flex h-[650px]">
             {/* Левая часть только с изображением */}
             <div className="w-[200px] rounded-l-lg relative overflow-hidden">
               <img 
