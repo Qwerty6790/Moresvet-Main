@@ -291,7 +291,7 @@ const Header = () => {
     if (catalogLinkRef.current) {
       const rect = catalogLinkRef.current.getBoundingClientRect();
       const menuWidth = 600;
-      const menuHeight = 600;
+      const menuHeight = 650;
       const centerPosition = rect.left + rect.width / 2 - menuWidth / 2;
       const maxLeft = window.innerWidth - menuWidth - 10; // 10px отступ от правого края
       
