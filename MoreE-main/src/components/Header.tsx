@@ -99,14 +99,11 @@ const Header = () => {
   const [activeMobileCategory, setActiveMobileCategory] = useState<number | null>(null);
   const [expandedAccordionItems, setExpandedAccordionItems] = useState<number[]>([]);
   const [isCatalogMenuOpen, setIsCatalogMenuOpen] = useState(false);
-  const [isBrandsMenuOpen, setIsBrandsMenuOpen] = useState(false);
   const [catalogMenuPosition, setCatalogMenuPosition] = useState({ top: 0, left: 0 });
-  const [brandsMenuPosition, setBrandsMenuPosition] = useState({ top: 0, left: 0 });
   const router = useRouter();
   const catalogRef = useRef<HTMLDivElement | null>(null);
   const catalogButtonRef = useRef<HTMLButtonElement | null>(null);
   const catalogLinkRef = useRef<HTMLAnchorElement | null>(null);
-  const brandsLinkRef = useRef<HTMLAnchorElement | null>(null);
 
   // Хук для поиска товаров
   const { products, loading } = useSearchProducts(searchQuery);
@@ -130,21 +127,7 @@ const Header = () => {
     ]
   };
 
-  // Данные для брендов
-  const brandCategories = [
-    { title: 'MAYTONI', image: '/images/maytonilogo.png', link: '/brands/maytoni' },
-    { title: 'FAVOURITE', image: '/images/favouritelogo.png', link: '/brands/favourite' },
-    { title: 'ODEON LIGHT', image: '/images/odeonlightlogo.png', link: '/brands/odeon' },
-    { title: 'ARTE LAMP', image: '/images/artelamplogo.png', link: '/brands/arte' },
-    { title: 'LIGHTSTAR', image: '/images/lightstarlogo.png', link: '/brands/lightstar' },
-    { title: 'LUMION', image: '/images/lumionlogo.png', link: '/brands/lumion' },
-    { title: 'KINKLIGHT', image: '/images/kinklightlogo.png', link: '/brands/kinklight' },
-    { title: 'SONEX', image: '/images/sonexlogo1.png', link: '/brands/sonex' },
-    { title: 'NOVOTECH', image: '/images/novotechlogo.png', link: '/brands/novotech' },
-    { title: 'WERKEL', image: '/images/werkellogo.png', link: '/brands/werkel' },
-    { title: 'ST LUCE', image: '/images/stlucelogo.png', link: '/brands/stluce' },
-    { title: 'VOLTUM', image: '/images/voltumlogo.png', link: '/brands/voltum' }
-  ];
+
 
   // Отслеживание скролла для скрытия верхней панели
   useEffect(() => {
