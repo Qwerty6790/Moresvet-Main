@@ -125,7 +125,8 @@ const Header = () => {
     ],
     electrical: [
       { title: 'Встраиваемые серии', link: '/catalog/Встраиваемые-серии' },
-      { title: 'Выдвижной блок', link: '/catalog/Выдвижной-блок' }
+      { title: 'Выдвижной блок', link: '/catalog/Выдвижной-блок' },
+      { title: 'Накладные серии', link: '/catalog/Накладные-серии' }
     ]
   };
 
@@ -307,11 +308,16 @@ const Header = () => {
     if (catalogLinkRef.current) {
       const rect = catalogLinkRef.current.getBoundingClientRect();
       const menuWidth = 600;
+      const menuHeight = 600;
       const centerPosition = rect.left + rect.width / 2 - menuWidth / 2;
       const maxLeft = window.innerWidth - menuWidth - 10; // 10px отступ от правого края
       
+      // Проверяем, помещается ли меню снизу
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const shouldOpenAbove = spaceBelow < menuHeight + 20;
+      
       setCatalogMenuPosition({
-        top: rect.bottom + window.scrollY + 8,
+        top: shouldOpenAbove ? rect.top - menuHeight - 8 : rect.bottom + 8,
         left: Math.max(10, Math.min(centerPosition, maxLeft))
       });
     }
@@ -343,43 +349,7 @@ const Header = () => {
     }, 100);
   };
 
-  const handleBrandsMouseEnter = () => {
-    if (brandsLinkRef.current) {
-      const rect = brandsLinkRef.current.getBoundingClientRect();
-      const menuWidth = 400;
-      const centerPosition = rect.left + rect.width / 2 - menuWidth / 2;
-      const maxLeft = window.innerWidth - menuWidth - 10; // 10px отступ от правого края
-      
-      setBrandsMenuPosition({
-        top: rect.bottom + window.scrollY + 8,
-        left: Math.max(10, Math.min(centerPosition, maxLeft))
-      });
-    }
-    setIsBrandsMenuOpen(true);
-  };
 
-  const handleBrandsMouseLeave = (e: React.MouseEvent) => {
-    setTimeout(() => {
-      const brandsMenu = document.getElementById('brands-menu');
-      const brandsLink = brandsLinkRef.current;
-      
-      if (brandsMenu && brandsLink) {
-        const menuRect = brandsMenu.getBoundingClientRect();
-        const linkRect = brandsLink.getBoundingClientRect();
-        const mouseX = e.clientX;
-        const mouseY = e.clientY;
-        
-        const inMenu = mouseX >= menuRect.left && mouseX <= menuRect.right && 
-                      mouseY >= menuRect.top && mouseY <= menuRect.bottom;
-        const inLink = mouseX >= linkRect.left && mouseX <= linkRect.right && 
-                      mouseY >= linkRect.top && mouseY <= linkRect.bottom;
-        
-        if (!inMenu && !inLink) {
-          setIsBrandsMenuOpen(false);
-        }
-      }
-    }, 100);
-  };
 
   return (
     <>
@@ -434,21 +404,13 @@ const Header = () => {
                       О нас
                     </Link>
 
-                    {/* Бренды с выпадающим меню */}
-                    <div 
-                      className="relative"
-                      onMouseEnter={handleBrandsMouseEnter}
-                      onMouseLeave={handleBrandsMouseLeave}
+                                        {/* Бренды без выпадающего меню */}
+                    <Link
+                      href="/brands"
+                      className="text-white hover:text-gray-300 text-base font-medium transition-colors"
                     >
-                      <Link
-                        ref={brandsLinkRef}
-                        href="/brands"
-                        className="text-white hover:text-gray-300 text-base font-medium transition-colors flex items-center"
-                      >
-                        Бренды
-                       
-                      </Link>
-                    </div>
+                      Бренды
+                    </Link>
 
                     {/* Документация */}
                     <Link
@@ -624,46 +586,7 @@ const Header = () => {
         document.body
       )}
 
-      {typeof window !== 'undefined' && isBrandsMenuOpen && createPortal(
-        <div 
-          id="brands-menu"
-          className="fixed w-[400px] bg-white rounded-lg shadow-2xl border border-gray-200 transition-all duration-200 ease-in-out"
-          style={{
-            top: brandsMenuPosition.top,
-            left: brandsMenuPosition.left,
-            zIndex: 99999,
-            animation: 'fadeIn 0.2s ease-in-out'
-          }}
-          onMouseEnter={() => setIsBrandsMenuOpen(true)}
-          onMouseLeave={() => setIsBrandsMenuOpen(false)}
-        >
-          <div className="p-6">
-            <h4 className="text-lg font-bold mb-4 text-gray-800">Популярные бренды</h4>
-            <div className="grid grid-cols-2 gap-3">
-              {brandCategories.map((brand, index) => (
-                <Link
-                  key={index}
-                  href={brand.link}
-                  className="flex flex-col items-center p-3 hover:bg-gray-50 rounded-lg transition-colors group"
-                >
-                  <div className="w-20 h-20 bg-black rounded-lg mb-2 flex items-center justify-center overflow-hidden relative">
-                    <img 
-                      src={brand.image} 
-                      alt={brand.title}
-                      className="w-full h-full object-contain group-hover:scale-105 transition-transform filter brightness-110"
-                    />
-                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
-                  </div>
-                  <span className="text-xs font-medium text-gray-600 group-hover:text-gray-800 text-center">
-                    {brand.title}
-                  </span>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>,
-        document.body
-      )}
+
      
     </>
   );
