@@ -389,7 +389,7 @@ const Header = () => {
                         href="/products"
                         className={`text-white text-base font-medium transition duration-500 flex items-center px-4 py-2 rounded-lg ${
                           isCatalogMenuOpen 
-                            ? 'bg-transparent backdrop-blur-xl transform translate-y-1' 
+                            ? 'bg-transparent backdrop-blur-xl transition duration-500 transform translate-y-1' 
                             : 'hover:text-gray-300'
                         }`}
                       >
