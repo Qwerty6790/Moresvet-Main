@@ -66,13 +66,12 @@ export default function Banner() {
 
   // Популярные категории для каталога
   const popularCategories = [
-    { id: 1, title: 'ЛЮСТРЫ', image: '/images/ЛюстраME.webp', link: '/catalog?category=Люстра&page=1' },
-    { id: 2, title: 'СВЕТИЛЬНИКИ', image: '/images/светильникME.webp', link: '/catalog/Светильник' },
-    { id: 3, title: 'БРА И ПОДСВЕТКИ', image: '/images/БраME.webp', link: '/catalog/Бра' },
-    { id: 4, title: 'Лампочки', image: '/images/светоидоднаялампаME.webp', link: '/catalog/Лампочка' },
-    { id: 5, title: 'НАСТОЛЬНЫЕ ЛАМПЫ', image: '/images/настольнаялампаME.webp', link: '/catalog/Настольная лампа' },
-    { id: 6, title: 'ТОРШЕРЫ', image: '/images/ТоршерME.webp', link: '/catalog/Торшер' },
-    { id: 7, title: 'УЛИЧНОЕ ОСВЕЩЕНИЕ', image: '/images/УличныйСветME.png', link: '/catalog/Уличный светильник' }
+    { id: 1, title: 'ЛЮСТРЫ', image: '/images/lustry.jpg', link: '/catalog?category=Люстра&page=1' },
+    { id: 2, title: 'СВЕТИЛЬНИКИ', image: '/images/svetilniki.jpeg', link: '/catalog/Светильник' },
+    { id: 3, title: 'БРА И ПОДСВЕТКИ', image: '/images/bra.jpeg', link: '/catalog/Бра' },
+    { id: 4, title: 'НАСТОЛЬНЫЕ ЛАМПЫ', image: '/images/nastolny.jpg', link: '/catalog/Настольная лампа' },
+    { id: 5, title: 'ТОРШЕРЫ', image: '/images/torher.jpg', link: '/catalog/Торшер' },
+    { id: 6, title: 'УЛИЧНОЕ ОСВЕЩЕНИЕ', image: '/images/ylihnoe.jpg', link: '/catalog/Уличный светильник' }
   ];
 
   return (
@@ -133,7 +132,7 @@ export default function Banner() {
                 href={category.link}
                 className="flex flex-col items-center group hover:scale-105 transition-transform duration-300"
               >
-                <div className="w-24 h-24 mb-4 flex items-center justify-center bg-gray-50 rounded-full group-hover:bg-gray-100 transition-colors">
+                <div className="w-full h-full mb-4 flex items-center justify-center group-hover:bg-gray-100 transition-colors">
                   <Image
                     src={category.image}
                     alt={category.title}
