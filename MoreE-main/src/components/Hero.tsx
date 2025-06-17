@@ -132,11 +132,11 @@ export default function Banner() {
                 href={category.link}
                 className="flex flex-col items-center group hover:scale-105 transition-transform duration-300"
               >
-                 <div className="relative mb-4 w-32 h-32">
+                 <div className="relative mb-4 w-full h-full">
                    {/* Задняя темная область со смещением влево */}
-                   <div className="absolute -left-2 top-2 w-32 h-32 bg-gray-300 rounded-2xl"></div>
+                   <div className="absolute -left-2 top-2 w-full h-full bg-gray-300 rounded-2xl"></div>
                    {/* Основное изображение */}
-                   <div className="relative w-full h-fyll bg-white rounded-2xl overflow-hidden shadow-md group-hover:shadow-lg transition-shadow">
+                   <div className="relative w-full h-full bg-white rounded-2xl overflow-hidden shadow-md group-hover:shadow-lg transition-shadow">
                      <Image
                        src={category.image}
                        alt={category.title}
