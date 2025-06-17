@@ -276,6 +276,41 @@ const Header = () => {
     }
   };
 
+  // Обработчик поиска
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      handleProductClick(searchQuery);
+    }
+  };
+
+  // Обработчик нажатия Enter в поле поиска
+  const handleSearchKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
+  // Закрытие поиска по Escape
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsSearchOpen(false);
+      }
+    };
+
+    if (isSearchOpen) {
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [isSearchOpen]);
+
 
 
   const toggleAccordionItem = (index: number) => {
@@ -362,6 +397,21 @@ const Header = () => {
         .catalog-menu-enter {
           animation: slideDown 0.3s ease-out;
         }
+        
+        @keyframes searchModalFadeIn {
+          from {
+            opacity: 0;
+            transform: scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+        
+        .search-modal-enter {
+          animation: searchModalFadeIn 0.3s ease-out;
+        }
       `}</style>
       
       <div className="container mx-auto px-4">
@@ -426,7 +476,10 @@ const Header = () => {
                   {/* Правая часть - поиск, сравнение, избранное, корзина */}
                   <div className="flex items-center space-x-6">
                     {/* Поиск */}
-                    <button className="text-white hover:text-gray-300">
+                    <button 
+                      onClick={() => setIsSearchOpen(true)}
+                      className="text-white hover:text-gray-300 transition-colors"
+                    >
                       <Search className="w-5 h-5" />
                     </button>
                     
@@ -524,6 +577,83 @@ const Header = () => {
           )}
         </header>
       </div>
+
+      {/* Модальное окно поиска */}
+      {isSearchOpen && (
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
+          {/* Блюр фон */}
+          <div 
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setIsSearchOpen(false)}
+          />
+          
+          {/* Модальное окно */}
+          <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl search-modal-enter">
+            {/* Заголовок */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <h3 className="text-xl font-semibold text-gray-900">Поиск товаров</h3>
+              <button
+                onClick={() => setIsSearchOpen(false)}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+            
+            {/* Поле поиска */}
+            <div className="p-6">
+              <div className="flex items-center space-x-3">
+                <div className="flex-1 relative">
+                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyPress={handleSearchKeyPress}
+                    placeholder="Введите название товара..."
+                    className="w-full pl-12 pr-4 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    autoFocus
+                  />
+                </div>
+                <button
+                  onClick={handleSearch}
+                  className="px-8 py-4 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium"
+                >
+                  Найти
+                </button>
+              </div>
+            </div>
+            
+            {/* Результаты поиска */}
+            {searchQuery && (
+              <div className="max-h-96 overflow-y-auto border-t border-gray-200">
+                {searchResultsContent}
+              </div>
+            )}
+            
+            {/* Популярные категории */}
+            {!searchQuery && (
+              <div className="p-6 border-t border-gray-200">
+                <h4 className="text-sm font-medium text-gray-700 mb-4">Популярные категории</h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {catalogData.lighting.slice(0, 4).map((item, index) => (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        router.push(item.link);
+                        setIsSearchOpen(false);
+                      }}
+                      className="p-3 text-left bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+                    >
+                      <span className="text-sm font-medium text-gray-700">{item.title}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Порталы для выпадающих меню */}
       {typeof window !== 'undefined' && isCatalogMenuOpen && createPortal(
