@@ -28,6 +28,60 @@ export type Category = {
   id?: string; // Добавляем id для идентификации категории
 };
 
+// Функция для получения товаров для конкретной страницы (вынесена отдельно для использования в getServerSideProps)
+const fetchProductsForPageStandalone = async (
+  sourceName: string, 
+  page: number = 1, 
+  limit: number = 40,
+  params: Record<string, any> = {},
+  signal?: AbortSignal
+): Promise<{
+  products: ProductI[],
+  totalPages: number,
+  totalProducts: number
+}> => {
+  // Базовые параметры для запроса
+  const baseParams = {
+    ...params,
+    limit,
+    page, // Передаем нужную страницу
+    source: sourceName || '',
+    inStock: 'true',  // Всегда запрашиваем только товары в наличии
+  };
+  
+  console.log('Загружаем страницу', page, 'с параметрами:', baseParams);
+  
+  // Преобразуем sourceName в строку для fetchProductsWithSorting
+  const brand = sourceName || 'Все товары';
+  const brandStr = typeof brand === 'string' ? brand : Array.isArray(brand) ? brand[0] : 'Все товары';
+  
+  try {
+    // Получаем данные для запрошенной страницы
+    const data = await fetchProductsWithSorting(brandStr, baseParams, signal);
+    
+    // Фильтруем товары в наличии
+    const inStockProducts = data.products ? data.products.filter((product: ProductI) => 
+      parseInt(product.stock as string, 10) > 0
+    ) : [];
+    
+    console.log(`Страница ${page}: ${inStockProducts.length} из ${data.products?.length || 0} товаров в наличии`);
+    console.log(`Всего страниц: ${data.totalPages}, всего товаров: ${data.totalProducts}`);
+    
+    return {
+      products: inStockProducts,
+      totalPages: data.totalPages || 1,
+      totalProducts: data.totalProducts || 0
+    };
+  } catch (error) {
+    console.error('Ошибка при загрузке страницы:', error);
+    return {
+      products: [],
+      totalPages: 1,
+      totalProducts: 0
+    };
+  }
+};
+
 export type Brand = {
   name: string;
   categories: Category[];
@@ -838,133 +892,7 @@ interface CatalogIndexProps {
   lcpImageUrls: string[]; // Добавляем проп для LCP URL
 }
 
-// Функция для объединения товаров с нескольких страниц
-const combineProductsFromMultiplePages = async (
-  sourceName: string, 
-  initialPage: number = 1, 
-  limit: number = 40,
-  params: Record<string, any> = {},
-  signal?: AbortSignal
-): Promise<{
-  products: ProductI[],
-  totalPages: number,
-  totalProducts: number
-}> => {
-  // Базовые параметры для запроса
-  const baseParams = {
-    ...params,
-    limit,
-    source: sourceName || '',
-    inStock: 'true',  // Всегда запрашиваем только товары в наличии
-  };
-  
-  // Массив для всех загруженных товаров
-  let allProducts: ProductI[] = [];
-  
-  // Текущая страница запроса
-  let currentPage = initialPage;
-  let originalTotalPages = 0;
-  let originalTotalProducts = 0;
-  
-  // Максимальное количество страниц для загрузки (защита от бесконечного цикла)
-  const MAX_PAGES_TO_LOAD = 5;
-  
-  // Минимальное количество товаров, которое мы хотим получить
-  const MIN_PRODUCTS_COUNT = limit; 
-  
-  console.log('Начинаем загрузку товаров для страницы', initialPage);
-  
-  // Преобразуем sourceName в строку для fetchProductsWithSorting
-  const brand = sourceName || 'Все товары';
-  const brandStr = typeof brand === 'string' ? brand : Array.isArray(brand) ? brand[0] : 'Все товары';
-  
-  try {
-    // Получаем данные для первой страницы, чтобы узнать общее количество товаров и страниц
-    const firstPageParams = { ...baseParams, page: initialPage };
-    console.log(`Загружаем первую страницу для получения мета-информации`);
-    
-    // Получаем данные для текущей страницы
-    const initialData = await fetchProductsWithSorting(brandStr, firstPageParams, signal);
-    
-    // Сохраняем оригинальную информацию о количестве страниц и товаров
-    originalTotalPages = initialData.totalPages || 0;
-    originalTotalProducts = initialData.totalProducts || 0;
-    
-    console.log(`Оригинальная информация: всего товаров - ${originalTotalProducts}, всего страниц - ${originalTotalPages}`);
-    
-    // Добавляем товары в наличии из первой страницы
-    const inStockProducts = initialData.products ? initialData.products.filter((product: ProductI) => 
-      parseInt(product.stock as string, 10) > 0
-    ) : [];
-    
-    console.log(`Страница ${initialPage}: ${inStockProducts.length} из ${initialData.products?.length || 0} товаров в наличии`);
-    
-    // Добавляем товары в общий массив
-    allProducts = [...allProducts, ...inStockProducts];
-  } catch (error) {
-    console.error('Ошибка при загрузке первой страницы:', error);
-  }
-  
-  // Загружаем дополнительные страницы при необходимости
-  if (allProducts.length < MIN_PRODUCTS_COUNT && currentPage < originalTotalPages) {
-    currentPage++; // Начинаем со следующей страницы
-    
-    // Загружаем страницы до тех пор, пока не соберем нужное количество товаров или не достигнем ограничения
-    for (let i = 0; i < MAX_PAGES_TO_LOAD - 1 && currentPage <= originalTotalPages; i++) {
-      const pageParams = { ...baseParams, page: currentPage };
-      console.log(`Загружаем дополнительную страницу ${currentPage} из ${originalTotalPages}`);
-      
-      try {
-        // Получаем данные для текущей страницы
-        const data = await fetchProductsWithSorting(brandStr, pageParams, signal);
-        
-        // Проверяем, есть ли товары в ответе
-        if (!data.products || data.products.length === 0) {
-          console.log(`Страница ${currentPage} не содержит товаров, прекращаем загрузку`);
-          break;
-        }
-        
-        // Добавляем только товары в наличии
-        const inStockProducts = data.products.filter((product: ProductI) => 
-          parseInt(product.stock as string, 10) > 0
-        );
-        
-        console.log(`Страница ${currentPage}: ${inStockProducts.length} из ${data.products.length} товаров в наличии`);
-        
-        // Добавляем товары в общий массив
-        allProducts = [...allProducts, ...inStockProducts];
-        
-        // Если собрали достаточное количество товаров, выходим
-        if (allProducts.length >= MIN_PRODUCTS_COUNT) {
-          console.log(`Достигнуто нужное количество товаров (${allProducts.length}), завершаем загрузку`);
-          break;
-        }
-        
-        // Переходим к следующей странице
-        currentPage++;
-      } catch (error) {
-        console.error('Ошибка при загрузке страницы:', error);
-        break;
-      }
-    }
-  }
-  
-  // Выбираем товары для запрошенной страницы
-  const startIndex = 0; // Всегда начинаем с первого элемента в собранном массиве
-  const endIndex = Math.min(limit, allProducts.length);
-  const pageProducts = allProducts.slice(startIndex, endIndex);
-  
-  console.log(`Итоговый результат: возвращаем ${pageProducts.length} товаров`);
-  console.log(`Оригинальное количество страниц: ${originalTotalPages}, товаров: ${originalTotalProducts}`);
-  console.log(`Собрано товаров в наличии: ${allProducts.length}`);
-  
-  // Возвращаем результаты с оригинальным количеством страниц и общего числа товаров
-  return {
-    products: pageProducts,
-    totalPages: originalTotalPages > 0 ? originalTotalPages : 1,
-    totalProducts: originalTotalProducts
-  };
-};
+
 
 // Добавляем маппинг для логотипов брендов
 const brandLogoMap: Record<string, string> = {
@@ -1130,6 +1058,9 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
       const categoryName = category ? (Array.isArray(category) ? category[0] : category) : '';
       const productName = name ? (Array.isArray(name) ? name[0] : name as string) : '';
       const sortValue = sort ? (Array.isArray(sort) ? sort[0] : sort) : 'newest';
+      
+      // Обновляем currentPage в соответствии с URL
+      setCurrentPage(pageNumber);
       
       // Проверяем, является ли текущая категория "Люстра" без подкатегории
       if (categoryName === 'Люстра' && !router.query.subcategory) {
@@ -1355,14 +1286,14 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
         params.sortOrder = 'desc';
       }
       
-      // Используем нашу новую функцию для получения товаров
-      const result = await combineProductsFromMultiplePages(
-        sourceName, 
-        page, 
-        limit, 
-        params,
-        fetchAbortController.current.signal
-      );
+              // Используем нашу новую функцию для получения товаров
+        const result = await fetchProductsForPageStandalone(
+          sourceName, 
+          page, 
+          limit, 
+          params,
+          fetchAbortController.current.signal
+        );
       
       // Обновляем состояние компонента
       setProducts(result.products);
@@ -2975,8 +2906,8 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
      if (maxPrice && !isNaN(Number(maxPrice))) params.maxPrice = Number(maxPrice);
 
 
-    // Запрашиваем *только первую страницу* на сервере
-    const dataPromise = fetchProductsWithSorting(sourceName as string, params); // Используем fetchProductsWithSorting напрямую
+    // Запрашиваем нужную страницу на сервере
+    const dataPromise = fetchProductsForPageStandalone(sourceName as string, pageNumber, limit, params); // Используем новую функцию
 
     const initialData = await Promise.race([dataPromise, timeoutPromise]) as {
       products: ProductI[],
