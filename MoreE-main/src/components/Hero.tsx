@@ -165,48 +165,7 @@ export default function Banner() {
           </div>
 
           {/* Первая область фотографий */}
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold mb-8 text-center">Наши лучшие работы</h2>
-            <div className="grid grid-cols-4 gap-4 h-96">
-              <div className="col-span-2 relative overflow-hidden rounded-lg group">
-                <img 
-                  src="/images/work1.jpg" 
-                  alt="Освещение дома" 
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0  transition-all duration-300">
-                  <div className="absolute bottom-4 left-4 text-black">
-                    <h3 className="text-xl font-bold">Домашнее освещение</h3>
-                    <p className="text-sm opacity-90">Современные решения</p>
-                  </div>
-                </div>
-              </div>
-              <div className="relative overflow-hidden rounded-lg group">
-                <img 
-                  src="/images/assets_task_01jrdh7qpqf7ftcpemen2q4j7c_img_0.webp" 
-                  alt="Офисное освещение" 
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0  transition-all duration-300">
-                  <div className="absolute bottom-4 left-4 text-black">
-                    <h3 className="text-lg font-bold">Офисы</h3>
-                  </div>
-                </div>
-              </div>
-              <div className="relative overflow-hidden rounded-lg group">
-                <img 
-                  src="/images/assets_task_01jqw0yqm3fxfttyamn7h1n0ns_img_0 (1).webp" 
-                  alt="Уличное освещение" 
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0  transition-all duration-300">
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <h3 className="text-lg font-bold">Улицы</h3>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+         
 
           {/* О компании MoreElecktriki */}
           <div className="mb-16">
@@ -240,34 +199,18 @@ export default function Banner() {
                 <div className="space-y-4">
                   <div className="relative overflow-hidden rounded-lg group h-44">
                     <img 
-                      src="/images/company1.jpg" 
+                      src="/images/assets_task_01jrdpq6eef67argn1c1279zna_img_0.webp" 
                       alt="Офис MoreElecktriki" 
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all duration-300"></div>
-                  </div>
-                  <div className="relative overflow-hidden rounded-lg group h-44">
-                    <img 
-                      src="/images/company2.jpg" 
-                      alt="Команда специалистов" 
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all duration-300"></div>
-                  </div>
+                  </div>  
                 </div>
                 <div className="space-y-4">
                   <div className="relative overflow-hidden rounded-lg group h-60">
                     <img 
-                      src="/images/company3.jpg" 
+                      src="/images/assets_task_01jrdh7qpqf7ftcpemen2q4j7c_img_0.webp" 
                       alt="Склад продукции" 
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all duration-300"></div>
-                  </div>
-                  <div className="relative overflow-hidden rounded-lg group h-28">
-                    <img 
-                      src="/images/company4.jpg" 
-                      alt="Сертификаты качества" 
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all duration-300"></div>
