@@ -604,20 +604,20 @@ const Header = () => {
             <div className="p-6">
               <div className="flex items-center space-x-3">
                 <div className="flex-1 relative">
-                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-black" />
+                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white" />
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyPress={handleSearchKeyPress}
                     placeholder="Введите название товара..."
-                    className="w-full pl-12 pr-4 py-4 text-lg border border-black rounded-xl focus:ring-2  focus:border-transparent outline-none transition-all"
+                    className="w-full pl-12 pr-4 py-4 text-lg  rounded-xl focus:ring-2  focus:border-transparent outline-none transition-all"
                     autoFocus
                   />
                 </div>
                 <button
                   onClick={handleSearch}
-                  className="px-8 py-4 bg- text-black rounded-xl  transition-colors font-medium"
+                  className="px-8 py-4 bg- text-white rounded-xl  transition-colors font-medium"
                 >
                   Найти
                 </button>
@@ -626,15 +626,15 @@ const Header = () => {
             
             {/* Результаты поиска */}
             {searchQuery && (
-              <div className="max-h-96 overflow-y-auto border-t border-gray-200">
+              <div className="max-h-96 overflow-y-auto ">
                 {searchResultsContent}
               </div>
             )}
             
             {/* Популярные категории */}
             {!searchQuery && (
-              <div className="p-6 border-t border-gray-200">
-                <h4 className="text-sm font-medium text-gray-700 mb-4">Популярные категории</h4>
+              <div className="p-6 ">
+                <h4 className="text-sm font-medium text-white mb-4">Популярные категории</h4>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {catalogData.lighting.slice(0, 4).map((item, index) => (
                     <button
@@ -643,9 +643,9 @@ const Header = () => {
                         router.push(item.link);
                         setIsSearchOpen(false);
                       }}
-                      className="p-3 text-left bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+                      className="p-3 text-left bg-black/50 backdrop-blur-2xl rounded-lg transition-colors"
                     >
-                      <span className="text-sm font-medium text-gray-700">{item.title}</span>
+                      <span className="text-sm font-medium text-white">{item.title}</span>
                     </button>
                   ))}
                 </div>
