@@ -384,17 +384,18 @@ const Header = () => {
                       onMouseEnter={handleCatalogMouseEnter}
                       onMouseLeave={handleCatalogMouseLeave}
                     >
-                      <Link
-                        ref={catalogLinkRef}
-                        href="/products"
-                        className={`text-white text-base font-medium transition duration-500 flex items-center px-4 py-2 rounded-lg ${
-                          isCatalogMenuOpen 
-                            ? 'bg-transparent backdrop-blur-xl transition duration-500 transform translate-y-1' 
-                            : 'hover:text-gray-300'
-                        }`}
-                      >
-                        Каталог
-                      </Link>
+                   <Link
+  ref={catalogLinkRef}
+  href="/products"
+  className={`text-white text-base font-medium flex items-center px-4 py-2 rounded-lg transition-all duration-300 ease-in-out ${
+    isCatalogMenuOpen
+      ? 'bg-transparent backdrop-blur-xl translate-y-1'
+      : 'hover:text-gray-300 hover:backdrop-blur-md'
+  }`}
+>
+  Каталог
+</Link>
+
                     </div>
 
                     {/* О нас */}
