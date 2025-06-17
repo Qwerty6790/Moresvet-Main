@@ -172,17 +172,17 @@ export default function Banner() {
           {/* О компании MoreElecktriki */}
           <div className="mb-16">
             <h2 className="text-3xl font-bold mb-12 text-center">О компании MoreElecktriki</h2>
-            <div className="grid grid-cols-2 gap-12 items-center">
+            <div className=" gap-12 items-center">
               {/* Левая часть - текст о компании */}
               <div className="space-y-6">
                 <div className="space-y-4">
-                  <h3 className="text-2xl font-bold text-gray-800">Освещаем вашу жизнь</h3>
-                  <p className="text-gray-600 leading-relaxed">
+                  <h3 className="text-2xl font-bold text-black">Освещаем вашу жизнь</h3>
+                  <p className="text-black leading-relaxed">
                     MoreElecktriki — ведущий поставщик качественного освещения в России. 
                     Мы специализируемся на продаже премиальных светильников, люстр и 
                     электротехнических товаров от лучших мировых производителей.
                   </p>
-                  <p className="text-gray-600 leading-relaxed">
+                  <p className="text-black leading-relaxed">
                     Наша команда профессионалов поможет вам создать идеальное освещение 
                     для дома, офиса или коммерческого объекта. Мы предлагаем не только 
                     продажу, но и полный комплекс услуг по проектированию и монтажу.
@@ -190,17 +190,8 @@ export default function Banner() {
                 </div>
               </div>
 
-                             {/* Правая часть - область фотографий */}
-               <div className="w-full">
-                 <div className="relative overflow-hidden rounded-xl group w-full h-[300px]">
-                   <img 
-                     src="/images/image.png" 
-                     alt="Большая ликвидация - специальное предложение" 
-                     className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
-                   />
-                   <div className="absolute inset-0  transition-all duration-300"></div>
-                 </div>
-               </div>
+
+          
 
             </div>
           </div>
