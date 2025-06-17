@@ -47,6 +47,13 @@ export default function Banner() {
       subtitle: 'Скидки до 30%',
       description: 'На избранные модели светильников',
       buttonText: 'Узнать больше'
+    },
+    {
+      image: '/images/Снимок экрана 2025-06-17 114544.png',
+      title: 'Специальное предложение',
+      subtitle: 'Скидки до 30%',
+      description: 'На избранные модели светильников',
+      buttonText: 'Узнать больше'
     }
   ];
 
