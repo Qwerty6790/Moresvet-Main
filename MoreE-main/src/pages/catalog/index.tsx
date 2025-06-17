@@ -86,9 +86,21 @@ const fetchProductsForPageStandalone = async (
       });
     }
     
+    // 🔧 ИСПРАВЛЯЕМ: вычисляем правильное количество страниц
+    const correctTotalPages = Math.ceil((data.totalProducts || 0) / (baseParams.limit || 40));
+    const finalTotalPages = Math.max(correctTotalPages, 1);
+    
+    console.log('🔧 ИСПРАВЛЕНИЕ ПАГИНАЦИИ:', {
+      apiTotalPages: data.totalPages,
+      totalProducts: data.totalProducts,
+      limit: baseParams.limit,
+      correctTotalPages: correctTotalPages,
+      finalTotalPages: finalTotalPages
+    });
+    
     return {
       products: inStockProducts,
-      totalPages: data.totalPages || 1,
+      totalPages: finalTotalPages, // Используем исправленное значение
       totalProducts: data.totalProducts || 0
     };
   } catch (error) {
@@ -945,12 +957,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
   const [totalPages, setTotalPages] = useState<number>(initialTotalPages);
   const [totalProducts, setTotalProducts] = useState<number>(initialTotalProducts);
   
-  // Отладка исходного состояния
-  console.log('🚀 ИНИЦИАЛИЗАЦИЯ КОМПОНЕНТА:', {
-    initialTotalPages,
-    initialTotalProducts,
-    initialProductsLength: initialProducts.length
-  });
+
   const [viewMode, setViewMode] = useState<'grid' | 'list' | 'table'>('grid');
   const [currentPage, setCurrentPage] = useState<number>(1);
   // Новое состояние для переключения между обычным и коллекционным режимом просмотра
@@ -1326,21 +1333,8 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
       setTotalPages(result.totalPages);
       setTotalProducts(result.totalProducts);
       
-      // Добавляем подробную отладку состояния
-      console.log('🔄 ОБНОВЛЯЕМ СОСТОЯНИЕ КОМПОНЕНТА:', {
-        page: page,
-        productsCount: result.products.length,
-        totalPages: result.totalPages,
-        totalProducts: result.totalProducts,
-        currentPage: currentPage
-      });
-      
       // Извлекаем фильтры из всех найденных товаров
       extractFiltersFromProducts(result.products);
-      
-      // Выводим информацию о загруженных товарах
-      console.log(`✅ Загружено ${result.products.length} товаров в наличии из ${result.totalProducts}`);
-      console.log(`📄 Страница ${page} из ${result.totalPages}`);
     } catch (error) {
       if (!axios.isCancel(error)) {
         console.error('Error fetching products:', error);
@@ -1887,15 +1881,8 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
 
   // Функция для рендера пагинации с эллипсисами
   const renderPagination = () => {
-    console.log('🎯 RENDER PAGINATION:', { 
-      totalPages, 
-      currentPage, 
-      totalProducts, 
-      productsLength: products.length 
-    });
-    
-    // ВРЕМЕННО: всегда показываем пагинацию для отладки
-    // if (totalPages <= 1) return null;
+    // Не показываем пагинацию, если страниц меньше 2
+    if (totalPages <= 1) return null;
     
     const pageNumbers: (number | string)[] = [];
     
@@ -2887,9 +2874,6 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                     )}
                      {/* Пагинация */}
                      <div className={`mt-8 ${displayMode === 'collection' ? 'hidden sm:hidden' : ''}`}>
-                       <div className="mb-4 p-2 bg-yellow-100 text-sm">
-                         🔧 ОТЛАДКА: totalPages={totalPages}, currentPage={currentPage}, displayMode={displayMode}
-                       </div>
                        {renderPagination()}
                      </div>
                   </>
