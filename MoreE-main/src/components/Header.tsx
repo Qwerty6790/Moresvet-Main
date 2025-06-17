@@ -510,7 +510,7 @@ const Header = () => {
       {typeof window !== 'undefined' && isCatalogMenuOpen && createPortal(
         <div 
           id="catalog-menu"
-          className="fixed w-[600px] bg-transparent backdrop-blur-xl rounded-lg shadow-2xl border border-gray-200 transition-all duration-200 ease-in-out"
+          className="fixed w-[600px] bg-transparent backdrop-blur-xl rounded-lg shadow-2xl transition-all duration-200 ease-in-out"
           style={{
             top: catalogMenuPosition.top,
             left: catalogMenuPosition.left,
