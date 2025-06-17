@@ -556,7 +556,7 @@ const Header = () => {
                     <Link
                       key={index}
                       href={item.link}
-                      className="flex items-center p-2 hover:bg-gray-50 rounded-lg transition-all duration-150 text-white hover:text-gray-800 group border-l-2 border-transparent hover:border-blue-500"
+                      className="flex items-center p-2 hover:bg-gray-50 rounded-lg transition-all duration-150 text-white hover:backdrop-blur-2xl group border-l-2 border-transparent hover:border-blue-500"
                     >
                       <span className="text-sm group-hover:text-blue-600 transition-colors font-medium">{item.title}</span>
                     </Link>
