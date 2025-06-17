@@ -125,14 +125,14 @@ export default function Banner() {
       <div className="bg-white py-16 relative">
         <div className="max-w-7xl mx-auto px-4">
           {/* Популярные категории */}
-          <div className="grid grid-cols-7 gap-8 justify-items-center">
+          <div className="grid bg-gray-100 grid-cols-7 gap-8 justify-items-center">
             {popularCategories.map((category) => (
               <Link 
                 key={category.id} 
                 href={category.link}
                 className="flex flex-col items-center group hover:scale-105 transition-transform duration-300"
               >
-                <div className="w-full h-full mb-4 flex items-center justify-center bg-gray-100 transition-colors">
+                <div className="w-full h-full mb-4 flex items-center justify-center  transition-colors">
                   <Image
                     src={category.image}
                     alt={category.title}
