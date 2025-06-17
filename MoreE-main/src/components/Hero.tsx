@@ -136,8 +136,8 @@ export default function Banner() {
                   <Image
                     src={category.image}
                     alt={category.title}
-                    width={100}
-                    height={100}
+                    width={140}
+                    height={140}
                     className="object-cover"
                   />
                 </div>
