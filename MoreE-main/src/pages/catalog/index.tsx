@@ -622,10 +622,21 @@ const ImageCategories: React.FC<{
   categories: Category[]; 
   onCategoryClick: (category: Category) => void; 
 }> = ({ categories, onCategoryClick }) => {
+  const [hoveredCategory, setHoveredCategory] = React.useState<string | null>(null);
+  
   // Фильтруем категории, исключая "Розетки и выключатели"
   const filteredCategories = categories.filter(
     (category) => category.label !== 'Розетки и выключатели' && category.label !== 'Все товары'
   );
+
+  // Получаем подкатегории из productCategories для показа при наведении
+  const getSubcategories = (categoryLabel: string) => {
+    const category = productCategories.find(cat => 
+      cat.label.toLowerCase().includes(categoryLabel.toLowerCase()) ||
+      categoryLabel.toLowerCase().includes(cat.label.toLowerCase())
+    );
+    return category?.subcategories || [];
+  };
 
   return (
     <div className="mb-10">
@@ -643,11 +654,16 @@ const ImageCategories: React.FC<{
           else if (category.label.includes('Торшер') || category.label.includes('Торшеры')) displayLabel = 'Напольные светильники';
           else if (category.label.includes('Уличный светильник')) displayLabel = 'Уличные светильники';
           
+          const subcategories = getSubcategories(category.label);
+          const isHovered = hoveredCategory === category.label;
+          
           return (
             <div
               key={index}
               onClick={() => onCategoryClick(category)}
-              className="flex flex-col items-center cursor-pointer transition-transform hover:scale-105"
+              onMouseEnter={() => setHoveredCategory(category.label)}
+              onMouseLeave={() => setHoveredCategory(null)}
+              className="flex flex-col items-center cursor-pointer transition-transform hover:scale-105 relative"
             >
               <div className="relative w-full aspect-square mb-4 overflow-hidden bg-white border border-gray-200">
                 <img 
@@ -655,6 +671,44 @@ const ImageCategories: React.FC<{
                   alt={category.label}
                   className="w-full h-full object-contain p-4"
                 />
+                
+                                {/* Всплывающее окно с подкатегориями - только на десктопе */}
+                {isHovered && subcategories.length > 0 && (
+                  <div className={`hidden md:block absolute -top-2 z-50 bg-white border border-gray-200 rounded-lg shadow-lg p-4 min-w-[200px] max-w-[250px] ${
+                    index >= 3 ? 'right-full mr-2' : 'left-full ml-2'
+                  }`}>
+                    <div className="text-sm font-medium text-gray-800 mb-2">{displayLabel}</div>
+                    <div className="space-y-1">
+                      {subcategories.map((sub, subIndex) => (
+                        <div 
+                          key={subIndex}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onCategoryClick({ 
+                              label: sub.label, 
+                              searchName: sub.searchName
+                            });
+                          }}
+                          className="text-xs text-gray-600 hover:text-blue-600 hover:bg-gray-50 p-1 rounded cursor-pointer transition-colors"
+                        >
+                          {sub.label}
+                        </div>
+                      ))}
+                    </div>
+                    {/* Треугольная стрелка - меняем направление в зависимости от позиции */}
+                    {index >= 3 ? (
+                      <>
+                        <div className="absolute top-4 -right-2 w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-l-[8px] border-l-white"></div>
+                        <div className="absolute top-4 -right-[9px] w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-l-[8px] border-l-gray-200"></div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="absolute top-4 -left-2 w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-r-[8px] border-r-white"></div>
+                        <div className="absolute top-4 -left-[9px] w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-r-[8px] border-r-gray-200"></div>
+                      </>
+                    )}
+                  </div>
+                )}
               </div>
               <div className="text-center text-sm font-medium">{displayLabel}</div>
             </div>
