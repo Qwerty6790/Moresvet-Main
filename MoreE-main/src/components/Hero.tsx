@@ -71,7 +71,8 @@ export default function Banner() {
     { id: 3, title: 'БРА И ПОДСВЕТКИ', image: '/images/bra.jpeg', link: '/catalog/Бра' },
     { id: 4, title: 'НАСТОЛЬНЫЕ ЛАМПЫ', image: '/images/nastolny.jpg', link: '/catalog/Настольная лампа' },
     { id: 5, title: 'ТОРШЕРЫ', image: '/images/torher.jpg', link: '/catalog/Торшер' },
-    { id: 6, title: 'УЛИЧНОЕ ОСВЕЩЕНИЕ', image: '/images/ylihnoe.jpg', link: '/catalog/Уличный светильник' }
+    { id: 6, title: 'УЛИЧНОЕ ОСВЕЩЕНИЕ', image: '/images/ylihnoe.jpg', link: '/catalog/Уличный светильник' },
+    { id: 7, title: 'ВСТРАИВАЕМЫЕ СЕРИИ', image: '/images/vamsvet-vyklyuchatel-dvukhklavishnyy-werkel-belyy-matovyy-w1120061-4690389184611.webp', link: '/catalog/Уличный светильник' }
   ];
 
   return (
