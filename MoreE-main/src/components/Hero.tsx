@@ -132,7 +132,7 @@ export default function Banner() {
                 href={category.link}
                 className="flex flex-col items-center group hover:scale-105 transition-transform duration-300"
               >
-                                 <div className="w-32 h-32 mb-4 flex items-center justify-center bg-gray-100 rounded-lg group-hover:bg-gray-200 transition-colors relative overflow-hidden">
+                                 <div className="w-full h-full mb-4 flex items-center justify-center bg-gray-100 rounded-lg group-hover:bg-gray-200 transition-colors relative overflow-hidden">
                    <Image
                      src={category.image}
                      alt={category.title}
