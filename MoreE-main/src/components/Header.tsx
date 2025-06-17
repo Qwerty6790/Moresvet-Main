@@ -583,18 +583,18 @@ const Header = () => {
         <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
           {/* Блюр фон */}
           <div 
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/20 backdrop-blur-sm"
             onClick={() => setIsSearchOpen(false)}
           />
           
           {/* Модальное окно */}
-          <div className="relative  backdrop-blur-2xl bg-black/50 rounded-2xl shadow-2xl w-full max-w-2xl search-modal-enter">
+          <div className="relative  backdrop-blur-2xl bg-black/20 rounded-2xl shadow-2xl w-full max-w-2xl search-modal-enter">
             {/* Заголовок */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-200">
-              <h3 className="text-xl font-semibold text-gray-900">Поиск товаров</h3>
+            <div className="flex items-center justify-between p-6">
+              <h3 className="text-xl font-semibold text-white">Поиск товаров</h3>
               <button
                 onClick={() => setIsSearchOpen(false)}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                className="p-2  rounded-full transition-colors"
               >
                 <X className="w-5 h-5 text-gray-500" />
               </button>
@@ -643,7 +643,7 @@ const Header = () => {
                         router.push(item.link);
                         setIsSearchOpen(false);
                       }}
-                      className="p-3 text-left bg-black/50 backdrop-blur-2xl rounded-lg transition-colors"
+                      className="p-3 text-left bg-black/20 backdrop-blur-2xl rounded-lg transition-colors"
                     >
                       <span className="text-sm font-medium text-white">{item.title}</span>
                     </button>
