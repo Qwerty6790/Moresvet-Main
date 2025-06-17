@@ -174,7 +174,7 @@ export default function Banner() {
               {/* Левая часть - текст о компании */}
               <div className="space-y-6">
                 <div className="space-y-4">
-                  <h3 className="text-2xl font-bold text-gray-800">Освещаем вашу жизнь с 2010 года</h3>
+                  <h3 className="text-2xl font-bold text-gray-800">Освещаем вашу жизнь</h3>
                   <p className="text-gray-600 leading-relaxed">
                     MoreElecktriki — ведущий поставщик качественного освещения в России. 
                     Мы специализируемся на продаже премиальных светильников, люстр и 
@@ -186,27 +186,20 @@ export default function Banner() {
                     продажу, но и полный комплекс услуг по проектированию и монтажу.
                   </p>
                 </div>
-                
-      
-
-                <button className="bg-transparent backdrop-blur-xl text-black px-8 py-3 rounded-lg  transition-colors font-medium">
-                  Узнать больше о нас
-                </button>
               </div>
 
-              {/* Правая часть - область фотографий */}
-              <div className="grid grid-cols-2 gap-4 h-96">
-                <div className="space-y-4">
-                  <div className="relative overflow-hidden rounded-lg group w-full h-full">
-                    <img 
-                      src="/images/image.png" 
-                      alt="Склад продукции" 
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all duration-300"></div>
-                  </div>
-                </div>
-              </div>
+                             {/* Правая часть - область фотографий */}
+               <div className="w-full">
+                 <div className="relative overflow-hidden rounded-xl group w-full h-[300px]">
+                   <img 
+                     src="/images/image.png" 
+                     alt="Большая ликвидация - специальное предложение" 
+                     className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                   />
+                   <div className="absolute inset-0  transition-all duration-300"></div>
+                 </div>
+               </div>
+
             </div>
           </div>
         </div>
