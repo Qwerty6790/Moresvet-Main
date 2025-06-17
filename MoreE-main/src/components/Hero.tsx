@@ -183,7 +183,7 @@ export default function Banner() {
               </div>
               <div className="relative overflow-hidden rounded-lg group">
                 <img 
-                  src="/images/work2.jpg" 
+                  src="/images/assets_task_01jrdh7qpqf7ftcpemen2q4j7c_img_0.webp" 
                   alt="Офисное освещение" 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
@@ -195,59 +195,13 @@ export default function Banner() {
               </div>
               <div className="relative overflow-hidden rounded-lg group">
                 <img 
-                  src="/images/work3.jpg" 
+                  src="/images/assets_task_01jqw0yqm3fxfttyamn7h1n0ns_img_0 (1).webp" 
                   alt="Уличное освещение" 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300">
                   <div className="absolute bottom-4 left-4 text-white">
                     <h3 className="text-lg font-bold">Улицы</h3>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Вторая область фотографий */}
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold mb-8 text-center">Премиальные коллекции</h2>
-            <div className="grid grid-cols-3 gap-6">
-              <div className="relative overflow-hidden rounded-lg group h-64">
-                <img 
-                  src="/images/premium1.jpg" 
-                  alt="Люстры премиум класса" 
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent">
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <h3 className="text-xl font-bold mb-2">Люстры Premium</h3>
-                    <p className="text-sm opacity-90">Эксклюзивная коллекция</p>
-                  </div>
-                </div>
-              </div>
-              <div className="relative overflow-hidden rounded-lg group h-64">
-                <img 
-                  src="/images/premium2.jpg" 
-                  alt="Дизайнерские светильники" 
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent">
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <h3 className="text-xl font-bold mb-2">Дизайнерские</h3>
-                    <p className="text-sm opacity-90">Авторские работы</p>
-                  </div>
-                </div>
-              </div>
-              <div className="relative overflow-hidden rounded-lg group h-64">
-                <img 
-                  src="/images/premium3.jpg" 
-                  alt="Smart освещение" 
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent">
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <h3 className="text-xl font-bold mb-2">Smart Light</h3>
-                    <p className="text-sm opacity-90">Умное освещение</p>
                   </div>
                 </div>
               </div>
@@ -274,24 +228,7 @@ export default function Banner() {
                   </p>
                 </div>
                 
-                <div className="grid grid-cols-2 gap-6 pt-4">
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-yellow-600 mb-2">15+</div>
-                    <div className="text-gray-600">лет опыта</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-yellow-600 mb-2">50k+</div>
-                    <div className="text-gray-600">довольных клиентов</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-yellow-600 mb-2">5000+</div>
-                    <div className="text-gray-600">товаров в наличии</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-yellow-600 mb-2">100%</div>
-                    <div className="text-gray-600">гарантия качества</div>
-                  </div>
-                </div>
+      
 
                 <button className="bg-yellow-600 text-white px-8 py-3 rounded-lg hover:bg-yellow-700 transition-colors font-medium">
                   Узнать больше о нас
