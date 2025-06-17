@@ -631,10 +631,24 @@ const ImageCategories: React.FC<{
 
   // Получаем подкатегории из productCategories для показа при наведении
   const getSubcategories = (categoryLabel: string) => {
-    const category = productCategories.find(cat => 
-      cat.label.toLowerCase().includes(categoryLabel.toLowerCase()) ||
-      categoryLabel.toLowerCase().includes(cat.label.toLowerCase())
-    );
+    console.log('Поиск подкатегорий для:', categoryLabel);
+    
+    // Улучшенная логика поиска
+    let category = productCategories.find(cat => {
+      // Точное совпадение
+      if (cat.label.toLowerCase() === categoryLabel.toLowerCase()) return true;
+      
+      // Поиск по ключевым словам
+      if (categoryLabel.toLowerCase().includes('люстра') && cat.id === 'lyustra') return true;
+      if (categoryLabel.toLowerCase().includes('светильник') && cat.id === 'svetilnik') return true;
+      if (categoryLabel.toLowerCase().includes('уличн') && cat.id === 'ulichni') return true;
+      
+      return false;
+    });
+    
+    console.log('Найдена категория:', category);
+    console.log('Подкатегории:', category?.subcategories);
+    
     return category?.subcategories || [];
   };
 
@@ -654,8 +668,44 @@ const ImageCategories: React.FC<{
           else if (category.label.includes('Торшер') || category.label.includes('Торшеры')) displayLabel = 'Напольные светильники';
           else if (category.label.includes('Уличный светильник')) displayLabel = 'Уличные светильники';
           
-          const subcategories = getSubcategories(category.label);
+          let subcategories = getSubcategories(category.label);
+          
+          // Временно добавляем тестовые данные для всех категорий
+          if (subcategories.length === 0) {
+            if (category.label.includes('Люстра') || displayLabel === 'Люстры') {
+              subcategories = [
+                { label: 'Люстра подвесная', searchName: 'Люстра подвесная' },
+                { label: 'Люстра потолочная', searchName: 'Люстра потолочная' },
+                { label: 'Люстра на штанге', searchName: 'Люстра на штанге' },
+                { label: 'Люстра каскадная', searchName: 'Люстра каскадная' }
+              ];
+            } else if (category.label.includes('Светильник') || displayLabel === 'Светильники') {
+              subcategories = [
+                { label: 'Потолочный светильник', searchName: 'Потолочный светильник' },
+                { label: 'Подвесной светильник', searchName: 'Подвесной светильник' },
+                { label: 'Настенный светильник', searchName: 'Настенный светильник' },
+                { label: 'Встраиваемый светильник', searchName: 'Встраиваемый светильник' },
+                { label: 'Накладной светильник', searchName: 'Накладной светильник' },
+                { label: 'Трековый светильник', searchName: 'Трековый светильник' },
+                { label: 'Точечный светильник', searchName: 'Точечный светильник' }
+              ];
+            } else if (category.label.includes('Уличный') || displayLabel === 'Уличные светильники') {
+              subcategories = [
+                { label: 'Уличный светильник', searchName: 'Уличный светильник' },
+                { label: 'Настенный уличный светильник', searchName: 'Настенный уличный светильник' },
+                { label: 'Грунтовый светильник', searchName: 'Грунтовый светильник' },
+                { label: 'Ландшафтный светильник', searchName: 'Ландшафтный светильник' },
+                { label: 'Парковый светильник', searchName: 'Парковый светильник' }
+              ];
+            }
+          }
+          
           const isHovered = hoveredCategory === category.label;
+          
+          // Отладка
+          if (isHovered) {
+            console.log('Наведение на категорию:', category.label, 'подкатегории:', subcategories);
+          }
           
           return (
             <div
@@ -672,9 +722,9 @@ const ImageCategories: React.FC<{
                   className="w-full h-full object-contain p-4"
                 />
                 
-                                {/* Всплывающее окно с подкатегориями - только на десктопе */}
+                                {/* Всплывающее окно с подкатегориями - для тестирования показываем всегда */}
                 {isHovered && subcategories.length > 0 && (
-                  <div className={`hidden md:block absolute -top-2 z-50 bg-white border border-gray-200 rounded-lg shadow-lg p-4 min-w-[200px] max-w-[250px] ${
+                  <div className={`absolute -top-2 z-50 bg-white border border-gray-200 rounded-lg shadow-lg p-4 min-w-[200px] max-w-[250px] ${
                     index >= 3 ? 'right-full mr-2' : 'left-full ml-2'
                   }`}>
                     <div className="text-sm font-medium text-gray-800 mb-2">{displayLabel}</div>
