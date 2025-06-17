@@ -134,9 +134,9 @@ export default function Banner() {
                   <div
                     key={category.id}
                     className={`transform transition-transform duration-200 hover:scale-105 ${
-                      index === 0 ? 'col-span-3 row-span-2' : 
+                      index === 0 ? 'col-span-4 row-span-2' : 
                       index === 1 ? 'col-span-1 row-span-1' : 
-                      index === 2 ? 'col-span-2 row-span-1' : 
+                      index === 2 ? 'col-span-1 row-span-1' : 
                       index === 3 ? 'col-span-2 row-span-1' : 
                       index === 4 ? 'col-span-2 row-span-0' : 
                       index === 5 ? 'col-span-1 row-span-1' : 
@@ -150,10 +150,10 @@ export default function Banner() {
                         <img 
                           src={category.image} 
                           alt={category.title} 
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out p-2"
+                          className="w-full h-full object-cover  group-hover:scale-105 transition-transform duration-300 ease-in-out p-2"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent group-hover:from-black/20 transition-all duration-300"></div>
-                        <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
+                        <div className="absolute inset-0 bg-gradient-to-t   from-black/5 group-hover:from-black/20 transition-all duration-300"></div>
+                        <div className="absolute bottom-0 left-0 right-0 p-3 text-black bg-transparent backdrop-blur-xl">
                           <p className="font-bold group-hover:text-yellow-300 transition-colors duration-200">{category.title}</p>
                         </div>
                       </div>
