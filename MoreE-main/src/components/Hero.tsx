@@ -136,12 +136,12 @@ export default function Banner() {
                    {/* Задняя темная область со смещением влево */}
                    <div className="absolute -left-2 top-2 w-32 h-32 bg-gray-300 rounded-2xl"></div>
                    {/* Основное изображение */}
-                   <div className="relative w-32 h-32 bg-white rounded-2xl overflow-hidden shadow-md group-hover:shadow-lg transition-shadow">
+                   <div className="relative w-full h-fyll bg-white rounded-2xl overflow-hidden shadow-md group-hover:shadow-lg transition-shadow">
                      <Image
                        src={category.image}
                        alt={category.title}
-                       width={128}
-                       height={128}
+                       width={158}
+                       height={158}
                        className="object-cover w-full h-full"
                      />
                    </div>
