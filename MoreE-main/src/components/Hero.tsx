@@ -42,7 +42,7 @@ export default function Banner() {
       buttonText: 'Смотреть каталог'
     },
     {
-      image: '/images/assets_task_01jrdr96hce8gvc3yrrapknvq8_img_0.webp',
+      image: '/images/Снимок экрана 2025-06-17 110243.png',
       title: 'Специальное предложение',
       subtitle: 'Скидки до 30%',
       description: 'На избранные модели светильников',
