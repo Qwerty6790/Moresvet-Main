@@ -944,6 +944,13 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [totalPages, setTotalPages] = useState<number>(initialTotalPages);
   const [totalProducts, setTotalProducts] = useState<number>(initialTotalProducts);
+  
+  // Отладка исходного состояния
+  console.log('🚀 ИНИЦИАЛИЗАЦИЯ КОМПОНЕНТА:', {
+    initialTotalPages,
+    initialTotalProducts,
+    initialProductsLength: initialProducts.length
+  });
   const [viewMode, setViewMode] = useState<'grid' | 'list' | 'table'>('grid');
   const [currentPage, setCurrentPage] = useState<number>(1);
   // Новое состояние для переключения между обычным и коллекционным режимом просмотра
@@ -1880,10 +1887,15 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
 
   // Функция для рендера пагинации с эллипсисами
   const renderPagination = () => {
-    // Не показываем пагинацию, если страниц меньше 2
-    if (totalPages <= 1) return null;
+    console.log('🎯 RENDER PAGINATION:', { 
+      totalPages, 
+      currentPage, 
+      totalProducts, 
+      productsLength: products.length 
+    });
     
-    console.log('Рендерим пагинацию:', { currentPage, totalPages });
+    // ВРЕМЕННО: всегда показываем пагинацию для отладки
+    // if (totalPages <= 1) return null;
     
     const pageNumbers: (number | string)[] = [];
     
@@ -2875,6 +2887,9 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                     )}
                      {/* Пагинация */}
                      <div className={`mt-8 ${displayMode === 'collection' ? 'hidden sm:hidden' : ''}`}>
+                       <div className="mb-4 p-2 bg-yellow-100 text-sm">
+                         🔧 ОТЛАДКА: totalPages={totalPages}, currentPage={currentPage}, displayMode={displayMode}
+                       </div>
                        {renderPagination()}
                      </div>
                   </>
@@ -2978,11 +2993,11 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       }
     };
   } catch (error) {
-    console.error('Ошибка при получении товаров с сервера (getServerSideProps):', error);
+    console.error('❌ ОШИБКА В getServerSideProps:', error);
     return {
       props: {
         initialProducts: [],
-        initialTotalPages: 0,
+        initialTotalPages: 1, // Изменяем с 0 на 1
         initialTotalProducts: 0,
         source: sourceName || null,
         lcpImageUrls: [], // Пустой массив в случае ошибки
