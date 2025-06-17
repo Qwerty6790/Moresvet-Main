@@ -204,16 +204,6 @@ export default function Banner() {
               {/* Правая часть - область фотографий */}
               <div className="grid grid-cols-2 gap-4 h-96">
                 <div className="space-y-4">
-                  <div className="relative overflow-hidden rounded-lg group h-44">
-                    <img 
-                      src="/images/assets_task_01jrdpq6eef67argn1c1279zna_img_0.webp" 
-                      alt="Офис MoreElecktriki" 
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all duration-300"></div>
-                  </div>  
-                </div>
-                <div className="space-y-4">
                   <div className="relative overflow-hidden rounded-lg group h-60">
                     <img 
                       src="/images/assets_task_01jrdh7qpqf7ftcpemen2q4j7c_img_0.webp" 
