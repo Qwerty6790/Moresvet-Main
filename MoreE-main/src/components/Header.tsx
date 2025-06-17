@@ -537,17 +537,6 @@ const Header = () => {
           onMouseEnter={() => setIsCatalogMenuOpen(true)}
           onMouseLeave={() => setIsCatalogMenuOpen(false)}
         >
-          {/* Соединительный элемент */}
-          <div 
-            className="absolute -top-1 bg-black/60 backdrop-blur-xl border-t border-l border-r border-white/20 rounded-t-lg"
-            style={{
-              left: '50%',
-              transform: 'translateX(-50%)',
-              width: '120px',
-              height: '8px'
-            }}
-          />
-          
           <div className="flex h-[650px]">
             {/* Левая часть только с изображением */}
             <div className="w-[200px] rounded-l-lg relative overflow-hidden">
