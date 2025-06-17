@@ -588,7 +588,7 @@ const Header = () => {
           />
           
           {/* Модальное окно */}
-          <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl search-modal-enter">
+          <div className="relative  backdrop-blur-2xl bg-black/50 rounded-2xl shadow-2xl w-full max-w-2xl search-modal-enter">
             {/* Заголовок */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h3 className="text-xl font-semibold text-gray-900">Поиск товаров</h3>
@@ -617,7 +617,7 @@ const Header = () => {
                 </div>
                 <button
                   onClick={handleSearch}
-                  className="px-8 py-4 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium"
+                  className="px-8 py-4 bg- text-white rounded-xl hover:bg-blue-700 transition-colors font-medium"
                 >
                   Найти
                 </button>
