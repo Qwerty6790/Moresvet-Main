@@ -372,7 +372,7 @@ const Header = () => {
                       <Link
                         ref={catalogLinkRef}
                         href="/products"
-                        className="text-white hover:text-gray-300 text-base font-medium transition-colors flex items-center"
+                        className="text-white hover:bg-transparent hover:backdrop-blur-xl p-2 hover:text-gray-300 text-base font-medium transition-colors flex items-center"
                       >
                         Каталог
                       
