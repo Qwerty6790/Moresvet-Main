@@ -86,22 +86,45 @@ const fetchProductsForPageStandalone = async (
       });
     }
     
-    // 🔧 ИСПРАВЛЯЕМ: вычисляем правильное количество страниц
-    const correctTotalPages = Math.ceil((data.totalProducts || 0) / (baseParams.limit || 40));
-    const finalTotalPages = Math.max(correctTotalPages, 1);
+    // 🔧 ИСПРАВЛЯЕМ: если API не вернул правильные данные, вычисляем на основе количества товаров
+    let finalTotalProducts = data.totalProducts || 0;
+    let finalTotalPages = data.totalPages || 1;
+    
+    // Если API вернул 0 товаров, но у нас есть товары, пересчитываем
+    if (finalTotalProducts === 0 && inStockProducts.length > 0) {
+      console.warn('⚠️ API вернул totalProducts = 0, но товары есть. Пересчитываем...');
+      
+      // Если это первая страница и у нас есть товары, предполагаем что всего товаров больше
+      if (page === 1) {
+        // Если товаров на странице меньше лимита - это последняя страница
+        if (inStockProducts.length < (baseParams.limit || 40)) {
+          finalTotalProducts = inStockProducts.length;
+          finalTotalPages = 1;
+        } else {
+          // Предполагаем что есть еще товары, устанавливаем минимум 2 страницы
+          finalTotalProducts = inStockProducts.length * 2; // Примерная оценка
+          finalTotalPages = Math.ceil(finalTotalProducts / (baseParams.limit || 40));
+        }
+      }
+    } else if (finalTotalProducts > 0) {
+      // Если общее количество товаров есть, пересчитываем страницы
+      const correctTotalPages = Math.ceil(finalTotalProducts / (baseParams.limit || 40));
+      finalTotalPages = Math.max(correctTotalPages, 1);
+    }
     
     console.log('🔧 ИСПРАВЛЕНИЕ ПАГИНАЦИИ:', {
       apiTotalPages: data.totalPages,
-      totalProducts: data.totalProducts,
+      apiTotalProducts: data.totalProducts,
+      productsOnPage: inStockProducts.length,
       limit: baseParams.limit,
-      correctTotalPages: correctTotalPages,
+      finalTotalProducts: finalTotalProducts,
       finalTotalPages: finalTotalPages
     });
     
     return {
       products: inStockProducts,
-      totalPages: finalTotalPages, // Используем исправленное значение
-      totalProducts: data.totalProducts || 0
+      totalPages: finalTotalPages,
+      totalProducts: finalTotalProducts
     };
   } catch (error) {
     console.error('❌ Ошибка при загрузке страницы:', error);
@@ -1881,8 +1904,10 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
 
   // Функция для рендера пагинации с эллипсисами
   const renderPagination = () => {
-    // Не показываем пагинацию, если страниц меньше 2
-    if (totalPages <= 1) return null;
+    // Отладка пагинации - показываем даже если 1 страница в development режиме
+    const shouldShowPagination = totalPages > 1 || (process.env.NODE_ENV === 'development' && products.length > 0);
+    
+    if (!shouldShowPagination) return null;
     
     const pageNumbers: (number | string)[] = [];
     
@@ -2525,7 +2550,13 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
               {/* Filter and Sort controls с улучшенной адаптивностью */}
               <div className="bg-white rounded-lg p-3 sm:p-4 mb-4 sm:mb-6 shadow-sm border border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-3">
                 <div className="text-sm text-gray-700 font-medium w-full sm:w-auto text-center sm:text-left">
-                  Найдено: <span className="text-black font-semibold">{totalProducts}</span> товаров
+                  Найдено: <span className="text-black font-semibold">{totalProducts}</span> {getTotalProductsText(totalProducts)}
+                  {/* Отладочная информация - удалить в продакшене */}
+                  {process.env.NODE_ENV === 'development' && (
+                    <span className="text-xs text-gray-500 ml-2">
+                      (Страница {currentPage}/{totalPages}, показано: {products.length})
+                    </span>
+                  )}
                 </div>
                 
                 <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
