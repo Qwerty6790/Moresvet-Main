@@ -734,29 +734,27 @@ const ImageCategories: React.FC<{
                   className="w-full h-full object-contain p-4 rounded-lg"
                 />
                 
-                                                  {/* Всплывающее окно с подкатегориями поверх изображения */}
+                                                  {/* Затемнение фотки с подкатегориями */}
                  {shouldShowSubcategories && (
-                   <div className="absolute inset-0 z-50 bg-black/60 backdrop-blur-sm rounded-lg flex items-center justify-center animate-in fade-in p-2">
-                     <div className="bg-white/95 rounded-lg shadow-xl p-3 max-w-[90%] max-h-[90%] overflow-y-auto">
-                       <div className="text-sm font-semibold text-gray-900 mb-3 text-center border-b border-gray-200 pb-2">{displayLabel}</div>
-                       <div className="space-y-1">
-                         {subcategories.map((sub, subIndex) => (
-                           <div 
-                             key={subIndex}
-                             onClick={(e) => {
-                               e.stopPropagation();
-                               onCategoryClick({ 
-                                 label: sub.label, 
-                                 searchName: sub.searchName
-                               });
-                             }}
-                             className="text-xs text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-2 py-1.5 rounded-md cursor-pointer subcategory-item-hover flex items-center group/item whitespace-nowrap"
-                           >
-                             <span className="text-xs mr-1.5 opacity-50 text-blue-500">▸</span>
-                             <span className="group-hover/item:font-medium transition-all duration-150">{sub.label}</span>
-                           </div>
-                         ))}
-                       </div>
+                   <div className="absolute inset-0 z-50 bg-black/70 rounded-lg flex flex-col items-center justify-center animate-in fade-in p-3">
+                     <div className="text-white text-sm font-bold mb-3 text-center">{displayLabel}</div>
+                     <div className="space-y-2 w-full">
+                       {subcategories.map((sub, subIndex) => (
+                         <div 
+                           key={subIndex}
+                           onClick={(e) => {
+                             e.stopPropagation();
+                             onCategoryClick({ 
+                               label: sub.label, 
+                               searchName: sub.searchName
+                             });
+                           }}
+                           className="text-white text-xs hover:text-blue-300 hover:bg-white/20 px-2 py-1.5 rounded-md cursor-pointer transition-all duration-200 flex items-center group/item backdrop-blur-sm"
+                         >
+                           <span className="text-xs mr-2 opacity-70 text-blue-300">▸</span>
+                           <span className="group-hover/item:font-medium transition-all duration-150">{sub.label}</span>
+                         </div>
+                       ))}
                      </div>
                    </div>
                  )}
