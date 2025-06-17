@@ -59,13 +59,32 @@ const fetchProductsForPageStandalone = async (
     // Получаем данные для запрошенной страницы
     const data = await fetchProductsWithSorting(brandStr, baseParams, signal);
     
+    // Добавляем подробную отладку
+    console.log('🔍 ОТВЕТ ОТ API:', {
+      page: page,
+      totalPages: data.totalPages,
+      totalProducts: data.totalProducts,
+      productsCount: data.products?.length || 0,
+      firstProduct: data.products?.[0]?.name || 'нет товаров'
+    });
+    
     // Фильтруем товары в наличии
     const inStockProducts = data.products ? data.products.filter((product: ProductI) => 
       parseInt(product.stock as string, 10) > 0
     ) : [];
     
-    console.log(`Страница ${page}: ${inStockProducts.length} из ${data.products?.length || 0} товаров в наличии`);
-    console.log(`Всего страниц: ${data.totalPages}, всего товаров: ${data.totalProducts}`);
+    console.log(`📦 Страница ${page}: ${inStockProducts.length} из ${data.products?.length || 0} товаров в наличии`);
+    console.log(`📊 РЕЗУЛЬТАТ: totalPages = ${data.totalPages}, totalProducts = ${data.totalProducts}`);
+    
+    // Проверяем, что пагинация работает правильно
+    if (data.totalPages <= 1 && data.totalProducts > 40) {
+      console.warn('⚠️ ПРОБЛЕМА: totalPages = 1, но товаров больше 40!', {
+        totalProducts: data.totalProducts,
+        totalPages: data.totalPages,
+        limit: baseParams.limit,
+        page: baseParams.page
+      });
+    }
     
     return {
       products: inStockProducts,
@@ -73,7 +92,7 @@ const fetchProductsForPageStandalone = async (
       totalProducts: data.totalProducts || 0
     };
   } catch (error) {
-    console.error('Ошибка при загрузке страницы:', error);
+    console.error('❌ Ошибка при загрузке страницы:', error);
     return {
       products: [],
       totalPages: 1,
@@ -1300,12 +1319,21 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
       setTotalPages(result.totalPages);
       setTotalProducts(result.totalProducts);
       
+      // Добавляем подробную отладку состояния
+      console.log('🔄 ОБНОВЛЯЕМ СОСТОЯНИЕ КОМПОНЕНТА:', {
+        page: page,
+        productsCount: result.products.length,
+        totalPages: result.totalPages,
+        totalProducts: result.totalProducts,
+        currentPage: currentPage
+      });
+      
       // Извлекаем фильтры из всех найденных товаров
       extractFiltersFromProducts(result.products);
       
       // Выводим информацию о загруженных товарах
-      console.log(`Загружено ${result.products.length} товаров в наличии из ${result.totalProducts}`);
-      console.log(`Страница ${page} из ${result.totalPages}`);
+      console.log(`✅ Загружено ${result.products.length} товаров в наличии из ${result.totalProducts}`);
+      console.log(`📄 Страница ${page} из ${result.totalPages}`);
     } catch (error) {
       if (!axios.isCancel(error)) {
         console.error('Error fetching products:', error);
@@ -1852,74 +1880,81 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
 
   // Функция для рендера пагинации с эллипсисами
   const renderPagination = () => {
+    // Не показываем пагинацию, если страниц меньше 2
+    if (totalPages <= 1) return null;
+    
+    console.log('Рендерим пагинацию:', { currentPage, totalPages });
+    
     const pageNumbers: (number | string)[] = [];
     
-    // Показываем пагинацию, даже если totalPages == 1
-    if (totalPages <= 0) return null;
-    
+    // Всегда показываем первую страницу
     pageNumbers.push(1);
     
     let startPage = Math.max(2, currentPage - 1);
     let endPage = Math.min(totalPages - 1, currentPage + 1);
     
+    // Расширяем диапазон для малых страниц
     if (currentPage <= 3) {
       endPage = Math.min(totalPages - 1, 5);
     }
     
+    // Расширяем диапазон для больших страниц
     if (currentPage >= totalPages - 2) {
       startPage = Math.max(2, totalPages - 4);
     }
     
+    // Добавляем эллипсис в начале, если нужно
     if (startPage > 2) {
       pageNumbers.push('ellipsis-start');
     }
     
+    // Добавляем страницы в диапазоне
     for (let i = startPage; i <= endPage; i++) {
       pageNumbers.push(i);
     }
     
+    // Добавляем эллипсис в конце, если нужно
     if (endPage < totalPages - 1) {
       pageNumbers.push('ellipsis-end');
     }
     
+    // Всегда показываем последнюю страницу (если она не первая)
     if (totalPages > 1) {
       pageNumbers.push(totalPages);
     }
     
     return (
-      <div className="flex justify-center items-center mt-8 space-x-1">
+      <div className="flex justify-center items-center mt-8 space-x-2">
+        {/* Кнопка "В начало" */}
         {currentPage > 1 && (
           <button
             onClick={() => handlePageChange(1)}
-            className="px-3 py-2 border rounded-md border-gray-300 hover:bg-gray-50 text-gray-700"
+            className="px-3 py-2 border rounded-md border-gray-300 hover:bg-gray-50 text-gray-700 transition-colors"
             aria-label="Первая страница"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M15.707 15.707a1 1 0 01-1.414 0L9.414 10l4.879-4.879a1 1 0 011.414 1.414L11.828 10l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
-              <path fillRule="evenodd" d="M9.707 15.707a1 1 0 01-1.414 0L3.414 10l4.879-4.879a1 1 0 011.414 1.414L5.828 10l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
-            </svg>
+            ««
           </button>
         )}
         
+        {/* Кнопка "Назад" */}
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className={`px-3 py-2 border rounded-md ${
+          className={`px-3 py-2 border rounded-md transition-colors ${
             currentPage === 1
               ? 'bg-gray-100 text-gray-400 cursor-not-allowed border-gray-200'
               : 'border-gray-300 hover:bg-gray-50 text-gray-700'
           }`}
           aria-label="Предыдущая страница"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
-          </svg>
+          ‹
         </button>
         
+        {/* Номера страниц */}
         {pageNumbers.map((page, index) => {
           if (page === 'ellipsis-start' || page === 'ellipsis-end') {
             return (
-              <span key={`${page}-${index}`} className="px-4 py-2 text-gray-500">
+              <span key={`${page}-${index}`} className="px-3 py-2 text-gray-500">
                 ...
               </span>
             );
@@ -1930,44 +1965,46 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
             <button
               key={`page-${page}-${index}`}
               onClick={() => handlePageChange(pageNum)}
-              className={`min-w-[40px] px-4 py-2 border rounded-md ${
+              className={`min-w-[40px] px-3 py-2 border rounded-md transition-colors ${
                 currentPage === pageNum
                   ? 'bg-black text-white border-black hover:bg-gray-800'
                   : 'border-gray-300 hover:bg-gray-50 text-gray-700'
-              } transition-colors`}
+              }`}
             >
               {page}
             </button>
           );
         })}
         
+        {/* Кнопка "Вперед" */}
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className={`px-3 py-2 border rounded-md ${
+          className={`px-3 py-2 border rounded-md transition-colors ${
             currentPage === totalPages
               ? 'bg-gray-100 text-gray-400 cursor-not-allowed border-gray-200'
               : 'border-gray-300 hover:bg-gray-50 text-gray-700'
           }`}
           aria-label="Следующая страница"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-          </svg>
+          ›
         </button>
         
-        {currentPage < totalPages - 1 && (
+        {/* Кнопка "В конец" */}
+        {currentPage < totalPages && (
           <button
             onClick={() => handlePageChange(totalPages)}
-            className="px-3 py-2 border rounded-md border-gray-300 hover:bg-gray-50 text-gray-700"
+            className="px-3 py-2 border rounded-md border-gray-300 hover:bg-gray-50 text-gray-700 transition-colors"
             aria-label="Последняя страница"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M4.293 15.707a1 1 0 001.414 0L10.586 10l-4.879-4.879a1 1 0 00-1.414 1.414L8.172 10l-3.88 3.88a1 1 0 000 1.414z" clipRule="evenodd" />
-              <path fillRule="evenodd" d="M10.293 15.707a1 1 0 001.414 0L16.586 10l-4.879-4.879a1 1 0 00-1.414 1.414L14.172 10l-3.88 3.88a1 1 0 000 1.414z" clipRule="evenodd" />
-            </svg>
+            »»
           </button>
         )}
+        
+        {/* Информация о текущей странице */}
+        <div className="ml-4 text-sm text-gray-600">
+          Страница {currentPage} из {totalPages}
+        </div>
       </div>
     );
   };
