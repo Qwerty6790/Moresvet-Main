@@ -300,7 +300,7 @@ const Header = () => {
       const shouldOpenAbove = spaceBelow < menuHeight + 20;
       
       setCatalogMenuPosition({
-        top: shouldOpenAbove ? rect.top - menuHeight - 8 : rect.bottom + 8,
+        top: shouldOpenAbove ? rect.top - menuHeight - 8 : rect.bottom - 4, // Уменьшили отступ для соединения
         left: Math.max(10, Math.min(centerPosition, maxLeft))
       });
     }
@@ -347,6 +347,21 @@ const Header = () => {
             transform: translateY(0);
           }
         }
+        
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            transform: translateY(-5px) scale(0.98);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+        
+        .catalog-menu-enter {
+          animation: slideDown 0.3s ease-out;
+        }
       `}</style>
       
       <div className="container mx-auto px-4">
@@ -372,10 +387,13 @@ const Header = () => {
                       <Link
                         ref={catalogLinkRef}
                         href="/products"
-                        className="text-white hover:bg-transparent hover:backdrop-blur-xl hover:h-20 rounded-b-xl p-2 hover:text-gray-300 text-base font-medium transition-colors flex items-center"
+                        className={`text-white text-base font-medium transition-all duration-300 flex items-center px-4 py-2 rounded-lg ${
+                          isCatalogMenuOpen 
+                            ? 'bg-white/10 backdrop-blur-xl transform translate-y-1' 
+                            : 'hover:text-gray-300'
+                        }`}
                       >
                         Каталог
-                      
                       </Link>
                     </div>
 
@@ -510,16 +528,26 @@ const Header = () => {
       {typeof window !== 'undefined' && isCatalogMenuOpen && createPortal(
         <div 
           id="catalog-menu"
-          className="fixed w-[600px] bg-transparent backdrop-blur-xl rounded-lg shadow-2xl transition-all duration-200 ease-in-out"
+          className="fixed w-[600px] bg-black/60 backdrop-blur-xl rounded-lg shadow-2xl transition-all duration-300 ease-in-out border border-white/20 catalog-menu-enter"
           style={{
             top: catalogMenuPosition.top,
             left: catalogMenuPosition.left,
-            zIndex: 99999,
-            animation: 'fadeIn 0.2s ease-in-out'
+            zIndex: 99999
           }}
           onMouseEnter={() => setIsCatalogMenuOpen(true)}
           onMouseLeave={() => setIsCatalogMenuOpen(false)}
         >
+          {/* Соединительный элемент */}
+          <div 
+            className="absolute -top-1 bg-black/60 backdrop-blur-xl border-t border-l border-r border-white/20 rounded-t-lg"
+            style={{
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: '120px',
+              height: '8px'
+            }}
+          />
+          
           <div className="flex h-[650px]">
             {/* Левая часть только с изображением */}
             <div className="w-[200px] rounded-l-lg relative overflow-hidden">
