@@ -129,7 +129,7 @@ export default function Banner() {
           <div className="mb-12">
             <div className="mx-auto">
               <h2 className="text-3xl font-bold mb-8">Популярные категории</h2>
-              <div className="grid grid-cols-8 gap-4 relative">
+              <div className="grid grid-cols-6 gap-4 relative">
                 {popularCategories.map((category, index) => (
                   <div
                     key={category.id}
