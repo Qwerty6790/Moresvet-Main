@@ -49,7 +49,7 @@ export default function Banner() {
       buttonText: 'Узнать больше'
     },
     {
-      image: '/images/Снимок экрана 2025-06-17 114544.png',
+      image: '/images/Дизайн_без_названия__11__308fc32673a6c219bff706661f135e79.webp',
       title: 'Специальное предложение',
       subtitle: 'Скидки до 30%',
       description: 'На избранные модели светильников',
