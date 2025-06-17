@@ -57,50 +57,55 @@
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: scale(0.9);
+    transform: scale(0.95) rotateY(10deg);
+    backdrop-filter: blur(0px);
   }
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) rotateY(0deg);
+    backdrop-filter: blur(12px);
   }
 }
 
 @keyframes fadeOut {
   from {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) rotateY(0deg);
+    backdrop-filter: blur(12px);
   }
   to {
     opacity: 0;
-    transform: scale(0.9);
+    transform: scale(0.95) rotateY(-10deg);
+    backdrop-filter: blur(0px);
   }
 }
 
 .animate-in {
-  animation: fadeIn 0.25s ease-out forwards;
+  animation: fadeIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 .animate-out {
-  animation: fadeOut 0.2s ease-in forwards;
+  animation: fadeOut 0.25s ease-in forwards;
 }
 
 .fade-in {
-  animation: fadeIn 0.25s ease-out;
+  animation: fadeIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* Стили для всплывающего окна подкатегорий */
 .subcategory-popup {
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .subcategory-item-hover {
-  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .subcategory-item-hover:hover {
-  transform: translateX(4px);
-  background-color: rgba(59, 130, 246, 0.05);
+  transform: translateY(-2px) scale(1.02);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
 /* Стили для фильтров */

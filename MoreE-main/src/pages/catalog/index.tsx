@@ -711,6 +711,10 @@ const ImageCategories: React.FC<{
            const isClicked = clickedCategory === category.label;
            const hasSubcategories = subcategories.length > 0;
            const shouldShowSubcategories = hasSubcategories && (isMobile ? isClicked : isHovered);
+           
+           // Адаптивная логика для размещения подкатегорий
+           const isCompactMode = subcategories.length > 6;
+           const itemsPerColumn = isCompactMode ? Math.ceil(subcategories.length / 2) : subcategories.length;
           
           return (
             <div
@@ -736,9 +740,11 @@ const ImageCategories: React.FC<{
                 
                                                   {/* Затемнение фотки с подкатегориями */}
                  {shouldShowSubcategories && (
-                   <div className="absolute inset-0 z-50 bg-black/70 rounded-lg flex flex-col items-center justify-center animate-in fade-in p-3">
-                     <div className="text-white text-sm font-bold mb-3 text-center">{displayLabel}</div>
-                     <div className="space-y-2 w-full">
+                   <div className="absolute inset-0 z-50 bg-gradient-to-br from-black/80 via-gray-900/75 to-black/80 backdrop-blur-md rounded-lg flex flex-col items-center justify-center animate-in fade-in p-2">
+                     <div className="text-white text-sm font-bold mb-2 text-center drop-shadow-lg backdrop-blur-sm bg-white/10 rounded-full px-3 py-1">
+                       {displayLabel}
+                     </div>
+                     <div className={`w-full max-h-full overflow-hidden ${isCompactMode ? 'grid grid-cols-2 gap-1' : 'space-y-1'}`}>
                        {subcategories.map((sub, subIndex) => (
                          <div 
                            key={subIndex}
@@ -749,10 +755,10 @@ const ImageCategories: React.FC<{
                                searchName: sub.searchName
                              });
                            }}
-                           className="text-white text-xs hover:text-blue-300 hover:bg-white/20 px-2 py-1.5 rounded-md cursor-pointer transition-all duration-200 flex items-center group/item backdrop-blur-sm"
+                           className={`text-white ${isCompactMode ? 'text-[10px] py-0.5 px-1.5' : 'text-xs py-1 px-2'} hover:text-amber-200 hover:bg-white/30 rounded-md cursor-pointer transition-all duration-300 flex items-center group/item backdrop-blur-lg border border-white/15 hover:border-amber-300/50 hover:shadow-md hover:scale-105`}
                          >
-                           <span className="text-xs mr-2 opacity-70 text-blue-300">▸</span>
-                           <span className="group-hover/item:font-medium transition-all duration-150">{sub.label}</span>
+                           <span className={`${isCompactMode ? 'text-[8px] mr-1' : 'text-xs mr-2'} opacity-75 text-amber-300`}>●</span>
+                           <span className="group-hover/item:font-semibold transition-all duration-200 truncate leading-tight">{sub.label}</span>
                          </div>
                        ))}
                      </div>
