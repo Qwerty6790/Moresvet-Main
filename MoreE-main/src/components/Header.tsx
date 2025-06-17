@@ -611,13 +611,13 @@ const Header = () => {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyPress={handleSearchKeyPress}
                     placeholder="Введите название товара..."
-                    className="w-full pl-12 pr-4 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    className="w-full pl-12 pr-4 py-4 text-lg border border-black rounded-xl focus:ring-2  focus:border-transparent outline-none transition-all"
                     autoFocus
                   />
                 </div>
                 <button
                   onClick={handleSearch}
-                  className="px-8 py-4 bg- text-white rounded-xl hover:bg-blue-700 transition-colors font-medium"
+                  className="px-8 py-4 bg- text-black rounded-xl  transition-colors font-medium"
                 >
                   Найти
                 </button>
