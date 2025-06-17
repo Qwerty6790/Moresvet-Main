@@ -196,7 +196,7 @@ export default function Banner() {
                 
       
 
-                <button className="bg-yellow-600 text-white px-8 py-3 rounded-lg hover:bg-yellow-700 transition-colors font-medium">
+                <button className="bg-transparent backdrop-blur-xl text-black px-8 py-3 rounded-lg  transition-colors font-medium">
                   Узнать больше о нас
                 </button>
               </div>
