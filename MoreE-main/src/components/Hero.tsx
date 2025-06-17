@@ -72,7 +72,6 @@ export default function Banner() {
     { id: 4, title: 'НАСТОЛЬНЫЕ ЛАМПЫ', image: '/images/nastolny.jpg', link: '/catalog/Настольная лампа' },
     { id: 5, title: 'ТОРШЕРЫ', image: '/images/torher.jpg', link: '/catalog/Торшер' },
     { id: 6, title: 'УЛИЧНОЕ ОСВЕЩЕНИЕ', image: '/images/ylihnoe.jpg', link: '/catalog/Уличный светильник' },
-    { id: 7, title: 'ВСТРАИВАЕМЫЕ СЕРИИ', image: '/images/vamsvet-vyklyuchatel-dvukhklavishnyy-werkel-belyy-matovyy-w1120061-4690389184611.webp', link: '/catalog/Уличный светильник' }
   ];
 
   return (
@@ -130,7 +129,7 @@ export default function Banner() {
           <div className="mb-12">
             <div className="mx-auto">
               <h2 className="text-3xl font-bold mb-8">Популярные категории</h2>
-              <div className="grid grid-cols-6 gap-4 relative">
+              <div className="grid grid-cols-8 gap-4 relative">
                 {popularCategories.map((category, index) => (
                   <div
                     key={category.id}
@@ -140,8 +139,10 @@ export default function Banner() {
                       index === 2 ? 'col-span-1 row-span-1' : 
                       index === 3 ? 'col-span-2 row-span-1' : 
                       index === 4 ? 'col-span-2 row-span-0' : 
-                      index === 5 ? 'col-span-1 row-span-1' : 
+                      index === 5 ? 'col-span-2 row-span-0' : 
+                      index === 6 ? 'col-span-2 row-span-1' : 
                       'col-span-2 row-span-1'
+                          
                     }`}
                   >
                     <Link href={category.link} className="group block text-center h-full">
@@ -151,7 +152,7 @@ export default function Banner() {
                         <img 
                           src={category.image} 
                           alt={category.title} 
-                          className="w-full h-full object-cover  group-hover:scale-105 transition-transform duration-300 ease-in-out p-2"
+                          className="w-full h-full object-contain scale-125  group-hover:scale-105 transition-transform duration-300 ease-in-out p-2"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t   from-black/5 group-hover:from-black/20 transition-all duration-300"></div>
                         <div className="absolute bottom-0 left-0 right-0 p-3 text-black bg-transparent backdrop-blur-xl">
