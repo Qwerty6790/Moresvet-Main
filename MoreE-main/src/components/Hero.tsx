@@ -35,7 +35,7 @@ export default function Banner() {
   // Данные для слайдера баннера
   const sliderData = [
     {
-      image: '/images/Снимок экрана 2025-06-17 111530.png',
+      image: '/images/assets_task_01jxyfw4xbf51r7m7fes2npm3w_1750148841_img_3.webp',
       title: 'Новая коллекция',
       subtitle: 'Весна 2024',
       description: 'Элегантные решения для вашего интерьера',
