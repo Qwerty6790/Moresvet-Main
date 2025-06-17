@@ -541,7 +541,7 @@ const Header = () => {
             {/* Левая часть только с изображением */}
             <div className="w-[200px] rounded-l-lg relative overflow-hidden">
               <img 
-                src="/images/assets_task_01jrdpq6eef67argn1c1279zna_img_0.webp" 
+                src="/images/Снимок экрана 2025-06-17 120738.png" 
                 alt="Каталог светильников"
                 className="w-full h-full object-cover"
               />
