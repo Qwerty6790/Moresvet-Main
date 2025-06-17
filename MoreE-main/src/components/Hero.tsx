@@ -174,8 +174,8 @@ export default function Banner() {
                   alt="Освещение дома" 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
-                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300">
-                  <div className="absolute bottom-4 left-4 text-white">
+                <div className="absolute inset-0  transition-all duration-300">
+                  <div className="absolute bottom-4 left-4 text-black">
                     <h3 className="text-xl font-bold">Домашнее освещение</h3>
                     <p className="text-sm opacity-90">Современные решения</p>
                   </div>
@@ -187,8 +187,8 @@ export default function Banner() {
                   alt="Офисное освещение" 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
-                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300">
-                  <div className="absolute bottom-4 left-4 text-white">
+                <div className="absolute inset-0  transition-all duration-300">
+                  <div className="absolute bottom-4 left-4 text-black">
                     <h3 className="text-lg font-bold">Офисы</h3>
                   </div>
                 </div>
@@ -199,7 +199,7 @@ export default function Banner() {
                   alt="Уличное освещение" 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
-                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300">
+                <div className="absolute inset-0  transition-all duration-300">
                   <div className="absolute bottom-4 left-4 text-white">
                     <h3 className="text-lg font-bold">Улицы</h3>
                   </div>
