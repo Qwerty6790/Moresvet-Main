@@ -727,57 +727,41 @@ const ImageCategories: React.FC<{
               onMouseLeave={() => !isMobile && setHoveredCategory(null)}
               className="category-item flex flex-col items-center cursor-pointer transition-all duration-200 hover:scale-105 relative group"
             >
-              <div className="relative w-full aspect-square mb-4 overflow-visible bg-white border border-gray-200 rounded-lg shadow-sm group-hover:shadow-md transition-shadow">
+              <div className="relative w-full aspect-square mb-4 overflow-hidden bg-white border border-gray-200 rounded-lg shadow-sm group-hover:shadow-md transition-shadow">
                 <img 
                   src={imageUrl} 
                   alt={category.label}
                   className="w-full h-full object-contain p-4 rounded-lg"
                 />
                 
-                                 {/* Всплывающее окно с подкатегориями */}
+                                                  {/* Всплывающее окно с подкатегориями поверх изображения */}
                  {shouldShowSubcategories && (
-                   <div className={`absolute ${isMobile ? 'top-full mt-2 left-0 right-0' : 'top-0'} z-50 bg-white/95 backdrop-blur-sm border border-gray-300 rounded-lg shadow-xl p-3 min-w-[220px] max-w-[280px] ${
-                     !isMobile ? (index >= 3 ? 'right-full mr-3' : 'left-full ml-3') : ''
-                   } animate-in fade-in subcategory-popup`}>
-                     <div className="text-sm font-semibold text-gray-900 mb-3 border-b border-gray-200 pb-2">{displayLabel}</div>
-                     <div className="space-y-1">
-                       {subcategories.map((sub, subIndex) => (
-                         <div 
-                           key={subIndex}
-                           onClick={(e) => {
-                             e.stopPropagation();
-                             onCategoryClick({ 
-                               label: sub.label, 
-                               searchName: sub.searchName
-                             });
-                           }}
-                           className="text-sm text-gray-700 hover:text-blue-600 hover:bg-blue-50 p-2 rounded-md cursor-pointer subcategory-item-hover flex items-center group/item"
-                         >
-                           <span className="text-xs mr-2 opacity-50 text-blue-500">▸</span>
-                           <span className="group-hover/item:font-medium transition-all duration-150">{sub.label}</span>
-                         </div>
-                       ))}
+                   <div className="absolute inset-0 z-50 bg-black/60 backdrop-blur-sm rounded-lg flex items-center justify-center animate-in fade-in p-2">
+                     <div className="bg-white/95 rounded-lg shadow-xl p-3 max-w-[90%] max-h-[90%] overflow-y-auto">
+                       <div className="text-sm font-semibold text-gray-900 mb-3 text-center border-b border-gray-200 pb-2">{displayLabel}</div>
+                       <div className="space-y-1">
+                         {subcategories.map((sub, subIndex) => (
+                           <div 
+                             key={subIndex}
+                             onClick={(e) => {
+                               e.stopPropagation();
+                               onCategoryClick({ 
+                                 label: sub.label, 
+                                 searchName: sub.searchName
+                               });
+                             }}
+                             className="text-xs text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-2 py-1.5 rounded-md cursor-pointer subcategory-item-hover flex items-center group/item whitespace-nowrap"
+                           >
+                             <span className="text-xs mr-1.5 opacity-50 text-blue-500">▸</span>
+                             <span className="group-hover/item:font-medium transition-all duration-150">{sub.label}</span>
+                           </div>
+                         ))}
+                       </div>
                      </div>
-                                         {/* Стрелка указывающая на категорию */}
-                     {!isMobile && (
-                       index >= 3 ? (
-                         <div className="absolute top-6 -right-2 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-l-[10px] border-l-white drop-shadow-sm"></div>
-                       ) : (
-                         <div className="absolute top-6 -left-2 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-r-[10px] border-r-white drop-shadow-sm"></div>
-                       )
-                     )}
-                     {isMobile && (
-                       <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-b-[10px] border-b-white drop-shadow-sm"></div>
-                     )}
-                  </div>
-                )}
-                
-                                 {/* Индикатор наличия подкатегорий */}
-                 {hasSubcategories && (
-                   <div className="absolute top-2 right-2 w-4 h-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg animate-pulse group-hover:animate-none group-hover:scale-110 transition-transform duration-200">
-                     <span className="text-white text-xs font-bold">+</span>
                    </div>
                  )}
+                
+                
               </div>
               <div className="text-center text-sm font-medium text-gray-800 group-hover:text-blue-600 transition-colors">
                 {displayLabel}
