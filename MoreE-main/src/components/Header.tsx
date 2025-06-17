@@ -387,7 +387,7 @@ const Header = () => {
                       <Link
                         ref={catalogLinkRef}
                         href="/products"
-                        className={`text-white text-base font-medium transition-all duration-300 flex items-center px-4 py-2 rounded-lg ${
+                        className={`text-white text-base font-medium transition duration-500 flex items-center px-4 py-2 rounded-lg ${
                           isCatalogMenuOpen 
                             ? 'bg-transparent backdrop-blur-xl transform translate-y-1' 
                             : 'hover:text-gray-300'
