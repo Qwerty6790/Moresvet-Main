@@ -372,7 +372,7 @@ const Header = () => {
                       <Link
                         ref={catalogLinkRef}
                         href="/products"
-                        className="text-white hover:bg-transparent hover:backdrop-blur-xl rounded-b-xl p-2 hover:text-gray-300 text-base font-medium transition-colors flex items-center"
+                        className="text-white hover:bg-transparent hover:backdrop-blur-xl hover:h-20 rounded-b-xl p-2 hover:text-gray-300 text-base font-medium transition-colors flex items-center"
                       >
                         Каталог
                       
@@ -540,7 +540,7 @@ const Header = () => {
                     <Link
                       key={index}
                       href={item.link}
-                      className="flex items-center p-2 hover:bg-black rounded-lg transition-all duration-150 text-white group border-l-2 border-transparent"
+                      className="flex items-center p-2 hover:backdrop-blur-2xl rounded-lg transition-all duration-150 text-white group border-l-2 border-transparent"
                     >
                       <span className="text-sm  transition-colors font-medium">{item.title}</span>
                     </Link>
