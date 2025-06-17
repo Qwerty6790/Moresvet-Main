@@ -48,6 +48,13 @@ export default function Banner() {
       description: 'На избранные модели светильников',
       buttonText: 'Узнать больше'
     },
+    {
+      image: '/images/image.png',
+      title: 'Специальное предложение',
+      subtitle: 'Скидки до 30%',
+      description: 'На избранные модели светильников',
+      buttonText: 'Узнать больше'
+    },
   ];
 
   // Автоматическое переключение слайдов
