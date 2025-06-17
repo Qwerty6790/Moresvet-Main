@@ -534,13 +534,13 @@ const Header = () => {
             <div className="flex-1 p-6">
               {/* Освещение */}
               <div className="mb-8">
-                <h4 className="text-lg font-bold mb-4 text-gray-800 tracking-wide">ОСВЕЩЕНИЕ</h4>
+                <h4 className="text-lg font-bold mb-4 text-white tracking-wide">ОСВЕЩЕНИЕ</h4>
                 <div className="grid grid-cols-1 gap-2">
                   {catalogData.lighting.map((item, index) => (
                     <Link
                       key={index}
                       href={item.link}
-                      className="flex items-center p-2 hover:bg-gray-50 rounded-lg transition-all duration-150 text-gray-600 hover:text-gray-800 group border-l-2 border-transparent"
+                      className="flex items-center p-2 hover:bg-gray-50 rounded-lg transition-all duration-150 text-white group border-l-2 border-transparent"
                     >
                       <span className="text-sm  transition-colors font-medium">{item.title}</span>
                     </Link>
@@ -550,7 +550,7 @@ const Header = () => {
 
               {/* Электроустановочное оборудование */}
               <div>
-                <h4 className="text-lg font-bold mb-4 text-gray-800 tracking-wide">ЭЛЕКТРОУСТАНОВОЧНОЕ ОБОРУДОВАНИЕ</h4>
+                <h4 className="text-lg font-bold mb-4 text-white tracking-wide">ЭЛЕКТРОУСТАНОВОЧНОЕ ОБОРУДОВАНИЕ</h4>
                 <div className="grid grid-cols-1 gap-2">
                   {catalogData.electrical.map((item, index) => (
                     <Link
