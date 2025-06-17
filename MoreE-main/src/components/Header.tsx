@@ -528,7 +528,7 @@ const Header = () => {
       {typeof window !== 'undefined' && isCatalogMenuOpen && createPortal(
         <div 
           id="catalog-menu"
-          className="fixed w-[600px] bg-black/60 backdrop-blur-xl rounded-lg shadow-2xl transition-all duration-300 ease-in-out border border-white/20 catalog-menu-enter"
+          className="fixed w-[600px] bg-black/60 backdrop-blur-xl rounded-lg shadow-2xl transition-all duration-300 ease-in-out  catalog-menu-enter"
           style={{
             top: catalogMenuPosition.top,
             left: catalogMenuPosition.left,
