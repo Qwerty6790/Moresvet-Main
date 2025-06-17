@@ -122,35 +122,46 @@ export default function Banner() {
       </div>
 
       {/* Контент под баннером */}
-      <div className="bg-white py-16 relative">
+      <div className="bg-white py-12 relative">
         <div className="max-w-7xl mx-auto px-4">
-          {/* Популярные категории */}
-                     <div className="grid grid-cols-6 gap-8 justify-items-center">
-            {popularCategories.map((category) => (
-              <Link 
-                key={category.id} 
-                href={category.link}
-                className="flex flex-col items-center group hover:scale-105 transition-transform duration-300"
-              >
-                 <div className="relative mb-4 w-full h-full">
-                   {/* Задняя темная область со смещением влево */}
-                   <div className="absolute -left-2 top-2 w-full h-full bg-gray-300 rounded-2xl"></div>
-                   {/* Основное изображение */}
-                   <div className="relative w-full h-full bg-white rounded-2xl overflow-hidden shadow-md group-hover:shadow-lg transition-shadow">
-                     <Image
-                       src={category.image}
-                       alt={category.title}
-                       width={158}
-                       height={158}
-                       className="object-cover w-full h-full"
-                     />
-                   </div>
-                 </div>
-                <span className="text-sm font-medium text-gray-800 text-center leading-tight">
-                  {category.title}
-                </span>
-              </Link>
-            ))}
+         
+          {/* Категории товаров */}
+          <div className="mb-12">
+            <div className="mx-auto">
+              <h2 className="text-3xl font-bold mb-8">Популярные категории</h2>
+              <div className="grid grid-cols-8 gap-4 relative">
+                {popularCategories.map((category, index) => (
+                  <div
+                    key={category.id}
+                    className={`transform transition-transform duration-200 hover:scale-105 ${
+                      index === 0 ? 'col-span-3 row-span-2' : 
+                      index === 1 ? 'col-span-1 row-span-1' : 
+                      index === 2 ? 'col-span-2 row-span-1' : 
+                      index === 3 ? 'col-span-2 row-span-1' : 
+                      index === 4 ? 'col-span-2 row-span-0' : 
+                      index === 5 ? 'col-span-1 row-span-1' : 
+                      'col-span-2 row-span-1'
+                    }`}
+                  >
+                    <Link href={category.link} className="group block text-center h-full">
+                      <div className={`relative rounded-md overflow-hidden ${
+                        index === 0 || index === 4 ? 'h-full' : 'h-96'
+                      } mb-2`}>
+                        <img 
+                          src={category.image} 
+                          alt={category.title} 
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out p-2"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent group-hover:from-black/20 transition-all duration-300"></div>
+                        <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
+                          <p className="font-bold group-hover:text-yellow-300 transition-colors duration-200">{category.title}</p>
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
