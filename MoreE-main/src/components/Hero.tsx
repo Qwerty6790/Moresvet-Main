@@ -136,9 +136,9 @@ export default function Banner() {
                   <Image
                     src={category.image}
                     alt={category.title}
-                    width={60}
-                    height={60}
-                    className="object-contain"
+                    width={100}
+                    height={100}
+                    className="object-cover"
                   />
                 </div>
                 <span className="text-sm font-medium text-gray-800 text-center leading-tight">
