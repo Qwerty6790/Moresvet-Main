@@ -35,13 +35,6 @@ export default function Banner() {
   // Данные для слайдера баннера
   const sliderData = [
     {
-      image: '/images/Снимок экрана 2025-06-17 113949.png',
-      title: 'Новая коллекция',
-      subtitle: 'Весна 2024',
-      description: 'Элегантные решения для вашего интерьера',
-      buttonText: 'Смотреть каталог'
-    },
-    {
       image: '/images/Снимок экрана 2025-06-17 121935.png',
       title: 'Специальное предложение',
       subtitle: 'Скидки до 30%',
@@ -105,9 +98,9 @@ export default function Banner() {
               key={index} 
               className={`w-1/2 transition-opacity duration-1000 ease-in-out absolute ${currentSlide === index ? 'opacity-100' : 'opacity-0'}`}
             >
-              <h1 className="text-white text-7xl font-bold mb-2">{slide.title}</h1>
-              <h2 className="text-white text-7xl font-bold mb-8">{slide.subtitle}</h2>
-              <p className="text-white text-xl mb-8">{slide.description}</p>
+              <h1 className="text-black text-7xl font-bold mb-2">{slide.title}</h1>
+              <h2 className="text-black text-7xl font-bold mb-8">{slide.subtitle}</h2>
+              <p className="text-black text-xl mb-8">{slide.description}</p>
               
               <button className="bg-white text-black font-medium px-8 py-4 rounded-md hover:bg-opacity-90 transition-colors">
                 {slide.buttonText}
