@@ -725,7 +725,7 @@ const ImageCategories: React.FC<{
               }}
               onMouseEnter={() => !isMobile && setHoveredCategory(category.label)}
               onMouseLeave={() => !isMobile && setHoveredCategory(null)}
-              className="category-item flex flex-col items-center cursor-pointer transition-all duration-200 hover:scale-105 relative group"
+              className="flex flex-col items-center cursor-pointer transition-all duration-200 hover:scale-105 relative group"
             >
               <div className="relative w-full aspect-square mb-4 overflow-visible bg-white border border-gray-200 rounded-lg shadow-sm group-hover:shadow-md transition-shadow">
                 <img 
@@ -736,8 +736,8 @@ const ImageCategories: React.FC<{
                 
                                  {/* Всплывающее окно с подкатегориями */}
                  {shouldShowSubcategories && (
-                   <div className={`absolute ${isMobile ? 'top-full mt-2 left-0 right-0' : 'top-0'} z-50 bg-white/95 backdrop-blur-sm border border-gray-300 rounded-lg shadow-xl p-3 min-w-[220px] max-w-[280px] ${
-                     !isMobile ? (index >= 3 ? 'right-full mr-3' : 'left-full ml-3') : ''
+                   <div className={`absolute top-0 z-50 bg-white/95 backdrop-blur-sm border border-gray-300 rounded-lg shadow-xl p-3 min-w-[220px] max-w-[280px] ${
+                     index >= 3 ? 'right-full mr-3' : 'left-full ml-3'
                    } animate-in fade-in subcategory-popup`}>
                      <div className="text-sm font-semibold text-gray-900 mb-3 border-b border-gray-200 pb-2">{displayLabel}</div>
                      <div className="space-y-1">
@@ -758,17 +758,12 @@ const ImageCategories: React.FC<{
                          </div>
                        ))}
                      </div>
-                                         {/* Стрелка указывающая на категорию */}
-                     {!isMobile && (
-                       index >= 3 ? (
-                         <div className="absolute top-6 -right-2 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-l-[10px] border-l-white drop-shadow-sm"></div>
-                       ) : (
-                         <div className="absolute top-6 -left-2 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-r-[10px] border-r-white drop-shadow-sm"></div>
-                       )
-                     )}
-                     {isMobile && (
-                       <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-b-[10px] border-b-white drop-shadow-sm"></div>
-                     )}
+                    {/* Стрелка указывающая на категорию */}
+                    {index >= 3 ? (
+                      <div className="absolute top-6 -right-2 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-l-[10px] border-l-white drop-shadow-sm"></div>
+                    ) : (
+                      <div className="absolute top-6 -left-2 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-r-[10px] border-r-white drop-shadow-sm"></div>
+                    )}
                   </div>
                 )}
                 
