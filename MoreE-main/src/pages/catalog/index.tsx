@@ -6,6 +6,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import 'tailwindcss/tailwind.css';
+import '../styles/categories.css';
 import Footer from '@/components/Footer';
 import { ProductI } from '@/types/interfaces';
 import { BASE_URL } from '@/utils/constants';
@@ -623,33 +624,70 @@ const ImageCategories: React.FC<{
   onCategoryClick: (category: Category) => void; 
 }> = ({ categories, onCategoryClick }) => {
   const [hoveredCategory, setHoveredCategory] = React.useState<string | null>(null);
+  const [clickedCategory, setClickedCategory] = React.useState<string | null>(null);
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
+
+  // Закрытие подкатегорий при клике вне элемента (мобильные устройства)
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isMobile && clickedCategory) {
+        const target = event.target as Element;
+        if (!target.closest('.category-item')) {
+          setClickedCategory(null);
+        }
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [isMobile, clickedCategory]);
   
   // Фильтруем категории, исключая "Розетки и выключатели"
   const filteredCategories = categories.filter(
     (category) => category.label !== 'Розетки и выключатели' && category.label !== 'Все товары'
   );
 
-  // Получаем подкатегории из productCategories для показа при наведении
-  const getSubcategories = (categoryLabel: string) => {
-    console.log('Поиск подкатегорий для:', categoryLabel);
-    
-    // Улучшенная логика поиска
-    let category = productCategories.find(cat => {
-      // Точное совпадение
-      if (cat.label.toLowerCase() === categoryLabel.toLowerCase()) return true;
-      
-      // Поиск по ключевым словам
-      if (categoryLabel.toLowerCase().includes('люстра') && cat.id === 'lyustra') return true;
-      if (categoryLabel.toLowerCase().includes('светильник') && cat.id === 'svetilnik') return true;
-      if (categoryLabel.toLowerCase().includes('уличн') && cat.id === 'ulichni') return true;
-      
-      return false;
-    });
-    
-    console.log('Найдена категория:', category);
-    console.log('Подкатегории:', category?.subcategories);
-    
-    return category?.subcategories || [];
+  // Получаем подкатегории напрямую по типу категории
+  const getSubcategoriesForCategory = (categoryLabel: string) => {
+    // Мапим подкатегории согласно требованиям
+    if (categoryLabel.includes('Люстра') || categoryLabel === 'Люстра') {
+      return [
+        { label: 'Люстра подвесная', searchName: 'Люстра подвесная' },
+        { label: 'Люстра потолочная', searchName: 'Люстра потолочная' },
+        { label: 'Люстра на штанге', searchName: 'Люстра на штанге' },
+        { label: 'Люстра каскадная', searchName: 'Люстра каскадная' }
+      ];
+    } else if (categoryLabel.includes('Светильник') || categoryLabel === 'Светильник') {
+      return [
+        { label: 'Потолочный светильник', searchName: 'Потолочный светильник' },
+        { label: 'Подвесной светильник', searchName: 'Подвесной светильник' },
+        { label: 'Настенный светильник', searchName: 'Настенный светильник' },
+        { label: 'Встраиваемый светильник', searchName: 'Встраиваемый светильник' },
+        { label: 'Накладной светильник', searchName: 'Накладной светильник' },
+        { label: 'Трековый светильник', searchName: 'Трековый светильник' },
+        { label: 'Точечный светильник', searchName: 'Точечный светильник' }
+      ];
+    } else if (categoryLabel.includes('Уличный светильник') || categoryLabel === 'Уличный светильник') {
+      return [
+        { label: 'Уличный светильник', searchName: 'Уличный светильник' },
+        { label: 'Настенный уличный светильник', searchName: 'Настенный уличный светильник' },
+        { label: 'Грунтовый светильник', searchName: 'Грунтовый светильник' },
+        { label: 'Ландшафтный светильник', searchName: 'Ландшафтный светильник' },
+        { label: 'Парковый светильник', searchName: 'Парковый светильник' }
+      ];
+    }
+    return [];
   };
 
   return (
@@ -668,99 +706,82 @@ const ImageCategories: React.FC<{
           else if (category.label.includes('Торшер') || category.label.includes('Торшеры')) displayLabel = 'Напольные светильники';
           else if (category.label.includes('Уличный светильник')) displayLabel = 'Уличные светильники';
           
-          let subcategories = getSubcategories(category.label);
-          
-          // Временно добавляем тестовые данные для всех категорий
-          if (subcategories.length === 0) {
-            if (category.label.includes('Люстра') || displayLabel === 'Люстры') {
-              subcategories = [
-                { label: 'Люстра подвесная', searchName: 'Люстра подвесная' },
-                { label: 'Люстра потолочная', searchName: 'Люстра потолочная' },
-                { label: 'Люстра на штанге', searchName: 'Люстра на штанге' },
-                { label: 'Люстра каскадная', searchName: 'Люстра каскадная' }
-              ];
-            } else if (category.label.includes('Светильник') || displayLabel === 'Светильники') {
-              subcategories = [
-                { label: 'Потолочный светильник', searchName: 'Потолочный светильник' },
-                { label: 'Подвесной светильник', searchName: 'Подвесной светильник' },
-                { label: 'Настенный светильник', searchName: 'Настенный светильник' },
-                { label: 'Встраиваемый светильник', searchName: 'Встраиваемый светильник' },
-                { label: 'Накладной светильник', searchName: 'Накладной светильник' },
-                { label: 'Трековый светильник', searchName: 'Трековый светильник' },
-                { label: 'Точечный светильник', searchName: 'Точечный светильник' }
-              ];
-            } else if (category.label.includes('Уличный') || displayLabel === 'Уличные светильники') {
-              subcategories = [
-                { label: 'Уличный светильник', searchName: 'Уличный светильник' },
-                { label: 'Настенный уличный светильник', searchName: 'Настенный уличный светильник' },
-                { label: 'Грунтовый светильник', searchName: 'Грунтовый светильник' },
-                { label: 'Ландшафтный светильник', searchName: 'Ландшафтный светильник' },
-                { label: 'Парковый светильник', searchName: 'Парковый светильник' }
-              ];
-            }
-          }
-          
-          const isHovered = hoveredCategory === category.label;
-          
-          // Отладка
-          if (isHovered) {
-            console.log('Наведение на категорию:', category.label, 'подкатегории:', subcategories);
-          }
+                     const subcategories = getSubcategoriesForCategory(category.label);
+           const isHovered = hoveredCategory === category.label;
+           const isClicked = clickedCategory === category.label;
+           const hasSubcategories = subcategories.length > 0;
+           const shouldShowSubcategories = hasSubcategories && (isMobile ? isClicked : isHovered);
           
           return (
             <div
               key={index}
-              onClick={() => onCategoryClick(category)}
-              onMouseEnter={() => setHoveredCategory(category.label)}
-              onMouseLeave={() => setHoveredCategory(null)}
-              className="flex flex-col items-center cursor-pointer transition-transform hover:scale-105 relative"
+              onClick={(e) => {
+                if (isMobile && hasSubcategories) {
+                  e.preventDefault();
+                  setClickedCategory(isClicked ? null : category.label);
+                } else {
+                  onCategoryClick(category);
+                }
+              }}
+              onMouseEnter={() => !isMobile && setHoveredCategory(category.label)}
+              onMouseLeave={() => !isMobile && setHoveredCategory(null)}
+              className="category-item flex flex-col items-center cursor-pointer transition-all duration-200 hover:scale-105 relative group"
             >
-              <div className="relative w-full aspect-square mb-4 overflow-hidden bg-white border border-gray-200">
+              <div className="relative w-full aspect-square mb-4 overflow-visible bg-white border border-gray-200 rounded-lg shadow-sm group-hover:shadow-md transition-shadow">
                 <img 
                   src={imageUrl} 
                   alt={category.label}
-                  className="w-full h-full object-contain p-4"
+                  className="w-full h-full object-contain p-4 rounded-lg"
                 />
                 
-                                {/* Всплывающее окно с подкатегориями - для тестирования показываем всегда */}
-                {isHovered && subcategories.length > 0 && (
-                  <div className={`absolute -top-2 z-50 bg-white border border-gray-200 rounded-lg shadow-lg p-4 min-w-[200px] max-w-[250px] ${
-                    index >= 3 ? 'right-full mr-2' : 'left-full ml-2'
-                  }`}>
-                    <div className="text-sm font-medium text-gray-800 mb-2">{displayLabel}</div>
-                    <div className="space-y-1">
-                      {subcategories.map((sub, subIndex) => (
-                        <div 
-                          key={subIndex}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onCategoryClick({ 
-                              label: sub.label, 
-                              searchName: sub.searchName
-                            });
-                          }}
-                          className="text-xs text-gray-600 hover:text-blue-600 hover:bg-gray-50 p-1 rounded cursor-pointer transition-colors"
-                        >
-                          {sub.label}
-                        </div>
-                      ))}
-                    </div>
-                    {/* Треугольная стрелка - меняем направление в зависимости от позиции */}
-                    {index >= 3 ? (
-                      <>
-                        <div className="absolute top-4 -right-2 w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-l-[8px] border-l-white"></div>
-                        <div className="absolute top-4 -right-[9px] w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-l-[8px] border-l-gray-200"></div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="absolute top-4 -left-2 w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-r-[8px] border-r-white"></div>
-                        <div className="absolute top-4 -left-[9px] w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-r-[8px] border-r-gray-200"></div>
-                      </>
-                    )}
+                                 {/* Всплывающее окно с подкатегориями */}
+                 {shouldShowSubcategories && (
+                   <div className={`absolute ${isMobile ? 'top-full mt-2 left-0 right-0' : 'top-0'} z-50 bg-white/95 backdrop-blur-sm border border-gray-300 rounded-lg shadow-xl p-3 min-w-[220px] max-w-[280px] ${
+                     !isMobile ? (index >= 3 ? 'right-full mr-3' : 'left-full ml-3') : ''
+                   } animate-in fade-in subcategory-popup`}>
+                     <div className="text-sm font-semibold text-gray-900 mb-3 border-b border-gray-200 pb-2">{displayLabel}</div>
+                     <div className="space-y-1">
+                       {subcategories.map((sub, subIndex) => (
+                         <div 
+                           key={subIndex}
+                           onClick={(e) => {
+                             e.stopPropagation();
+                             onCategoryClick({ 
+                               label: sub.label, 
+                               searchName: sub.searchName
+                             });
+                           }}
+                           className="text-sm text-gray-700 hover:text-blue-600 hover:bg-blue-50 p-2 rounded-md cursor-pointer subcategory-item-hover flex items-center group/item"
+                         >
+                           <span className="text-xs mr-2 opacity-50 text-blue-500">▸</span>
+                           <span className="group-hover/item:font-medium transition-all duration-150">{sub.label}</span>
+                         </div>
+                       ))}
+                     </div>
+                                         {/* Стрелка указывающая на категорию */}
+                     {!isMobile && (
+                       index >= 3 ? (
+                         <div className="absolute top-6 -right-2 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-l-[10px] border-l-white drop-shadow-sm"></div>
+                       ) : (
+                         <div className="absolute top-6 -left-2 w-0 h-0 border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent border-r-[10px] border-r-white drop-shadow-sm"></div>
+                       )
+                     )}
+                     {isMobile && (
+                       <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-b-[10px] border-b-white drop-shadow-sm"></div>
+                     )}
                   </div>
                 )}
+                
+                                 {/* Индикатор наличия подкатегорий */}
+                 {hasSubcategories && (
+                   <div className="absolute top-2 right-2 w-4 h-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg animate-pulse group-hover:animate-none group-hover:scale-110 transition-transform duration-200">
+                     <span className="text-white text-xs font-bold">+</span>
+                   </div>
+                 )}
               </div>
-              <div className="text-center text-sm font-medium">{displayLabel}</div>
+              <div className="text-center text-sm font-medium text-gray-800 group-hover:text-blue-600 transition-colors">
+                {displayLabel}
+              </div>
             </div>
           );
         })}
