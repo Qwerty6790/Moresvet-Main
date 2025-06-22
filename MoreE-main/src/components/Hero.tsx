@@ -66,12 +66,12 @@ export default function Banner() {
 
   // Популярные категории для каталога
   const popularCategories = [
-    { id: 1, title: 'ЛЮСТРЫ', image: '/images/lustry.jpg', link: '/catalog?category=Люстра&page=1' },
-    { id: 2, title: 'СВЕТИЛЬНИКИ', image: '/images/svetilniki.jpeg', link: '/catalog/Светильник' },
-    { id: 3, title: 'БРА И ПОДСВЕТКИ', image: '/images/bra.jpeg', link: '/catalog/Бра' },
-    { id: 4, title: 'НАСТОЛЬНЫЕ ЛАМПЫ', image: '/images/nastolny.jpg', link: '/catalog/Настольная лампа' },
-    { id: 5, title: 'ТОРШЕРЫ', image: '/images/torher.jpg', link: '/catalog/Торшер' },
-    { id: 6, title: 'УЛИЧНОЕ ОСВЕЩЕНИЕ', image: '/images/ylihnoe.jpg', link: '/catalog/Уличный светильник' },
+    { id: 1, title: 'ЛЮСТРЫ', image: '/images/lustry.jpg', link: '/osveheny?category=Люстра&page=1' },
+    { id: 2, title: 'СВЕТИЛЬНИКИ', image: '/images/svetilniki.jpeg', link: '/osveheny/Светильник' },
+    { id: 3, title: 'БРА И ПОДСВЕТКИ', image: '/images/bra.jpeg', link: '/osveheny/Бра' },
+    { id: 4, title: 'НАСТОЛЬНЫЕ ЛАМПЫ', image: '/images/nastolny.jpg', link: '/osveheny/Настольная лампа' },
+    { id: 5, title: 'ТОРШЕРЫ', image: '/images/torher.jpg', link: '/osveheny/Торшер' },
+    { id: 6, title: 'УЛИЧНОЕ ОСВЕЩЕНИЕ', image: '/images/ylihnoe.jpg', link: '/osveheny/Уличный светильник' },
   ];
 
   return (

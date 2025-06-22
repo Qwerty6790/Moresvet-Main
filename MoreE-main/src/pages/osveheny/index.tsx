@@ -1732,6 +1732,51 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
     };
   }, []);
 
+  // Компонент аккордеона для брендов
+  const BrandsAccordion = () => {
+    const [isBrandsOpen, setIsBrandsOpen] = useState(false);
+
+    return (
+      <div className="bg-white rounded-lg p-4 mb-4 shadow-sm border border-gray-100">
+        <div 
+          className="flex items-center justify-between cursor-pointer"
+          onClick={() => setIsBrandsOpen(!isBrandsOpen)}
+        >
+          <span className="font-medium text-sm uppercase">Бренды</span>
+          <span className="transform transition-transform duration-200 text-gray-400">
+            {isBrandsOpen ? (
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path fillRule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path fillRule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            )}
+          </span>
+        </div>
+        
+        {isBrandsOpen && (
+          <div className="mt-3 space-y-1.5 max-h-[200px] overflow-y-auto pr-1">
+            {brands.map((brand, index) => (
+              <div
+                key={`brand-${index}`}
+                className={`flex items-center px-3 py-2 rounded transition-colors duration-200 ${
+                  selectedBrand?.name === brand.name
+                    ? 'bg-gray-100 text-black font-medium' 
+                    : 'text-gray-700 hover:bg-gray-50 cursor-pointer'
+                }`}
+                onClick={() => handleBrandChange(brand)}
+              >
+                <span className="text-sm">{brand.name}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
+
   // Компонент для отображения бренда и его категорий
   const BrandPanel = () => {
     if (!selectedBrand || selectedBrand.name === 'Все товары') return null;
@@ -2243,32 +2288,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
 
               {/* Блок брендов - показываем только если не выбран конкретный бренд */}
               {(!selectedBrand || selectedBrand.name === 'Все товары') && (
-                <div className="bg-white rounded-lg p-4 mb-4 shadow-sm border border-gray-100">
-                  <div className="flex items-center mb-3">
-                    
-                    <span className="font-medium text-sm uppercase">Бренды</span>
-                  </div>
-                  <div className="space-y-1.5 max-h-[200px] overflow-y-auto pr-1">
-                    {brands.slice(0, 10).map((brand, index) => (
-                      <div
-                        key={`brand-${index}`}
-                        className={`flex items-center px-3 py-2 rounded transition-colors duration-200 ${
-                          selectedBrand?.name === brand.name
-                            ? 'bg-white text-white font-medium' 
-                            : 'text-gray-700 hover:bg-gray-50 cursor-pointer'
-                        }`}
-                        onClick={() => handleBrandChange(brand)}
-                      >
-                        <span className="text-sm">{brand.name}</span>
-                      </div>
-                    ))}
-                    {brands.length > 10 && (
-                      <button className="w-full text-center text-xs text-blue-600 hover:text-blue-800 mt-2">
-                        Показать все бренды
-                      </button>
-                    )}
-                  </div>
-                </div>
+                <BrandsAccordion />
               )}
 
               {/* Кнопка фильтров */}
