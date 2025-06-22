@@ -26,53 +26,6 @@ export type Category = {
   subcategories?: Category[]; // Добавляем подкатегории
   isOpen?: boolean; // Для состояния аккордеона
   id?: string; // Добавляем id для идентификации категории
-  slug?: string; // Добавляем slug для красивых URL
-};
-
-// Маппинг категорий на красивые URL slug'и
-const categorySlugMap: Record<string, string> = {
-  'Люстры': 'chandeliers',
-  'Люстра подвесная': 'pendant-chandeliers',
-  'Люстра потолочная': 'ceiling-chandeliers',
-  'Люстра каскадная': 'cascade-chandeliers',
-  'Люстра хрустальная': 'crystal-chandeliers',
-  'Люстра на штанге': 'rod-chandeliers',
-  'Светильники': 'lights',
-  'Потолочный светильник': 'ceiling-lights',
-  'Подвесной светильник': 'pendant-lights',
-  'Настенный светильник': 'wall-lights',
-  'Встраиваемый светильник': 'recessed-lights',
-  'Накладной светильник': 'surface-lights',
-  'Трековый светильник': 'track-lights',
-  'Точечный светильник': 'spot-lights',
-  'Бра': 'wall-sconces',
-  'Торшер': 'floor-lamps',
-  'Настольная лампа': 'table-lamps',
-  'Уличный светильник': 'outdoor-lights',
-  'Ландшафтный светильник': 'landscape-lights',
-  'Грунтовый светильник': 'ground-lights',
-  'Светодиодная лента': 'led-strips',
-  'Профиль для ленты': 'led-profiles',
-  'Блок питания': 'power-supplies',
-  'Коннекторы': 'connectors',
-  'Шинопровод': 'track-systems',
-  'Комплектующие': 'accessories',
-  'Умный свет': 'smart-lighting'
-};
-
-// Обратный маппинг для получения названия категории по slug
-const slugToCategoryMap: Record<string, string> = Object.fromEntries(
-  Object.entries(categorySlugMap).map(([category, slug]) => [slug, category])
-);
-
-// Функция для получения slug категории
-const getCategorySlug = (category: string): string => {
-  return categorySlugMap[category] || category.toLowerCase().replace(/\s+/g, '-');
-};
-
-// Функция для получения названия категории по slug
-const getCategoryFromSlug = (slug: string): string => {
-  return slugToCategoryMap[slug] || slug;
 };
 
 // Функция для получения товаров для конкретной страницы (вынесена отдельно для использования в getServerSideProps)
@@ -652,14 +605,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
       const { source: urlSource, page, category, sort, name } = router.query;
       const sourceName = urlSource || source || '';
       const pageNumber = page ? parseInt(page as string, 10) : 1;
-      
-      // Преобразуем slug обратно в название категории
-      let categoryName = '';
-      if (category) {
-        const categorySlug = Array.isArray(category) ? category[0] : category;
-        categoryName = getCategoryFromSlug(categorySlug);
-      }
-      
+      const categoryName = category ? (Array.isArray(category) ? category[0] : category) : '';
       const productName = name ? (Array.isArray(name) ? name[0] : name as string) : '';
       const sortValue = sort ? (Array.isArray(sort) ? sort[0] : sort) : 'newest';
       
@@ -772,7 +718,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
         pathname: router.pathname,
         query: { 
           ...router.query, 
-          category: getCategorySlug(firstSubcategory.searchName || firstSubcategory.label),
+          category: firstSubcategory.searchName,
           subcategory: firstSubcategory.label,
           // Сохраняем source (бренд), если он есть
           source: selectedBrand && selectedBrand.name !== 'Все товары' ? selectedBrand.name : undefined,
@@ -789,7 +735,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
           pathname: router.pathname,
           query: { 
             ...router.query, 
-            category: getCategorySlug(category.searchName || category.label),
+            category: category.searchName || category.label,
             // Сохраняем source (бренд), если он есть
             source: selectedBrand && selectedBrand.name !== 'Все товары' ? selectedBrand.name : undefined,
             page: '1',
