@@ -1220,7 +1220,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
             query: {
               ...router.query,
               source: brand.name,
-              category: getCategorySlug(matchingCategory.searchName || matchingCategory.label),
+              category: matchingCategory.searchName,
               page: 1
             },
           }, undefined, { shallow: true });
@@ -1242,7 +1242,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
           query: {
             ...router.query,
             source: brand.name,
-            category: getCategorySlug(allProductsCategory.searchName || allProductsCategory.label),
+            category: allProductsCategory.searchName,
             page: 1
           },
         }, undefined, { shallow: true });
