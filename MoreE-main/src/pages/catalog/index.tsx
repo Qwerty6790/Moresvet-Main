@@ -2230,10 +2230,10 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
           {isClient && (
             <div className="mb-8 bg-white rounded-lg p-6 shadow-sm border border-gray-100">
               <div className="flex flex-wrap gap-3 justify-center items-center">
-                {/* ПОДВЕСНЫЕ СВЕТИЛЬНИКИ */}
+                {/* ЛЮСТРЫ */}
                 <div className="relative group">
                   <button className="px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:text-black transition-colors">
-                    ПОДВЕСНЫЕ СВЕТИЛЬНИКИ
+                    ЛЮСТРЫ
                   </button>
                   <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-48">
                     <div className="p-2">
@@ -2244,10 +2244,10 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                         Люстра подвесная
                       </button>
                       <button 
-                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Подвесной светильник', searchName: 'Подвесной светильник' })}
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Люстра потолочная', searchName: 'Люстра потолочная' })}
                         className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
                       >
-                        Подвесной светильник
+                        Люстра потолочная
                       </button>
                       <button 
                         onClick={() => handleCategoryClickWithBrandContext({ label: 'Люстра каскадная', searchName: 'Люстра каскадная' })}
@@ -2255,36 +2255,60 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                       >
                         Люстра каскадная
                       </button>
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Люстра хрустальная', searchName: 'Люстра хрустальная' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Люстра хрустальная
+                      </button>
                     </div>
                   </div>
                 </div>
 
                 <span className="text-gray-300">•</span>
 
-                {/* ПОТОЛОЧНЫЕ */}
+                {/* СВЕТИЛЬНИКИ */}
                 <div className="relative group">
                   <button className="px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:text-black transition-colors">
-                    ПОТОЛОЧНЫЕ
+                    СВЕТИЛЬНИКИ
                   </button>
                   <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-48">
                     <div className="p-2">
                       <button 
-                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Люстра потолочная', searchName: 'Люстра потолочная' })}
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Точечный светильник', searchName: 'Точечный светильник' })}
                         className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
                       >
-                        Люстра потолочная
+                        Точечный светильник
                       </button>
                       <button 
-                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Потолочный светильник', searchName: 'Потолочный светильник' })}
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Трековый светильник', searchName: 'Трековый светильник' })}
                         className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
                       >
-                        Потолочный светильник
+                        Трековый светильник
                       </button>
                       <button 
                         onClick={() => handleCategoryClickWithBrandContext({ label: 'Накладной светильник', searchName: 'Накладной светильник' })}
                         className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
                       >
                         Накладной светильник
+                      </button>
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Встраиваемый светильник', searchName: 'Встраиваемый светильник' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Встраиваемый светильник
+                      </button>
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Подвесной светильник', searchName: 'Подвесной светильник' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Подвесной светильник
+                      </button>
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Потолочный светильник', searchName: 'Потолочный светильник' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Потолочный светильник
                       </button>
                     </div>
                   </div>
