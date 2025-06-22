@@ -467,24 +467,7 @@ interface CatalogIndexProps {
 
 
 
-// Добавляем маппинг для логотипов брендов
-const brandLogoMap: Record<string, string> = {
-  'Artelamp': '/images/artelamplogo.png',
-  'KinkLight': '/images/kinklightlogo.png',
-  'Favourite': '/images/favouritelogo.png',
-  'Lumion': '/images/lumionlogo.png',
-  'LightStar': '/images/lightstarlogo.png',
-  'OdeonLight': '/images/odeonlightlogo.png',
-  'Maytoni': '/images/maytonilogo.png',
-  'Sonex': '/images/sonexlogo.png',
-  'ElektroStandard': '/images/elektrostandardlogo.png',
-  'Novotech': '/images/novotechlogo.png',
-  'Denkirs': '/images/denkirslogo1.png',
-  'Werkel': '/images/werkellogo.png',
-  'Voltum': '/images/voltumlogo.png',
-  'Stluc': '/images/stlucelogo.png',
-  // Добавьте логотипы для других брендов по необходимости
-};
+
 
 const CatalogIndex: React.FC<CatalogIndexProps> = ({
   initialProducts,
@@ -1753,23 +1736,10 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
   const BrandPanel = () => {
     if (!selectedBrand || selectedBrand.name === 'Все товары') return null;
     
-    // Получаем URL логотипа бренда (или используем заглушку)
-    const brandLogo = brandLogoMap[selectedBrand.name] || '/images/brands/placeholder-logo.png';
-    
     return (
       <div className="bg-white rounded-lg p-4 mb-4 shadow-sm border border-gray-100">
         <div className="flex items-center mb-4">
           <div className="flex-1 flex items-center gap-3">
-            <div className="relative h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0 bg-black rounded-md overflow-hidden border border-gray-100">
-              <img 
-                src={brandLogo} 
-                alt={`${selectedBrand.name} logo`} 
-                className="w-full h-full object-contain p-1"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = '/images/brands/placeholder-logo.png';
-                }}
-              />
-            </div>
             <div>
               <h2 className="font-semibold text-gray-900">{selectedBrand.name}</h2>
               <p className="text-xs text-gray-500">Официальный дилер</p>
@@ -2289,18 +2259,6 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                         }`}
                         onClick={() => handleBrandChange(brand)}
                       >
-                        {brand.name !== 'Все товары' && brandLogoMap[brand.name] && (
-                          <div className="h-5 w-5 mr-2 bg-black flex-shrink-0">
-                            <img 
-                              src={brandLogoMap[brand.name]} 
-                              alt={`${brand.name} logo`} 
-                              className="h-full w-full object-contain"
-                              onError={(e) => {
-                                (e.target as HTMLImageElement).style.display = 'none';
-                              }}
-                            />
-                          </div>
-                        )}
                         <span className="text-sm">{brand.name}</span>
                       </div>
                     ))}
@@ -2612,19 +2570,9 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
              
               {/* Products Grid */}
               <div className="flex-1 bg-white rounded-lg p-4 sm:p-5 shadow-sm border border-gray-100 overflow-hidden">
-                {/* Добавляем заголовок с логотипом бренда над товарами */}
+                {/* Заголовок бренда над товарами */}
                 {selectedBrand && selectedBrand.name !== 'Все товары' && (
                   <div className="mb-6 flex flex-col sm:flex-row items-center gap-3 sm:gap-5 border-b pb-4">
-                    <div className="h-14 w-14 sm:h-16 sm:w-16 bg-black rounded-lg border overflow-hidden p-1.5 flex-shrink-0">
-                      <img 
-                        src={brandLogoMap[selectedBrand.name] || '/images/placeholder-logo.png'} 
-                        alt={`${selectedBrand.name} logo`}
-                        className="w-full h-full object-contain" 
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = '/images/placeholder-logo.png';
-                        }}
-                      />
-                    </div>
                     <div className="text-center sm:text-left">
                       <h1 className="text-xl sm:text-2xl font-bold text-gray-900">{selectedBrand.name}</h1>
                       <div className="text-sm text-gray-500 mt-1">
