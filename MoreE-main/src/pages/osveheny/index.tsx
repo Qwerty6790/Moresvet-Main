@@ -1926,7 +1926,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
           {/* Заголовок с переключателем режима просмотра */}
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-3">
             <h1 className="text-4xl md:text-5xl font-bold text-center w-full">
-              ДЕКОРАТИВНЫЙ СВЕТ
+            КАТАЛОГ СВЕТА
             </h1>
           </div>
           
