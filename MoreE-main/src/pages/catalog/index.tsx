@@ -2480,7 +2480,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                 {/* ТРЕКОВЫЕ */}
                 <div className="relative group">
                   <button className="px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:text-black transition-colors">
-                    ТРЕКОВЫЕ
+                    Комплектующие
                   </button>
                   <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-48">
                     <div className="p-2">
@@ -2488,7 +2488,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                         onClick={() => handleCategoryClickWithBrandContext({ label: 'Трековый светильник', searchName: 'Трековый светильник' })}
                         className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
                       >
-                        Трековый светильник
+                       Коннекторы
                       </button>
                       <button 
                         onClick={() => handleCategoryClickWithBrandContext({ label: 'Шинопровод', searchName: 'Шинопровод' })}
@@ -2500,7 +2500,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                         onClick={() => handleCategoryClickWithBrandContext({ label: 'Точечный светильник', searchName: 'Точечный светильник' })}
                         className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
                       >
-                        Точечный светильник
+                        Блок питания
                       </button>
                     </div>
                   </div>
