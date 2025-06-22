@@ -1920,7 +1920,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
             <span className="text-gray-300">•</span>
             <Link href="/catalog" className="hover:text-gray-900 p-3  transition-colors">Каталог</Link>
             <span className="text-gray-300">•</span>
-            <span className="text-gray-900 p-3  font-medium">ДЕКОРАТИВНЫЙ СВЕТ</span>
+            <span className="text-gray-900 p-3  font-medium">КАТАЛОГ СВЕТА</span>
           </div>
           
           {/* Заголовок с переключателем режима просмотра */}
