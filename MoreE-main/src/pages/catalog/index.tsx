@@ -305,409 +305,98 @@ const productCategories = [
   },
 ];
 
+// Стандартные категории для всех брендов
+const standardCategories = [
+  { label: 'Все товары', searchName: 'Все товары' },
+  { label: 'Люстра подвесная', searchName: 'Люстра подвесная' },
+  { label: 'Люстра потолочная', searchName: 'Люстра потолочная' },
+  { label: 'Люстра каскадная', searchName: 'Люстра каскадная' },
+  { label: 'Люстра хрустальная', searchName: 'Люстра хрустальная' },
+  { label: 'Точечный светильник', searchName: 'Точечный светильник' },
+  { label: 'Трековый светильник', searchName: 'Трековый светильник' },
+  { label: 'Накладной светильник', searchName: 'Накладной светильник' },
+  { label: 'Встраиваемый светильник', searchName: 'Встраиваемый светильник' },
+  { label: 'Подвесной светильник', searchName: 'Подвесной светильник' },
+  { label: 'Потолочный светильник', searchName: 'Потолочный светильник' },
+  { label: 'Настенный светильник', searchName: 'Настенный светильник' },
+  { label: 'Бра', searchName: 'Бра' },
+  { label: 'Настольная лампа', searchName: 'Настольная лампа' },
+  { label: 'Торшер', searchName: 'Торшер' },
+  { label: 'Уличный светильник', searchName: 'Уличный светильник' },
+  { label: 'Ландшафтный светильник', searchName: 'Ландшафтный светильник' },
+  { label: 'Грунтовый светильник', searchName: 'Грунтовый светильник' },
+  { label: 'Светодиодная лента', searchName: 'Светодиодная лента' },
+  { label: 'Профиль для ленты', searchName: 'Профиль для ленты' },
+  { label: 'Блок питания', searchName: 'Блок питания' },
+  { label: 'Коннекторы', searchName: 'Коннекторы' },
+  { label: 'Шинопровод', searchName: 'Шинопровод' },
+];
+
 // Массив брендов с категориями
 const brands: Brand[] = [
   {
     name: 'Все товары',
-    categories: [
-      { label: 'Люстра', searchName: 'Люстра' },
-      { label: 'Автоматический выключатель', searchName: 'Автоматический выключатель' },
-      ...productCategories.map(cat => ({ label: cat.label, searchName: cat.searchName, aliases: [] }))
-    ],
+    categories: standardCategories,
   },
   {
     name: 'Artelamp',
-    categories: [
-      { label: 'Все товары', searchName: 'Все товары' },
-      { label: 'Люстра подвесная', searchName: 'Подвесная люстра' },
-      { label: 'Люстра на штанге', searchName: 'Люстра на штанге' },
-      { label: 'Каскадная люстра', searchName: 'Каскадная люстра' },
-      {
-        label: 'Люстра потолочная',
-        searchName: 'Люстра',
-        aliases: ['Потолочная люстра'],
-      },
-      { label: 'Бра', searchName: 'Бра' },
-      { label: 'Торшеры', searchName: 'Торшер' },
-      { label: 'Потолочный Светильник', searchName: 'Потолочный Светильник' },
-      { label: 'Трековый светильник', searchName: 'трековый светильник' },
-      { label: 'Врезной Светильник', searchName: 'Врезной Светильник' },
-      { label: 'Споты', searchName: 'Спот' },
-      { label: 'Уличный настенный светильник', searchName: 'Уличный настенный светильник' },
-      { label: 'Настольный Светильник', searchName: 'Настольный Светильник' },
-      { label: 'Подвесной светильник', searchName: 'Подвес' },
-      { label: 'Уличный светильник', searchName: 'Уличный светильник' },
-    ],
+    categories: standardCategories,
   },
   {
     name: 'KinkLight',
-    categories: [
-      { label: 'Все товары', searchName: 'Все товары' },
-      { label: 'Каскадная люстра', searchName: 'Люстра каскадная' },
-      { label: 'Шнур', searchName: 'Шнур' },
-      {
-        label: 'Люстра потолочная',
-        searchName: 'Люстра',
-        aliases: ['Потолочная люстра'],
-      },
-      { label: 'Бра', searchName: 'Бра' },
-      { label: 'Торшеры', searchName: 'Торшер' },
-      { label: 'Трековый светильник', searchName: 'трековый светильник' },
-      { label: 'Подвесной светильник', searchName: 'Подвес' },
-    ],
+    categories: standardCategories,
   },
   {
     name: 'Favourite',
-    categories: [
-      { label: 'Все товары', searchName: 'Все товары' },
-      { label: 'Люстра подвесная', searchName: 'Люстра подвесная' },
-      { label: 'Потолочный Светильник', searchName: 'Потолочный Светильник' },
-      { label: 'Трековый светильник', searchName: 'трековый светильник' },
-      { label: 'Врезной Светильник', searchName: 'Врезной Светильник' },
-      { label: 'Споты', searchName: 'Спот' },
-      { label: 'Настенный Светильник', searchName: 'Настенный Светильник' },
-      {
-        label: 'Люстра потолочные',
-        searchName: 'Люстра',
-        aliases: ['Потолочная люстра'],
-      },
-      { label: 'Напольный Светильник', searchName: 'Напольный Светильник' },
-      { label: 'Настольный Светильник', searchName: 'Настольный Светильник' },
-      { label: 'Подвесной светильник', searchName: 'Подвес' },
-      { label: 'Уличный светильник', searchName: 'Уличный светильник' },
-    ],
+    categories: standardCategories,
   },
   {
     name: 'Lumion',
-    categories: [
-      { label: 'Все товары', searchName: 'Все товары' },
-      { label: 'Люстра подвесная', searchName: 'Люстра подвесная' },
-      { label: 'Потолочный Светильник', searchName: 'Потолочный Светильник' },
-      { label: 'Подвесное крепление', searchName: 'Подвесное крепление' },
-      { label: 'Интерьерная настольная лампа', searchName: 'Интерьерная настольная лампа' },
-      { label: 'Споты', searchName: 'Спот' },
-      {
-        label: 'Люстры потолочная',
-        searchName: 'Люстра',
-        aliases: ['Потолочная люстра'],
-      },
-      { label: 'Настенный светильник', searchName: 'Настенный светильник' },
-      { label: 'Бра', searchName: 'Бра' },
-      { label: 'Торшеры', searchName: 'Торшер' },
-      { label: 'Подвесной светильник', searchName: 'Подвесной светильник' },
-    ],
+    categories: standardCategories,
   },
   {
     name: 'LightStar',
-    categories: [
-      { label: 'Все товары', searchName: 'Все товары' },
-      { label: 'Люстра подвесная', searchName: 'Люстра подвесная' },
-      {
-        label: 'Люстра потолочная',
-        searchName: 'Люстра',
-        aliases: ['Потолочная люстра'],
-      },
-      { label: 'Бра RAMO', searchName: 'Бра RAMO' },
-      { label: 'Бра STREGARO', searchName: 'Бра STREGARO' },
-      { label: 'Бра RAGNO', searchName: 'Бра RAGNO' },
-      { label: 'Бра CILINO', searchName: 'Бра CILINO' },
-      { label: 'Бра ZETA', searchName: 'Бра ZETA' },            
-      { label: 'Бра TUBO', searchName: 'Бра TUBO' },
-      { label: 'Бра FAVO', searchName: 'Бра FAVO' },
-      { label: 'Бра EXTRA', searchName: 'Бра EXTRA' },
-      { label: 'Бра SIENA', searchName: 'Бра SIENA' },
-      { label: 'Бра PALLA', searchName: 'Бра PALLA' },
-      { label: 'Настольная лампа', searchName: 'Настольная лампа' },
-      { label: 'Светильник точечный', searchName: 'Светильник точечный ' },
-      { label: 'Встраиваемый светильник', searchName: 'Встраиваемый светильник' },
-      { label: 'Трековый светильник', searchName: 'Трековый светильник' },
-      { label: 'Подвесной светильник', searchName: 'Светильник подвесной' },
-      { label: 'Соединитель', searchName: 'Соединитель' },
-    ],
+    categories: standardCategories,
   },
   {
     name: 'OdeonLight',
-    categories: [
-      { label: 'Все товары', searchName: 'Все товары' },
-      { label: 'Люстра каскадная', searchName: 'Люстра каскадная' },
-      { label: 'Люстра подвесная', searchName: 'Люстра подвесная' },
-      { label: 'Потолочный Светильник', searchName: 'Потолочный Светильник' },
-      { label: 'Споты', searchName: 'Спот' },
-      { label: 'Настенный Светильник', searchName: 'Настенный Светильник' },
-      {
-        label: 'Люстра потолочная',
-        searchName: 'Люстра',
-        aliases: ['Потолочная люстра'],
-      },
-      { label: 'Напольный Светильник', searchName: 'Напольный Светильник' },
-      { label: 'Настольный Светильник', searchName: 'Настольный Светильник' },
-      { label: 'Подвесной светильник', searchName: 'Подвес' },
-      { label: 'Уличный светильник', searchName: 'Уличный светильник' },
-    ],
+    categories: standardCategories,
   },
   {
     name: 'Maytoni',
-    categories: [
-      { label: 'Все товары', searchName: 'Все товары' },
-      { label: 'Подвесной светильник', searchName: 'Подвесной светильник' },
-      { label: 'Трековый светильник', searchName: 'Трековый светильник' },
-      { label: 'Встраиваемый светильник', searchName: 'Встраиваемый светильник' },
-      { label: 'Потолочный светильник', searchName: 'Потолочный светильник' },
-      { label: 'Настенный светильник', searchName: 'Настенный светильник' },
-      { label: 'Ландшафтный светильник', searchName: 'Ландшафтный светильник' },
-      { label: 'Светодиодная лента', searchName: 'Светодиодная лента' },
-      {
-        label: 'Люстра потолочная',
-        searchName: 'Люстра',
-        aliases: ['Потолочная люстра'],
-      },
-      { label: 'Торшеры', searchName: 'Торшер' },
-      { label: 'Парковый светильник', searchName: 'Парковый светильник' },
-    ],
+    categories: standardCategories,
   },
   {
     name: 'Sonex',
-    categories: [
-      {
-        label: 'Люстра-вентилятор',
-        searchName: 'Люстра-вентилятор',
-        aliases: ['Люстра-вентилятор'],
-      },
-      { label: 'Все товары', searchName: 'Все товары' },
-      { label: 'Подвесное крепление', searchName: 'Подвесное крепление' },
-      { label: 'Светильники MERTO', searchName: 'MERTO' }, 
-      { label: 'Светильники LASSA', searchName: 'LASSA' },
-      { label: 'Светильники PIN', searchName: 'PIN' },
-      { label: 'Светильники MITRA', searchName: 'MITRA' },
-      { label: 'Светильники PALE', searchName: 'PALE' },
-      { label: 'Светильники VAKA', searchName: 'VAKA' },
-      { label: 'Светильники MINI', searchName: 'MINI' },
-      { label: 'Светильники COLOR', searchName: 'COLOR' },   
-      { label: 'Светильники SNOK', searchName: 'SNOK' },
-      { label: 'Светильники BASICA', searchName: 'BASICA' },
-      { label: 'Светильники MARON', searchName: 'MARON' },
-      { label: 'Светильники AVRA', searchName: 'AVRA' },
-      { label: 'Светильники TAN', searchName: 'TAN' },
-      { label: 'Светильники PICO', searchName: 'PICO' },
-      { label: 'Бра', searchName: 'Бра' },
-    ],
+    categories: standardCategories,
   },
   {
     name: 'ElektroStandard',
-    categories: [
-      { label: 'Все товары', searchName: 'Все товары' },
-      { label: 'Встраиваемый точечный светильник', searchName: 'Встраиваемый точечный светильник' },
-      { label: 'Светильник встраиваемый', searchName: 'Светильник встраиваемый' },
-      { label: 'Накладной точечный светильник', searchName: 'Накладной точечный светильник' },
-      { label: 'Накладной светильник', searchName: 'Накладной светильник' },
-      { label: 'Накладной акцентный светильник', searchName: 'Накладной акцентный светильник' },
-      { label: 'Встраиваемый поворотный светодиодный светильник', searchName: 'Встраиваемый поворотный светодиодный светильник' },
-      { label: 'Накладной поворотный светодиодный светильник ', searchName: 'Накладной поворотный светодиодный светильник ' },
-      { label: 'Трековая система Line Magnetic', searchName: 'Line Magnetic' },
-      { label: 'Трековая система Mini Magnetic', searchName: 'Mini Magnetic' },
-      { label: 'Трековая система Module System', searchName: 'Module System' },
-      { label: 'Магнитная система Esthetic Magnetic', searchName: 'Esthetic Magnetic' },
-      { label: 'Магнитная система Flat Magnetic', searchName: 'Flat Magnetic' },
-      { label: 'Магнитная система Flat Magnetic', searchName: 'Flat Magnetic' },
-      { label: 'Маг­нитная сис­те­ма Slim Magnetic', searchName: 'Slim Magnetic' },
-      { label: 'Подвесной светодиодный светильник', searchName: 'Подвесной светодиодный светильник' },
-      { label: 'Подвесной линейный светодиодный светильник', searchName: 'Подвесной линейный светодиодный светильник' },
-      { label: 'Трековый поворотный светильник ', searchName: 'Трековый поворотный светильник ' },
-      { label: 'Накладной линейный светодиодный светильник', searchName: 'Накладной линейный светодиодный светильник' },
-      { label: 'Настенный светодиодный светильник', searchName: 'Настенный светодиодный светильник' },
-      { label: 'Линейный светодиодный светильник', searchName: 'Линейный светодиодный светильник' },
-      { label: 'Шинопроводы', searchName: 'Шинопровод' },
-      { label: 'Настенный уличный светильник', searchName: 'Настенный уличный светильник' },
-      { label: 'Линейный светодиодный подвесной двусторонний светильник', searchName: 'Линейный светодиодный подвесной двусторонний светильник' },
-      { label: 'Светильник садово-парковый', searchName: 'Светильник садово-парковый' },
-      { label: 'Уличный светильник на столбе', searchName: 'Уличный светильник на столбе' },
-      { label: 'Светильник поворотный садово-парковый', searchName: 'Светильник поворотный садово-парковый' },
-      { label: 'Ландшафтный светодиодный светильник', searchName: 'Ландшафтный светодиодный светильник' },
-      { label: 'Трековый светильник', searchName: 'Трековый светильник' },
-      { label: 'Настольный светильник', searchName: 'Настольный светильник' },
-      { label: 'Коннекторы', searchName: 'Коннектор' },
-      { label: 'Лампа галогенная G4', searchName: 'Лампа галогенная G4' },
-      { label: 'Ретро лампа Эдисона', searchName: 'Ретро лампа Эдисона' },
-      { label: 'Лампа накаливания', searchName: 'Лампа накаливания' },
-      { label: 'Светодиодная лампа Classic', searchName: 'Светодиодная лампа Classic' },
-      { label: 'Светодиодная лампа "Свеча на ветру"', searchName: 'Светодиодная лампа "Свеча на ветру"' },
-      { label: 'Светодиодная лампа "Свеча"', searchName: 'Светодиодная лампа "Свеча"' },
-      { label: 'Светодиодная лампа G45', searchName: 'Светодиодная лампа G45' },
-      { label: 'Филаментная светодиодная лампа', searchName: 'Филаментная светодиодная лампа' },
-      { label: 'Светодиодная лампа G9', searchName: 'Светодиодная лампа G9' },
-      { label: 'Светодиодная лампа', searchName: 'Светодиодная лампа' },
-      { label: 'Лампа накаливания T32', searchName: 'Лампа накаливания T32' },          
-      { label: 'Светодиодная лампа G4', searchName: 'Светодиодная лампа G4' },
-    ],
+    categories: standardCategories,
   },
   {
     name: 'Novotech',
-    categories: [
-      { label: 'Все товары', searchName: 'Все товары' },
-      { label: 'Трековый светодиодный светильник', searchName: 'Трековый светодиодный светильник' },
-      { label: 'Светильник трековый однофазный трехжильный', searchName: 'Светильник трековый однофазный трехжильный' },
-      { label: 'Светильник накладной', searchName: 'Светильник накладной' },
-      { label: 'Стандартный встраиваемый светильник', searchName: 'Встраивамый стандартный светильник' },
-      { label: 'Светильник встраиваемый', searchName: 'Светильник встраиваемый' },
-      { label: 'Ландшафтный настенный светильник', searchName: 'Ландшафтный настенный светильник' },
-      { label: 'Подвес для светильников', searchName: 'подвес для светильников' },
-      { label: 'Светильник подвесной диммируемый', searchName: 'Светильник подвесной диммируемый' },
-      { label: 'Светильник подвесной', searchName: 'Светильник подвесной' },
-      { label: 'Светильник без драйвера ', searchName: 'Светильник без драйвера ' },
-      { label: 'Трековый светильник', searchName: 'Трековый светильник' },
-    ],
+    categories: standardCategories,
   },
   {
     name: 'Denkirs',
-    categories: [
-      { label: 'Все товары', searchName: 'Все товары' },
-      { label: 'Встраиваемый светильник', searchName: 'Встраиваемый светильник' },
-      { label: 'Светильник встраиваемый в стену', searchName: 'Светильник встраиваемый в стену' },
-      { label: 'Линейный светильник', searchName: 'Линейный светильник' },
-      { label: 'Грунтовый светильник', searchName: 'Грунтовый светильник' },
-      { label: 'Настенный уличный светильник', searchName: 'Настенный уличный светильник' },
-      { label: 'Повортный встраиваемый светильник', searchName: 'Повортный встраиваемый светильник' },
-      { label: 'Светильник на магните', searchName: 'Светильник на магните' },
-      { label: 'Светильник для трека ремня', searchName: 'DK55' },
-      { label: 'Светильник для трека', searchName: 'Светильник для трека' },
-      { label: 'Накладной светильник', searchName: 'Светильник накладной' },
-      { label: 'Акцентный светильник', searchName: 'Акцентный светильник' },
-      { label: 'Повортный светильник для трека', searchName: 'Повортный светильник для трека' },
-      { label: 'Трековый светильник', searchName: 'Трековый светильник' },
-      { label: 'Подвесной светильник', searchName: 'Подвесной светильник' },
-      { label: 'Угловой светильник', searchName: 'Угловой светильник' },
-      { label: 'Ландшафтный светильник', searchName: 'Ландшафтный светильник' },
-      { label: 'Коннектор соединитель гибкий наконечник', searchName: 'TR' },
-      { label: 'Бра', searchName: 'DK50' },
-    ],
+    categories: standardCategories,
   },
   {
     name: 'Werkel',
-    categories: [
-      { label: 'Все товары', searchName: 'Все товары' },
-      {
-        label: 'Автоматический выключатель',
-        searchName: 'Автоматический выключатель',
-        aliases: ['Автоматический выключатель'],
-      },
-      { label: 'Умный автоматический выключатель', searchName: 'Умный автоматический выключатель' },
-      { label: 'Выключатель одноклавишный', searchName: 'Выключатель одноклавишный' },
-      { label: 'Выключатель двухклавишный', searchName: 'Выключатель двухклавишный' },
-      { label: 'Электронный карточный выключатель', searchName: 'Электронный карточный выключатель' },
-      { label: 'Перекрестный выключатель', searchName: 'Перекрестный выключатель' },
-      { label: 'Выключатель жалюзи', searchName: 'Выключатель жалюзи' },
-      { label: 'Модульная розетка', searchName: 'Модульная розетка' },
-      { label: 'Cенсорный выключатель', searchName: 'Cенсорный выключатель' },
-      { label: 'Умный сенсорный выключатель', searchName: 'Умный сенсорный выключатель' },
-      { label: 'Переключатель/выключатель', searchName: 'Переключатель/выключатель' },
-      { label: 'Датчик движения', searchName: 'Датчик движения' },
-      { label: 'Выключатель на 4 положения', searchName: 'Выключатель на 4 положения' },
-      { label: 'Розетка с заземлением', searchName: 'Розетка с заземлением' },
-      { label: 'Розетка двойная с заземлением', searchName: 'Розетка двойная с заземлением' },
-      { label: 'Розетка тройная с заземлением', searchName: 'Розетка тройная с заземлением' },
-      { label: 'Розетка для электроплиты', searchName: 'Розетка для электроплиты' },
-      { label: 'Розетка Ethernet', searchName: 'Розетка Ethernet' },
-      { label: 'Акустическая розетка', searchName: 'Акустическая розетка' },
-      { label: 'Розетка со встроенной подсветкой', searchName: 'Розетка со встроенной подсветкой' },
-      { label: 'Розетка с подсветкой', searchName: 'Розетка с подсветкой' },
-      { label: 'Розетка ТВ+Ethernet', searchName: 'Розетка ТВ+Ethernet' },
-      { label: 'Умная встраиваемая розетка с заземлением', searchName: 'Умная встраиваемая розетка с заземлением' },
-      { label: 'Розетка с быстрой зарядкой', searchName: 'Розетка с быстрой зарядкой' },
-      { label: 'Телефонная розетка', searchName: 'Телефонная розетка' },   
-      { label: 'ТВ-розетка', searchName: 'ТВ-розетка' },
-      { label: 'Розетка влагозащищенная', searchName: 'Розетка влагозащ.' },    
-      { label: 'Терморегулятор', searchName: 'Терморегулятор' }, 
-      { label: 'Умный сенсорный терморегулятор', searchName: 'Умный сенсорный терморегулятор' }, 
-      { label: 'Автоматический выключатель', searchName: 'Автоматический выключатель' },
-      { label: 'Рамка на 1 пост', searchName: 'Рамка на 1 пост' },
-      { label: 'Рамка на 2 поста', searchName: 'Рамка на 2 поста' },
-      { label: 'Рамка на 3 поста', searchName: 'Рамка на 3 поста' },
-      { label: 'Рамка на 4 поста', searchName: 'Рамка на 4 поста' },
-      { label: 'Рамка для двойной розетки', searchName: 'Рамка для двойной розетки' },
-      { label: 'Рамка на 5 поста', searchName: 'Рамка на 5 поста' },
-      
-    ],
+    categories: standardCategories,
   },
   {
     name: 'Voltum',
-    categories: [
-      { label: 'Все товары', searchName: 'Все товары' },
-      { label: 'Выключатель Встраиваемый', searchName: 'Выключатель Встраиваемый' },
-      { label: 'Выключатель с самовозвратом', searchName: 'Выключатель с самовозвратом' },
-      { label: 'Розетка Встраиваемая', searchName: 'Розетка Встраиваемая' },
-      { label: 'Розетка Телевизионная', searchName: 'Розетка Телевизионная' },
-      { label: 'Проходной переключатель встраиваемый ', searchName: 'Проходной переключатель встраиваемый ' },
-      { label: 'Светорегулятор встраиваемый', searchName: 'Светорегулятор встраиваемый' },
-      { label: 'Терморегулятор электронный', searchName: 'Терморегулятор электронный' },
-      { label: 'Подсветка светодиодная встраиваемая', searchName: 'Подсветка светодиодная встраиваемая' },
-      { label: 'Датчик движения встраиваемый', searchName: 'Датчик движения встраиваемый' },
-      { label: 'Вывод кабеля VOLTUM', searchName: 'Вывод кабеля VOLTUM' },
-      { label: 'Заглушка VOLTUM', searchName: 'Заглушка VOLTUM' },
-      { label: 'Розетка акустическая встраиваемая', searchName: 'Розетка акустическая встраиваемая' },
-      { label: 'Розетка компьютерная встраиваемая', searchName: 'Розетка компьютерная встраиваемая' },
-      { label: 'Рамка стеклянная VOLTUM S70 на 1 пост', searchName: 'Рамка стеклянная VOLTUM S70 на 1 пост' },
-      { label: 'Рамка стеклянная VOLTUM S70 на 2 поста', searchName: 'Рамка стеклянная VOLTUM S70 на 2 поста' },
-      { label: 'Рамка стеклянная VOLTUM S70 на 3 поста', searchName: 'Рамка стеклянная VOLTUM S70 на 3 поста' },
-      { label: 'Рамка стеклянная VOLTUM S70 на 4 поста', searchName: 'Рамка стеклянная VOLTUM S70 на 4 поста' },
-      { label: 'Рамка стеклянная VOLTUM S70 на 5 поста', searchName: 'Рамка стеклянная VOLTUM S70 на 5 поста' },
-      { label: 'Рамка пластиковая VOLTUM S70 на 1 пост', searchName: 'Рамка пластиковая VOLTUM S70 на 1 пост' },
-      { label: 'Рамка пластиковая VOLTUM S70 на 2 поста', searchName: 'Рамка пластиковая VOLTUM S70 на 2 поста' },
-      { label: 'Рамка пластиковая VOLTUM S70 на 3 поста', searchName: 'Рамка пластиковая VOLTUM S70 на 3 поста' },
-      { label: 'Рамка пластиковая VOLTUM S70 на 4 поста', searchName: 'Рамка пластиковая VOLTUM S70 на 4 поста' },
-      { label: 'Рамка пластиковая VOLTUM S70 на 5 поста', searchName: 'Рамка пластиковая VOLTUM S70 на 5 поста' },     
-    ],
-  },
-  {
-    name: 'LightStar',
-    categories: [
-      { label: 'Все товары', searchName: 'Все товары' },
-    ],
-  },
-  {
-    name: 'KinkLight',
-    categories: [
-      { label: 'Все товары', searchName: 'Все товары' },
-      { label: 'Настольная лампа', searchName: 'Настольная лампа' },
-      { label: 'Люстра', searchName: 'Люстра' },
-      { label: 'Торшер', searchName: 'Торшер' },
-      {
-        label: 'Люстра потолочная',
-        searchName: 'Люстра',
-        aliases: ['Потолочная люстра'],
-      },
-      { label: 'Настенный Светильник', searchName: 'Настенный Светильник' },
-      { label: 'Светильник уличный', searchName: 'Светильник уличный' },
-      { label: 'Подвес', searchName: 'Подвес' },
-      { label: 'Бра', searchName: 'Бра' },
-      { label: 'Трековый светильник', searchName: 'трековый светильник' },
-    ],
+    categories: standardCategories,
   },
   {
     name: 'Stluce',
-    categories: [
-      { label: 'Все товары', searchName: 'Все товары' },
-      { label: 'Магнитный трековый светильник', searchName: 'Магнитный трековый светильник' },
-      {
-        label: 'Люстра потолочная',
-        
-        searchName: 'Люстра',
-        aliases: ['Потолочная люстра'],
-      },
-      { label: 'Подвесной светильник', searchName: 'Подвесной светильник' },
-      { label: 'Потолочный светильник', searchName: 'Потолочный светильник' },
-      { label: 'Коннектор', searchName: 'Коннектор' },
-      { label: 'Бра', searchName: 'Бра ST' },
-      { label: 'Настольная лампа', searchName: 'Настольная лампа' },
-      { label: 'Торшер', searchName: 'Торшер' },
-    ],
+    categories: standardCategories,
   },
 ];
 
-// Добавляем глобальные категории для всех брендов
-brands[0].categories = [
-  { label: 'Все товары', searchName: 'Все товары' },
-  ...productCategories.map(cat => ({ label: cat.label, searchName: cat.searchName, aliases: [] }))
-];
+
 
 
 
@@ -2470,6 +2159,37 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                         className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
                       >
                         Блок питания LED
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <span className="text-gray-300">•</span>
+
+                {/* УЛИЧНЫЕ */}
+                <div className="relative group">
+                  <button className="px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:text-black transition-colors">
+                    УЛИЧНЫЕ
+                  </button>
+                  <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-48">
+                    <div className="p-2">
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Уличный светильник', searchName: 'Уличный светильник' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Уличный светильник
+                      </button>
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Ландшафтный светильник', searchName: 'Ландшафтный светильник' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Ландшафтный светильник
+                      </button>
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Грунтовый светильник', searchName: 'Грунтовый светильник' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Грунтовый светильник
                       </button>
                     </div>
                   </div>
