@@ -2477,15 +2477,15 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
 
                 <span className="text-gray-300">•</span>
 
-                {/* ТРЕКОВЫЕ */}
+                {/* КОМПЛЕКТУЮЩИЕ */}
                 <div className="relative group">
                   <button className="px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:text-black transition-colors">
-                    Комплектующие
+                    КОМПЛЕКТУЮЩИЕ
                   </button>
                   <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-48">
                     <div className="p-2">
                       <button 
-                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Трековый светильник', searchName: 'Трековый светильник' })}
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Коннекторы', searchName: 'Коннекторы' })}
                         className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
                       >
                        Коннекторы
@@ -2497,7 +2497,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                         Шинопровод
                       </button>
                       <button 
-                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Точечный светильник', searchName: 'Точечный светильник' })}
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Блок питания', searchName: 'Блок питания' })}
                         className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
                       >
                         Блок питания
