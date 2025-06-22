@@ -2226,65 +2226,261 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
             </h1>
           </div>
           
-          {/* Текстовые категории в разброс */}
+          {/* Главные категории с подкатегориями */}
           {isClient && (
             <div className="mb-8 bg-white rounded-lg p-6 shadow-sm border border-gray-100">
               <div className="flex flex-wrap gap-3 justify-center items-center">
-                <button 
-                  onClick={() => handleCategoryClickWithBrandContext({ label: 'Люстра', searchName: 'Люстры' })}
-                  className="px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:text-black transition-colors"
-                >
-                  ПОДВЕСНЫЕ СВЕТИЛЬНИКИ
-                </button>
+                {/* ПОДВЕСНЫЕ СВЕТИЛЬНИКИ */}
+                <div className="relative group">
+                  <button className="px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:text-black transition-colors">
+                    ПОДВЕСНЫЕ СВЕТИЛЬНИКИ
+                  </button>
+                  <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-48">
+                    <div className="p-2">
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Люстра подвесная', searchName: 'Люстра подвесная' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Люстра подвесная
+                      </button>
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Подвесной светильник', searchName: 'Подвесной светильник' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Подвесной светильник
+                      </button>
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Люстра каскадная', searchName: 'Люстра каскадная' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Люстра каскадная
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
                 <span className="text-gray-300">•</span>
-                <button 
-                  onClick={() => handleCategoryClickWithBrandContext({ label: 'Светильник', searchName: 'Светильники' })}
-                  className="px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:text-black transition-colors"
-                >
-                  ПОТОЛОЧНЫЕ
-                </button>
+
+                {/* ПОТОЛОЧНЫЕ */}
+                <div className="relative group">
+                  <button className="px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:text-black transition-colors">
+                    ПОТОЛОЧНЫЕ
+                  </button>
+                  <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-48">
+                    <div className="p-2">
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Люстра потолочная', searchName: 'Люстра потолочная' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Люстра потолочная
+                      </button>
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Потолочный светильник', searchName: 'Потолочный светильник' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Потолочный светильник
+                      </button>
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Накладной светильник', searchName: 'Накладной светильник' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Накладной светильник
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
                 <span className="text-gray-300">•</span>
-                <button 
-                  onClick={() => handleCategoryClickWithBrandContext({ label: 'Бра', searchName: 'Настенные светильники' })}
-                  className="px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:text-black transition-colors"
-                >
-                  НАСТЕННЫЕ
-                </button>
+
+                {/* НАСТЕННЫЕ */}
+                <div className="relative group">
+                  <button className="px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:text-black transition-colors">
+                    НАСТЕННЫЕ
+                  </button>
+                  <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-48">
+                    <div className="p-2">
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Настенный светильник', searchName: 'Настенный светильник' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Настенный светильник
+                      </button>
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Бра', searchName: 'Бра' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Бра
+                      </button>
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Настенный уличный светильник', searchName: 'Настенный уличный светильник' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Настенный уличный
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
                 <span className="text-gray-300">•</span>
-                <button 
-                  onClick={() => handleCategoryClickWithBrandContext({ label: 'Настольная лампа', searchName: 'Настольные светильники' })}
-                  className="px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:text-black transition-colors"
-                >
-                  НАСТОЛЬНЫЕ
-                </button>
+
+                {/* НАСТОЛЬНЫЕ */}
+                <div className="relative group">
+                  <button className="px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:text-black transition-colors">
+                    НАСТОЛЬНЫЕ
+                  </button>
+                  <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-48">
+                    <div className="p-2">
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Настольная лампа', searchName: 'Настольная лампа' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Настольная лампа
+                      </button>
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Лампа офисная', searchName: 'Лампа офисная' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Лампа офисная
+                      </button>
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Лампа декоративная', searchName: 'Лампа декоративная' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Лампа декоративная
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
                 <br className="hidden sm:block" />
-                <button 
-                  onClick={() => handleCategoryClickWithBrandContext({ label: 'Торшер', searchName: 'Напольные светильники' })}
-                  className="px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:text-black transition-colors"
-                >
-                  НАПОЛЬНЫЕ
-                </button>
+
+                {/* НАПОЛЬНЫЕ */}
+                <div className="relative group">
+                  <button className="px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:text-black transition-colors">
+                    НАПОЛЬНЫЕ
+                  </button>
+                  <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-48">
+                    <div className="p-2">
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Торшер', searchName: 'Торшер' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Торшер
+                      </button>
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Напольный светильник', searchName: 'Напольный светильник' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Напольный светильник
+                      </button>
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Торшер декоративный', searchName: 'Торшер декоративный' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Торшер декоративный
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
                 <span className="text-gray-300">•</span>
-                <button 
-                  onClick={() => handleCategoryClickWithBrandContext({ label: 'Уличный светильник', searchName: 'Уличный светильник' })}
-                  className="px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:text-black transition-colors"
-                >
-                  УЛИЧНЫЕ
-                </button>
+
+                {/* УЛИЧНЫЕ */}
+                <div className="relative group">
+                  <button className="px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:text-black transition-colors">
+                    УЛИЧНЫЕ
+                  </button>
+                  <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-48">
+                    <div className="p-2">
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Уличный светильник', searchName: 'Уличный светильник' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Уличный светильник
+                      </button>
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Грунтовый светильник', searchName: 'Грунтовый светильник' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Грунтовый светильник
+                      </button>
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Ландшафтный светильник', searchName: 'Ландшафтный светильник' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Ландшафтный
+                      </button>
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Парковый светильник', searchName: 'Парковый светильник' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Парковый светильник
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
                 <span className="text-gray-300">•</span>
-                <button 
-                  onClick={() => handleCategoryClickWithBrandContext({ label: 'Светодиодная лента', searchName: 'Светодиодная лента' })}
-                  className="px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:text-black transition-colors"
-                >
-                  LED ЛЕНТЫ
-                </button>
+
+                {/* LED ЛЕНТЫ */}
+                <div className="relative group">
+                  <button className="px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:text-black transition-colors">
+                    LED ЛЕНТЫ
+                  </button>
+                  <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-48">
+                    <div className="p-2">
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Светодиодная лента', searchName: 'Светодиодная лента' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Светодиодная лента
+                      </button>
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Профиль для ленты', searchName: 'Профиль для ленты' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Профиль для ленты
+                      </button>
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Блок питания LED', searchName: 'Блок питания LED' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Блок питания LED
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
                 <span className="text-gray-300">•</span>
-                <button 
-                  onClick={() => handleCategoryClickWithBrandContext({ label: 'Трековый светильник', searchName: 'Трековый светильник' })}
-                  className="px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:text-black transition-colors"
-                >
-                  ТРЕКОВЫЕ
-                </button>
+
+                {/* ТРЕКОВЫЕ */}
+                <div className="relative group">
+                  <button className="px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:text-black transition-colors">
+                    ТРЕКОВЫЕ
+                  </button>
+                  <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-48">
+                    <div className="p-2">
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Трековый светильник', searchName: 'Трековый светильник' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Трековый светильник
+                      </button>
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Шинопровод', searchName: 'Шинопровод' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Шинопровод
+                      </button>
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Точечный светильник', searchName: 'Точечный светильник' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Точечный светильник
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}
