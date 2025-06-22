@@ -645,7 +645,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
             pathname: router.pathname,
             query: { 
               ...router.query, 
-              category: getCategorySlug(firstCategory.searchName || firstCategory.label),
+              category: firstCategory.searchName || firstCategory.label,
               page: 1 
             },
           }, undefined, { shallow: true });
@@ -718,7 +718,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
             pathname: router.pathname,
             query: { 
               ...router.query,
-              category: getCategorySlug(firstSubcategory.searchName || firstSubcategory.label),
+              category: firstSubcategory.searchName,
               subcategory: firstSubcategory.label,
               page: '1'
             },
