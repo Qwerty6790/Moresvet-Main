@@ -1913,7 +1913,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
       <main className="flex-grow container mx-auto px-2 sm:px-4 lg:px-8 pt-4 sm:pt-6 pb-12 mt-20 max-w-full overflow-hidden">
         <div className="max-w-7xl mx-auto">
           {/* Хлебные крошки - скрываем на самых маленьких экранах */}
-          <div className="hidden sm:flex items-center text-sm text-gray-500 mb-4">
+          <div className="hidden sm:flex items-center text-sm p-3  text-gray-500 mb-4">
             <Link href="/" className="hover:text-gray-900 transition-colors">Назад</Link>
             <span className="text-gray-300">•</span>
             <Link href="/" className="hover:text-gray-900 transition-colors">Главная</Link>
