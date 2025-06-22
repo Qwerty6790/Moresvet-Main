@@ -383,14 +383,6 @@ const brands: Brand[] = [
     categories: standardCategories,
   },
   {
-    name: 'Werkel',
-    categories: standardCategories,
-  },
-  {
-    name: 'Voltum',
-    categories: standardCategories,
-  },
-  {
     name: 'Stluce',
     categories: standardCategories,
   },
@@ -1549,7 +1541,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
       // Светильники по типам
       'Люстра', 'Бра', 'Торшер', 'Светильник', 'Лампа', 'Подвес', 'Спот', 
       // Популярные коллекции из каталога
-      'Werkel', 'Voltum', 'Maytoni', 'Sonex', 'Denkirs', 'Favourite', 'OdeonLight',
+      'Maytoni', 'Sonex', 'Denkirs', 'Favourite', 'OdeonLight',
       'Artelamp', 'KinkLight', 'LightStar', 'Lumion', 'Novotech', 'Stluce',
       'ElektroStandard',
       // Добавляем известные названия коллекций
