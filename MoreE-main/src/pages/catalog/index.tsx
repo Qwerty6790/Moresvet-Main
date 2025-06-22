@@ -1870,11 +1870,11 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
           {/* Хлебные крошки - скрываем на самых маленьких экранах */}
           <div className="hidden sm:flex items-center text-sm text-gray-500 mb-4">
             <Link href="/" className="hover:text-gray-900 transition-colors">Назад</Link>
-            <span className="mx-2">/</span>
+            <span className="text-gray-300">•</span>
             <Link href="/" className="hover:text-gray-900 transition-colors">Главная</Link>
-            <span className="mx-2">/</span>
+            <span className="text-gray-300">•</span>
             <Link href="/catalog" className="hover:text-gray-900 transition-colors">Каталог</Link>
-            <span className="mx-2">/</span>
+            <span className="text-gray-300">•</span>
             <span className="text-gray-900 font-medium">ДЕКОРАТИВНЫЙ СВЕТ</span>
           </div>
           
