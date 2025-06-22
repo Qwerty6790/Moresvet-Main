@@ -75,37 +75,6 @@ const getCategoryFromSlug = (slug: string): string => {
   return slugToCategoryMap[slug] || slug;
 };
 
-// Маппинг брендов на красивые URL slug'и
-const brandSlugMap: Record<string, string> = {
-  'Artelamp': 'artelamp',
-  'KinkLight': 'kinklight',
-  'Favourite': 'favourite',
-  'Lumion': 'lumion',
-  'LightStar': 'lightstar',
-  'OdeonLight': 'odeonlight',
-  'Maytoni': 'maytoni',
-  'Sonex': 'sonex',
-  'ElektroStandard': 'elektrostandard',
-  'Novotech': 'novotech',
-  'Denkirs': 'denkirs',
-  'Stluce': 'stluce'
-};
-
-// Обратный маппинг для получения названия бренда по slug
-const slugToBrandMap: Record<string, string> = Object.fromEntries(
-  Object.entries(brandSlugMap).map(([brand, slug]) => [slug, brand])
-);
-
-// Функция для получения slug бренда
-const getBrandSlug = (brand: string): string => {
-  return brandSlugMap[brand] || brand.toLowerCase();
-};
-
-// Функция для получения названия бренда по slug
-const getBrandFromSlug = (slug: string): string => {
-  return slugToBrandMap[slug] || slug;
-};
-
 // Функция для получения товаров для конкретной страницы (вынесена отдельно для использования в getServerSideProps)
 const fetchProductsForPageStandalone = async (
   sourceName: string, 
@@ -413,6 +382,10 @@ const standardCategories = [
 // Массив брендов с категориями
 const brands: Brand[] = [
   {
+    name: 'Все товары',
+    categories: standardCategories,
+  },
+  {
     name: 'Artelamp',
     categories: standardCategories,
   },
@@ -603,8 +576,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
     
     // Если есть параметр source но нет category, показываем все товары бренда
     if (router.isReady && router.query.source && !hasCategory) {
-      const sourceSlug = router.query.source as string;
-      const sourceName = getBrandFromSlug(sourceSlug);
+      const sourceName = router.query.source as string;
       
       // Специальная обработка для OdeonLight
       let brandToSearch = sourceName;
@@ -628,7 +600,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
             pathname: router.pathname,
             query: { 
               ...router.query, 
-              category: getCategorySlug(allProductsCategory.searchName || allProductsCategory.label),
+              category: allProductsCategory.searchName || allProductsCategory.label,
               page: 1 
             },
           }, undefined, { shallow: true });
@@ -678,14 +650,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
   useEffect(() => {
     if (router.isReady) {
       const { source: urlSource, page, category, sort, name } = router.query;
-      
-      // Преобразуем slug бренда обратно в название
-      let sourceName = '';
-      if (urlSource || source) {
-        const brandSlug = urlSource || source || '';
-        sourceName = getBrandFromSlug(brandSlug as string);
-      }
-      
+      const sourceName = urlSource || source || '';
       const pageNumber = page ? parseInt(page as string, 10) : 1;
       
       // Преобразуем slug обратно в название категории
@@ -810,7 +775,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
           category: getCategorySlug(firstSubcategory.searchName || firstSubcategory.label),
           subcategory: firstSubcategory.label,
           // Сохраняем source (бренд), если он есть
-          source: selectedBrand && selectedBrand.name !== 'Все товары' ? getBrandSlug(selectedBrand.name) : undefined,
+          source: selectedBrand && selectedBrand.name !== 'Все товары' ? selectedBrand.name : undefined,
           page: '1'
         },
       }, undefined, { shallow: true });
@@ -826,7 +791,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
             ...router.query, 
             category: getCategorySlug(category.searchName || category.label),
             // Сохраняем source (бренд), если он есть
-            source: selectedBrand && selectedBrand.name !== 'Все товары' ? getBrandSlug(selectedBrand.name) : undefined,
+            source: selectedBrand && selectedBrand.name !== 'Все товары' ? selectedBrand.name : undefined,
             page: '1',
             // Удаляем subcategory, если есть
             subcategory: undefined
@@ -1254,7 +1219,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
             pathname: router.pathname,
             query: {
               ...router.query,
-              source: getBrandSlug(brand.name),
+              source: brand.name,
               category: getCategorySlug(matchingCategory.searchName || matchingCategory.label),
               page: 1
             },
@@ -1276,7 +1241,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
           pathname: router.pathname,
           query: {
             ...router.query,
-            source: getBrandSlug(brand.name),
+            source: brand.name,
             category: getCategorySlug(allProductsCategory.searchName || allProductsCategory.label),
             page: 1
           },
@@ -1294,8 +1259,8 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
           pathname: router.pathname,
           query: {
             ...router.query,
-            source: getBrandSlug(brand.name),
-            category: getCategorySlug(firstCategory.searchName || firstCategory.label),
+            source: brand.name,
+            category: firstCategory.searchName,
             page: 1
           },
         }, undefined, { shallow: true });
@@ -1310,7 +1275,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
           pathname: router.pathname,
           query: {
             ...router.query,
-            source: getBrandSlug(brand.name),
+            source: brand.name,
             category: undefined,
             page: 1
           },
@@ -1902,8 +1867,8 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                         pathname: router.pathname,
                         query: {
                           ...router.query,
-                          source: selectedBrand.name === 'Все товары' ? undefined : getBrandSlug(selectedBrand.name),
-                          category: getCategorySlug(category.searchName || category.label),
+                          source: selectedBrand.name === 'Все товары' ? undefined : selectedBrand.name,
+                          category: category.searchName,
                           page: 1
                         },
                       }, undefined, { shallow: true });
