@@ -143,7 +143,15 @@ export const searchProductsWithSorting = async (
   }
   
   // Выводим окончательные параметры для отладки
-  console.log('API search params:', finalParams);
+  console.log('🔍 API search params:', finalParams);
+  
+  // Отладка зеркального поиска
+  if (finalParams.mirroredSearches) {
+    console.log('🪞 Зеркальные варианты поиска:', {
+      original: finalParams.name,
+      mirrored: finalParams.mirroredSearches
+    });
+  }
   
   try {
     const url = `/api/products/search`;
