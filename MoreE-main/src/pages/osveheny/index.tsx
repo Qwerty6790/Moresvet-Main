@@ -335,10 +335,6 @@ const standardCategories = [
 // Массив брендов с категориями
 const brands: Brand[] = [
   {
-    name: 'Все товары',
-    categories: standardCategories,
-  },
-  {
     name: 'Artelamp',
     categories: standardCategories,
   },
