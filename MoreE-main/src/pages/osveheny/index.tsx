@@ -28,33 +28,6 @@ export type Category = {
   id?: string; // Добавляем id для идентификации категории
 };
 
-// Функция для создания зеркального поиска по словам
-const createMirroredSearch = (searchTerm: string): string[] => {
-  if (!searchTerm) return [];
-  
-  // Разбиваем на слова и удаляем пустые
-  const words = searchTerm.trim().split(/\s+/).filter(word => word.length > 0);
-  
-  if (words.length <= 1) return [searchTerm];
-  
-  const searchVariants: string[] = [searchTerm]; // Оригинальный порядок
-  
-  // Создаем все возможные перестановки слов (для 2-3 слов)
-  if (words.length === 2) {
-    const [word1, word2] = words;
-    searchVariants.push(`${word2} ${word1}`); // Зеркальная версия
-  } else if (words.length === 3) {
-    const [word1, word2, word3] = words;
-    searchVariants.push(`${word2} ${word1} ${word3}`);
-    searchVariants.push(`${word3} ${word1} ${word2}`);
-    searchVariants.push(`${word2} ${word3} ${word1}`);
-    searchVariants.push(`${word3} ${word2} ${word1}`);
-    searchVariants.push(`${word1} ${word3} ${word2}`);
-  }
-  
-  return [...new Set(searchVariants)]; // Убираем дубликаты
-};
-
 // Функция для получения товаров для конкретной страницы (вынесена отдельно для использования в getServerSideProps)
 const fetchProductsForPageStandalone = async (
   sourceName: string, 
@@ -791,22 +764,15 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
       
       // Добавляем категорию, используя параметр name для API
       if (selectedCategory && selectedCategory.label !== 'Все товары') {
-        const searchTerm = selectedCategory.searchName || selectedCategory.label;
-        
-        // Создаем зеркальные варианты поиска для лучшего покрытия
-        const mirroredSearches = createMirroredSearch(searchTerm);
-        
-        // Основной поисковый запрос
-        params.name = searchTerm;
-        
-        // Добавляем зеркальные варианты как альтернативные поисковые запросы
-        if (mirroredSearches.length > 1) {
-          params.mirroredSearches = mirroredSearches.slice(1); // Исключаем оригинальный
-        }
-        
-        // Проверяем наличие aliases и добавляем их
+        // Проверяем наличие aliases и используем их для формирования более полного поискового запроса
         if (selectedCategory.aliases && selectedCategory.aliases.length > 0) {
+          // Используем первый элемент из aliases как основной запрос
+          params.name = selectedCategory.searchName || selectedCategory.label;
+          
+          // Добавляем aliases как дополнительные параметры поиска (опционально)
           params.aliases = selectedCategory.aliases;
+        } else {
+          params.name = selectedCategory.searchName || selectedCategory.label;
         }
       }
       
@@ -821,31 +787,11 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
         
         // Ищем категорию по URL-параметру для получения aliases
         const categoryFromDB = findCategoryByName(decodedCategory);
-        if (categoryFromDB) {
-          const searchTerm = categoryFromDB.searchName || categoryFromDB.label;
-          
-          // Создаем зеркальные варианты поиска
-          const mirroredSearches = createMirroredSearch(searchTerm);
-          
-          params.name = searchTerm;
-          
-          // Добавляем зеркальные варианты
-          if (mirroredSearches.length > 1) {
-            params.mirroredSearches = mirroredSearches.slice(1);
-          }
-          
-          // Добавляем aliases если есть
-          if (categoryFromDB.aliases && categoryFromDB.aliases.length > 0) {
-            params.aliases = categoryFromDB.aliases;
-          }
+        if (categoryFromDB && categoryFromDB.aliases && categoryFromDB.aliases.length > 0) {
+          params.name = categoryFromDB.searchName || categoryFromDB.label;
+          params.aliases = categoryFromDB.aliases;
         } else {
-          // Если категория не найдена, все равно применяем зеркальный поиск
-          const mirroredSearches = createMirroredSearch(decodedCategory);
           params.name = decodedCategory;
-          
-          if (mirroredSearches.length > 1) {
-            params.mirroredSearches = mirroredSearches.slice(1);
-          }
         }
       }
       
@@ -2782,22 +2728,13 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
      } else {
        params.sortBy = 'popularity'; params.sortOrder = 'desc'; // По умолчанию - популярность
      }
-     // Обработка категории с зеркальным поиском
-     if (category && typeof category === 'string' && category.toLowerCase() !== 'все товары') {
+     // Обработка категории
+     if (category && typeof category === 'string' && category.toLowerCase() !== 'все товары' /*...*/) {
         const decodedCategory = decodeURIComponent(category);
-        
         if (decodedCategory.toLowerCase().includes('настольн')) {
             params.name = 'Настольная лампа';
-            // Добавляем зеркальные варианты для настольных ламп
-            params.mirroredSearches = ['Лампа настольная'];
         } else {
-            // Применяем зеркальный поиск для всех категорий
-            const mirroredSearches = createMirroredSearch(decodedCategory);
             params.name = decodedCategory;
-            
-            if (mirroredSearches.length > 1) {
-                params.mirroredSearches = mirroredSearches.slice(1);
-            }
         }
      }
      if (color) params.color = color;
