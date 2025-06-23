@@ -608,8 +608,8 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
       // Обновляем currentPage в соответствии с URL
       setCurrentPage(pageNumber);
       
-      // Проверяем, является ли текущая категория "Люстра" без подкатегории
-      if (categoryName === 'Люстра' && !router.query.subcategory) {
+      // Проверяем, является ли текущая категория "Люстра" 
+      if (categoryName === 'Люстра') {
         // Находим категорию "Люстра" в массиве категорий
         const lustraCategory = productCategories.find(cat => cat.label === 'Люстра' || cat.searchName === 'Люстра');
         
@@ -626,7 +626,6 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
             query: { 
               ...router.query,
               category: firstSubcategory.searchName,
-              subcategory: firstSubcategory.label,
               page: '1'
             },
           }, undefined, { shallow: true });
@@ -715,7 +714,6 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
         query: { 
           ...router.query, 
           category: firstSubcategory.searchName,
-          subcategory: firstSubcategory.label,
           // Сохраняем source (бренд), если он есть
           source: selectedBrand && selectedBrand.name !== 'Все товары' ? selectedBrand.name : undefined,
           page: '1'
@@ -734,9 +732,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
             category: category.searchName || category.label,
             // Сохраняем source (бренд), если он есть
             source: selectedBrand && selectedBrand.name !== 'Все товары' ? selectedBrand.name : undefined,
-            page: '1',
-            // Удаляем subcategory, если есть
-            subcategory: undefined
+            page: '1'
           },
         }, undefined, { shallow: true });
       }
