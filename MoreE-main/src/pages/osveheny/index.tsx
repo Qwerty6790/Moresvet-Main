@@ -2004,7 +2004,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
               {isClient && <BrandPanel />}
 
               {/* Блок брендов - показываем только если не выбран конкретный бренд */}
-              {(!selectedBrand || selectedBrand.name === '') && (
+              {(!selectedBrand || selectedBrand.name === 'Все товары') && (
                 <BrandsAccordion />
               )}
 
