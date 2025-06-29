@@ -83,6 +83,16 @@ interface FilterCategory {
   allLink: string;
 }
 
+// Обновленный интерфейс для категорий
+interface CatalogItem {
+  title: string;
+  link: string;
+  subcategories?: {
+    title: string;
+    link: string;
+  }[];
+}
+
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -99,35 +109,167 @@ const Header = () => {
   const [activeMobileCategory, setActiveMobileCategory] = useState<number | null>(null);
   const [expandedAccordionItems, setExpandedAccordionItems] = useState<number[]>([]);
   const [isCatalogMenuOpen, setIsCatalogMenuOpen] = useState(false);
+  const [isBrandsMenuOpen, setIsBrandsMenuOpen] = useState(false);
   const [catalogMenuPosition, setCatalogMenuPosition] = useState({ top: 0, left: 0 });
+  const [brandsMenuPosition, setBrandsMenuPosition] = useState({ top: 0, left: 0 });
+  const [activeSubcategories, setActiveSubcategories] = useState<number | null>(null);
+  const [isHoveringBridge, setIsHoveringBridge] = useState(false);
+  const [isAboutMenuOpen, setIsAboutMenuOpen] = useState(false);
+  const [aboutMenuPosition, setAboutMenuPosition] = useState({ top: 0, left: 0 });
   const router = useRouter();
   const catalogRef = useRef<HTMLDivElement | null>(null);
   const catalogButtonRef = useRef<HTMLButtonElement | null>(null);
   const catalogLinkRef = useRef<HTMLAnchorElement | null>(null);
+  const brandsLinkRef = useRef<HTMLAnchorElement | null>(null);
+  const aboutLinkRef = useRef<HTMLAnchorElement | null>(null);
 
   // Хук для поиска товаров
   const { products, loading } = useSearchProducts(searchQuery);
 
-  // Данные для каталога
+  // Обновленные данные для каталога с подкатегориями
   const catalogData = {
     lighting: [
-      { title: 'Люстры', link: '/catalog/Люстры' },
-      { title: 'Светильники', link: '/catalog/Светильники' },
-      { title: 'Торшеры', link: '/catalog/Торшеры' },
-      { title: 'Бра', link: '/catalog/Бра' },
-      { title: 'Уличные светильники', link: '/catalog/Уличные-светильники' },
-      { title: 'Комплектующие', link: '/catalog/Комплектующие' },
-      { title: 'Светодиодные ленты', link: '/catalog/Светодиодные-ленты' },
-      { title: 'Светодиодные лампы', link: '/catalog/Светодиодные-лампы' }
+      { 
+        title: 'Люстры', 
+        link: '/catalog/Люстры',
+        subcategories: [
+          { title: 'Подвесные люстры', link: '/catalog/Люстры/Подвесные' },
+          { title: 'Потолочные люстры', link: '/catalog/Люстры/Потолочные' },
+          { title: 'Каскадные люстры', link: '/catalog/Люстры/Каскадные' },
+          { title: 'Хрустальные люстры', link: '/catalog/Люстры/Хрустальные' },
+          { title: 'Современные люстры', link: '/catalog/Люстры/Современные' }
+        ]
+      },
+      { 
+        title: 'Светильники', 
+        link: '/catalog/Светильники',
+        subcategories: [
+          { title: 'Встраиваемые светильники', link: '/catalog/Светильники/Встраиваемые' },
+          { title: 'Накладные светильники', link: '/catalog/Светильники/Накладные' },
+          { title: 'Трековые светильники', link: '/catalog/Светильники/Трековые' },
+          { title: 'Точечные светильники', link: '/catalog/Светильники/Точечные' }
+        ]
+      },
+      { 
+        title: 'Торшеры', 
+        link: '/catalog/Торшеры',
+        subcategories: [
+          { title: 'Классические торшеры', link: '/catalog/Торшеры/Классические' },
+          { title: 'Современные торшеры', link: '/catalog/Торшеры/Современные' },
+          { title: 'Торшеры с регулировкой', link: '/catalog/Торшеры/С-регулировкой' }
+        ]
+      },
+      { 
+        title: 'Бра', 
+        link: '/catalog/Бра',
+        subcategories: [
+          { title: 'Настенные бра', link: '/catalog/Бра/Настенные' },
+          { title: 'Светодиодные бра', link: '/catalog/Бра/Светодиодные' },
+          { title: 'Классические бра', link: '/catalog/Бра/Классические' },
+          { title: 'Современные бра', link: '/catalog/Бра/Современные' }
+        ]
+      },
+      { 
+        title: 'Уличные светильники', 
+        link: '/catalog/Уличные-светильники',
+        subcategories: [
+          { title: 'Настенные уличные светильники', link: '/catalog/Уличные-светильники/Настенные' },
+          { title: 'Столбы освещения', link: '/catalog/Уличные-светильники/Столбы' },
+          { title: 'Грунтовые светильники', link: '/catalog/Уличные-светильники/Грунтовые' },
+          { title: 'Прожекторы', link: '/catalog/Уличные-светильники/Прожекторы' }
+        ]
+      },
+      { 
+        title: 'Комплектующие', 
+        link: '/catalog/Комплектующие',
+        subcategories: [
+          { title: 'Трансформаторы', link: '/catalog/Комплектующие/Трансформаторы' },
+          { title: 'Драйверы', link: '/catalog/Комплектующие/Драйверы' },
+          { title: 'Блоки питания', link: '/catalog/Комплектующие/Блоки-питания' }
+        ]
+      },
+      { 
+        title: 'Светодиодные ленты', 
+        link: '/catalog/Светодиодные-ленты',
+        subcategories: [
+          { title: 'Одноцветные ленты', link: '/catalog/Светодиодные-ленты/Одноцветные' },
+          { title: 'RGB ленты', link: '/catalog/Светодиодные-ленты/RGB' },
+          { title: 'Профили для лент', link: '/catalog/Светодиодные-ленты/Профили' }
+        ]
+      },
+      { 
+        title: 'Светодиодные лампы', 
+        link: '/catalog/Светодиодные-лампы',
+        subcategories: [
+          { title: 'Лампы E27', link: '/catalog/Светодиодные-лампы/E27' },
+          { title: 'Лампы E14', link: '/catalog/Светодиодные-лампы/E14' },
+          { title: 'Лампы GU10', link: '/catalog/Светодиодные-лампы/GU10' },
+          { title: 'Трубчатые лампы', link: '/catalog/Светодиодные-лампы/Трубчатые' }
+        ]
+      }
     ],
     electrical: [
-      { title: 'Встраиваемые серии', link: '/catalog/Встраиваемые-серии' },
-      { title: 'Выдвижной блок', link: '/catalog/Выдвижной-блок' },
-      { title: 'Накладные серии', link: '/catalog/Накладные-серии' }
+      { 
+        title: 'Встраиваемые серии', 
+        link: '/catalog/Встраиваемые-серии',
+        subcategories: [
+          { title: 'Розетки', link: '/catalog/Встраиваемые-серии/Розетки' },
+          { title: 'Выключатели', link: '/catalog/Встраиваемые-серии/Выключатели' },
+          { title: 'Рамки', link: '/catalog/Встраиваемые-серии/Рамки' }
+        ]
+      },
+      { 
+        title: 'Выдвижной блок', 
+        link: '/catalog/Выдвижной-блок',
+        subcategories: [
+          { title: 'В столешницу', link: '/catalog/Выдвижной-блок/В-столешницу' },
+          { title: 'В розетку', link: '/catalog/Выдвижной-блок/В-розетку' }
+        ]
+      },
+      { 
+        title: 'Накладные серии', 
+        link: '/catalog/Накладные-серии',
+        subcategories: [
+          { title: 'Розетки', link: '/catalog/Накладные-серии/Розетки' },
+          { title: 'Выключатели', link: '/catalog/Накладные-серии/Выключатели' }
+        ]
+      }
     ]
   };
 
+  // Данные для брендов
+  const brandsData = [
+    { title: 'Artelamp', link: '/brands/artelamp', logo: '/images/artelamplogo.png' },
+    { title: 'Denkirs', link: '/brands/denkirs', logo: '/images/denkirslogo1.png' },
+    { title: 'Elektrostandart', link: '/brands/elektrostandart', logo: '/images/elektrostandartlogo.png' },
+    { title: 'Kinklight', link: '/brands/kinklight', logo: '/images/kinklightlogo.png' },
+    { title: 'Lightstar', link: '/brands/lightstar', logo: '/images/lightstarlogo.png' },
+    { title: 'Lumion', link: '/brands/lumion', logo: '/images/lumionlogo.png' },
+    { title: 'Maytoni', link: '/brands/maytoni', logo: '/images/maytonilogo.png' },
+    { title: 'Novotech', link: '/brands/novotech', logo: '/images/novotechlogo.png' },
+    { title: 'Odeon Light', link: '/brands/odeonlight', logo: '/images/odeonlightlogo.png' },
+    { title: 'Sonex', link: '/brands/sonex', logo: '/images/sonexlogo1.png' },
+    { title: 'St Luce', link: '/brands/stluce', logo: '/images/stlucelogo.png' },
+    { title: 'Voltum', link: '/brands/voltum', logo: '/images/voltumlogo.png' },
+    { title: 'Werkel', link: '/brands/werkel', logo: '/images/werkellogo.png' }
+  ];
 
+  // Данные для меню "О нас"
+  const aboutData = {
+    sections: [
+      {
+        title: 'О компании',
+        items: [
+          'Более 10 лет на рынке светотехники',
+          'Прямые поставки от производителей',
+          'Гарантия качества на все товары',
+          'Профессиональная консультация',
+          'Широкий ассортимент продукции'
+        ]
+      },  
+    ],
+    image: '/images/Снимок экрана 2025-06-29 163412.png'
+  };
 
   // Отслеживание скролла для скрытия верхней панели
   useEffect(() => {
@@ -211,9 +353,10 @@ const Header = () => {
     );
   }, [products, loading, searchQuery]);
 
-  // При наведении на категорию каталога
-  const handleCategoryHover = (index: number) => {
-    setActiveCategory(index);
+  // Функция для безопасного обновления состояния при наведении
+  const handleCategoryHover = (index: number | null) => {
+    setActiveSubcategories(index);
+    setIsHoveringBridge(false);
   };
 
   // Закрытие мобильного меню при клике вне его области
@@ -311,8 +454,6 @@ const Header = () => {
     };
   }, [isSearchOpen]);
 
-
-
   const toggleAccordionItem = (index: number) => {
     setExpandedAccordionItems(prev => 
       prev.includes(index) 
@@ -328,14 +469,13 @@ const Header = () => {
       const menuWidth = 600;
       const menuHeight = 650;
       const centerPosition = rect.left + rect.width / 2 - menuWidth / 2;
-      const maxLeft = window.innerWidth - menuWidth - 10; // 10px отступ от правого края
+      const maxLeft = window.innerWidth - menuWidth - 10;
       
-      // Проверяем, помещается ли меню снизу
       const spaceBelow = window.innerHeight - rect.bottom;
       const shouldOpenAbove = spaceBelow < menuHeight + 20;
       
       setCatalogMenuPosition({
-        top: shouldOpenAbove ? rect.top - menuHeight - 8 : rect.bottom - 4, // Уменьшили отступ для соединения
+        top: shouldOpenAbove ? rect.top - menuHeight - 8 : rect.bottom + 8,
         left: Math.max(10, Math.min(centerPosition, maxLeft))
       });
     }
@@ -343,7 +483,6 @@ const Header = () => {
   };
 
   const handleCatalogMouseLeave = (e: React.MouseEvent) => {
-    // Добавляем небольшую задержку для плавного перехода
     setTimeout(() => {
       const catalogMenu = document.getElementById('catalog-menu');
       const catalogLink = catalogLinkRef.current;
@@ -354,7 +493,6 @@ const Header = () => {
         const mouseX = e.clientX;
         const mouseY = e.clientY;
         
-        // Проверяем, находится ли курсор в области меню или ссылки
         const inMenu = mouseX >= menuRect.left && mouseX <= menuRect.right && 
                       mouseY >= menuRect.top && mouseY <= menuRect.bottom;
         const inLink = mouseX >= linkRect.left && mouseX <= linkRect.right && 
@@ -367,7 +505,90 @@ const Header = () => {
     }, 100);
   };
 
+  const handleBrandsMouseEnter = () => {
+    if (brandsLinkRef.current) {
+      const rect = brandsLinkRef.current.getBoundingClientRect();
+      const menuWidth = 500;
+      const menuHeight = 350;
+      const centerPosition = rect.left + rect.width / 2 - menuWidth / 2;
+      const maxLeft = window.innerWidth - menuWidth - 10;
+      
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const shouldOpenAbove = spaceBelow < menuHeight + 20;
+      
+      setBrandsMenuPosition({
+        top: shouldOpenAbove ? rect.top - menuHeight - 8 : rect.bottom + 8,
+        left: Math.max(10, Math.min(centerPosition, maxLeft))
+      });
+    }
+    setIsBrandsMenuOpen(true);
+  };
 
+  const handleBrandsMouseLeave = (e: React.MouseEvent) => {
+    setTimeout(() => {
+      const brandsMenu = document.getElementById('brands-menu');
+      const brandsLink = brandsLinkRef.current;
+      
+      if (brandsMenu && brandsLink) {
+        const menuRect = brandsMenu.getBoundingClientRect();
+        const linkRect = brandsLink.getBoundingClientRect();
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+        
+        const inMenu = mouseX >= menuRect.left && mouseX <= menuRect.right && 
+                      mouseY >= menuRect.top && mouseY <= menuRect.bottom;
+        const inLink = mouseX >= linkRect.left && mouseX <= linkRect.right && 
+                      mouseY >= linkRect.top && mouseY <= linkRect.bottom;
+        
+        if (!inMenu && !inLink) {
+          setIsBrandsMenuOpen(false);
+        }
+      }
+    }, 100);
+  };
+
+  // Обработчики для меню "О нас"
+  const handleAboutMouseEnter = () => {
+    if (aboutLinkRef.current) {
+      const rect = aboutLinkRef.current.getBoundingClientRect();
+      const menuWidth = 800;
+      const menuHeight = 650;
+      const centerPosition = rect.left + rect.width / 2 - menuWidth / 2;
+      const maxLeft = window.innerWidth - menuWidth - 10;
+      
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const shouldOpenAbove = spaceBelow < menuHeight + 20;
+      
+      setAboutMenuPosition({
+        top: shouldOpenAbove ? rect.top - menuHeight - 8 : rect.bottom + 8,
+        left: Math.max(10, Math.min(centerPosition, maxLeft))
+      });
+    }
+    setIsAboutMenuOpen(true);
+  };
+
+  const handleAboutMouseLeave = (e: React.MouseEvent) => {
+    setTimeout(() => {
+      const aboutMenu = document.getElementById('about-menu');
+      const aboutLink = aboutLinkRef.current;
+      
+      if (aboutMenu && aboutLink) {
+        const menuRect = aboutMenu.getBoundingClientRect();
+        const linkRect = aboutLink.getBoundingClientRect();
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+        
+        const inMenu = mouseX >= menuRect.left && mouseX <= menuRect.right && 
+                      mouseY >= menuRect.top && mouseY <= menuRect.bottom;
+        const inLink = mouseX >= linkRect.left && mouseX <= linkRect.right && 
+                      mouseY >= linkRect.top && mouseY <= linkRect.bottom;
+        
+        if (!inMenu && !inLink) {
+          setIsAboutMenuOpen(false);
+        }
+      }
+    }, 100);
+  };
 
   return (
     <>
@@ -383,19 +604,23 @@ const Header = () => {
           }
         }
         
-        @keyframes slideDown {
+        @keyframes slideFromLeft {
           from {
             opacity: 0;
-            transform: translateY(-5px) scale(0.98);
+            transform: translateX(-30px) scale(0.95);
           }
           to {
             opacity: 1;
-            transform: translateY(0) scale(1);
+            transform: translateX(0) scale(1);
           }
         }
         
         .catalog-menu-enter {
-          animation: slideDown 0.3s ease-out;
+          animation: slideFromLeft 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .brands-menu-enter {
+          animation: slideFromLeft 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
         
         @keyframes searchModalFadeIn {
@@ -448,21 +673,43 @@ const Header = () => {
 
                     </div>
 
-                    {/* О нас */}
-                    <Link
-                      href="/about"
-                      className="text-white hover:text-gray-300 text-base font-medium transition-colors"
+                    {/* О нас с выпадающим меню */}
+                    <div 
+                      className="relative"
+                      onMouseEnter={handleAboutMouseEnter}
+                      onMouseLeave={handleAboutMouseLeave}
                     >
-                      О нас
-                    </Link>
+                      <Link
+                        ref={aboutLinkRef}
+                        href="/about"
+                        className={`text-white text-base font-medium flex items-center px-4 py-2 rounded-lg transition-all duration-300 ease-in-out ${
+                          isAboutMenuOpen
+                            ? 'bg-transparent backdrop-blur-xl translate-y-1'
+                            : 'hover:text-gray-300 hover:backdrop-blur-md'
+                        }`}
+                      >
+                        О нас
+                      </Link>
+                    </div>
 
-                                        {/* Бренды без выпадающего меню */}
-                    <Link
-                      href="/brands"
-                      className="text-white hover:text-gray-300 text-base font-medium transition-colors"
+                    {/* Бренды с выпадающим меню */}
+                    <div 
+                      className="relative"
+                      onMouseEnter={handleBrandsMouseEnter}
+                      onMouseLeave={handleBrandsMouseLeave}
                     >
-                      Бренды
-                    </Link>
+                      <Link
+                        ref={brandsLinkRef}
+                        href="/brands"
+                        className={`text-white text-base font-medium flex items-center px-4 py-2 rounded-lg transition-all duration-300 ease-in-out ${
+                          isBrandsMenuOpen
+                            ? 'bg-transparent backdrop-blur-xl translate-y-1'
+                            : 'hover:text-gray-300 hover:backdrop-blur-md'
+                        }`}
+                      >
+                        Бренды
+                      </Link>
+                    </div>
 
                     {/* Документация */}
                     <Link
@@ -630,52 +877,71 @@ const Header = () => {
                 {searchResultsContent}
               </div>
             )}
-            
-            {/* Популярные категории */}
-            {!searchQuery && (
-              <div className="p-6 ">
-                <h4 className="text-sm font-medium text-white mb-4">Популярные категории</h4>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {catalogData.lighting.slice(0, 4).map((item, index) => (
-                    <button
-                      key={index}
-                      onClick={() => {
-                        router.push(item.link);
-                        setIsSearchOpen(false);
-                      }}
-                      className="p-3 text-left bg-black/20 backdrop-blur-2xl rounded-lg transition-colors"
-                    >
-                      <span className="text-sm font-medium text-white">{item.title}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+
+           
           </div>
         </div>
       )}
 
       {/* Порталы для выпадающих меню */}
+      {/* Каталог меню */}
       {typeof window !== 'undefined' && isCatalogMenuOpen && createPortal(
         <div 
           id="catalog-menu"
-          className="fixed w-[600px] bg-black/60 backdrop-blur-xl rounded-lg shadow-2xl transition-all duration-300 ease-in-out  catalog-menu-enter"
+          className="fixed w-[800px] bg-black/60 backdrop-blur-xl rounded-lg shadow-2xl transition-all duration-300 ease-in-out catalog-menu-enter"
           style={{
             top: catalogMenuPosition.top,
             left: catalogMenuPosition.left,
             zIndex: 99999
           }}
           onMouseEnter={() => setIsCatalogMenuOpen(true)}
-          onMouseLeave={() => setIsCatalogMenuOpen(false)}
+          onMouseLeave={() => {
+            setIsCatalogMenuOpen(false);
+            handleCategoryHover(null);
+          }}
         >
           <div className="flex h-[650px]">
-            {/* Левая часть только с изображением */}
-            <div className="w-[200px] rounded-l-lg relative overflow-hidden">
-              <img 
-                src="/images/SL6115.304.01_02W.webp" 
-                alt="Каталог светильников"
-                className="w-full h-full object-cover"
-              />
+            {/* Левая часть с фото/подкатегориями */}
+            <div 
+              className="w-[500px] rounded-l-lg relative overflow-hidden"
+              onMouseEnter={() => isHoveringBridge && activeSubcategories !== null && setIsHoveringBridge(true)}
+              onMouseLeave={() => setIsHoveringBridge(false)}
+            >
+              <div className="absolute inset-0 transition-opacity duration-500 ease-in-out" 
+                   style={{ opacity: activeSubcategories === null ? 1 : 0 }}>
+                <img 
+                  src="/images/Снимок экрана 2025-06-29 162945.png" 
+                  alt="Каталог светильников"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="absolute inset-0 transition-opacity duration-500 ease-in-out"
+                   style={{ opacity: activeSubcategories !== null ? 1 : 0 }}>
+                {activeSubcategories !== null && (
+                  <div className="w-full h-full bg-black/40 backdrop-blur-sm p-6 animate-fadeIn">
+                    <h3 className="text-lg font-bold text-white mb-4 transition-transform duration-300 ease-out">
+                      {activeSubcategories < catalogData.lighting.length 
+                        ? catalogData.lighting[activeSubcategories].title
+                        : catalogData.electrical[activeSubcategories - catalogData.lighting.length].title
+                      }
+                    </h3>
+                    <div className="grid grid-cols-1 gap-3">
+                      {(activeSubcategories < catalogData.lighting.length 
+                        ? catalogData.lighting[activeSubcategories].subcategories
+                        : catalogData.electrical[activeSubcategories - catalogData.lighting.length].subcategories
+                      )?.map((sub, subIndex) => (
+                        <Link
+                          key={subIndex}
+                          href={sub.link}
+                          className="block p-3 text-sm text-white hover:bg-white/10 rounded-lg transition-all duration-300 ease-in-out hover:translate-x-1"
+                        >
+                          {sub.title}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
             
             {/* Правая часть с категориями */}
@@ -685,13 +951,33 @@ const Header = () => {
                 <h4 className="text-lg font-bold mb-4 text-white tracking-wide">ОСВЕЩЕНИЕ</h4>
                 <div className="grid grid-cols-1 gap-2">
                   {catalogData.lighting.map((item, index) => (
-                    <Link
+                    <div
                       key={index}
-                      href={item.link}
-                      className="flex items-center p-2 hover:backdrop-blur-2xl rounded-lg transition-all duration-150 text-white group border-l-2 border-transparent"
+                      className="relative group"
+                      onMouseEnter={() => handleCategoryHover(index)}
                     >
-                      <span className="text-sm  transition-colors font-medium">{item.title}</span>
-                    </Link>
+                      <div className="flex">
+                        <Link
+                          href={item.link}
+                          className="flex-1 flex items-center p-2 hover:bg-black/60 rounded-lg transition-all duration-300 ease-in-out text-white hover:backdrop-blur-2xl group border-l-2 border-transparent"
+                        >
+                          <span className="text-sm transition-all duration-300 ease-in-out font-medium">{item.title}</span>
+                        </Link>
+                        {/* Широкая область для навигации */}
+                        <div 
+                          className="w-24 h-full"
+                          onMouseEnter={() => {
+                            setIsHoveringBridge(true);
+                            handleCategoryHover(index);
+                          }}
+                          onMouseLeave={() => {
+                            if (!isHoveringBridge) {
+                              handleCategoryHover(null);
+                            }
+                          }}
+                        />
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -701,13 +987,33 @@ const Header = () => {
                 <h4 className="text-lg font-bold mb-4 text-white tracking-wide">ЭЛЕКТРОУСТАНОВОЧНОЕ ОБОРУДОВАНИЕ</h4>
                 <div className="grid grid-cols-1 gap-2">
                   {catalogData.electrical.map((item, index) => (
-                    <Link
+                    <div
                       key={index}
-                      href={item.link}
-                      className="flex items-center p-2 hover:bg-gray-50 rounded-lg transition-all duration-150 text-white hover:backdrop-blur-2xl group border-l-2 border-transparent hover:border-blue-500"
+                      className="relative group"
+                      onMouseEnter={() => handleCategoryHover(index + catalogData.lighting.length)}
                     >
-                      <span className="text-sm group-hover:text-blue-600 transition-colors font-medium">{item.title}</span>
-                    </Link>
+                      <div className="flex">
+                        <Link
+                          href={item.link}
+                          className="flex-1 flex items-center p-2 hover:bg-black/60 rounded-lg transition-all duration-300 ease-in-out text-white hover:backdrop-blur-2xl group border-l-2 border-transparent"
+                        >
+                          <span className="text-sm transition-all duration-300 ease-in-out font-medium">{item.title}</span>
+                        </Link>
+                        {/* Широкая область для навигации */}
+                        <div 
+                          className="w-24 h-full"
+                          onMouseEnter={() => {
+                            setIsHoveringBridge(true);
+                            handleCategoryHover(index + catalogData.lighting.length);
+                          }}
+                          onMouseLeave={() => {
+                            if (!isHoveringBridge) {
+                              handleCategoryHover(null);
+                            }
+                          }}
+                        />
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -717,6 +1023,113 @@ const Header = () => {
         document.body
       )}
 
+      {/* О нас меню */}
+      {typeof window !== 'undefined' && isAboutMenuOpen && createPortal(
+        <div 
+          id="about-menu"
+          className="fixed w-[800px] bg-black/60 backdrop-blur-xl rounded-lg shadow-2xl transition-all duration-300 ease-in-out catalog-menu-enter"
+          style={{
+            top: aboutMenuPosition.top,
+            left: aboutMenuPosition.left,
+            zIndex: 99999
+          }}
+          onMouseEnter={() => setIsAboutMenuOpen(true)}
+          onMouseLeave={() => setIsAboutMenuOpen(false)}
+        >
+          <div className="flex h-[650px]">
+            {/* Левая часть с фото */}
+            <div className="w-[500px] rounded-l-lg relative overflow-hidden">
+              <img 
+                src={aboutData.image}
+                alt="О нашей компании"
+                className="w-full h-full object-cover"
+              />
+         
+            </div>
+            
+            {/* Правая часть с информацией */}
+            <div className="flex-1 p-8">
+              <h3 className="text-2xl font-bold text-white mb-8">О нашей компании</h3>
+              
+              {aboutData.sections.map((section, index) => (
+                <div key={index} className="mb-8">
+                  <h4 className="text-lg font-bold mb-4 text-white tracking-wide">
+                    {section.title}
+                  </h4>
+                  <div className="space-y-3">
+                    {section.items.map((item, itemIndex) => (
+                      <div 
+                        key={itemIndex}
+                        className="flex items-center p-2 text-white hover:bg-black/60 rounded-lg transition-all duration-300 ease-in-out group"
+                      >
+                        <div className="w-2 h-2  rounded-full mr-3"></div>
+                        <span className="text-sm transition-all duration-300 ease-in-out font-medium">
+                          {item}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* Бренды меню */}
+      {typeof window !== 'undefined' && isBrandsMenuOpen && createPortal(
+        <div 
+          id="brands-menu"
+          className="fixed w-[500px] bg-black/60 backdrop-blur-xl rounded-lg shadow-2xl transition-all duration-300 ease-in-out brands-menu-enter"
+          style={{
+            top: brandsMenuPosition.top,
+            left: brandsMenuPosition.left,
+            zIndex: 99999
+          }}
+          onMouseEnter={() => setIsBrandsMenuOpen(true)}
+          onMouseLeave={() => setIsBrandsMenuOpen(false)}
+        >
+          <div className="p-4">
+            <h4 className="text-base font-bold mb-4 text-white tracking-wide text-center">НАШИ БРЕНДЫ</h4>
+            <div className="grid grid-cols-3 gap-2">
+              {brandsData.map((brand, index) => (
+                <Link
+                  key={index}
+                  href={brand.link}
+                  className="flex flex-col items-center p-2 hover:backdrop-blur-2xl rounded-lg transition-all duration-200 group border border-transparent hover:border-white/20"
+                >
+                  <div 
+                    className="relative w-[85px] h-[45px] mb-2 flex items-center justify-center bg-white/10 rounded-lg overflow-hidden"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <img 
+                      src={brand.logo} 
+                      alt={brand.title}
+                      style={{
+                        maxWidth: '80%',
+                        maxHeight: '80%',
+                        width: 'auto',
+                        height: 'auto',
+                        objectFit: 'contain',
+                      }}
+                      className="filter brightness-0 invert group-hover:filter-none transition-all duration-200"
+                    />
+                  </div>
+                  <span className="text-[10px] text-white text-center font-medium group-hover:text-blue-300 transition-colors">
+                    {brand.title}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
 
      
     </>

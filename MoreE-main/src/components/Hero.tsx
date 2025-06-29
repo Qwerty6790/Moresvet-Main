@@ -35,18 +35,36 @@ export default function Banner() {
   // Данные для слайдера баннера
   const sliderData = [
     {
+      image: '/images/1-3-scaled111.webp',
+      title: 'Специальное предложение',
+      subtitle: 'Скидки до 30%',
+      description: 'На избранные модели светильников',
+      buttonText: 'Узнать больше',
+      textColor: 'white' // темный фон - белый текст
+    },
+    {
+      image: '/images/2-1-scaled.webp',
+      title: 'Специальное предложение',
+      subtitle: 'Скидки до 30%',
+      description: 'На избранные модели светильников',
+      buttonText: 'Узнать больше',
+      textColor: 'white' // темный фон - белый текст
+    },
+    {
       image: '/images/Снимок экрана 2025-06-17 121935.png',
       title: 'Специальное предложение',
       subtitle: 'Скидки до 30%',
       description: 'На избранные модели светильников',
-      buttonText: 'Узнать больше'
+      buttonText: 'Узнать больше',
+      textColor: 'black' // светлый фон - черный текст
     },
     {
       image: '/images/Дизайн_без_названия__11__308fc32673a6c219bff706661f135e79.webp',
       title: 'Специальное предложение',
       subtitle: 'Скидки до 30%',
       description: 'На избранные модели светильников',
-      buttonText: 'Узнать больше'
+      buttonText: 'Узнать больше',
+      textColor: 'black' // темный фон - белый текст
     },
   ];
 
@@ -95,13 +113,23 @@ export default function Banner() {
           {sliderData.map((slide, index) => (
             <div 
               key={index} 
-              className={`w-1/2 transition-opacity duration-1000 ease-in-out absolute ${currentSlide === index ? 'opacity-100' : 'opacity-0'}`}
+              className={`w-1/2 transition-opacity  duration-1000 ease-in-out absolute ${currentSlide === index ? 'opacity-100' : 'opacity-0'}`}
             >
-              <h1 className="text-black text-7xl font-bold mb-2">{slide.title}</h1>
-              <h2 className="text-black text-7xl font-bold mb-8">{slide.subtitle}</h2>
-              <p className="text-black text-xl mb-8">{slide.description}</p>
+              <h1 className={`text-7xl font-bold mb-2 ${slide.textColor === 'white' ? 'text-white' : 'text-black'}`}>
+                {slide.title}
+              </h1>
+              <h2 className={`text-7xl font-bold mb-8 ${slide.textColor === 'white' ? 'text-white' : 'text-black'}`}>
+                {slide.subtitle}
+              </h2>
+              <p className={`text-xl mb-8 ${slide.textColor === 'white' ? 'text-white' : 'text-black'}`}>
+                {slide.description}
+              </p>
               
-              <button className="bg-white text-black font-medium px-8 py-4 rounded-md hover:bg-opacity-90 transition-colors">
+              <button className={`font-medium px-8 py-4 rounded-md transition-colors ${
+                slide.textColor === 'white' 
+                  ? 'bg-white text-black hover:bg-opacity-90' 
+                  : 'bg-black text-white hover:bg-opacity-90'
+              }`}>
                 {slide.buttonText}
               </button>
             </div>
@@ -128,7 +156,7 @@ export default function Banner() {
           {/* Категории товаров */}
           <div className="mb-12">
             <div className="mx-auto">
-              <h2 className="text-3xl font-bold mb-8">Популярные категории</h2>
+              <h2 className="text-3xl text-black font-bold mb-8">Популярные категории</h2>
               <div className="grid grid-cols-8 gap-4 relative">
                 {popularCategories.map((category, index) => (
                   <div
@@ -147,12 +175,12 @@ export default function Banner() {
                   >
                     <Link href={category.link} className="group block text-center h-full">
                       <div className={`relative rounded-md overflow-hidden ${
-                        index === 0 || index === 4 ? 'h-full' : 'h-96'
+                        index === 0 || index === 4 ? 'h-full' : 'h-full'
                       } mb-2`}>
                         <img 
                           src={category.image} 
                           alt={category.title} 
-                          className="w-full h-full object-contain scale-125  group-hover:scale-105 transition-transform duration-300 ease-in-out p-2"
+                          className="w-full h-full object-cover  group-hover:scale-105 transition-transform duration-300 ease-in-out p-2"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t   from-black/5 group-hover:from-black/20 transition-all duration-300"></div>
                         <div className="absolute bottom-0 left-0 right-0 p-3 text-black bg-transparent backdrop-blur-xl">
