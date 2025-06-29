@@ -15,6 +15,8 @@ interface MainBannerSlide {
   title2: string;
   buttonText: string;
   subText: string;
+  isVideo: boolean;
+  videoUrl: string;
 }
 
 interface SideBannerSlide {
@@ -36,35 +38,21 @@ export default function Banner() {
   const sliderData = [
     {
       image: '/images/1-3-scaled111.webp',
-      title: 'Специальное предложение',
-      subtitle: 'Скидки до 30%',
-      description: 'На избранные модели светильников',
-      buttonText: 'Узнать больше',
-      textColor: 'white' // темный фон - белый текст
+      title: 'Выбирай свой свет',
+      subtitle: 'Делай дизайн своим выбором',
+      buttonText: 'Узнать больше о STluce',
+      textColor: 'white',
+      isVideo: true,
+      videoUrl: '/images/dzx1j_8hlzu.mp4'
     },
     {
-      image: '/images/2-1-scaled.webp',
-      title: 'Специальное предложение',
-      subtitle: 'Скидки до 30%',
-      description: 'На избранные модели светильников',
-      buttonText: 'Узнать больше',
-      textColor: 'white' // темный фон - белый текст
-    },
-    {
-      image: '/images/Снимок экрана 2025-06-17 121935.png',
-      title: 'Специальное предложение',
-      subtitle: 'Скидки до 30%',
-      description: 'На избранные модели светильников',
-      buttonText: 'Узнать больше',
-      textColor: 'black' // светлый фон - черный текст
-    },
-    {
-      image: '/images/Дизайн_без_названия__11__308fc32673a6c219bff706661f135e79.webp',
-      title: 'Специальное предложение',
-      subtitle: 'Скидки до 30%',
-      description: 'На избранные модели светильников',
-      buttonText: 'Узнать больше',
-      textColor: 'black' // темный фон - белый текст
+      image: '/images/1-3-scaled111.webp',
+      title: 'Сияют вместе с Maytoni',
+      subtitle: 'Сотни и тысяче людей ',
+      buttonText: 'Узнать больше о Maytoni',
+      textColor: 'white',
+      isVideo: true,
+      videoUrl: '/images/timer.mp4'
     },
   ];
 
@@ -84,12 +72,12 @@ export default function Banner() {
 
   // Популярные категории для каталога
   const popularCategories = [
-    { id: 1, title: 'ЛЮСТРЫ', image: '/images/lustry.jpg', link: '/osveheny?category=Люстра&page=1' },
-    { id: 2, title: 'СВЕТИЛЬНИКИ', image: '/images/svetilniki.jpeg', link: '/osveheny/Светильник' },
-    { id: 3, title: 'БРА И ПОДСВЕТКИ', image: '/images/bra.jpeg', link: '/osveheny/Бра' },
-    { id: 4, title: 'НАСТОЛЬНЫЕ ЛАМПЫ', image: '/images/nastolny.jpg', link: '/osveheny/Настольная лампа' },
-    { id: 5, title: 'ТОРШЕРЫ', image: '/images/torher.jpg', link: '/osveheny/Торшер' },
-    { id: 6, title: 'УЛИЧНОЕ ОСВЕЩЕНИЕ', image: '/images/ylihnoe.jpg', link: '/osveheny/Уличный светильник' },
+    { id: 1, title: 'ЛЮСТРЫ', image: '/images/Lustracategpory.png', link: '/osveheny?category=Люстра&page=1' },
+    { id: 2, title: 'СВЕТИЛЬНИКИ', image: '/images/svetilnikicategory.png', link: '/osveheny/Светильник' },
+    { id: 3, title: 'БРА И ПОДСВЕТКИ', image: '/images/bracategory.png', link: '/osveheny/Бра' },
+    { id: 4, title: 'НАСТОЛЬНЫЕ ЛАМПЫ', image: '/images/nastolnycategory.png', link: '/osveheny/Настольная лампа' },
+    { id: 5, title: 'ТОРШЕРЫ', image: '/images/torhernaplonacategory.png', link: '/osveheny/Торшер' },
+    { id: 6, title: 'УЛИЧНОЕ ОСВЕЩЕНИЕ', image: '/images/ylihnoecategory.png', link: '/osveheny/Уличный светильник' },
   ];
 
   return (
@@ -99,11 +87,27 @@ export default function Banner() {
         {sliderData.map((slide, index) => (
           <div 
             key={index}
-            className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out ${currentSlide === index ? 'opacity-100' : 'opacity-0'}`}
-            style={{
-              backgroundImage: `url('${slide.image}')`,
-            }}
-          />
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${currentSlide === index ? 'opacity-100' : 'opacity-0'}`}
+          >
+            {slide.isVideo ? (
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="w-full h-full object-cover"
+              >
+                <source src={slide.videoUrl} type="video/mp4" />
+              </video>
+            ) : (
+              <div
+                className="w-full h-full bg-cover bg-center"
+                style={{
+                  backgroundImage: `url('${slide.image}')`,
+                }}
+              />
+            )}
+          </div>
         ))}
       </div>
       
@@ -121,9 +125,6 @@ export default function Banner() {
               <h2 className={`text-7xl font-bold mb-8 ${slide.textColor === 'white' ? 'text-white' : 'text-black'}`}>
                 {slide.subtitle}
               </h2>
-              <p className={`text-xl mb-8 ${slide.textColor === 'white' ? 'text-white' : 'text-black'}`}>
-                {slide.description}
-              </p>
               
               <button className={`font-medium px-8 py-4 rounded-md transition-colors ${
                 slide.textColor === 'white' 
@@ -154,39 +155,26 @@ export default function Banner() {
         <div className="max-w-7xl mx-auto px-4">
          
           {/* Категории товаров */}
-          <div className="mb-12">
+          <div className="mb-12 relative">
+            <div className="absolute top-0 left-0 w-1/2 h-full bg-gray-100 -z-10"></div>
             <div className="mx-auto">
               <h2 className="text-3xl text-black font-bold mb-8">Популярные категории</h2>
-              <div className="grid grid-cols-8 gap-4 relative">
+              <div className="grid grid-cols-6 gap-4 relative">
                 {popularCategories.map((category, index) => (
                   <div
                     key={category.id}
-                    className={`transform transition-transform duration-200 hover:scale-105 ${
-                      index === 0 ? 'col-span-4 row-span-2' : 
-                      index === 1 ? 'col-span-1 row-span-1' : 
-                      index === 2 ? 'col-span-1 row-span-1' : 
-                      index === 3 ? 'col-span-2 row-span-1' : 
-                      index === 4 ? 'col-span-2 row-span-0' : 
-                      index === 5 ? 'col-span-2 row-span-0' : 
-                      index === 6 ? 'col-span-2 row-span-1' : 
-                      'col-span-2 row-span-1'
-                          
-                    }`}
+                    className="transform transition-transform duration-200 hover:scale-105"
                   >
                     <Link href={category.link} className="group block text-center h-full">
-                      <div className={`relative rounded-md overflow-hidden ${
-                        index === 0 || index === 4 ? 'h-full' : 'h-full'
-                      } mb-2`}>
+                      <div className="relative rounded-md overflow-hidden h-[200px]">
                         <img 
                           src={category.image} 
                           alt={category.title} 
-                          className="w-full h-full object-cover  group-hover:scale-105 transition-transform duration-300 ease-in-out p-2"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out p-2"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t   from-black/5 group-hover:from-black/20 transition-all duration-300"></div>
-                        <div className="absolute bottom-0 left-0 right-0 p-3 text-black bg-transparent backdrop-blur-xl">
-                          <p className="font-bold group-hover:text-yellow-300 transition-colors duration-200">{category.title}</p>
-                        </div>
+                        <div className="absolute right-0 w-1/2 h-full bg-gradient-to-t  transition-all duration-300"></div>
                       </div>
+                      <p className="font-bold text-black mt-3 group-hover:text-yellow-300 transition-colors duration-200">{category.title}</p>
                     </Link>
                   </div>
                 ))}
@@ -194,12 +182,46 @@ export default function Banner() {
             </div>
           </div>
 
-          {/* Первая область фотографий */}
-         
+          {/* Новая секция с тезисами и фотографией */}
+          <div className="mb-24">
+            <div className="flex gap-12">
+              {/* Левая часть с тезисами */}
+              <div className="w-1/2 space-y-8 py-8">
+                <h2 className="text-4xl font-bold text-gray-900">
+                  Твой свет для комфорта:<br/>
+                  новинки от производителей
+                </h2>
+                <p className="text-lg text-gray-600 mb-8">
+                  Новые функциональные светильники от производителей, которые придадут вашему интерьеру элегантность.
+                </p>
+                <div className="relative h-[300px] mt-8 group">
+                  <div className="absolute inset-0 bg-[url('/images/Дизайн_без_названия__11__308fc32673a6c219bff706661f135e79.webp')] bg-cover bg-center rounded-2xl overflow-hidden transition-opacity duration-500 ease-in-out group-hover:opacity-0">
+                    <div className="absolute inset-0 bg-gradient-to-br from-transparent "></div>
+                  </div>
+          
+                </div>
+              </div>
 
-          {/* О компании MoreElecktriki */}
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold mb-12 text-center">О компании MoreElecktriki</h2>
+              {/* Правая часть с фотографией */}
+              <div className="w-1/2 relative h-[600px] group">
+                <h2 className='text-4xl py-8 font-bold text-gray-900'>
+                  Открывай для себя новые возможности каждый день
+                </h2>
+                <span className='text-2xl text-gray-600'>
+                  Мы предлагаем широкий ассортимент светильников, люстр и электротехнических товаров от лучших мировых производителей.
+                </span>
+                <div className="relative h-[400px] mt-8 group">
+                  <div className="absolute inset-0 bg-[url('/images/Elektroustanovohnycategory.png')] bg-contain bg-no-repeat repeat bg-center rounded-2xl overflow-hidden transition-opacity duration-500 ease-in-out group-hover:opacity-0">
+                    <div className="absolute inset-0 bg-gradient-to-br from-transparent"></div>
+                  </div>
+                  <div className="absolute inset-0 bg-[url('/images/popular-img-1-2.webp')] bg-cover bg-center rounded-2xl overflow-hidden opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100">
+                    <div className="absolute inset-0 bg-gradient-to-br from-transparent"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+            <h2 className="text-3xl font-bold  text-center">О компании MoreElecktriki</h2>
             <div className=" gap-12 items-center">
               {/* Левая часть - текст о компании */}
               <div className="space-y-6">
@@ -223,6 +245,10 @@ export default function Banner() {
 
             </div>
           </div>
+          </div>
+
+          {/* О компании MoreElecktriki */}
+       
         </div>
       </div>
     </div>

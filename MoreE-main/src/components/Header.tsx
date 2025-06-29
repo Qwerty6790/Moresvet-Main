@@ -809,12 +809,10 @@ const Header = () => {
                 {/* Контактная информация */}
                 <div className="mt-8 border-t border-gray-700 pt-6">
                   <div className="flex flex-col space-y-4">
-                    <Link href="tel:88005509084" className="flex items-center text-white">
-                      <span className="h-5 w-5 mr-3">📞</span>
+                    <Link href="tel:88005509084" className="flex items-center text-white">                   
                       8-800-550-90-84
                     </Link>
                     <Link href="mailto:info@donel.su" className="flex items-center text-white">
-                      <span className="h-5 w-5 mr-3">✉️</span>
                       MORELECKTRIKI@gmail.com
                     </Link>
                   </div>
@@ -843,7 +841,7 @@ const Header = () => {
                 onClick={() => setIsSearchOpen(false)}
                 className="p-2  rounded-full transition-colors"
               >
-                <X className="w-5 h-5 text-gray-500" />
+                <X className="w-5 h-5 text-white" />
               </button>
             </div>
             
@@ -888,7 +886,7 @@ const Header = () => {
       {typeof window !== 'undefined' && isCatalogMenuOpen && createPortal(
         <div 
           id="catalog-menu"
-          className="fixed w-[800px] bg-black/60 backdrop-blur-xl rounded-lg shadow-2xl transition-all duration-300 ease-in-out catalog-menu-enter"
+          className="fixed w-[820px] bg-black/60 backdrop-blur-xl rounded-lg shadow-2xl transition-all duration-300 ease-in-out catalog-menu-enter"
           style={{
             top: catalogMenuPosition.top,
             left: catalogMenuPosition.left,
