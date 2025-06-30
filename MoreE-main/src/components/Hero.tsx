@@ -40,7 +40,6 @@ export default function Banner() {
       image: '/images/1-3-scaled111.webp',
       title: 'Выбирай свой свет',
       subtitle: 'Делай дизайн своим выбором',
-      buttonText: 'Узнать больше о STluce',
       textColor: 'white',
       isVideo: true,
       videoUrl: '/images/dzx1j_8hlzu.mp4'
@@ -117,13 +116,7 @@ export default function Banner() {
                 {slide.subtitle}
               </h2>
               
-              <button className={`font-medium px-8 py-4 rounded-md transition-colors ${
-                slide.textColor === 'white' 
-                  ? 'bg-white text-black hover:bg-opacity-90' 
-                  : 'bg-black text-white hover:bg-opacity-90'
-              }`}>
-                {slide.buttonText}
-              </button>
+          
             </div>
           ))}
           
