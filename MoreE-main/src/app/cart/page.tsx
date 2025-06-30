@@ -67,7 +67,7 @@ const Cart: React.FC = () => {
     const updatedProducts = cartProducts
       .map((product) => {
         if (product._id === id) {
-          const updatedQuantity = product.quantity && product.quantity > 1 ? product.quantity - 1 : 0;
+          const updatedQuantity = (product.quantity ?? 0) > 1 ? (product.quantity ?? 0) - 1 : 0;
           return updatedQuantity > 0 ? { ...product, quantity: updatedQuantity } : null;
         }
         return product;
@@ -81,7 +81,7 @@ const Cart: React.FC = () => {
   const handleIncreaseQuantity = (id: string) => {
     const updatedProducts = cartProducts.map((product) => {
       if (product._id === id) {
-        return { ...product, quantity: (product.quantity || 0) + 1 };
+        return { ...product, quantity: (product.quantity ?? 0) + 1 };
       }
       return product;
     });
@@ -90,8 +90,8 @@ const Cart: React.FC = () => {
 
   const handleDecreaseQuantity = (id: string) => {
     const updatedProducts = cartProducts.map((product) => {
-      if (product._id === id && product.quantity && product.quantity > 1) {
-        return { ...product, quantity: product.quantity - 1 };
+      if (product._id === id && (product.quantity ?? 0) > 1) {
+        return { ...product, quantity: (product.quantity ?? 0) - 1 };
       }
       return product;
     });
@@ -132,7 +132,7 @@ const Cart: React.FC = () => {
       name: product.name,
       article: product.article,
       source: product.source,
-      quantity: product.quantity || 0,
+              quantity: product.quantity ?? 0,
       price: product.price || 0,
     }));
 
@@ -162,7 +162,7 @@ const Cart: React.FC = () => {
   };
 
   const totalAmount = cartProducts.reduce((sum, product) => {
-    const quantity = product.quantity || 0;
+    const quantity = product.quantity ?? 0;
     const price = product.price || 0;
     return sum + price * quantity;
   }, 0);
@@ -312,7 +312,7 @@ const Cart: React.FC = () => {
                                 >
                                   <FaMinus size={12} />
                                 </button>
-                                <span className="px-4 py-1 text-black font-medium">{product.quantity}</span>
+                                <span className="px-4 py-1 text-black font-medium">{product.quantity ?? 0}</span>
                                 <button
                                   onClick={() => handleIncreaseQuantity(product._id)}
                                   className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-black"

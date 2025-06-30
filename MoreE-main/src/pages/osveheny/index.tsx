@@ -70,7 +70,7 @@ const fetchProductsForPageStandalone = async (
     
     // Фильтруем товары в наличии
     const inStockProducts = data.products ? data.products.filter((product: ProductI) => 
-      parseInt(product.stock as string, 10) > 0
+      Number(product.stock) > 0
     ) : [];
     
     console.log(`📦 Страница ${page}: ${inStockProducts.length} из ${data.products?.length || 0} товаров в наличии`);
