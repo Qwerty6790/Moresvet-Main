@@ -45,15 +45,6 @@ export default function Banner() {
       isVideo: true,
       videoUrl: '/images/dzx1j_8hlzu.mp4'
     },
-    {
-      image: '/images/1-3-scaled111.webp',
-      title: 'Сияют вместе с Maytoni',
-      subtitle: 'Сотни и тысяче людей ',
-      buttonText: 'Узнать больше о Maytoni',
-      textColor: 'white',
-      isVideo: true,
-      videoUrl: '/images/timer.mp4'
-    },
   ];
 
   // Автоматическое переключение слайдов
@@ -195,7 +186,7 @@ export default function Banner() {
                   Новые функциональные светильники от производителей, которые придадут вашему интерьеру элегантность.
                 </p>
                 <div className="relative h-[300px] mt-8 group">
-                  <div className="absolute inset-0 bg-[url('/images/Дизайн_без_названия__11__308fc32673a6c219bff706661f135e79.webp')] bg-cover bg-center rounded-2xl overflow-hidden transition-opacity duration-500 ease-in-out group-hover:opacity-0">
+                  <div className="absolute inset-0 bg-[url('/images/Дизайн_без_названия__11__308fc32673a6c219bff706661f135e79.webp')] bg-cover bg-center rounded-2xl overflow-hidden transition-opacity duration-500 ease-in-out ">
                     <div className="absolute inset-0 bg-gradient-to-br from-transparent "></div>
                   </div>
           
@@ -209,15 +200,8 @@ export default function Banner() {
                 </h2>
                 <span className='text-2xl text-gray-600'>
                   Мы предлагаем широкий ассортимент светильников, люстр и электротехнических товаров от лучших мировых производителей.
+                  У нас вы можете найти все, что вам нужно для освещения вашего дома или офиса. Так же предлагаем не только продажу, но и полный комплекс услуг по проектированию и монтажу.Плюсом является то, что мы работаем с любыми покупателями, как физическими, так и юридическими лицами.
                 </span>
-                <div className="relative h-[400px] mt-8 group">
-                  <div className="absolute inset-0 bg-[url('/images/Elektroustanovohnycategory.png')] bg-contain bg-no-repeat repeat bg-center rounded-2xl overflow-hidden transition-opacity duration-500 ease-in-out group-hover:opacity-0">
-                    <div className="absolute inset-0 bg-gradient-to-br from-transparent"></div>
-                  </div>
-                  <div className="absolute inset-0 bg-[url('/images/popular-img-1-2.webp')] bg-cover bg-center rounded-2xl overflow-hidden opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100">
-                    <div className="absolute inset-0 bg-gradient-to-br from-transparent"></div>
-                  </div>
-                </div>
               </div>
             </div>
             <div>

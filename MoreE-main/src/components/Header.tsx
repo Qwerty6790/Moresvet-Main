@@ -835,8 +835,8 @@ const Header = () => {
           {/* Модальное окно */}
           <div className="relative  backdrop-blur-2xl bg-black/20 rounded-2xl shadow-2xl w-full max-w-2xl search-modal-enter">
             {/* Заголовок */}
-            <div className="flex items-center justify-between p-6">
-              <h3 className="text-xl font-semibold text-white">Поиск товаров</h3>
+            <div className="flex items-center justify-between p-3">
+              <h3 className="text-5xl font-semibold text-white">Поиск товаров</h3>
               <button
                 onClick={() => setIsSearchOpen(false)}
                 className="p-2  rounded-full transition-colors"
