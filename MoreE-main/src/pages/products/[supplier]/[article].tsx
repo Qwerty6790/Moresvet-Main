@@ -244,15 +244,93 @@ const ProductDetail: React.FC = () => {
 
             {/* Dimensions */}
             <div className="flex items-center gap-2 sm:gap-3 mb-6 sm:mb-12">
-              <span className="text-base sm:text-xl">1620</span>
-              <span className="text-base sm:text-xl">×</span>
-              <span className="text-base sm:text-xl">450</span>
-              <span className="text-base sm:text-xl">×</span>
-              <span className="text-base sm:text-xl">450</span>
+              {product.height && <span className="text-base sm:text-xl">{product.height}</span>}
+              {product.length && product.height && <span className="text-base sm:text-xl">×</span>}
+              {product.length && <span className="text-base sm:text-xl">{product.length}</span>}
+              {product.width && (product.height || product.length) && <span className="text-base sm:text-xl">×</span>}
+              {product.width && <span className="text-base sm:text-xl">{product.width}</span>}
+              {product.diameter && (
+                <div className="flex items-center gap-2">
+                  <span className="text-xs sm:text-sm text-gray-600">⌀</span>
+                  <span className="text-base sm:text-xl">{product.diameter}</span>
+                </div>
+              )}
             </div>
 
             {/* Specifications */}
             <div className="space-y-4 sm:space-y-6">
+              {product.lightStyle && (
+                <div>
+                  <p className="text-xs sm:text-sm mb-2">Стиль</p>
+                  <p className="text-xs sm:text-sm text-gray-600">{product.lightStyle}</p>
+                  <div className="h-px bg-gray-200"></div>
+                </div>
+              )}
+
+              {product.lampType && (
+                <div>
+                  <p className="text-xs sm:text-sm mb-2">Тип лампы</p>
+                  <p className="text-xs sm:text-sm text-gray-600">{product.lampType}</p>
+                  <div className="h-px bg-gray-200"></div>
+                </div>
+              )}
+
+              {product.color && (
+                <div>
+                  <p className="text-xs sm:text-sm mb-2">Цвет</p>
+                  <p className="text-xs sm:text-sm text-gray-600">{product.color}</p>
+                  <div className="h-px bg-gray-200"></div>
+                </div>
+              )}
+
+              {product.socketType && (
+                <div>
+                  <p className="text-xs sm:text-sm mb-2">Цоколь</p>
+                  <p className="text-xs sm:text-sm text-gray-600">{product.socketType}</p>
+                  <div className="h-px bg-gray-200"></div>
+                </div>
+              )}
+
+              {product.lampsCount && (
+                <div>
+                  <p className="text-xs sm:text-sm mb-2">Количество ламп</p>
+                  <p className="text-xs sm:text-sm text-gray-600">{product.lampsCount}</p>
+                  <div className="h-px bg-gray-200"></div>
+                </div>
+              )}
+
+              {product.lampPower && (
+                <div>
+                  <p className="text-xs sm:text-sm mb-2">Мощность лампы, Вт</p>
+                  <p className="text-xs sm:text-sm text-gray-600">{product.lampPower}</p>
+                  <div className="h-px bg-gray-200"></div>
+                </div>
+              )}
+
+              {product.totalPower && (
+                <div>
+                  <p className="text-xs sm:text-sm mb-2">Общая мощность, Вт</p>
+                  <p className="text-xs sm:text-sm text-gray-600">{product.totalPower}</p>
+                  <div className="h-px bg-gray-200"></div>
+                </div>
+              )}
+
+              {product.voltage && (
+                <div>
+                  <p className="text-xs sm:text-sm mb-2">Напряжение, В</p>
+                  <p className="text-xs sm:text-sm text-gray-600">{product.voltage}</p>
+                  <div className="h-px bg-gray-200"></div>
+                </div>
+              )}
+
+              {product.material && (
+                <div>
+                  <p className="text-xs sm:text-sm mb-2">Материал</p>
+                  <p className="text-xs sm:text-sm text-gray-600">{product.material}</p>
+                  <div className="h-px bg-gray-200"></div>
+                </div>
+              )}
+
               <div>
                 <p className="text-xs sm:text-sm mb-2">Цветовая температура, К</p>
                 <div className="h-px bg-gray-200"></div>
@@ -269,6 +347,14 @@ const ProductDetail: React.FC = () => {
                 <p className="text-xs sm:text-sm text-gray-600">IP 20</p>
                 <div className="h-px bg-gray-200"></div>
               </div>
+
+              {product.source && (
+                <div>
+                  <p className="text-xs sm:text-sm mb-2">Источник</p>
+                  <p className="text-xs sm:text-sm text-gray-600">{product.source}</p>
+                  <div className="h-px bg-gray-200"></div>
+                </div>
+              )}
             </div>
 
             {/* Price and Action */}
