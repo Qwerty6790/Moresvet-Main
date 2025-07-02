@@ -411,10 +411,8 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
   const [totalProducts, setTotalProducts] = useState<number>(initialTotalProducts);
   
 
-  const [viewMode, setViewMode] = useState<'grid' | 'list' | 'table'>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [currentPage, setCurrentPage] = useState<number>(1);
-  // Новое состояние для переключения между обычным и коллекционным режимом просмотра
-  const [displayMode, setDisplayMode] = useState<'product' | 'collection'>('product');
   const limit = 40;
   
   
@@ -1320,181 +1318,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
     );
   };
 
-  // Функция для группировки товаров по коллекциям
-  const groupProductsByCollection = (products: ProductI[]) => {
-    // Если входные данные не определены или пусты, возвращаем объект с одной категорией "Прочие товары"
-    if (!products || products.length === 0) {
-      return { 'Прочие товары': [] };
-    }
-    
-    const collectionsTemp: Record<string, ProductI[]> = {};
-    
-    // Создаем набор известных шаблонов коллекций
-    const knownCollectionPatterns = [
-      // Светильники по типам
-      'Люстра', 'Бра', 'Торшер', 'Светильник', 'Лампа', 'Подвес', 'Спот', 
-      // Популярные коллекции из каталога
-      'Maytoni', 'Sonex', 'Denkirs', 'Favourite', 'OdeonLight',
-      'Artelamp', 'KinkLight', 'LightStar', 'Lumion', 'Novotech', 'Stluce',
-      'ElektroStandard',
-      // Добавляем известные названия коллекций
-      'BOLLA', 'YUKA', 'OSCA', 'ZETA', 'TUBO', 'CILINO', 'RAMO', 'RAGNO', 'STREGARO',
-      'FAVO', 'EXTRA', 'SIENA', 'PALLA', 'LASSA', 'MERTO', 'PIN', 'MITRA', 'PALE',
-      'VAKA', 'MINI', 'COLOR', 'SNOK', 'BASICA', 'MARON', 'AVRA', 'TAN', 'PICO',
-      'LINE', 'FLAT', 'SLIM', 'ESTHETIC'
-    ];
-    
-    // Создаем набор для поиска похожих частей названий
-    const productNameParts: Record<string, number> = {};
-    
-    // Первый проход - собираем части имен для определения общих слов и паттернов
-    products.forEach(product => {
-      if (typeof product.name === 'string' && product.name.trim()) {
-        const productName = product.name.trim();
-        
-        // 1. Разбиваем имя на слова и добавляем в набор
-        const words = productName.split(/\s+/).filter(word => word.length > 3);
-        words.forEach(word => {
-          productNameParts[word] = (productNameParts[word] || 0) + 1;
-        });
-        
-        // 2. Ищем слова в ВЕРХНЕМ РЕГИСТРЕ (часто названия коллекций)
-        const uppercaseWords = productName.match(/\b([A-ZА-Я]{3,})\b/g);
-        if (uppercaseWords) {
-          uppercaseWords.forEach(word => {
-            // Даем больший вес словам в верхнем регистре (считаем их за 2)
-            productNameParts[word] = (productNameParts[word] || 0) + 2;
-          });
-        }
-        
-        // 3. Ищем слова после предлогов "коллекция", "серия", "модель" и т.д.
-        const collectionMarkers = [
-          /коллекция\s+([A-Za-zА-Яа-я0-9]+)/i,
-          /серия\s+([A-Za-zА-Яа-я0-9]+)/i,
-          /модель\s+([A-Za-zА-Яа-я0-9]+)/i,
-          /collection\s+([A-Za-zА-Яа-я0-9]+)/i,
-          /серии\s+([A-Za-zА-Яа-я0-9]+)/i
-        ];
-        
-        collectionMarkers.forEach(marker => {
-          const match = productName.match(marker);
-          if (match && match[1]) {
-            // Даем наибольший вес словам после маркеров коллекций (считаем их за 3)
-            productNameParts[match[1]] = (productNameParts[match[1]] || 0) + 3;
-          }
-        });
-      }
-    });
-    
-    // Выбираем наиболее частые слова как коллекции (с порогом минимум 2 товара)
-    const commonNameParts = Object.entries(productNameParts)
-      .filter(([_, count]) => count >= 2)
-      .sort((a, b) => b[1] - a[1])
-      .map(([word]) => word);
-    
-    // Объединяем common parts с известными паттернами, отдавая приоритет common
-    const allCollectionPatterns = [...commonNameParts, ...knownCollectionPatterns];
-    
-    // Второй проход - группируем на основе собранной информации
-    products.forEach(product => {
-      // Определяем коллекцию по разным полям и алгоритмам с приоритетами
-      let collectionName = 'Без коллекции';
-      
-      // 1. Используем явное поле collection, если оно есть
-      if (product.collection) {
-        collectionName = String(product.collection);
-      } 
-      // 2. Ищем коллекцию в названии товара
-      else if (typeof product.name === 'string' && product.name.trim()) {
-        const productName = product.name.trim();
-        
-        // Сначала проверяем явные маркеры коллекций
-        let foundCollectionMarker = false;
-        const collectionMarkers = [
-          /коллекция\s+([A-Za-zА-Яа-я0-9]+)/i,
-          /серия\s+([A-Za-zА-Яа-я0-9]+)/i,
-          /модель\s+([A-Za-zА-Яа-я0-9]+)/i,
-          /collection\s+([A-Za-zА-Яа-я0-9]+)/i,
-          /серии\s+([A-Za-zА-Яа-я0-9]+)/i
-        ];
-        
-        for (const marker of collectionMarkers) {
-          const match = productName.match(marker);
-          if (match && match[1]) {
-            collectionName = match[1];
-            foundCollectionMarker = true;
-            break;
-          }
-        }
-        
-        // Если явных маркеров нет, ищем слова в ВЕРХНЕМ РЕГИСТРЕ
-        if (!foundCollectionMarker) {
-          const uppercaseWords = productName.match(/\b([A-ZА-Я]{3,})\b/g);
-          if (uppercaseWords && uppercaseWords.length > 0) {
-            collectionName = uppercaseWords[0];
-            foundCollectionMarker = true;
-          }
-        }
-        
-        // Если и этого нет, ищем совпадения с паттернами коллекций
-        if (!foundCollectionMarker) {
-          for (const pattern of allCollectionPatterns) {
-            if (productName.includes(pattern)) {
-              collectionName = pattern;
-              foundCollectionMarker = true;
-              break;
-            }
-          }
-        }
-        
-        // Если ничего не нашли, используем первое слово названия
-        if (!foundCollectionMarker) {
-          const nameMatch = productName.match(/([А-Яа-яA-Za-z0-9]{3,})/);
-          if (nameMatch && nameMatch[1]) {
-            collectionName = nameMatch[1];
-          }
-        }
-      } 
-      // 3. Используем бренд товара как последний вариант
-      else if (product.source && typeof product.source === 'string') {
-        collectionName = String(product.source);
-      }
-      
-      // Добавляем товар в соответствующую коллекцию
-      if (!collectionsTemp[collectionName]) {
-        collectionsTemp[collectionName] = [];
-      }
-      collectionsTemp[collectionName].push(product);
-    });
-    
-    // Финальные коллекции после обработки
-    const collections: Record<string, ProductI[]> = {};
-    
-    // Создаем категорию для разрозненных товаров (всегда должна существовать)
-    collections['Прочие товары'] = [];
-    
-    // Обрабатываем временные коллекции
-    Object.entries(collectionsTemp)
-      // Сортируем коллекции по количеству товаров для лучшей группировки
-      .sort((a, b) => b[1].length - a[1].length)
-      .forEach(([name, items]) => {
-        // Если в коллекции больше 1 товара, сохраняем её
-        if (items.length > 1) {
-          collections[name] = items;
-        } else {
-          // Иначе добавляем товар в "Прочие товары"
-          collections['Прочие товары'].push(...items);
-        }
-      });
-    
-    // Убедимся, что есть хотя бы одна коллекция, даже если все товары в "Прочие товары"
-    if (Object.keys(collections).length === 0 || 
-       (Object.keys(collections).length === 1 && collections['Прочие товары'].length === 0)) {
-      return { 'Все товары': products };
-    }
-    
-    return collections;
-  };
+  // Удалена функция группировки по коллекциям
 
   // Новое состояние для отслеживания ширины экрана
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -2013,13 +1837,58 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                 </div>
               )}
 
+              {/* Отображение текущей категории и её подкатегорий */}
+              {selectedCategory && selectedCategory.label !== 'Все товары' && (
+                <div className="bg-white rounded-lg p-4 mb-4 shadow-sm border border-gray-100">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="font-semibold text-gray-900">{selectedCategory.label}</h3>
+                    <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                      Текущая категория
+                    </span>
+                  </div>
+                  
+                  {/* Подкатегории, если есть */}
+                  {(() => {
+                    // Находим родительскую категорию для получения подкатегорий
+                    const parentCategory = productCategories.find(cat => 
+                      cat.label === selectedCategory.label || 
+                      cat.searchName === selectedCategory.searchName ||
+                      (cat.subcategories && cat.subcategories.some(sub => 
+                        sub.label === selectedCategory.label || 
+                        sub.searchName === selectedCategory.searchName
+                      ))
+                    );
+                    
+                    if (parentCategory && parentCategory.subcategories && parentCategory.subcategories.length > 0) {
+                      return (
+                        <div className="space-y-1 mt-3 pt-3 border-t border-gray-100">
+                          <p className="text-xs text-gray-500 uppercase font-medium mb-2">Подкатегории</p>
+                          {parentCategory.subcategories.map((subcat, index) => (
+                            <div
+                              key={`subcat-${index}`}
+                              className={`px-3 py-2 rounded-md cursor-pointer transition-colors text-sm ${
+                                selectedCategory.label === subcat.label || selectedCategory.searchName === subcat.searchName
+                                  ? 'bg-blue-50 text-blue-700 font-medium'
+                                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                              }`}
+                              onClick={() => handleCategoryChange(subcat)}
+                            >
+                              {subcat.label}
+                            </div>
+                          ))}
+                        </div>
+                      );
+                    }
+                    return null;
+                  })()}
+                </div>
+              )}
+
               {/* Панель бренда (если выбран конкретный бренд) */}
               {isClient && <BrandPanel />}
 
-              {/* Блок брендов - показываем только если не выбран конкретный бренд */}
-              {(!selectedBrand || selectedBrand.name === 'Все товары') && (
-                <BrandsAccordion />
-              )}
+              {/* Блок брендов - показываем всегда в аккордеоне */}
+              <BrandsAccordion />
 
               {/* Кнопка фильтров */}
               <div className="bg-white rounded-md p-4 shadow-sm mb-4 border border-gray-200">
@@ -2076,8 +1945,8 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                 </div>
                 
                 <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
-                  {/* Переключатель режима отображения для десктопа - улучшенный дизайн */}
-                  <div className="hidden sm:flex bg-white border border-gray-200 rounded-md shadow-sm px-1 py-1">
+                  {/* Переключатель режима отображения - упрощенный дизайн */}
+                  <div className="flex bg-white border border-gray-200 rounded-md shadow-sm px-1 py-1">
                     <button
                       onClick={() => setViewMode('grid')}
                       className={`p-1.5 rounded-md transition-all ${
@@ -2102,79 +1971,6 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
-                      </svg>
-                    </button>
-                    <button
-                      onClick={() => setViewMode('table')}
-                      className={`p-1.5 rounded-md transition-all ${
-                        viewMode === 'table' 
-                          ? 'bg-gradient-to-r from-gray-800 to-gray-700 text-white shadow-sm' 
-                          : 'text-gray-600 hover:bg-gray-50'
-                      }`}
-                      title="Таблица"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M3 14h18M3 6h18M3 18h18" />
-                      </svg>
-                    </button>
-                  </div>
-                  
-                  {/* Переключатель отображения продукт/коллекция - улучшенный дизайн */}
-                  <div className="flex bg-white rounded-rounded  shadow-sm overflow-hidden">
-                    <button 
-                      onClick={() => setDisplayMode('product')}
-                      className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-all ${
-                        displayMode === 'product' 
-                          ? 'bg-gradient-to-r rounded-full text-black' 
-                          : 'text-black hover:bg-gray-50'
-                      }`}
-                    >
-                      <div className="flex items-center gap-1.5">
-                       
-                        <span>Товары</span>
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => setDisplayMode('collection')}
-                      className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-all ${
-                        displayMode === 'collection'
-                          ? 'bg-gradient-to-r roinded-full text-black' 
-                          : 'text-black hover:bg-gray-50'
-                      }`}
-                    >
-                      <div className="flex items-center gap-1.5">
-                        
-                        <span>Коллекции</span>
-                      </div>
-                    </button>
-                  </div>
-                  
-                  {/* Мобильный переключатель режимов отображения - улучшенный дизайн */}
-                  <div className="sm:hidden flex bg-white border border-gray-200 rounded-md shadow-sm px-1 py-1">
-                    <button
-                      onClick={() => setViewMode('grid')}
-                      className={`p-1.5 rounded-md transition-all ${
-                        viewMode === 'grid' 
-                          ? 'bg-gradient-to-r from-gray-800 to-gray-700 text-white shadow-sm' 
-                          : 'text-gray-600 hover:bg-gray-50'
-                      }`}
-                      title="Сетка"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6z" />
-                      </svg>
-                    </button>
-                    <button
-                      onClick={() => setViewMode('table')}
-                      className={`p-1.5 rounded-md transition-all ${
-                        viewMode === 'table' 
-                          ? 'bg-gradient-to-r from-gray-800 to-gray-700 text-white shadow-sm' 
-                          : 'text-gray-600 hover:bg-gray-50'
-                      }`}
-                      title="Таблица"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M3 14h18" />
                       </svg>
                     </button>
                   </div>
@@ -2338,48 +2134,15 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                 ) : products.length > 0 ? (
                   // Рендер реальных товаров
                   <>
-                    {displayMode === 'product' ? (
-                      <CatalogOfProductSearch
-                        products={products}
-                        viewMode={viewMode}
-                        isLoading={isLoading} // Передаем isLoading, хотя он уже false здесь
-                      />
-                      // ... (остальной код для product mode)
-                     ) : (
-                      // Режим коллекций
-                      <div className="space-y-10">
-                        {Object.entries(groupProductsByCollection(products))
-                          // Сортируем коллекции: сначала по количеству товаров (по убыванию), 
-                          // но "Прочие товары" всегда внизу
-                          .sort((a, b) => {
-                            if (a[0] === 'Прочие товары') return 1;
-                            if (b[0] === 'Прочие товары') return -1;
-                            return b[1].length - a[1].length;
-                          })
-                          .map(([collectionName, collectionProducts]) => (
-                            <div key={collectionName} className={`mb-12 ${collectionName === 'Прочие товары' ? 'mt-8 pt-8 border-t border-gray-200' : ''}`}>
-                              <div className="flex items-center gap-2 mb-4">
-                                <h3 className="text-xl font-bold text-gray-900">{collectionName}</h3>
-                                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-                                  {collectionProducts.length} {collectionProducts.length === 1 ? 'товар' : 
-                                    (collectionProducts.length >= 2 && collectionProducts.length <= 4) ? 'товара' : 'товаров'}
-                                </span>
-                              </div>
-                              <div className="border-b border-gray-200 mb-4"></div>
-                              <CatalogOfProductSearch
-                                products={collectionProducts} 
-                                viewMode={viewMode}
-                                isLoading={isLoading}                      
-                              />
-                            </div>
-                          ))
-                        }
-                      </div>
-                    )}
-                     {/* Пагинация */}
-                     <div className={`mt-8 ${displayMode === 'collection' ? 'hidden sm:hidden' : ''}`}>
-                       {renderPagination()}
-                     </div>
+                    <CatalogOfProductSearch
+                      products={products}
+                      viewMode={viewMode}
+                      isLoading={isLoading}
+                    />
+                    {/* Пагинация */}
+                    <div className="mt-8">
+                      {renderPagination()}
+                    </div>
                   </>
                 ) : (
                    // Товары не найдены
