@@ -1,11 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
 import Maytoni from '@/app/cardproducts/page';
-
 
 interface SideBannerSlide {
    id: number;
@@ -20,24 +19,14 @@ interface SideBannerSlide {
 // --- КОНЕЦ ДАННЫХ ДЛЯ СЛАЙДЕРОВ ---
 
 export default function Banner() {
-  const [currentSlide, setCurrentSlide] = useState(0);
   const [hasVideoPlayed, setHasVideoPlayed] = useState(false);
 
-  // Данные для слайдера баннера
-  const sliderData = [
-    {
-      image: '/images/1-3-scaled111.webp',
-      title: 'Выбирай свой свет',
-      subtitle: 'Сделай дизайн своим выбором',
-      textColor: 'white',
-      isVideo: true,
-      videoUrl: '/images/dzx1j_8hlzu.mp4'
-    },
-  ];
-
-  // Функция для переключения на конкретный слайд
-  const goToSlide = (index: number) => {
-    setCurrentSlide(index);
+  // Данные для баннера
+  const bannerData = {
+    title: 'Выбирай свой свет',
+    subtitle: 'Сделай дизайн своим выбором',
+    textColor: 'white',
+    videoUrl: '/images/dzx1j_8hlzu.mp4'
   };
 
   // Обработчик окончания видео
@@ -57,73 +46,32 @@ export default function Banner() {
 
   return (
     <div className="w-full">
-      {/* Фоновое изображение для слайдера */}
+      {/* Видео баннер */}
       <div className="absolute top-0 left-0 right-0 h-screen -z-10">
-        {sliderData.map((slide, index) => (
-          <div 
-            key={index}
-            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${currentSlide === index ? 'opacity-100' : 'opacity-0'}`}
+        <div className="absolute inset-0">
+          <video
+            autoPlay
+            muted
+            playsInline
+            onEnded={handleVideoEnd}
+            className="w-full h-full object-cover"
+            style={{ opacity: hasVideoPlayed ? 0.3 : 1 }}
           >
-            {slide.isVideo ? (
-              hasVideoPlayed ? (
-                <div
-                  className="w-full h-full bg-cover bg-center"
-                  style={{
-                    backgroundImage: `url('${slide.image}')`,
-                  }}
-                />
-              ) : (
-                <video
-                  autoPlay
-                  muted
-                  playsInline
-                  onEnded={handleVideoEnd}
-                  className="w-full h-full object-cover"
-                >
-                  <source src={slide.videoUrl} type="video/mp4" />
-                </video>
-              )
-            ) : (
-              <div
-                className="w-full h-full bg-cover bg-center"
-                style={{
-                  backgroundImage: `url('${slide.image}')`,
-                }}
-              />
-            )}
-          </div>
-        ))}
+            <source src={bannerData.videoUrl} type="video/mp4" />
+          </video>
+        </div>
       </div>
       
-      {/* Баннер-слайдер */}
+      {/* Контент баннера */}
       <div className="relative pt-36 w-full h-screen">
         <div className="max-w-7xl mx-auto px-4 h-[calc(100vh-112px)] flex items-center">
-          {sliderData.map((slide, index) => (
-            <div 
-              key={index} 
-              className={`w-1/2 transition-opacity  duration-1000 ease-in-out absolute ${currentSlide === index ? 'opacity-100' : 'opacity-0'}`}
-            >
-              <h1 className={`text-7xl font-bold mb-2 ${slide.textColor === 'white' ? 'text-white' : 'text-black'}`}>
-                {slide.title}
-              </h1>
-              <h2 className={`text-7xl font-bold mb-8 ${slide.textColor === 'white' ? 'text-white' : 'text-black'}`}>
-                {slide.subtitle}
-              </h2>
-              
-          
-            </div>
-          ))}
-          
-          {/* Индикаторы слайдера */}
-          <div className="absolute bottom-10 left-4 flex space-x-2">
-            {sliderData.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => goToSlide(index)}
-                className={`w-3 h-3 rounded-full ${currentSlide === index ? 'bg-white' : 'bg-white bg-opacity-50'}`}
-                aria-label={`Перейти к слайду ${index + 1}`}
-              />
-            ))}
+          <div className="w-1/2">
+            <h1 className={`text-7xl font-bold mb-2 ${bannerData.textColor === 'white' ? 'text-white' : 'text-black'}`}>
+              {bannerData.title}
+            </h1>
+            <h2 className={`text-7xl font-bold mb-8 ${bannerData.textColor === 'white' ? 'text-white' : 'text-black'}`}>
+              {bannerData.subtitle}
+            </h2>
           </div>
         </div>
       </div>
@@ -176,7 +124,6 @@ export default function Banner() {
                   <div className="absolute inset-0 bg-[url('/images/photo.webp')] bg-cover bg-center rounded-2xl overflow-hidden transition-opacity duration-500 ease-in-out ">
                     <div className="absolute inset-0 bg-gradient-to-br from-transparent "></div>
                   </div>
-          
                 </div>
               </div>
 
@@ -192,34 +139,27 @@ export default function Banner() {
               </div>
             </div>
             <div>
-            <h2 className="text-3xl font-bold  text-center">О компании MoreElecktriki</h2>
-            <div className=" gap-12 items-center">
-              {/* Левая часть - текст о компании */}
-              <div className="space-y-6">
-                <div className="space-y-4">
-                  <h3 className="text-4xl font-bold text-black">Освещаем вашу жизнь</h3>
-                  <p className="text-black text-2xl leading-relaxed">
-                    MoreElecktriki — ведущий поставщик качественного освещения в России. 
-                    Мы специализируемся на продаже премиальных светильников, люстр и 
-                    электротехнических товаров от лучших мировых производителей.
-                  </p>
-                  <p className="text-black text-2xl leading-relaxed">
-                    Наша команда профессионалов поможет вам создать идеальное освещение 
-                    для дома, офиса или коммерческого объекта. Мы предлагаем не только 
-                    продажу, но и полный комплекс услуг по проектированию и монтажу.
-                  </p>
+              <h2 className="text-3xl font-bold text-center">О компании MoreElecktriki</h2>
+              <div className="gap-12 items-center">
+                {/* Левая часть - текст о компании */}
+                <div className="space-y-6">
+                  <div className="space-y-4">
+                    <h3 className="text-4xl font-bold text-black">Освещаем вашу жизнь</h3>
+                    <p className="text-black text-2xl leading-relaxed">
+                      MoreElecktriki — ведущий поставщик качественного освещения в России. 
+                      Мы специализируемся на продаже премиальных светильников, люстр и 
+                      электротехнических товаров от лучших мировых производителей.
+                    </p>
+                    <p className="text-black text-2xl leading-relaxed">
+                      Наша команда профессионалов поможет вам создать идеальное освещение 
+                      для дома, офиса или коммерческого объекта. Мы предлагаем не только 
+                      продажу, но и полный комплекс услуг по проектированию и монтажу.
+                    </p>
+                  </div>
                 </div>
               </div>
-
-
-          
-
             </div>
           </div>
-          </div>
-
-          {/* О компании MoreElecktriki */}
-       
         </div>
       </div>
     </div>
