@@ -106,7 +106,7 @@ export default function Banner() {
                         <img 
                           src={category.image} 
                           alt={category.title} 
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out p-2"
+                          className="w-full h-full object-cover sm:object-contain  group-hover:scale-105 transition-transform duration-300 ease-in-out p-2"
                         />
                         <div className="absolute right-0 w-1/2 h-full bg-gradient-to-t transition-all duration-300"></div>
                       </div>
