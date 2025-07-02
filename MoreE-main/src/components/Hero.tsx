@@ -35,15 +35,6 @@ export default function Banner() {
     },
   ];
 
-  // Автоматическое переключение слайдов
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % sliderData.length);
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [sliderData.length]);
-
   // Функция для переключения на конкретный слайд
   const goToSlide = (index: number) => {
     setCurrentSlide(index);
