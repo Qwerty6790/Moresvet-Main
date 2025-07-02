@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -19,7 +19,21 @@ interface SideBannerSlide {
 // --- КОНЕЦ ДАННЫХ ДЛЯ СЛАЙДЕРОВ ---
 
 export default function Banner() {
-  const [hasVideoPlayed, setHasVideoPlayed] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.play().catch(console.error);
+    }
+  }, []);
+
+  const handleTimeUpdate = () => {
+    const v = videoRef.current;
+    if (v && v.currentTime >= 0.04) {
+      v.pause();
+      v.currentTime = 0.04;
+    }
+  };
 
   // Данные для баннера
   const bannerData = {
@@ -27,11 +41,6 @@ export default function Banner() {
     subtitle: 'Сделай дизайн своим выбором',
     textColor: 'white',
     videoUrl: '/images/dzx1j_8hlzu.mp4'
-  };
-
-  // Обработчик окончания видео
-  const handleVideoEnd = () => {
-    setHasVideoPlayed(true);
   };
 
   // Популярные категории для каталога
@@ -50,12 +59,13 @@ export default function Banner() {
       <div className="absolute top-0 left-0 right-0 h-screen -z-10">
         <div className="absolute inset-0">
           <video
+            ref={videoRef}
             autoPlay
             muted
             playsInline
-            onEnded={handleVideoEnd}
+            preload="auto"
+            onTimeUpdate={handleTimeUpdate}
             className="w-full h-full object-cover"
-            style={{ opacity: hasVideoPlayed ? 0.3 : 1 }}
           >
             <source src={bannerData.videoUrl} type="video/mp4" />
           </video>
