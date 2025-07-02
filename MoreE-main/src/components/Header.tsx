@@ -639,16 +639,16 @@ const Header = () => {
         }
       `}</style>
       
-      <div className="container mx-auto px-4">
-        <header className="fixed top-4 left-0 right-0 z-[9998] w-full pointer-events-auto">
-          <div className="max-w-7xl mx-auto px-4">
+      <div className="container mx-auto px-2 md:px-4">
+        <header className="fixed top-2 md:top-4 left-0 right-0 z-[9998] w-full pointer-events-auto">
+          <div className="max-w-7xl mx-auto px-2 md:px-4">
             {/* Основной хедер с прозрачным фоном и закругленными краями */}
             <div className="backdrop-blur-lg bg-black/50 text-black rounded-xl overflow-hidden shadow-xl">
-              <div className="px-6">
-                <div className="flex items-center justify-between h-16">
+              <div className="px-3 md:px-6">
+                <div className="flex items-center justify-between h-14 md:h-16">
                   {/* Логотип */}
-                  <a href="/" className="flex-shrink-0 text-white  text-2xl font-bold flex items-center">
-                  MORELECKTRIKI
+                  <a href="/" className="flex-shrink-0 text-white text-lg md:text-2xl font-bold flex items-center">
+                    MORELECKTRIKI
                   </a>
 
                   {/* Основное меню - десктоп */}
@@ -720,28 +720,27 @@ const Header = () => {
                     </a>
                   </nav>
 
-                  {/* Правая часть - поиск, сравнение, избранное, корзина */}
-                  <div className="flex items-center space-x-6">
+                  {/* Правая часть - поиск, избранное, корзина */}
+                  <div className="flex items-center space-x-3 md:space-x-6">
                     {/* Поиск */}
                     <button 
                       onClick={() => setIsSearchOpen(true)}
                       className="text-white hover:text-gray-300 transition-colors"
                     >
-                      <Search className="w-5 h-5" />
+                      <Search className="w-4 h-4 md:w-5 md:h-5" />
                     </button>
                     
-                    {/* Разделитель */}
-                    <span className="h-6 w-px bg-white/50"></span>
-                    
+                    {/* Разделитель - скрыт на мобильных */}
+                    <span className="hidden md:block h-6 w-px bg-white/50"></span>
                     
                     {/* Избранное */}
                     <a href="/favorites" className="text-white hover:text-gray-300">
-                      <Heart className="w-5 h-5" />
+                      <Heart className="w-4 h-4 md:w-5 md:h-5" />
                     </a>
                     
                     {/* Корзина */}
                     <a href="/cart" className="text-white hover:text-gray-300">
-                      <ShoppingCart className="w-5 h-5" />
+                      <ShoppingCart className="w-4 h-4 md:w-5 md:h-5" />
                     </a>
 
                     {/* Мобильное меню */}
@@ -749,30 +748,28 @@ const Header = () => {
                       onClick={() => setIsMobileMenuOpen(true)}
                       className="lg:hidden text-white hover:text-gray-300"
                     >
-                      <MenuIcon className="w-5 h-5" />
+                      <MenuIcon className="w-4 h-4 md:w-5 md:h-5" />
                     </button>
                   </div>
                 </div>
               </div>
-              
-            
             </div>
           </div>
 
           {/* Мобильное меню */}
           {isMobileMenuOpen && (
-            <div className="fixed inset-0 z-[9999] bg-black/50 backdrop-blur-lg bg-opacity-95  overflow-y-auto rounded-lg">
+            <div className="fixed inset-0 z-[9999] bg-black/50 backdrop-blur-lg bg-opacity-95 overflow-y-auto">
               <div className="max-w-7xl mx-auto px-4 py-4">
                 {/* Верхняя панель с логотипом и кнопкой закрытия */}
                 <div className="flex items-center justify-between py-4 border-b border-gray-700">
-                  <a href="/" className="flex-shrink-0 text-white text-2xl font-bold flex items-center">
-                    <span className='text-white text-3xl font-light'>MORELECKTRIKI</span>
+                  <a href="/" className="flex-shrink-0 text-white text-xl md:text-2xl font-bold flex items-center">
+                    <span className='text-white text-2xl md:text-3xl font-light'>MORELECKTRIKI</span>
                   </a>
                   <button
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="p-2 rounded-full hover:bg-gray-800"
                   >
-                    <X className="w-6 h-6 text-white" />
+                    <X className="w-5 h-5 md:w-6 md:h-6 text-white" />
                   </button>
                 </div>
 
@@ -781,25 +778,25 @@ const Header = () => {
                   <div className="flex flex-col space-y-1">
                     <a 
                       href="/products"
-                      className="flex items-center justify-between py-3 px-2 text-lg font-medium text-white hover:bg-gray-800 rounded-lg"
+                      className="flex items-center justify-between py-3 px-2 text-base md:text-lg font-medium text-white hover:bg-gray-800 rounded-lg"
                     >
                       <span>Каталог</span>
                     </a>
                     <a 
                       href="/about"
-                      className="flex items-center justify-between py-3 px-2 text-lg font-medium text-white hover:bg-gray-800 rounded-lg"
+                      className="flex items-center justify-between py-3 px-2 text-base md:text-lg font-medium text-white hover:bg-gray-800 rounded-lg"
                     >
                       <span>О нас</span>
                     </a>
                     <a 
                       href="/brands"
-                      className="flex items-center justify-between py-3 px-2 text-lg font-medium text-white hover:bg-gray-800 rounded-lg"
+                      className="flex items-center justify-between py-3 px-2 text-base md:text-lg font-medium text-white hover:bg-gray-800 rounded-lg"
                     >
                       <span>Бренды</span>
                     </a>
                     <a 
                       href="/documentation"
-                      className="flex items-center justify-between py-3 px-2 text-lg font-medium text-white hover:bg-gray-800 rounded-lg"
+                      className="flex items-center justify-between py-3 px-2 text-base md:text-lg font-medium text-white hover:bg-gray-800 rounded-lg"
                     >
                       <span>Документация</span>
                     </a>
@@ -807,12 +804,12 @@ const Header = () => {
                 </div>
 
                 {/* Контактная информация */}
-                <div className="mt-8 border-t border-gray-700 pt-6">
-                  <div className="flex flex-col space-y-4">
-                    <a href="tel:88005509084" className="flex items-center text-white">                   
+                <div className="mt-6 md:mt-8 border-t border-gray-700 pt-4 md:pt-6">
+                  <div className="flex flex-col space-y-3 md:space-y-4">
+                    <a href="tel:88005509084" className="flex items-center text-white text-base md:text-lg">                   
                       8-800-550-90-84
                     </a>
-                    <a href="mailto:info@donel.su" className="flex items-center text-white">
+                    <a href="mailto:info@donel.su" className="flex items-center text-white text-base md:text-lg">
                       MORELECKTRIKI@gmail.com
                     </a>
                   </div>
@@ -825,7 +822,7 @@ const Header = () => {
 
       {/* Модальное окно поиска */}
       {isSearchOpen && (
-        <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[99999] flex items-start md:items-center justify-center p-4">
           {/* Блюр фон */}
           <div 
             className="absolute inset-0 bg-black/20 backdrop-blur-sm"
@@ -833,36 +830,36 @@ const Header = () => {
           />
           
           {/* Модальное окно */}
-          <div className="relative  backdrop-blur-2xl bg-black/20 rounded-2xl shadow-2xl w-full max-w-2xl search-modal-enter">
+          <div className="relative backdrop-blur-2xl bg-black/20 rounded-2xl shadow-2xl w-full max-w-2xl mt-16 md:mt-0 search-modal-enter">
             {/* Заголовок */}
             <div className="flex items-center justify-between p-3">
-              <h3 className="text-5xl font-semibold text-white">Поиск товаров</h3>
+              <h3 className="text-3xl md:text-5xl font-semibold text-white">Поиск товаров</h3>
               <button
                 onClick={() => setIsSearchOpen(false)}
-                className="p-2  rounded-full transition-colors"
+                className="p-2 rounded-full transition-colors"
               >
                 <X className="w-5 h-5 text-white" />
               </button>
             </div>
             
             {/* Поле поиска */}
-            <div className="p-6">
-              <div className="flex items-center space-x-3">
+            <div className="p-4 md:p-6">
+              <div className="flex items-center space-x-2 md:space-x-3">
                 <div className="flex-1 relative">
-                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white" />
+                  <Search className="absolute left-3 md:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-white" />
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyPress={handleSearchKeyPress}
                     placeholder="Введите название товара..."
-                    className="w-full pl-12 pr-4 py-4 text-lg  bg-black/10 backdrop-blur-2xl   rounded-xl focus:ring-white  focus:border-transparent outline-none transition-all"
+                    className="w-full pl-10 md:pl-12 pr-4 py-3 md:py-4 text-base md:text-lg bg-black/10 backdrop-blur-2xl rounded-xl focus:ring-white focus:border-transparent outline-none transition-all"
                     autoFocus
                   />
                 </div>
                 <button
                   onClick={handleSearch}
-                  className="px-8 py-4 bg- text-white rounded-xl  transition-colors font-medium"
+                  className="px-6 md:px-8 py-3 md:py-4 bg-transparent text-white rounded-xl transition-colors font-medium"
                 >
                   Найти
                 </button>
@@ -871,12 +868,10 @@ const Header = () => {
             
             {/* Результаты поиска */}
             {searchQuery && (
-              <div className="max-h-96 overflow-y-auto ">
+              <div className="max-h-[60vh] md:max-h-96 overflow-y-auto">
                 {searchResultsContent}
               </div>
             )}
-
-           
           </div>
         </div>
       )}
