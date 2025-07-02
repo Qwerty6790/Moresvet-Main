@@ -15,6 +15,7 @@ import SEO from '@/components/SEO';
 import { fetchProductsWithSorting } from '@/utils/api';
 
 import CatalogOfProductSearch from '@/components/Catalogofsearch';
+import LoadingSpinner from '@/components/LoadingSpinner';
 import Head from 'next/head'; // Добавляем импорт Head
 
 // Импортируем типы для категорий и брендов
@@ -2339,22 +2340,11 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                 
                 {/* --- Измененный блок загрузки --- */}
                 {(isLoading || !isClient) ? (
-                  // Всегда рендерим скелетон сетки, чтобы избежать CLS=null
-                  <div className="grid auto-rows-auto w-full grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4 lg:gap-6 xl:grid-cols-4 xl:gap-6">
-                    {Array.from({ length: 8 }).map((_, i) => (
-                      <div key={`skeleton-${i}`} className="bg-white rounded-lg border border-gray-100 flex flex-col h-full">
-                        <div className="relative aspect-square bg-gray-100 animate-pulse rounded-t-lg min-h-[150px] sm:min-h-[180px]"></div>
-                        <div className="p-2 sm:p-4 flex flex-col flex-grow">
-                          <div className="h-4 bg-gray-200 rounded w-3/4 mb-2 animate-pulse"></div>
-                          <div className="h-3 bg-gray-200 rounded w-1/2 mb-3 animate-pulse"></div>
-                          <div className="mt-auto flex items-center justify-between gap-2">
-                            <div className="h-5 bg-gray-200 rounded w-1/3 animate-pulse"></div>
-                            <div className="h-8 bg-gray-300 rounded w-1/2 animate-pulse"></div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                  <LoadingSpinner 
+                    size="lg" 
+                    text="Загружаем каталог светильников..." 
+                    showText={true}
+                  />
                 ) : products.length > 0 ? (
                   // Рендер реальных товаров
                   <>
@@ -2403,19 +2393,24 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                   </>
                 ) : (
                    // Товары не найдены
-                  <div className="p-12 text-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 14a2 2 0 100-4 2 2 0 000 4z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M22 12a10 10 0 11-20 0 10 10 0 0120 0z" />
-                    </svg>
-                    <p className="mt-4 text-gray-500 text-lg">Товары не найдены</p>
-                    <p className="text-gray-400 mt-2">Попробуйте изменить параметры фильтрации</p>
-                    <button 
-                      onClick={handleResetFilters} 
-                      className="mt-4 px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition-colors text-sm font-medium"
-                    >
-                      Сбросить все фильтры
-                    </button>
+                  <div className="text-center py-12">
+                    <LoadingSpinner 
+                      size="lg" 
+                      text="Товары не найдены" 
+                      showText={true}
+                    />
+                    <div className="mt-6">
+                      <p className="text-gray-500 text-lg mb-2">Попробуйте изменить параметры фильтрации</p>
+                      <button 
+                        onClick={handleResetFilters} 
+                        className="mt-4 px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors text-sm font-medium flex items-center gap-2 mx-auto"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        Сбросить все фильтры
+                      </button>
+                    </div>
                   </div>
                 )}
               </div> {/* Конец Products Area */}
