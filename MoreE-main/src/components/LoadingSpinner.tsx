@@ -33,18 +33,8 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
 
   return (
     <div className="flex flex-col items-center justify-center p-8">
-      {/* Основной спиннер с градиентом */}
-      <div className="relative">
-        {/* Внешнее кольцо */}
-        <div className={`${getSizeClasses()} border-4 border-gray-200 rounded-full animate-spin`}>
-          <div className="absolute inset-0 border-4 border-transparent border-t-black border-r-gray-800 rounded-full animate-pulse"></div>
-        </div>
-        
-        {/* Внутренний элемент с логотипом */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-6 h-6 bg-gradient-to-r from-black to-gray-700 rounded-full animate-bounce"></div>
-        </div>
-      </div>
+
+     
 
       {/* Анимированный текст MORELEKTRIKI */}
       <div className="mt-6 text-center">
