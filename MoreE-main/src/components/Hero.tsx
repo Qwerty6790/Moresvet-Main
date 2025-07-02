@@ -179,7 +179,7 @@ export default function Banner() {
                   Новые функциональные светильники от производителей, которые придадут вашему интерьеру элегантность.
                 </p>
                 <div className="relative h-[300px] mt-8 group">
-                  <div className="absolute inset-0 bg-[url('/images/Дизайн_без_названия__11__308fc32673a6c219bff706661f135e79.webp')] bg-cover bg-center rounded-2xl overflow-hidden transition-opacity duration-500 ease-in-out ">
+                  <div className="absolute inset-0 bg-[url('/images/photo.png.webp')] bg-cover bg-center rounded-2xl overflow-hidden transition-opacity duration-500 ease-in-out ">
                     <div className="absolute inset-0 bg-gradient-to-br from-transparent "></div>
                   </div>
           
