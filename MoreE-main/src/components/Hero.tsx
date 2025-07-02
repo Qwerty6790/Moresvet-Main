@@ -60,7 +60,6 @@ export default function Banner() {
             playsInline
             onTimeUpdate={handleTimeUpdate}
             className="w-full h-full object-cover"
-            style={{ opacity: hasVideoPlayed ? 0.3 : 1 }}
           >
             <source src={bannerData.videoUrl} type="video/mp4" />
           </video>
