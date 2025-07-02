@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -19,6 +19,7 @@ interface SideBannerSlide {
 // --- КОНЕЦ ДАННЫХ ДЛЯ СЛАЙДЕРОВ ---
 
 export default function Banner() {
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [hasVideoPlayed, setHasVideoPlayed] = useState(false);
 
   // Данные для баннера
@@ -29,9 +30,12 @@ export default function Banner() {
     videoUrl: '/images/dzx1j_8hlzu.mp4'
   };
 
-  // Обработчик окончания видео
-  const handleVideoEnd = () => {
-    setHasVideoPlayed(true);
+  // Обработчик времени видео
+  const handleTimeUpdate = () => {
+    if (videoRef.current && videoRef.current.currentTime >= 0.04) {
+      videoRef.current.pause();
+      setHasVideoPlayed(true);
+    }
   };
 
   // Популярные категории для каталога
@@ -50,10 +54,11 @@ export default function Banner() {
       <div className="absolute top-0 left-0 right-0 h-screen -z-10">
         <div className="absolute inset-0">
           <video
+            ref={videoRef}
             autoPlay
             muted
             playsInline
-            onEnded={handleVideoEnd}
+            onTimeUpdate={handleTimeUpdate}
             className="w-full h-full object-cover"
             style={{ opacity: hasVideoPlayed ? 0.3 : 1 }}
           >
