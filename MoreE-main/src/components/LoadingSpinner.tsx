@@ -33,14 +33,49 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
 
   return (
     <div className="flex flex-col items-center justify-center p-8">
-      {/* Основной спиннер */}
-      <div className={`${getSizeClasses()} border-4 border-gray-200 border-t-black rounded-full animate-spin`}></div>
+      {/* Основной спиннер с градиентом */}
+      <div className="relative">
+        {/* Внешнее кольцо */}
+        <div className={`${getSizeClasses()} border-4 border-gray-200 rounded-full animate-spin`}>
+          <div className="absolute inset-0 border-4 border-transparent border-t-black border-r-gray-800 rounded-full animate-pulse"></div>
+        </div>
+        
+        {/* Внутренний элемент с логотипом */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-6 h-6 bg-gradient-to-r from-black to-gray-700 rounded-full animate-bounce"></div>
+        </div>
+      </div>
 
-      {/* Текст MoreElektriki */}
+      {/* Анимированный текст MORELEKTRIKI */}
       <div className="mt-6 text-center">
-        <p className={`font-bold text-black ${getTextSize()}`}>
-          MoreElektriki
-        </p>
+        <div className="flex items-center justify-center space-x-1 mb-2">
+          {'MORELEKTRIKI'.split('').map((letter, index) => (
+            <span
+              key={index}
+              className={`font-bold text-black ${getTextSize()} animate-pulse`}
+              style={{
+                animationDelay: `${index * 0.1}s`,
+                animationDuration: '1.5s'
+              }}
+            >
+              {letter}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Дополнительная анимация волны */}
+      <div className="mt-4 flex space-x-1">
+        {[...Array(5)].map((_, i) => (
+          <div
+            key={i}
+            className="w-1 h-8 bg-gradient-to-t from-black to-gray-400 rounded-full animate-pulse"
+            style={{
+              animationDelay: `${i * 0.2}s`,
+              animationDuration: '1s'
+            }}
+          ></div>
+        ))}
       </div>
     </div>
   );
