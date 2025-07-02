@@ -29,9 +29,9 @@ export default function Banner() {
 
   const handleTimeUpdate = () => {
     const v = videoRef.current;
-    if (v && v.currentTime >= 0.04) {
+    if (v && v.currentTime >= 4) {
       v.pause();
-      v.currentTime = 0.04;
+      v.currentTime = 4;
     }
   };
 
@@ -73,13 +73,13 @@ export default function Banner() {
       </div>
       
       {/* Контент баннера */}
-      <div className="relative pt-36 w-full h-screen">
+      <div className="relative pt-20 md:pt-36 w-full h-screen">
         <div className="max-w-7xl mx-auto px-4 h-[calc(100vh-112px)] flex items-center">
-          <div className="w-1/2">
-            <h1 className={`text-7xl font-bold mb-2 ${bannerData.textColor === 'white' ? 'text-white' : 'text-black'}`}>
+          <div className="w-full md:w-1/2">
+            <h1 className={`text-4xl md:text-7xl font-bold mb-2 ${bannerData.textColor === 'white' ? 'text-white' : 'text-black'}`}>
               {bannerData.title}
             </h1>
-            <h2 className={`text-7xl font-bold mb-8 ${bannerData.textColor === 'white' ? 'text-white' : 'text-black'}`}>
+            <h2 className={`text-4xl md:text-7xl font-bold mb-8 ${bannerData.textColor === 'white' ? 'text-white' : 'text-black'}`}>
               {bannerData.subtitle}
             </h2>
           </div>
@@ -87,30 +87,30 @@ export default function Banner() {
       </div>
 
       {/* Контент под баннером */}
-      <div className="bg-white py-12 relative">
+      <div className="bg-white py-8 md:py-12 relative">
         <div className="max-w-7xl mx-auto px-4">
          
           {/* Категории товаров */}
-          <div className="mb-12 relative">
+          <div className="mb-8 md:mb-12 relative">
             <div className="absolute top-0 left-0 w-1/2 h-full bg-gray-100 -z-10"></div>
             <div className="mx-auto">
-              <h2 className="text-3xl text-black font-bold mb-8">Популярные категории</h2>
-              <div className="grid grid-cols-6 gap-4 relative">
+              <h2 className="text-2xl md:text-3xl text-black font-bold mb-6 md:mb-8">Популярные категории</h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 relative">
                 {popularCategories.map((category, index) => (
                   <div
                     key={category.id}
                     className="transform transition-transform duration-200 hover:scale-105"
                   >
                     <a href={category.link} className="group block text-center h-full">
-                      <div className="relative rounded-md overflow-hidden h-[200px]">
+                      <div className="relative rounded-md overflow-hidden h-[150px] md:h-[200px]">
                         <img 
                           src={category.image} 
                           alt={category.title} 
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out p-2"
                         />
-                        <div className="absolute right-0 w-1/2 h-full bg-gradient-to-t  transition-all duration-300"></div>
+                        <div className="absolute right-0 w-1/2 h-full bg-gradient-to-t transition-all duration-300"></div>
                       </div>
-                      <p className="font-bold text-black mt-3 group-hover:text-yellow-300 transition-colors duration-200">{category.title}</p>
+                      <p className="font-bold text-sm md:text-base text-black mt-2 md:mt-3 group-hover:text-yellow-300 transition-colors duration-200">{category.title}</p>
                     </a>
                   </div>
                 ))}
@@ -119,48 +119,48 @@ export default function Banner() {
           </div>
 
           {/* Новая секция с тезисами и фотографией */}
-          <div className="mb-24">
-            <div className="flex gap-12">
+          <div className="mb-12 md:mb-24">
+            <div className="flex flex-col md:flex-row gap-8 md:gap-12">
               {/* Левая часть с тезисами */}
-              <div className="w-1/2 space-y-8 py-8">
-                <h2 className="text-4xl font-bold text-gray-900">
+              <div className="w-full md:w-1/2 space-y-6 md:space-y-8 py-4 md:py-8">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
                   Твой свет для комфорта:<br/>
                   новинки от производителей
                 </h2>
-                <p className="text-lg text-black mb-8">
+                <p className="text-base md:text-lg text-black mb-4 md:mb-8">
                   Новые функциональные светильники от производителей, которые придадут вашему интерьеру элегантность.
                 </p>
-                <div className="relative h-[300px] mt-8 group">
-                  <div className="absolute inset-0 bg-[url('/images/photo.webp')] bg-cover bg-center rounded-2xl overflow-hidden transition-opacity duration-500 ease-in-out ">
-                    <div className="absolute inset-0 bg-gradient-to-br from-transparent "></div>
+                <div className="relative h-[200px] md:h-[300px] mt-4 md:mt-8 group">
+                  <div className="absolute inset-0 bg-[url('/images/photo.webp')] bg-cover bg-center rounded-2xl overflow-hidden transition-opacity duration-500 ease-in-out">
+                    <div className="absolute inset-0 bg-gradient-to-br from-transparent"></div>
                   </div>
                 </div>
               </div>
 
               {/* Правая часть с фотографией */}
-              <div className="w-1/2 relative h-[600px] group">
-                <h2 className='text-4xl py-8 font-bold text-gray-900'>
+              <div className="w-full md:w-1/2 relative h-[400px] md:h-[600px] group">
+                <h2 className='text-3xl md:text-4xl py-4 md:py-8 font-bold text-gray-900'>
                   Открывай для себя новые возможности каждый день
                 </h2>
-                <span className='text-2xl text-black'>
+                <span className='text-lg md:text-2xl text-black'>
                   Мы предлагаем широкий ассортимент светильников, люстр и электротехнических товаров от лучших мировых производителей.
                   У нас вы можете найти все, что вам нужно для освещения вашего дома или офиса. Так же предлагаем не только продажу, но и полный комплекс услуг по проектированию и монтажу.Плюсом является то, что мы работаем с любыми покупателями, как физическими, так и юридическими лицами.
                 </span>
               </div>
             </div>
             <div>
-              <h2 className="text-3xl font-bold text-center">О компании MoreElecktriki</h2>
-              <div className="gap-12 items-center">
+              <h2 className="text-2xl md:text-3xl font-bold text-center mt-8 md:mt-12">О компании MoreElecktriki</h2>
+              <div className="gap-8 md:gap-12 items-center">
                 {/* Левая часть - текст о компании */}
-                <div className="space-y-6">
-                  <div className="space-y-4">
-                    <h3 className="text-4xl font-bold text-black">Освещаем вашу жизнь</h3>
-                    <p className="text-black text-2xl leading-relaxed">
+                <div className="space-y-4 md:space-y-6">
+                  <div className="space-y-3 md:space-y-4">
+                    <h3 className="text-3xl md:text-4xl font-bold text-black">Освещаем вашу жизнь</h3>
+                    <p className="text-lg md:text-2xl text-black leading-relaxed">
                       MoreElecktriki — ведущий поставщик качественного освещения в России. 
                       Мы специализируемся на продаже премиальных светильников, люстр и 
                       электротехнических товаров от лучших мировых производителей.
                     </p>
-                    <p className="text-black text-2xl leading-relaxed">
+                    <p className="text-lg md:text-2xl text-black leading-relaxed">
                       Наша команда профессионалов поможет вам создать идеальное освещение 
                       для дома, офиса или коммерческого объекта. Мы предлагаем не только 
                       продажу, но и полный комплекс услуг по проектированию и монтажу.
