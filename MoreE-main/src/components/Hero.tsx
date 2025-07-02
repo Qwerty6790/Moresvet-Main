@@ -21,6 +21,7 @@ interface SideBannerSlide {
 
 export default function Banner() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [hasVideoPlayed, setHasVideoPlayed] = useState(false);
 
   // Данные для слайдера баннера
   const sliderData = [
@@ -48,6 +49,11 @@ export default function Banner() {
     setCurrentSlide(index);
   };
 
+  // Обработчик окончания видео
+  const handleVideoEnd = () => {
+    setHasVideoPlayed(true);
+  };
+
   // Популярные категории для каталога
   const popularCategories = [
     { id: 1, title: 'ЛЮСТРЫ', image: '/images/Lustracategpory.png', link: '/osveheny?category=Люстра' },
@@ -68,15 +74,24 @@ export default function Banner() {
             className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${currentSlide === index ? 'opacity-100' : 'opacity-0'}`}
           >
             {slide.isVideo ? (
-              <video
-                autoPlay
-                muted
-                loop
-                playsInline
-                className="w-full h-full object-cover"
-              >
-                <source src={slide.videoUrl} type="video/mp4" />
-              </video>
+              hasVideoPlayed ? (
+                <div
+                  className="w-full h-full bg-cover bg-center"
+                  style={{
+                    backgroundImage: `url('${slide.image}')`,
+                  }}
+                />
+              ) : (
+                <video
+                  autoPlay
+                  muted
+                  playsInline
+                  onEnded={handleVideoEnd}
+                  className="w-full h-full object-cover"
+                >
+                  <source src={slide.videoUrl} type="video/mp4" />
+                </video>
+              )
             ) : (
               <div
                 className="w-full h-full bg-cover bg-center"
