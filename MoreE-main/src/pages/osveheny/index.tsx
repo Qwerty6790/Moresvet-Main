@@ -911,8 +911,19 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
     }
     
     return (
-      <div>
-    
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold mb-4">Похожие категории</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+          {relatedCategories.map((category, index) => (
+            <div 
+              key={`related-${index}`}
+              onClick={() => handleCategoryClickWithBrandContext(category)}
+              className="bg-white border border-gray-100 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer text-center"
+            >
+              <div className="text-sm font-medium">{category.label}</div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   };
@@ -2076,12 +2087,50 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                 </div>
                 
                 <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
-                 
+                  {/* Переключатель режима отображения - упрощенный дизайн */}
+                  <div className="flex bg-white border border-gray-200 rounded-md shadow-sm px-1 py-1">
+                    <button
+                      onClick={() => setViewMode('grid')}
+                      className={`p-1.5 rounded-md transition-all ${
+                        viewMode === 'grid' 
+                          ? 'bg-gradient-to-r from-gray-800 to-gray-700 text-white shadow-sm' 
+                          : 'text-gray-600 hover:bg-gray-50'
+                      }`}
+                      title="Сетка"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                      </svg>
+                    </button>
+                    <button
+                      onClick={() => setViewMode('list')}
+                      className={`p-1.5 rounded-md transition-all ${
+                        viewMode === 'list' 
+                          ? 'bg-gradient-to-r from-gray-800 to-gray-700 text-white shadow-sm' 
+                          : 'text-gray-600 hover:bg-gray-50'
+                      }`}
+                      title="Список"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
+                      </svg>
+                    </button>
+                  </div>
                   
                   <select
-                    className="text-xs sm:text-sm border rounded-md px-2 py-1.5 sm:px-3 sm:py-2 bg-white focus:ring-2 focus:ring-gray-200 outline-none flex-1 sm:flex-none shadow-sm"
+                    className="text-xs sm:text-sm px-2 py-1.5 sm:px-3 sm:py-2 
+                    bg-white/20 backdrop-blur-md border border-white/30 
+                    rounded-md shadow-lg hover:shadow-xl transition-all duration-300
+                    text-gray-800 font-medium
+                    focus:ring-2 focus:ring-white/50 focus:border-white/50 outline-none 
+                    flex-1 sm:flex-none appearance-none
+                    [&>option]:bg-white/90 [&>option]:backdrop-blur-xl [&>option]:text-gray-800"
                     value={sortOrder || 'popularity'}
                     onChange={(e) => handleSortOrderChange(e.target.value as any)}
+                    style={{
+                      WebkitBackdropFilter: 'blur(8px)',
+                      backdropFilter: 'blur(8px)'
+                    }}
                   >
                     <option value="popularity">По популярности</option>
                     <option value="newest">Сначала новые</option>
