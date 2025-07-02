@@ -1961,9 +1961,6 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
               {/* Навигация по категориям */}
               <div className="bg-white rounded-lg p-4 mb-4 shadow-sm border border-gray-100">
                 <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-                  </svg>
                   Категории
                 </h3>
                 
