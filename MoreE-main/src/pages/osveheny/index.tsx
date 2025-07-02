@@ -939,68 +939,167 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
 
   // Функция для рендеринга категорий
   const renderCategories = () => {
-    // Всегда показываем основные категории с аккордеоном, независимо от выбранного бренда
+    // Если категория не выбрана или это "Все товары", показываем все категории
+    if (!selectedCategory || selectedCategory.label === 'Все товары') {
+      return (
+        <div>
+          <div className="space-y-1 pl-2 text-sm">
+            {productCategoriesState.map((category, index) => {
+              if (category.label === 'Все товары') return null;
+              
+              const hasSubcategories = category.subcategories && category.subcategories.length > 0;
+              
+              return (
+                <div key={`${category.label}-${index}`} className="mb-1">
+                  <div 
+                    className={`flex items-center justify-between px-2 py-1.5 rounded transition-colors duration-200 ${
+                      (selectedCategory?.label === category.label || 
+                      selectedCategory?.searchName === category.searchName) && 
+                      !hasSubcategories
+                        ? 'font-bold text-black bg-gray-100' 
+                        : 'text-gray-600 hover:text-black hover:bg-gray-50 cursor-pointer'
+                    }`}
+                    onClick={() => hasSubcategories 
+                      ? toggleCategoryAccordion(category.id) 
+                      : handleCategoryChange(category)
+                    }
+                  >
+                    <span>{category.label}</span>
+                    {hasSubcategories && (
+                      <span className="transform transition-transform duration-200 text-gray-400">
+                        {category.isOpen ? (
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path fillRule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+                          </svg>
+                        ) : (
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path fillRule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                          </svg>
+                        )}
+                      </span>
+                    )}
+                  </div>
+                  
+                  {/* Подкатегории в аккордеоне */}
+                  {hasSubcategories && category.isOpen && (
+                    <div className="pl-4 mt-1 space-y-1 border-l-2 border-gray-100 ml-2">
+                      {category.subcategories.map((subcat, subIndex) => (
+                        <div 
+                          key={`${subcat.label}-${subIndex}`}
+                          className={`flex items-center px-2 py-1 rounded transition-colors duration-200 ${
+                            selectedCategory?.label === subcat.label || 
+                            selectedCategory?.searchName === subcat.searchName
+                              ? 'font-bold text-black bg-gray-100' 
+                              : 'text-gray-600 hover:text-black hover:bg-gray-50 cursor-pointer'
+                          }`}
+                          onClick={() => handleCategoryChange(subcat)}
+                        >
+                          {subcat.label}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
+
+    // Показываем только текущую категорию и её подкатегории
+    // Сначала ищем родительскую категорию для текущей выбранной
+    let currentParentCategory = null;
+    
+    // Ищем среди основных категорий
+    for (const category of productCategoriesState) {
+      if (category.label === selectedCategory.label || category.searchName === selectedCategory.searchName) {
+        currentParentCategory = category;
+        break;
+      }
+      
+      // Ищем среди подкатегорий
+      if (category.subcategories) {
+        for (const subcat of category.subcategories) {
+          if (subcat.label === selectedCategory.label || subcat.searchName === selectedCategory.searchName) {
+            currentParentCategory = category;
+            break;
+          }
+        }
+      }
+      
+      if (currentParentCategory) break;
+    }
+    
+    // Если не нашли родительскую категорию, показываем все
+    if (!currentParentCategory) {
+      return (
+        <div>
+          <div className="space-y-1 pl-2 text-sm">
+            <div className="text-gray-500 text-xs mb-2">Все категории</div>
+            {productCategoriesState.map((category, index) => {
+              if (category.label === 'Все товары') return null;
+              return (
+                <div key={`${category.label}-${index}`} className="mb-1">
+                  <div 
+                    className="flex items-center px-2 py-1.5 rounded transition-colors duration-200 text-gray-600 hover:text-black hover:bg-gray-50 cursor-pointer"
+                    onClick={() => handleCategoryChange(category)}
+                  >
+                    <span>{category.label}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
+    
+    // Показываем только найденную родительскую категорию с её подкатегориями
+    const hasSubcategories = currentParentCategory.subcategories && currentParentCategory.subcategories.length > 0;
+    
     return (
       <div>
         <div className="space-y-1 pl-2 text-sm">
-          {productCategoriesState.map((category, index) => {
-            if (category.label === 'Все товары') return null;
-            
-            const hasSubcategories = category.subcategories && category.subcategories.length > 0;
-            
-            return (
-              <div key={`${category.label}-${index}`} className="mb-1">
+          {/* Название текущей категории */}
+          <div className="text-gray-500 text-xs mb-2 uppercase font-medium">
+            {currentParentCategory.label}
+          </div>
+          
+          {/* Основная категория */}
+          <div className="mb-1">
+            <div 
+              className={`flex items-center px-2 py-1.5 rounded transition-colors duration-200 ${
+                selectedCategory?.label === currentParentCategory.label || 
+                selectedCategory?.searchName === currentParentCategory.searchName
+                  ? 'font-bold text-black bg-gray-100' 
+                  : 'text-gray-600 hover:text-black hover:bg-gray-50 cursor-pointer'
+              }`}
+              onClick={() => handleCategoryChange(currentParentCategory)}
+            >
+              <span>Все {currentParentCategory.label.toLowerCase()}</span>
+            </div>
+          </div>
+          
+                     {/* Подкатегории */}
+           {hasSubcategories && (
+             <div className="pl-4 space-y-1 border-l-2 border-gray-100 ml-2">
+               {currentParentCategory.subcategories?.map((subcat, subIndex) => (
                 <div 
-                  className={`flex items-center justify-between px-2 py-1.5 rounded transition-colors duration-200 ${
-                    (selectedCategory?.label === category.label || 
-                    selectedCategory?.searchName === category.searchName) && 
-                    !hasSubcategories
+                  key={`${subcat.label}-${subIndex}`}
+                  className={`flex items-center px-2 py-1 rounded transition-colors duration-200 ${
+                    selectedCategory?.label === subcat.label || 
+                    selectedCategory?.searchName === subcat.searchName
                       ? 'font-bold text-black bg-gray-100' 
                       : 'text-gray-600 hover:text-black hover:bg-gray-50 cursor-pointer'
                   }`}
-                  onClick={() => hasSubcategories 
-                    ? toggleCategoryAccordion(category.id) 
-                    : handleCategoryChange(category)
-                  }
+                  onClick={() => handleCategoryChange(subcat)}
                 >
-                  <span>{category.label}</span>
-                  {hasSubcategories && (
-                    <span className="transform transition-transform duration-200 text-gray-400">
-                      {category.isOpen ? (
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                          <path fillRule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
-                        </svg>
-                      ) : (
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                          <path fillRule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                        </svg>
-                      )}
-                    </span>
-                  )}
+                  {subcat.label}
                 </div>
-                
-                {/* Подкатегории в аккордеоне */}
-                {hasSubcategories && category.isOpen && (
-                  <div className="pl-4 mt-1 space-y-1 border-l-2 border-gray-100 ml-2">
-                    {category.subcategories.map((subcat, subIndex) => (
-                      <div 
-                        key={`${subcat.label}-${subIndex}`}
-                        className={`flex items-center px-2 py-1 rounded transition-colors duration-200 ${
-                          selectedCategory?.label === subcat.label || 
-                          selectedCategory?.searchName === subcat.searchName
-                            ? 'font-bold text-black bg-gray-100' 
-                            : 'text-gray-600 hover:text-black hover:bg-gray-50 cursor-pointer'
-                        }`}
-                        onClick={() => handleCategoryChange(subcat)}
-                      >
-                        {subcat.label}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+              ))}
+            </div>
+          )}
         </div>
       </div>
     );
