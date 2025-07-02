@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -30,6 +30,13 @@ export default function Banner() {
     videoUrl: '/images/dzx1j_8hlzu.mp4'
   };
 
+  // Обработчик загрузки видео
+  const handleVideoLoad = () => {
+    if (videoRef.current) {
+      videoRef.current.play();
+    }
+  };
+
   // Обработчик времени видео
   const handleTimeUpdate = () => {
     if (videoRef.current && videoRef.current.currentTime >= 0.04) {
@@ -37,6 +44,15 @@ export default function Banner() {
       setHasVideoPlayed(true);
     }
   };
+
+  // Эффект для автоматического запуска видео
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.play().catch(error => {
+        console.log('Ошибка автовоспроизведения:', error);
+      });
+    }
+  }, []);
 
   // Популярные категории для каталога
   const popularCategories = [
@@ -55,9 +71,9 @@ export default function Banner() {
         <div className="absolute inset-0">
           <video
             ref={videoRef}
-            autoPlay
             muted
             playsInline
+            onLoadedMetadata={handleVideoLoad}
             onTimeUpdate={handleTimeUpdate}
             className="w-full h-full object-cover"
           >
