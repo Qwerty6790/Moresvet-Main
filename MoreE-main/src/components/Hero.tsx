@@ -29,9 +29,9 @@ export default function Banner() {
 
   const handleTimeUpdate = () => {
     const v = videoRef.current;
-    if (v && v.currentTime >= 0.04) {
+    if (v && v.currentTime >= 4) {
       v.pause();
-      v.currentTime = 0.04;
+      v.currentTime = 4;
     }
   };
 
