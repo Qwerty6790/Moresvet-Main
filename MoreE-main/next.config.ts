@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
   /* config options here */
   reactStrictMode: true,
   serverExternalPackages: [],
+  analytics: {
+    vercelAnalytics: true,
+  },
 };
 
 export default nextConfig;
