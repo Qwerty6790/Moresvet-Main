@@ -20,7 +20,7 @@ interface SideBannerSlide {
 
 export default function Banner() {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [hasVideoPlayed, setHasVideoPlayed] = useState(false);
+  const [isVideoReady, setIsVideoReady] = useState(false);
 
   // Данные для баннера
   const bannerData = {
@@ -30,28 +30,42 @@ export default function Banner() {
     videoUrl: '/images/dzx1j_8hlzu.mp4'
   };
 
-  // Обработчик загрузки видео
-  const handleVideoLoad = () => {
-    if (videoRef.current) {
-      videoRef.current.play();
-    }
-  };
-
-  // Обработчик времени видео
-  const handleTimeUpdate = () => {
-    if (videoRef.current && videoRef.current.currentTime >= 0.04) {
-      videoRef.current.pause();
-      setHasVideoPlayed(true);
-    }
-  };
-
-  // Эффект для автоматического запуска видео
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.play().catch(error => {
-        console.log('Ошибка автовоспроизведения:', error);
-      });
-    }
+    const video = videoRef.current;
+    if (!video) return;
+
+    const playVideo = async () => {
+      try {
+        console.log('Попытка воспроизведения видео...');
+        await video.play();
+        console.log('Видео начало воспроизводиться');
+      } catch (error) {
+        console.error('Ошибка воспроизведения:', error);
+      }
+    };
+
+    const handleCanPlay = () => {
+      console.log('Видео готово к воспроизведению');
+      setIsVideoReady(true);
+      playVideo();
+    };
+
+    const handleTimeUpdate = () => {
+      if (video.currentTime >= 0.04) {
+        console.log('Достигнуто время 0.04, останавливаем видео');
+        video.pause();
+        video.currentTime = 0.04;
+      }
+    };
+
+    video.addEventListener('canplay', handleCanPlay);
+    video.addEventListener('timeupdate', handleTimeUpdate);
+    video.load(); // Принудительно перезагружаем видео
+
+    return () => {
+      video.removeEventListener('canplay', handleCanPlay);
+      video.removeEventListener('timeupdate', handleTimeUpdate);
+    };
   }, []);
 
   // Популярные категории для каталога
@@ -73,8 +87,7 @@ export default function Banner() {
             ref={videoRef}
             muted
             playsInline
-            onLoadedMetadata={handleVideoLoad}
-            onTimeUpdate={handleTimeUpdate}
+            preload="auto"
             className="w-full h-full object-cover"
           >
             <source src={bannerData.videoUrl} type="video/mp4" />
