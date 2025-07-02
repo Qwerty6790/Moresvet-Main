@@ -225,7 +225,7 @@ const productCategories = [
   { 
     id: 'bra', 
     label: 'Бра', 
-    searchName: 'Настенный светильник',
+    searchName: 'Бра',
     aliases: ['Бра', 'Настенный светильник', 'Настенные светильники'],
     isOpen: false
   },

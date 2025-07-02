@@ -765,9 +765,9 @@ const Header = () => {
               <div className="max-w-7xl mx-auto px-4 py-4">
                 {/* Верхняя панель с логотипом и кнопкой закрытия */}
                 <div className="flex items-center justify-between py-4 border-b border-gray-700">
-                  <Link href="/" className="flex-shrink-0 text-white text-2xl font-bold flex items-center">
+                  <a href="/" className="flex-shrink-0 text-white text-2xl font-bold flex items-center">
                     <span className='text-white text-3xl font-light'>MORELECKTRIKI</span>
-                  </Link>
+                  </a>
                   <button
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="p-2 rounded-full hover:bg-gray-800"
@@ -779,42 +779,42 @@ const Header = () => {
                 {/* Навигация */}
                 <div className="mt-4">
                   <div className="flex flex-col space-y-1">
-                    <Link 
+                    <a 
                       href="/products"
                       className="flex items-center justify-between py-3 px-2 text-lg font-medium text-white hover:bg-gray-800 rounded-lg"
                     >
                       <span>Каталог</span>
-                    </Link>
-                    <Link 
+                    </a>
+                    <a 
                       href="/about"
                       className="flex items-center justify-between py-3 px-2 text-lg font-medium text-white hover:bg-gray-800 rounded-lg"
                     >
                       <span>О нас</span>
-                    </Link>
-                    <Link 
+                    </a>
+                    <a 
                       href="/brands"
                       className="flex items-center justify-between py-3 px-2 text-lg font-medium text-white hover:bg-gray-800 rounded-lg"
                     >
                       <span>Бренды</span>
-                    </Link>
-                    <Link 
+                    </a>
+                    <a 
                       href="/documentation"
                       className="flex items-center justify-between py-3 px-2 text-lg font-medium text-white hover:bg-gray-800 rounded-lg"
                     >
                       <span>Документация</span>
-                    </Link>
+                    </a>
                   </div>
                 </div>
 
                 {/* Контактная информация */}
                 <div className="mt-8 border-t border-gray-700 pt-6">
                   <div className="flex flex-col space-y-4">
-                    <Link href="tel:88005509084" className="flex items-center text-white">                   
+                    <a href="tel:88005509084" className="flex items-center text-white">                   
                       8-800-550-90-84
-                    </Link>
-                    <Link href="mailto:info@donel.su" className="flex items-center text-white">
+                    </a>
+                    <a href="mailto:info@donel.su" className="flex items-center text-white">
                       MORELECKTRIKI@gmail.com
-                    </Link>
+                    </a>
                   </div>
                 </div>
               </div>
