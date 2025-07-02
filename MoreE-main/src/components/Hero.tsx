@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -19,8 +19,7 @@ interface SideBannerSlide {
 // --- КОНЕЦ ДАННЫХ ДЛЯ СЛАЙДЕРОВ ---
 
 export default function Banner() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [isVideoReady, setIsVideoReady] = useState(false);
+  const [hasVideoPlayed, setHasVideoPlayed] = useState(false);
 
   // Данные для баннера
   const bannerData = {
@@ -30,43 +29,10 @@ export default function Banner() {
     videoUrl: '/images/dzx1j_8hlzu.mp4'
   };
 
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    const playVideo = async () => {
-      try {
-        console.log('Попытка воспроизведения видео...');
-        await video.play();
-        console.log('Видео начало воспроизводиться');
-      } catch (error) {
-        console.error('Ошибка воспроизведения:', error);
-      }
-    };
-
-    const handleCanPlay = () => {
-      console.log('Видео готово к воспроизведению');
-      setIsVideoReady(true);
-      playVideo();
-    };
-
-    const handleTimeUpdate = () => {
-      if (video.currentTime >= 0.04) {
-        console.log('Достигнуто время 0.04, останавливаем видео');
-        video.pause();
-        video.currentTime = 0.04;
-      }
-    };
-
-    video.addEventListener('canplay', handleCanPlay);
-    video.addEventListener('timeupdate', handleTimeUpdate);
-    video.load(); // Принудительно перезагружаем видео
-
-    return () => {
-      video.removeEventListener('canplay', handleCanPlay);
-      video.removeEventListener('timeupdate', handleTimeUpdate);
-    };
-  }, []);
+  // Обработчик окончания видео
+  const handleVideoEnd = () => {
+    setHasVideoPlayed(true);
+  };
 
   // Популярные категории для каталога
   const popularCategories = [
@@ -84,11 +50,12 @@ export default function Banner() {
       <div className="absolute top-0 left-0 right-0 h-screen -z-10">
         <div className="absolute inset-0">
           <video
-            ref={videoRef}
+            autoPlay
             muted
             playsInline
-            preload="auto"
+            onEnded={handleVideoEnd}
             className="w-full h-full object-cover"
+            style={{ opacity: hasVideoPlayed ? 0.3 : 1 }}
           >
             <source src={bannerData.videoUrl} type="video/mp4" />
           </video>
