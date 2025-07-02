@@ -2045,18 +2045,8 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                 </div>
               </div>
 
-              {/* Reset Filters button */}
-              <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 mb-4">
-                <button
-                  className="w-full py-2 border border-gray-300 rounded-md hover:bg-gray-50 text-sm text-gray-700 transition-colors font-medium flex items-center justify-center"
-                  onClick={handleResetFilters}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                  </svg>
-                  Сбросить все фильтры
-                </button>
-              </div>
+        
+              
               
               {/* Закрыть фильтр на мобильных */}
               {isMobileFilterOpen && (
