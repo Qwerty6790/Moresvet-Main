@@ -1466,15 +1466,37 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
       <Header />
       <main className="flex-grow container mx-auto px-2 sm:px-4 lg:px-8 pt-4 sm:pt-6 pb-12 mt-20 max-w-full overflow-hidden">
         <div className="max-w-7xl p-3  mx-auto">
-          {/* Хлебные крошки - скрываем на самых маленьких экранах */}
-          <div className="hidden sm:flex items-center text-sm  text-gray-500 mb-4">
-            <Link href="/" className="hover:text-gray-900 p-3  transition-colors">Назад</Link>
-            <span className="text-gray-300">•</span>
-            <Link href="/" className="hover:text-gray-900 p-3  transition-colors">Главная</Link>
-            <span className="text-gray-300">•</span>
-            <Link href="/catalog" className="hover:text-gray-900 p-3  transition-colors">Каталог</Link>
-            <span className="text-gray-300">•</span>
-            <span className="text-gray-900 p-3  font-medium">КАТАЛОГ СВЕТА</span>
+          {/* Навигационные хлебные крошки */}
+          <div className="flex items-center text-sm text-gray-600 mb-6 bg-gray-50 p-4 rounded-lg">
+            <button
+              onClick={() => {
+                setSelectedCategory({ label: 'Все товары', searchName: 'Все товары' });
+                setCurrentPage(1);
+                router.push({
+                  pathname: router.pathname,
+                  query: { 
+                    ...router.query,
+                    category: undefined,
+                    page: 1
+                  },
+                }, undefined, { shallow: true });
+              }}
+              className="hover:text-gray-900 transition-colors flex items-center gap-1 font-medium"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              Каталог
+            </button>
+            
+            {selectedCategory && selectedCategory.label !== 'Все товары' && (
+              <>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mx-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+                <span className="text-gray-900 font-medium">{selectedCategory.label}</span>
+              </>
+            )}
           </div>
           
           {/* Заголовок с переключателем режима просмотра */}
@@ -1837,52 +1859,71 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                 </div>
               )}
 
-              {/* Отображение текущей категории и её подкатегорий */}
-              {selectedCategory && selectedCategory.label !== 'Все товары' && (
-                <div className="bg-white rounded-lg p-4 mb-4 shadow-sm border border-gray-100">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-semibold text-gray-900">{selectedCategory.label}</h3>
-                    <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-                      Текущая категория
-                    </span>
-                  </div>
-                  
-                  {/* Подкатегории, если есть */}
-                  {(() => {
-                    // Находим родительскую категорию для получения подкатегорий
-                    const parentCategory = productCategories.find(cat => 
-                      cat.label === selectedCategory.label || 
-                      cat.searchName === selectedCategory.searchName ||
-                      (cat.subcategories && cat.subcategories.some(sub => 
-                        sub.label === selectedCategory.label || 
-                        sub.searchName === selectedCategory.searchName
-                      ))
+              {/* Навигация по категориям */}
+              <div className="bg-white rounded-lg p-4 mb-4 shadow-sm border border-gray-100">
+                <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                  </svg>
+                  Категории
+                </h3>
+                
+                <div className="space-y-1">
+                  {productCategories.map((category, categoryIndex) => {
+                    const isMainCategorySelected = selectedCategory?.label === category.label || selectedCategory?.searchName === category.searchName;
+                    const hasSelectedSubcategory = category.subcategories && category.subcategories.some(sub =>
+                      selectedCategory?.label === sub.label || selectedCategory?.searchName === sub.searchName
                     );
+                    const showSubcategories = isMainCategorySelected || hasSelectedSubcategory || (!selectedCategory || selectedCategory.label === 'Все товары');
                     
-                    if (parentCategory && parentCategory.subcategories && parentCategory.subcategories.length > 0) {
-                      return (
-                        <div className="space-y-1 mt-3 pt-3 border-t border-gray-100">
-                          <p className="text-xs text-gray-500 uppercase font-medium mb-2">Подкатегории</p>
-                          {parentCategory.subcategories.map((subcat, index) => (
-                            <div
-                              key={`subcat-${index}`}
-                              className={`px-3 py-2 rounded-md cursor-pointer transition-colors text-sm ${
-                                selectedCategory.label === subcat.label || selectedCategory.searchName === subcat.searchName
-                                  ? 'bg-blue-50 text-blue-700 font-medium'
-                                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                              }`}
-                              onClick={() => handleCategoryChange(subcat)}
-                            >
-                              {subcat.label}
-                            </div>
-                          ))}
+                    return (
+                      <div key={`cat-nav-${categoryIndex}`}>
+                        {/* Главная категория */}
+                        <div
+                          className={`px-3 py-2 rounded-md cursor-pointer transition-colors text-sm font-medium flex items-center justify-between ${
+                            isMainCategorySelected
+                              ? 'bg-blue-50 text-blue-700'
+                              : hasSelectedSubcategory
+                              ? 'bg-gray-50 text-gray-800'
+                              : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                          }`}
+                          onClick={() => handleCategoryChange(category)}
+                        >
+                          <span>{category.label}</span>
+                          {category.subcategories && category.subcategories.length > 0 && (
+                            <svg xmlns="http://www.w3.org/2000/svg" className={`h-4 w-4 transition-transform ${showSubcategories ? 'rotate-90' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                          )}
                         </div>
-                      );
-                    }
-                    return null;
-                  })()}
+                        
+                        {/* Подкатегории */}
+                        {category.subcategories && category.subcategories.length > 0 && showSubcategories && (
+                          <div className="ml-4 mt-1 space-y-1 border-l-2 border-gray-100 pl-3">
+                            {category.subcategories.map((subcat, subIndex) => {
+                              const isSubcategorySelected = selectedCategory?.label === subcat.label || selectedCategory?.searchName === subcat.searchName;
+                              
+                              return (
+                                <div
+                                  key={`subcat-nav-${subIndex}`}
+                                  className={`px-3 py-1.5 rounded-md cursor-pointer transition-colors text-sm ${
+                                    isSubcategorySelected
+                                      ? 'bg-blue-50 text-blue-700 font-medium border-l-2 border-blue-400 -ml-3 pl-3'
+                                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                                  }`}
+                                  onClick={() => handleCategoryChange(subcat)}
+                                >
+                                  {subcat.label}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
-              )}
+              </div>
 
               {/* Панель бренда (если выбран конкретный бренд) */}
               {isClient && <BrandPanel />}
@@ -1890,17 +1931,18 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
               {/* Блок брендов - показываем всегда в аккордеоне */}
               <BrandsAccordion />
 
-              {/* Кнопка фильтров */}
+              {/* Дополнительные фильтры */}
               <div className="bg-white rounded-md p-4 shadow-sm mb-4 border border-gray-200">
                 <div className="flex items-center mb-3">
-                 
-                  <span className="font-medium text-sm uppercase">Категории</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                  </svg>
+                  <span className="font-medium text-sm uppercase">Дополнительные фильтры</span>
                 </div>
-                <div className="space-y-0.5 max-h-[400px] overflow-y-auto pr-1">
-                  {/* Опции фильтра "Показывать только" */}
-                  <div className="py-2">
+                <div className="space-y-3">
+                  <div>
                     <div className="text-xs uppercase text-gray-500 font-medium mb-2">Показывать только</div>
-                    <div className="flex flex-col gap-2 ml-1">
+                    <div className="flex flex-col gap-2">
                       <label className="flex items-center gap-2 cursor-pointer">
                         <input type="checkbox" className="form-checkbox h-4 w-4 text-black rounded-sm border-gray-300" />
                         <span className="text-sm text-gray-700">В наличии</span>
@@ -1908,6 +1950,10 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                       <label className="flex items-center gap-2 cursor-pointer">
                         <input type="checkbox" className="form-checkbox h-4 w-4 text-black rounded-sm border-gray-300" />
                         <span className="text-sm text-gray-700">Популярные</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" className="form-checkbox h-4 w-4 text-black rounded-sm border-gray-300" />
+                        <span className="text-sm text-gray-700">Скидка</span>
                       </label>
                     </div>
                   </div>
