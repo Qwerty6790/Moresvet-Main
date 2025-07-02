@@ -71,7 +71,6 @@ export function middleware(request: NextRequest) {
     // Добавляем preload для критичных ресурсов
     const preloadLinks = [
       '</favicon.ico>; rel=preload; as=image',
-      '</images/MoreSvet.png>; rel=preload; as=image',
     ].join(', ');
     
     response.headers.set('Link', preloadLinks);
