@@ -137,7 +137,7 @@ export default function Banner() {
                     key={category.id}
                     className="transform transition-transform duration-200 hover:scale-105"
                   >
-                    <Link href={category.link} className="group block text-center h-full">
+                    <a href={category.link} className="group block text-center h-full">
                       <div className="relative rounded-md overflow-hidden h-[200px]">
                         <img 
                           src={category.image} 
@@ -147,7 +147,7 @@ export default function Banner() {
                         <div className="absolute right-0 w-1/2 h-full bg-gradient-to-t  transition-all duration-300"></div>
                       </div>
                       <p className="font-bold text-black mt-3 group-hover:text-yellow-300 transition-colors duration-200">{category.title}</p>
-                    </Link>
+                    </a>
                   </div>
                 ))}
               </div>

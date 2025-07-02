@@ -647,9 +647,9 @@ const Header = () => {
               <div className="px-6">
                 <div className="flex items-center justify-between h-16">
                   {/* Логотип */}
-                  <Link href="/" className="flex-shrink-0 text-white  text-2xl font-bold flex items-center">
+                  <a href="/" className="flex-shrink-0 text-white  text-2xl font-bold flex items-center">
                   MORELECKTRIKI
-                  </Link>
+                  </a>
 
                   {/* Основное меню - десктоп */}
                   <nav className="hidden lg:flex items-center space-x-8 mx-4">
@@ -659,7 +659,7 @@ const Header = () => {
                       onMouseEnter={handleCatalogMouseEnter}
                       onMouseLeave={handleCatalogMouseLeave}
                     >
-                   <Link
+                   <a
   ref={catalogLinkRef}
   href="/products"
   className={`text-white text-base font-medium flex items-center px-4 py-2 rounded-lg transition-all duration-300 ease-in-out ${
@@ -669,7 +669,7 @@ const Header = () => {
   }`}
 >
   Каталог
-</Link>
+</a>
 
                     </div>
 
@@ -679,7 +679,7 @@ const Header = () => {
                       onMouseEnter={handleAboutMouseEnter}
                       onMouseLeave={handleAboutMouseLeave}
                     >
-                      <Link
+                      <a
                         ref={aboutLinkRef}
                         href="/about"
                         className={`text-white text-base font-medium flex items-center px-4 py-2 rounded-lg transition-all duration-300 ease-in-out ${
@@ -689,7 +689,7 @@ const Header = () => {
                         }`}
                       >
                         О нас
-                      </Link>
+                      </a>
                     </div>
 
                     {/* Бренды с выпадающим меню */}
@@ -698,7 +698,7 @@ const Header = () => {
                       onMouseEnter={handleBrandsMouseEnter}
                       onMouseLeave={handleBrandsMouseLeave}
                     >
-                      <Link
+                      <a
                         ref={brandsLinkRef}
                         href="/brands"
                         className={`text-white text-base font-medium flex items-center px-4 py-2 rounded-lg transition-all duration-300 ease-in-out ${
@@ -708,16 +708,16 @@ const Header = () => {
                         }`}
                       >
                         Бренды
-                      </Link>
+                      </a>
                     </div>
 
                     {/* Документация */}
-                    <Link
+                    <a
                       href="/documentation"
                       className="text-white hover:text-gray-300 text-base font-medium transition-colors"
                     >
                       Документация
-                    </Link>
+                    </a>
                   </nav>
 
                   {/* Правая часть - поиск, сравнение, избранное, корзина */}
