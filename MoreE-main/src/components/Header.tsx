@@ -735,14 +735,14 @@ const Header = () => {
                     
                     
                     {/* Избранное */}
-                    <Link href="/favorites" className="text-white hover:text-gray-300">
+                    <a href="/favorites" className="text-white hover:text-gray-300">
                       <Heart className="w-5 h-5" />
-                    </Link>
+                    </a>
                     
                     {/* Корзина */}
-                    <Link href="/cart" className="text-white hover:text-gray-300">
+                    <a href="/cart" className="text-white hover:text-gray-300">
                       <ShoppingCart className="w-5 h-5" />
-                    </Link>
+                    </a>
 
                     {/* Мобильное меню */}
                     <button
