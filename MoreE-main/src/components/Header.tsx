@@ -16,7 +16,7 @@ import {
   UserRound
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+
 import axios from 'axios';
 import Image from 'next/image';
 import { FaHeart, FaShoppingBag, FaShoppingBasket, FaShoppingCart, FaUser } from 'react-icons/fa';
@@ -928,13 +928,13 @@ const Header = () => {
                         ? catalogData.lighting[activeSubcategories].subcategories
                         : catalogData.electrical[activeSubcategories - catalogData.lighting.length].subcategories
                       )?.map((sub, subIndex) => (
-                        <Link
+                        <a
                           key={subIndex}
                           href={sub.link}
                           className="block p-3 text-sm text-white hover:bg-white/10 rounded-lg transition-all duration-300 ease-in-out hover:translate-x-1"
                         >
                           {sub.title}
-                        </Link>
+                        </a>
                       ))}
                     </div>
                   </div>
@@ -955,12 +955,12 @@ const Header = () => {
                       onMouseEnter={() => handleCategoryHover(index)}
                     >
                       <div className="flex">
-                        <Link
+                        <a
                           href={item.link}
                           className="flex-1 flex items-center p-2 hover:bg-black/60 rounded-lg transition-all duration-300 ease-in-out text-white hover:backdrop-blur-2xl group border-l-2 border-transparent"
                         >
                           <span className="text-sm transition-all duration-300 ease-in-out font-medium">{item.title}</span>
-                        </Link>
+                        </a>
                         {/* Широкая область для навигации */}
                         <div 
                           className="w-24 h-full"
@@ -991,12 +991,12 @@ const Header = () => {
                       onMouseEnter={() => handleCategoryHover(index + catalogData.lighting.length)}
                     >
                       <div className="flex">
-                        <Link
+                        <a
                           href={item.link}
                           className="flex-1 flex items-center p-2 hover:bg-black/60 rounded-lg transition-all duration-300 ease-in-out text-white hover:backdrop-blur-2xl group border-l-2 border-transparent"
                         >
                           <span className="text-sm transition-all duration-300 ease-in-out font-medium">{item.title}</span>
-                        </Link>
+                        </a>
                         {/* Широкая область для навигации */}
                         <div 
                           className="w-24 h-full"
@@ -1092,7 +1092,7 @@ const Header = () => {
             <h4 className="text-base font-bold mb-4 text-white tracking-wide text-center">НАШИ БРЕНДЫ</h4>
             <div className="grid grid-cols-3 gap-2">
               {brandsData.map((brand, index) => (
-                <Link
+                <a
                   key={index}
                   href={brand.link}
                   className="flex flex-col items-center p-2 hover:backdrop-blur-2xl rounded-lg transition-all duration-200 group border border-transparent hover:border-white/20"
@@ -1121,7 +1121,7 @@ const Header = () => {
                   <span className="text-[10px] text-white text-center font-medium group-hover:text-blue-300 transition-colors">
                     {brand.title}
                   </span>
-                </Link>
+                </a>
               ))}
             </div>
           </div>
