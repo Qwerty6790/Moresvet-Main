@@ -131,80 +131,80 @@ const Header = () => {
     lighting: [
       { 
         title: 'Люстры', 
-        link: '/catalog/Люстры',
+        link: '/osveheny?category=Люстра',
         subcategories: [
-          { title: 'Подвесные люстры', link: '/catalog/Люстры/Подвесные' },
-          { title: 'Потолочные люстры', link: '/catalog/Люстры/Потолочные' },
-          { title: 'Каскадные люстры', link: '/catalog/Люстры/Каскадные' },
-          { title: 'Хрустальные люстры', link: '/catalog/Люстры/Хрустальные' },
-          { title: 'Современные люстры', link: '/catalog/Люстры/Современные' }
+          { title: 'Подвесные люстры', link: '/osveheny?category=Люстра&page=1' },
+          { title: 'Потолочные люстры', link: '/osveheny?category=Люстра&page=1' },
+          { title: 'Каскадные люстры', link: '/osveheny?category=Люстра&page=1' },
+          { title: 'Хрустальные люстры', link: '/osveheny?category=Люстра&page=1' },
+          { title: 'Современные люстры', link: '/osveheny?category=Люстра&page=1' }
         ]
       },
       { 
         title: 'Светильники', 
-        link: '/catalog/Светильники',
+        link: '/osveheny?category=Светильник',
         subcategories: [
-          { title: 'Встраиваемые светильники', link: '/catalog/Светильники/Встраиваемые' },
-          { title: 'Накладные светильники', link: '/catalog/Светильники/Накладные' },
-          { title: 'Трековые светильники', link: '/catalog/Светильники/Трековые' },
-          { title: 'Точечные светильники', link: '/catalog/Светильники/Точечные' }
+          { title: 'Встраиваемые светильники', link: '/osveheny?category=Светильник&page=1' },
+          { title: 'Накладные светильники', link: '/osveheny?category=Светильник&page=1' },
+          { title: 'Трековые светильники', link: '/osveheny?category=Светильник&page=1' },
+          { title: 'Точечные светильники', link: '/osveheny?category=Светильник&page=1' }
         ]
       },
       { 
         title: 'Торшеры', 
-        link: '/catalog/Торшеры',
+        link: '/osveheny?category=Торшер',
         subcategories: [
-          { title: 'Классические торшеры', link: '/catalog/Торшеры/Классические' },
-          { title: 'Современные торшеры', link: '/catalog/Торшеры/Современные' },
-          { title: 'Торшеры с регулировкой', link: '/catalog/Торшеры/С-регулировкой' }
+          { title: 'Классические торшеры', link: '/osveheny?category=Торшер&page=1' },
+          { title: 'Современные торшеры', link: '/osveheny?category=Торшер&page=1' },
+          { title: 'Торшеры с регулировкой', link: '/osveheny?category=Торшер&page=1' }
         ]
       },
       { 
         title: 'Бра', 
-        link: '/catalog/Бра',
+        link: '/osveheny?category=Бра',
         subcategories: [
-          { title: 'Настенные бра', link: '/catalog/Бра/Настенные' },
-          { title: 'Светодиодные бра', link: '/catalog/Бра/Светодиодные' },
-          { title: 'Классические бра', link: '/catalog/Бра/Классические' },
-          { title: 'Современные бра', link: '/catalog/Бра/Современные' }
+          { title: 'Настенные бра', link: '/osveheny?category=Бра&page=1' },
+          { title: 'Светодиодные бра', link: '/osveheny?category=Бра&page=1' },
+          { title: 'Классические бра', link: '/osveheny?category=Бра&page=1' },
+          { title: 'Современные бра', link: '/osveheny?category=Бра&page=1' }
         ]
       },
       { 
         title: 'Уличные светильники', 
-        link: '/catalog/Уличные-светильники',
+        link: '/osveheny?category=Уличный светильник',
         subcategories: [
-          { title: 'Настенные уличные светильники', link: '/catalog/Уличные-светильники/Настенные' },
-          { title: 'Столбы освещения', link: '/catalog/Уличные-светильники/Столбы' },
-          { title: 'Грунтовые светильники', link: '/catalog/Уличные-светильники/Грунтовые' },
-          { title: 'Прожекторы', link: '/catalog/Уличные-светильники/Прожекторы' }
+          { title: 'Настенные уличные светильники', link: '/osveheny?category=Уличный светильник&page=1' },
+          { title: 'Столбы освещения', link: '/osveheny?category=Уличный светильник&page=1' },
+          { title: 'Грунтовые светильники', link: '/osveheny?category=Уличный светильник&page=1' },
+          { title: 'Прожекторы', link: '/osveheny?category=Уличный светильник&page=1' }
         ]
       },
       { 
         title: 'Комплектующие', 
-        link: '/catalog/Комплектующие',
+        link: '/osveheny?category=Комплектующие',
         subcategories: [
-          { title: 'Трансформаторы', link: '/catalog/Комплектующие/Трансформаторы' },
-          { title: 'Драйверы', link: '/catalog/Комплектующие/Драйверы' },
-          { title: 'Блоки питания', link: '/catalog/Комплектующие/Блоки-питания' }
+          { title: 'Трансформаторы', link: '/osveheny?category=Комплектующие&page=1' },
+          { title: 'Драйверы', link: '/osveheny?category=Комплектующие&page=1' },
+          { title: 'Блоки питания', link: '/osveheny?category=Комплектующие&page=1' }
         ]
       },
       { 
         title: 'Светодиодные ленты', 
-        link: '/catalog/Светодиодные-ленты',
+        link: '/osveheny?category=Светодиодная лента',
         subcategories: [
-          { title: 'Одноцветные ленты', link: '/catalog/Светодиодные-ленты/Одноцветные' },
-          { title: 'RGB ленты', link: '/catalog/Светодиодные-ленты/RGB' },
-          { title: 'Профили для лент', link: '/catalog/Светодиодные-ленты/Профили' }
+          { title: 'Одноцветные ленты', link: '/osveheny?category=Светодиодная лента&page=1' },
+          { title: 'RGB ленты', link: '/osveheny?category=Светодиодная лента&page=1' },
+          { title: 'Профили для лент', link: '/osveheny?category=Светодиодная лента&page=1' }
         ]
       },
       { 
         title: 'Светодиодные лампы', 
-        link: '/catalog/Светодиодные-лампы',
+        link: '/osveheny?category=Светодиодная лампа',
         subcategories: [
-          { title: 'Лампы E27', link: '/catalog/Светодиодные-лампы/E27' },
-          { title: 'Лампы E14', link: '/catalog/Светодиодные-лампы/E14' },
-          { title: 'Лампы GU10', link: '/catalog/Светодиодные-лампы/GU10' },
-          { title: 'Трубчатые лампы', link: '/catalog/Светодиодные-лампы/Трубчатые' }
+          { title: 'Лампы E27', link: '/osveheny?category=Светодиодная лампа&page=1' },
+          { title: 'Лампы E14', link: '/osveheny?category=Светодиодная лампа&page=1' },
+          { title: 'Лампы GU10', link: '/osveheny?category=Светодиодная лампа&page=1' },
+          { title: 'Трубчатые лампы', link: '/osveheny?category=Светодиодная лампа&page=1' }
         ]
       }
     ],

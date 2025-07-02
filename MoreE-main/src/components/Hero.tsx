@@ -6,18 +6,6 @@ import Image from 'next/image';
 
 import Maytoni from '@/app/cardproducts/page';
 
-// --- ТИПЫ ДАННЫХ ---
-interface MainBannerSlide {
-  id: number;
-  bgImage: string;
-  alt: string;
-  title1: string;
-  title2: string;
-  buttonText: string;
-  subText: string;
-  isVideo: boolean;
-  videoUrl: string;
-}
 
 interface SideBannerSlide {
    id: number;
@@ -39,7 +27,7 @@ export default function Banner() {
     {
       image: '/images/1-3-scaled111.webp',
       title: 'Выбирай свой свет',
-      subtitle: 'Делай дизайн своим выбором',
+      subtitle: 'Сделай дизайн своим выбором',
       textColor: 'white',
       isVideo: true,
       videoUrl: '/images/dzx1j_8hlzu.mp4'
@@ -62,12 +50,12 @@ export default function Banner() {
 
   // Популярные категории для каталога
   const popularCategories = [
-    { id: 1, title: 'ЛЮСТРЫ', image: '/images/Lustracategpory.png', link: '/osveheny?category=Люстра&page=1' },
-    { id: 2, title: 'СВЕТИЛЬНИКИ', image: '/images/svetilnikicategory.png', link: '/osveheny/Светильник' },
-    { id: 3, title: 'БРА И ПОДСВЕТКИ', image: '/images/bracategory.png', link: '/osveheny/Бра' },
-    { id: 4, title: 'НАСТОЛЬНЫЕ ЛАМПЫ', image: '/images/nastolnycategory.png', link: '/osveheny/Настольная лампа' },
-    { id: 5, title: 'ТОРШЕРЫ', image: '/images/torhernaplonacategory.png', link: '/osveheny/Торшер' },
-    { id: 6, title: 'УЛИЧНОЕ ОСВЕЩЕНИЕ', image: '/images/ylihnoecategory.png', link: '/osveheny/Уличный светильник' },
+    { id: 1, title: 'ЛЮСТРЫ', image: '/images/Lustracategpory.png', link: '/osveheny?category=Люстра' },
+    { id: 2, title: 'СВЕТИЛЬНИКИ', image: '/images/svetilnikicategory.png', link: '/osveheny?category=Светильник' },
+    { id: 3, title: 'БРА И ПОДСВЕТКИ', image: '/images/bracategory.png', link: '/osveheny?category/Бра' },
+    { id: 4, title: 'НАСТОЛЬНЫЕ ЛАМПЫ', image: '/images/nastolnycategory.png', link: '/osveheny?category/Настольная лампа' },
+    { id: 5, title: 'ТОРШЕРЫ', image: '/images/torhernaplonacategory.png', link: '/osveheny?category/Торшер' },
+    { id: 6, title: 'УЛИЧНОЕ ОСВЕЩЕНИЕ', image: '/images/ylihnoecategory.png', link: '/osveheny?category/Уличный светильник' },
   ];
 
   return (
@@ -175,11 +163,11 @@ export default function Banner() {
                   Твой свет для комфорта:<br/>
                   новинки от производителей
                 </h2>
-                <p className="text-lg text-gray-600 mb-8">
+                <p className="text-lg text-black mb-8">
                   Новые функциональные светильники от производителей, которые придадут вашему интерьеру элегантность.
                 </p>
                 <div className="relative h-[300px] mt-8 group">
-                  <div className="absolute inset-0 bg-[url('/images/photo.png.webp')] bg-cover bg-center rounded-2xl overflow-hidden transition-opacity duration-500 ease-in-out ">
+                  <div className="absolute inset-0 bg-[url('/images/photo.webp')] bg-cover bg-center rounded-2xl overflow-hidden transition-opacity duration-500 ease-in-out ">
                     <div className="absolute inset-0 bg-gradient-to-br from-transparent "></div>
                   </div>
           
@@ -191,7 +179,7 @@ export default function Banner() {
                 <h2 className='text-4xl py-8 font-bold text-gray-900'>
                   Открывай для себя новые возможности каждый день
                 </h2>
-                <span className='text-2xl text-gray-600'>
+                <span className='text-2xl text-black'>
                   Мы предлагаем широкий ассортимент светильников, люстр и электротехнических товаров от лучших мировых производителей.
                   У нас вы можете найти все, что вам нужно для освещения вашего дома или офиса. Так же предлагаем не только продажу, но и полный комплекс услуг по проектированию и монтажу.Плюсом является то, что мы работаем с любыми покупателями, как физическими, так и юридическими лицами.
                 </span>
@@ -203,13 +191,13 @@ export default function Banner() {
               {/* Левая часть - текст о компании */}
               <div className="space-y-6">
                 <div className="space-y-4">
-                  <h3 className="text-2xl font-bold text-black">Освещаем вашу жизнь</h3>
-                  <p className="text-black leading-relaxed">
+                  <h3 className="text-4xl font-bold text-black">Освещаем вашу жизнь</h3>
+                  <p className="text-black text-2xl leading-relaxed">
                     MoreElecktriki — ведущий поставщик качественного освещения в России. 
                     Мы специализируемся на продаже премиальных светильников, люстр и 
                     электротехнических товаров от лучших мировых производителей.
                   </p>
-                  <p className="text-black leading-relaxed">
+                  <p className="text-black text-2xl leading-relaxed">
                     Наша команда профессионалов поможет вам создать идеальное освещение 
                     для дома, офиса или коммерческого объекта. Мы предлагаем не только 
                     продажу, но и полный комплекс услуг по проектированию и монтажу.
