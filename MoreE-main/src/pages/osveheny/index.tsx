@@ -226,7 +226,7 @@ const productCategories = [
     id: 'bra', 
     label: 'Бра', 
     searchName: 'Бра',
-    aliases: ['Бра', 'Настенный светильник', 'Настенные светильники'],
+    aliases: ['Бра настенный', 'Светильник настенный бра', 'Настенный светильник бра'],
     isOpen: false
   },
   { 
@@ -645,8 +645,14 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
       
       // Добавляем категорию, используя параметр name для API
       if (selectedCategory && selectedCategory.label !== 'Все товары') {
+        // Для категории "Бра" используем более строгий поиск
+        if (selectedCategory.label === 'Бра' || selectedCategory.searchName === 'Бра') {
+          // Используем точное соответствие для "Бра"
+          params.name = 'Бра';
+          params.exactMatch = true; // Добавляем флаг для точного поиска
+        }
         // Проверяем наличие aliases и используем их для формирования более полного поискового запроса
-        if (selectedCategory.aliases && selectedCategory.aliases.length > 0) {
+        else if (selectedCategory.aliases && selectedCategory.aliases.length > 0) {
           // Используем первый элемент из aliases как основной запрос
           params.name = selectedCategory.searchName || selectedCategory.label;
           
@@ -666,13 +672,19 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
         // Приоритет у параметра из URL
         const decodedCategory = decodeURIComponent(categoryFromURL);
         
-        // Ищем категорию по URL-параметру для получения aliases
-        const categoryFromDB = findCategoryByName(decodedCategory);
-        if (categoryFromDB && categoryFromDB.aliases && categoryFromDB.aliases.length > 0) {
-          params.name = categoryFromDB.searchName || categoryFromDB.label;
-          params.aliases = categoryFromDB.aliases;
+        // Для категории "Бра" используем строгий поиск
+        if (decodedCategory === 'Бра' || decodedCategory.toLowerCase() === 'бра') {
+          params.name = 'Бра';
+          params.exactMatch = true;
         } else {
-          params.name = decodedCategory;
+          // Ищем категорию по URL-параметру для получения aliases
+          const categoryFromDB = findCategoryByName(decodedCategory);
+          if (categoryFromDB && categoryFromDB.aliases && categoryFromDB.aliases.length > 0) {
+            params.name = categoryFromDB.searchName || categoryFromDB.label;
+            params.aliases = categoryFromDB.aliases;
+          } else {
+            params.name = decodedCategory;
+          }
         }
       }
       
@@ -1745,16 +1757,16 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                   <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 min-w-48">
                     <div className="p-2">
                       <button 
-                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Настенный светильник', searchName: 'Настенный светильник' })}
-                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
-                      >
-                        Настенный светильник
-                      </button>
-                      <button 
                         onClick={() => handleCategoryClickWithBrandContext({ label: 'Бра', searchName: 'Бра' })}
                         className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
                       >
                         Бра
+                      </button>
+                      <button 
+                        onClick={() => handleCategoryClickWithBrandContext({ label: 'Настенный светильник', searchName: 'Настенный светильник' })}
+                        className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md"
+                      >
+                        Настенный светильник
                       </button>
                       <button 
                         onClick={() => handleCategoryClickWithBrandContext({ label: 'Настенный уличный светильник', searchName: 'Настенный уличный светильник' })}
