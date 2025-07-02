@@ -911,19 +911,8 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
     }
     
     return (
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">Похожие категории</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-          {relatedCategories.map((category, index) => (
-            <div 
-              key={`related-${index}`}
-              onClick={() => handleCategoryClickWithBrandContext(category)}
-              className="bg-white border border-gray-100 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer text-center"
-            >
-              <div className="text-sm font-medium">{category.label}</div>
-            </div>
-          ))}
-        </div>
+      <div>
+    
       </div>
     );
   };
