@@ -1981,7 +1981,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                         <div
                           className={`px-3 py-2 rounded-md cursor-pointer transition-colors text-sm font-medium flex items-center justify-between ${
                             isMainCategorySelected
-                              ? 'bg-blue-50 text-blue-700'
+                              ? 'bg-black/50 text-black/50'
                               : hasSelectedSubcategory
                               ? 'bg-gray-50 text-gray-800'
                               : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
@@ -2007,7 +2007,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                                   key={`subcat-nav-${subIndex}`}
                                   className={`px-3 py-1.5 rounded-md cursor-pointer transition-colors text-sm ${
                                     isSubcategorySelected
-                                      ? 'bg-blue-50 text-blue-700 font-medium border-l-2 border-blue-400 -ml-3 pl-3'
+                                      ? 'bg-black/50 text-black/50 font-medium border-l-2 border-black/40 -ml-3 pl-3'
                                       : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                                   }`}
                                   onClick={() => handleCategoryChange(subcat)}
