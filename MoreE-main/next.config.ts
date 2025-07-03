@@ -4,10 +4,6 @@ const nextConfig: NextConfig = {
   /* config options here */
   reactStrictMode: true,
   serverExternalPackages: [],
-  // Отключаем Edge Runtime проблемы
-  experimental: {
-    serverComponentsExternalPackages: [],
-  },
   // Настройки для совместимости с хостингом
   output: 'standalone',
   // Добавляем заголовки безопасности через конфиг
@@ -47,8 +43,6 @@ const nextConfig: NextConfig = {
     }
     return config;
   },
-  // Отключаем SWC minifier который может вызывать проблемы
-  swcMinify: false,
 };
 
 export default nextConfig;
