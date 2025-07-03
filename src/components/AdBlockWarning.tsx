@@ -13,9 +13,9 @@ const AdBlockWarning: React.FC = () => {
           mode: 'no-cors'
         });
         setIsBlocked(false);
-      } catch (error) {
-        if (error.message?.includes('ERR_BLOCKED_BY_CLIENT') || 
-            error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+      } catch (error: unknown) {
+        if (error instanceof Error && (error.message?.includes('ERR_BLOCKED_BY_CLIENT') || 
+            error.name === 'TypeError' && error.message.includes('Failed to fetch'))) {
           setIsBlocked(true);
           setShowWarning(true);
         }
