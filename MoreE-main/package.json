@@ -28,6 +28,7 @@
     "three": "^0.172.0"
   },
   "devDependencies": {
+    "@netlify/plugin-nextjs": "^5.11.4",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
     "@types/react": "^18",
