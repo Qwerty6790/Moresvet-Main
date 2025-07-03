@@ -133,7 +133,7 @@ const Liked: React.FC = () => {
               </div>
               <p className="text-2xl font-medium text-black mb-6">{error}</p>
               <Link
-                href="/products"
+                href="/osveheny"
                 className="inline-flex items-center px-6 py-3 border-2 border-black text-black rounded-xl hover:bg-black hover:text-white transition-colors text-lg font-medium"
               >
                 Перейти в каталог

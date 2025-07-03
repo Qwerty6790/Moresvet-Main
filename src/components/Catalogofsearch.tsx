@@ -74,7 +74,6 @@ const SafeOptimizedImage: React.FC<{
       onError={handleError}
       decoding="async"
       loading={isLCP || priority ? "eager" : "lazy"}
-      fetchPriority={isLCP ? "high" : "auto"}
       width={width}
       height={height}
       style={aspectRatioStyle}
@@ -275,7 +274,6 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({
                   alt={product.name || 'Товар'}
                   className="w-full h-full object-contain"
                   loading="eager"
-                  fetchPriority="high"
                   decoding={isFirstProduct ? "sync" : "async"}
                   style={{ display: 'block' }}
                 />

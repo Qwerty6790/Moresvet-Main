@@ -322,7 +322,7 @@ const Header = () => {
             return (
               <div 
                 key={product._id} 
-                className={`flex items-center p-3 cursor-pointer hover:bg-gray-50 ${index !== products.length - 1 ? 'border-b border-gray-200' : ''}`}
+                className={`flex items-center p-3 cursor-pointer hover:backdrop-blur-sm ${index !== products.length - 1 ? 'border-b border-gray-200' : ''}`}
                 onClick={() => handleProductClick(product.name)}
               >
                 <img 
@@ -331,18 +331,12 @@ const Header = () => {
                   className="w-12 h-12 object-cover mr-4"
                 />
                 <div>
-                  <p className="text-sm font-medium text-gray-800">{product.name}</p>
-                  <p className="text-xs text-gray-500">{product.price} ₽</p>
+                  <p className="text-sm font-medium text-white">{product.name}</p>
+                  <p className="text-xs text-white">{product.price} ₽</p>
                 </div>
               </div>
             );
           })}
-          <div 
-            className="p-3 text-center font-medium text-blue-600 hover:bg-gray-50 cursor-pointer"
-            onClick={() => handleProductClick(searchQuery)}
-          >
-            Показать все товары
-          </div>
         </>
       );
     }
@@ -643,7 +637,7 @@ const Header = () => {
         <header className="fixed top-2 md:top-4 left-0 right-0 z-[9998] w-full pointer-events-auto">
           <div className="max-w-7xl mx-auto px-2 md:px-4">
             {/* Основной хедер с прозрачным фоном и закругленными краями */}
-            <div className="backdrop-blur-lg bg-black/50 text-black rounded-xl overflow-hidden shadow-xl">
+            <div className="backdrop-blur-lg bg-black/50  text-black rounded-xl overflow-hidden shadow-xl">
               <div className="px-3 md:px-6">
                 <div className="flex items-center justify-between h-14 md:h-16">
                   {/* Логотип */}
@@ -662,9 +656,9 @@ const Header = () => {
                    <a
   ref={catalogLinkRef}
   href="/products"
-  className={`text-white text-base font-medium flex items-center px-4 py-2 rounded-lg transition-all duration-300 ease-in-out ${
+  className={`text-white text-base  font-medium flex items-center px-4 py-2 rounded-lg  ease-in-out ${
     isCatalogMenuOpen
-      ? 'bg-transparent backdrop-blur-xl translate-y-1'
+      ? 'bg-transparent backdrop-blur-xl transition duration-500 '
       : 'hover:text-gray-300 hover:backdrop-blur-md'
   }`}
 >
@@ -684,7 +678,7 @@ const Header = () => {
                         href="/about"
                         className={`text-white text-base font-medium flex items-center px-4 py-2 rounded-lg transition-all duration-300 ease-in-out ${
                           isAboutMenuOpen
-                            ? 'bg-transparent backdrop-blur-xl translate-y-1'
+                            ? 'bg-transparent backdrop-blur-xl transition duration-500'
                             : 'hover:text-gray-300 hover:backdrop-blur-md'
                         }`}
                       >
@@ -703,7 +697,7 @@ const Header = () => {
                         href="/brands"
                         className={`text-white text-base font-medium flex items-center px-4 py-2 rounded-lg transition-all duration-300 ease-in-out ${
                           isBrandsMenuOpen
-                            ? 'bg-transparent backdrop-blur-xl translate-y-1'
+                            ? 'bg-transparent backdrop-blur-xl transition duration-500'
                             : 'hover:text-gray-300 hover:backdrop-blur-md'
                         }`}
                       >
@@ -734,7 +728,7 @@ const Header = () => {
                     <span className="hidden md:block h-6 w-px bg-white/50"></span>
                     
                     {/* Избранное */}
-                    <a href="/favorites" className="text-white hover:text-gray-300">
+                    <a href="/liked" className="text-white hover:text-gray-300">
                       <Heart className="w-4 h-4 md:w-5 md:h-5" />
                     </a>
                     
@@ -833,7 +827,7 @@ const Header = () => {
           <div className="relative backdrop-blur-2xl bg-black/20 rounded-2xl shadow-2xl w-full max-w-2xl mt-16 md:mt-0 search-modal-enter">
             {/* Заголовок */}
             <div className="flex items-center justify-between p-3">
-              <h3 className="text-3xl md:text-5xl font-semibold text-white">Поиск товаров</h3>
+              <h3 className="text-3xl md:text-4xl font-semibold text-white">Поиск товаров</h3>
               <button
                 onClick={() => setIsSearchOpen(false)}
                 className="p-2 rounded-full transition-colors"

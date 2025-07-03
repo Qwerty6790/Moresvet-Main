@@ -179,67 +179,18 @@ const SearchResults: React.FC = () => {
           <div className="hidden sm:flex items-center text-sm text-gray-500 mb-4">
             <Link href="/" className="hover:text-gray-900 transition-colors">Главная</Link>
             <span className="text-gray-300 mx-2">•</span>
-            <span className="text-gray-900 font-medium">Поиск: "{qwery}"</span>
+            <span className="text-gray-900 font-medium">Поиск: {qwery}</span>
           </div>
           
           {/* Заголовок */}
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-3">
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-              Результаты поиска: "{qwery}"
+              Результаты поиска: {qwery}
             </h1>
           </div>
 
           {/* Информация о количестве товаров и переключатель вида */}
-          <div className="bg-white rounded-lg p-3 sm:p-4 mb-4 sm:mb-6 shadow-sm border border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-3">
-            <div className="text-sm text-gray-700 font-medium w-full sm:w-auto text-center sm:text-left">
-              Найдено: <span className="text-black font-semibold">{totalProducts}</span> {getTotalProductsText(totalProducts)}
-            </div>
-            
-            <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-end">
-              {/* Переключатель режима отображения */}
-              <div className="flex bg-white border border-gray-200 rounded-md shadow-sm px-1 py-1">
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={`p-1.5 rounded-md transition-all ${
-                    viewMode === 'grid' 
-                      ? 'bg-gradient-to-r from-gray-800 to-gray-700 text-white shadow-sm' 
-                      : 'text-gray-600 hover:bg-gray-50'
-                  }`}
-                  title="Сетка"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                  </svg>
-                </button>
-                <button
-                  onClick={() => setViewMode('list')}
-                  className={`p-1.5 rounded-md transition-all ${
-                    viewMode === 'list' 
-                      ? 'bg-gradient-to-r from-gray-800 to-gray-700 text-white shadow-sm' 
-                      : 'text-gray-600 hover:bg-gray-50'
-                  }`}
-                  title="Список"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
-                  </svg>
-                </button>
-                <button
-                  onClick={() => setViewMode('table')}
-                  className={`p-1.5 rounded-md transition-all ${
-                    viewMode === 'table' 
-                      ? 'bg-gradient-to-r from-gray-800 to-gray-700 text-white shadow-sm' 
-                      : 'text-gray-600 hover:bg-gray-50'
-                  }`}
-                  title="Таблица"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M3 14h18M3 6h18M3 18h18" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
+          
 
           {/* Содержимое товаров */}
           <div className="bg-white rounded-lg p-4 sm:p-5 shadow-sm border border-gray-100 overflow-hidden">

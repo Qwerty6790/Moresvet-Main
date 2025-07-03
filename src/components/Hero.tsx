@@ -47,10 +47,11 @@ export default function Banner() {
   const popularCategories = [
     { id: 1, title: 'ЛЮСТРЫ', image: '/images/Lustracategpory.png', link: '/osveheny?category=Люстра' },
     { id: 2, title: 'СВЕТИЛЬНИКИ', image: '/images/svetilnikicategory.png', link: '/osveheny?category=Светильник' },
-    { id: 3, title: 'БРА И ПОДСВЕТКИ', image: '/images/bracategory.png', link: '/osveheny?category=Бра' },
+    { id: 3, title: 'БРА', image: '/images/bracategory.png', link: '/osveheny?category=Бра' },
     { id: 4, title: 'НАСТОЛЬНЫЕ ЛАМПЫ', image: '/images/nastolnycategory.png', link: '/osveheny?category=Настольная%20лампа' },
     { id: 5, title: 'ТОРШЕРЫ', image: '/images/torhernaplonacategory.png', link: '/osveheny?category=Торшер' },
     { id: 6, title: 'УЛИЧНОЕ ОСВЕЩЕНИЕ', image: '/images/ylihnoecategory.png', link: '/osveheny?category=Уличный%20светильник' },
+    { id: 7, title: 'ЭЛЕКТРОУСТАНОВОЧНОЕ ИЗДЕЛИЕ', image: '/images/image.png', link: '/osveheny?category=Уличный%20светильник' },
   ];
 
   return (
@@ -95,14 +96,14 @@ export default function Banner() {
             <div className="absolute top-0 left-0 w-1/2 h-full bg-gray-100 -z-10"></div>
             <div className="mx-auto">
               <h2 className="text-2xl md:text-3xl text-black font-bold mb-6 md:mb-8">Популярные категории</h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 relative">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-7 relative">
                 {popularCategories.map((category, index) => (
                   <div
                     key={category.id}
                     className="transform transition-transform duration-200 hover:scale-105"
                   >
                     <a href={category.link} className="group block text-center h-full">
-                      <div className="relative rounded-md overflow-hidden h-[150px] md:h-[200px]">
+                      <div className="relative rounded-md overflow-hidden h-[150px] md:h-[200px] md:w-[200px]">
                         <img 
                           src={category.image} 
                           alt={category.title} 
@@ -110,7 +111,7 @@ export default function Banner() {
                         />
                         <div className="absolute right-0 w-1/2 h-full bg-gradient-to-t transition-all duration-300"></div>
                       </div>
-                      <p className="font-bold text-sm md:text-base text-black mt-2 md:mt-3 group-hover:text-yellow-300 transition-colors duration-200">{category.title}</p>
+                      <p className="font-bold -mr-5 text-sm md:text-base text-black mt-2 md:mt-3 group-hover:text-yellow-300 transition-colors duration-200">{category.title}</p>
                     </a>
                   </div>
                 ))}

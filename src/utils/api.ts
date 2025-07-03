@@ -106,6 +106,12 @@ export const fetchProductsWithSorting = async (
     
     return data;
   } catch (error) {
+    // Специальная обработка для ERR_BLOCKED_BY_CLIENT
+    if (error.code === 'ERR_NETWORK' || error.message?.includes('ERR_BLOCKED_BY_CLIENT')) {
+      console.error('❌ Запрос заблокирован блокировщиком рекламы!');
+      console.error('🔧 Решение: Отключите AdBlock/uBlock для домена more-elecktriki-backand.vercel.app');
+      console.error('📋 Или добавьте домен в белый список блокировщика');
+    }
     console.error('Ошибка запроса продуктов:', error);
     throw error;
   }
@@ -157,6 +163,12 @@ export const searchProductsWithSorting = async (
     const url = `/api/products/search`;
     return await fetchWithCache(url, finalParams, signal, forceFresh);
   } catch (error) {
+    // Специальная обработка для ERR_BLOCKED_BY_CLIENT
+    if (error.code === 'ERR_NETWORK' || error.message?.includes('ERR_BLOCKED_BY_CLIENT')) {
+      console.error('❌ Запрос заблокирован блокировщиком рекламы!');
+      console.error('🔧 Решение: Отключите AdBlock/uBlock для домена more-elecktriki-backand.vercel.app');
+      console.error('📋 Или добавьте домен в белый список блокировщика');
+    }
     console.error('Ошибка поиска продуктов:', error);
     throw error;
   }

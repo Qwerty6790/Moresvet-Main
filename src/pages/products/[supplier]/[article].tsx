@@ -231,14 +231,9 @@ const ProductDetail: React.FC = () => {
           {/* Left Side - Product Info */}
           <div className="w-full lg:w-5/12 lg:order-1 lg:pr-12">
             <div className="mb-4 sm:mb-8">
-              <div className="flex gap-2 mb-3 sm:mb-4">
-                <span className="px-2 sm:px-3 py-0.5 sm:py-1 bg-gray-100 rounded-full text-xs">new</span>
-                <span className="px-2 sm:px-3 py-0.5 sm:py-1 bg-gray-100 rounded-full text-xs">LED</span>
-              </div>
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">{product.name}</h1>
               <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
                 <p className="text-xs sm:text-sm text-gray-600">{product.article}</p>
-                <button className="text-xs sm:text-sm text-gray-600 underline">Все характеристики</button>
               </div>
             </div>
 
@@ -365,9 +360,6 @@ const ProductDetail: React.FC = () => {
                 </span>
                 <span className="text-xs sm:text-sm text-gray-600">В наличии: {product.stock}</span>
               </div>
-              <button className="w-full py-3 sm:py-4 border border-gray-900 rounded text-xs sm:text-sm font-medium hover:bg-gray-50">
-                Найти у партнёра
-              </button>
             </div>
           </div>
         </div>

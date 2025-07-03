@@ -375,7 +375,7 @@ const Cart: React.FC = () => {
                     </div>
                     <div className="mb-8 p-4 bg-green-50 rounded-lg flex items-center gap-3 text-sm">
                       <span className="text-black/70">Вернется бонусами:</span>
-                      <span className="bg-green-500 text-white px-2 py-1 rounded font-medium">4 325 ₽</span>
+                      <span className="bg-green-500 text-white px-2 py-1 rounded font-medium">0₽</span>
                     </div>
                     <button
                       onClick={() => setIsOnlinePaymentModalOpen(true)}

@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "../components/Header";
 import Footer from "@/components/Footer";
+import AdBlockWarning from "@/components/AdBlockWarning";
 import Head from "next/head";
 import Script from "next/script"; // Import Script from next/script for dynamic script handling
 
@@ -41,7 +42,7 @@ export default function RootLayout({
       </Script>
 
       <body className={inter.className}>
-      
+        <AdBlockWarning />
         
         <main> 
           <Header />

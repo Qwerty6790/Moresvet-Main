@@ -13,19 +13,19 @@ const Footer = () => {
           <div>
           <h3 className="text-black font-medium text-lg mb-3">О компании</h3>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/company/about" className="hover:text-red-600 transition-colors duration-200">О компании</Link></li>
-              <li><Link href="/contacts" className="hover:text-red-600 transition-colors duration-200">Контакты</Link></li>
-              <li><Link href="/sitemap" className="hover:text-red-600 transition-colors duration-200">Карта сайта</Link></li>
+              <li><Link href="/about" className="hover:text-red-600 transition-colors duration-200">О компании</Link></li>
+              <li><Link href="/about" className="hover:text-red-600 transition-colors duration-200">Контакты</Link></li>
+              <li><Link href="/about" className="hover:text-red-600 transition-colors duration-200">Карта сайта</Link></li>
             </ul>
           </div>
 
           {/* For Buyers */}
           <div>
-            <h3 className="text-black font-medium text-lg mb-3">Покупателю</h3>
+            <h3 className="text-black font-medium text-lg mb-3">Для дизайнеров</h3>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/account" className="hover:text-red-600 transition-colors duration-200">Личный кабинет</Link></li>
-              <li><Link href="/customers/delivery" className="hover:text-red-600 transition-colors duration-200">Доставка и оплата</Link></li>
-              <li><Link href="/customers/warranty" className="hover:text-red-600 transition-colors duration-200">Гарантия</Link></li>
+              <li><Link href="/auth/register" className="hover:text-red-600 transition-colors duration-200">Личный кабинет</Link></li>
+              <li><Link href="/auth/register" className="hover:text-red-600 transition-colors duration-200">Доставка и оплата</Link></li>
+              <li><Link href="/auth/register" className="hover:text-red-600 transition-colors duration-200">Гарантия</Link></li>
             </ul>
           </div>
 

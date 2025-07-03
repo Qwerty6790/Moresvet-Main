@@ -98,25 +98,7 @@ const About = () => {
 
   return (
     <div className="min-h-screen mt-20">
-      {/* Photo Gallery Section */}
-      <div className="w-full bg-white py-16">
-        <div className=" px-4">
-          <div className="w-full h-[40vh]">
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="w-full h-full"
-            >
-              <div className="w-full h-full bg-gray-200 rounded-lg overflow-hidden">
-                <div 
-                  className="w-full h-full bg-cover bg-center" 
-                  style={{ backgroundImage: `url(${photos[0]})` }}
-                />
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </div>
+ 
 
       {/* Company Theses Section */}
       <div className="w-full bg-white py-16">
@@ -150,52 +132,41 @@ const About = () => {
       </div>
 
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-black">
-        <div className="absolute inset-0 bg-[url('/api/placeholder/1920/1080')] opacity-50 bg-cover bg-center" />
-        <div className="relative container mx-auto px-4 py-32">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="max-w-3xl mx-auto text-center text-white"
-          >
-            <Gem className="w-16 h-16 mx-auto mb-8 text-yellow-400" />
-            <h1 className="text-5xl font-black mb-6">
-              Искусство света
-            </h1>
-            <p className="text-xl text-gray-200 leading-relaxed mb-8">
-              Мы создаем неповторимую атмосферу в вашем доме с помощью эксклюзивных светильников и профессиональных решений по освещению
-            </p>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-yellow-400 text-black px-8 py-4 rounded-lg font-medium hover:bg-yellow-300 transition-colors"
-            >
-              Получить консультацию
-            </motion.button>
-          </motion.div>
-        </div>
-      </div>
-
-      {/* CTA Section */}
-      <div className="bg-black">
-        <div className="container mx-auto px-4 py-16">
-          <div className="max-w-4xl mx-auto text-center">
+      <div className="relative overflow-hidden">
+        <div 
+          className="w-full h-[600px] bg-cover bg-center"
+          style={{
+            backgroundImage: "url('/images/d.png')",
+            backgroundPosition: 'center 30%'
+          }}
+        >
+          <div className="absolute inset-0 " />
+          <div className="relative container mx-auto px-4 h-full flex items-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
+              className="max-w-3xl mx-auto text-center text-black"
             >
-              <h2 className="text-3xl font-bold mb-6 text-white">Готовы создать идеальное освещение?</h2>
-              <p className="text-lg mb-8 text-gray-300">
-                Запишитесь на бесплатную консультацию с нашим дизайнером по свету
+              <Gem className="w-16 h-16 mx-auto mb-8 text-black" />
+              <h1 className="text-5xl font-black mb-6 drop-shadow-lg">
+                Искусство света
+              </h1>
+              <p className="text-xl text-black leading-relaxed mb-8 drop-shadow-md">
+                Мы создаем неповторимую атмосферу в вашем доме с помощью эксклюзивных светильников и профессиональных решений по освещению
               </p>
-              <button className="bg-white text-black px-8 py-4 rounded-lg font-medium hover:bg-gray-100 transition-colors inline-flex items-center">
-                <Phone className="w-5 h-5 mr-2" />
-                Записаться на консультацию
-              </button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-black text-white px-8 py-4 rounded-lg font-medium hover:bg-yellow-300 transition-colors backdrop-blur-sm"
+              >
+                Получить консультацию
+              </motion.button>
             </motion.div>
           </div>
         </div>
       </div>
+
+     
 
       {/* Collaboration Request Section */}
       <div className="w-full bg-white py-16">
@@ -206,10 +177,6 @@ const About = () => {
               animate={{ opacity: 1, y: 0 }}
               className="text-center mb-10"
             >
-              <h2 className="text-4xl font-bold mb-6 text-gray-900">Заявка на сотрудничество</h2>
-              <p className="text-lg text-gray-600 mb-8">
-                Станьте нашим партнером и получите доступ к лучшим предложениям на рынке электрооборудования
-              </p>
             </motion.div>
             
             <form className="space-y-6">

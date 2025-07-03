@@ -127,7 +127,18 @@ const fetchProductsForPageStandalone = async (
       totalPages: finalTotalPages,
       totalProducts: finalTotalProducts
     };
-  } catch (error) {
+  } catch (error: any) {
+    // Проверяем, является ли ошибка отменой запроса
+    if (axios.isCancel(error) || error.name === 'AbortError' || error.name === 'CanceledError') {
+      console.log('Запрос в fetchProductsForPageStandalone был отменен');
+      // Не выбрасываем ошибку, возвращаем пустой результат
+      return {
+        products: [],
+        totalPages: 1,
+        totalProducts: 0
+      };
+    }
+    
     console.error('❌ Ошибка при загрузке страницы:', error);
     return {
       products: [],
@@ -412,6 +423,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
   
 
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const limit = 40;
   
@@ -474,6 +486,19 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
   // --- Добавляем useEffect для установки isClient ---
   useEffect(() => {
     setIsClient(true);
+  }, []);
+
+  // Очистка при размонтировании компонента
+  useEffect(() => {
+    return () => {
+      if (fetchAbortController.current && !fetchAbortController.current.signal.aborted) {
+        try {
+          fetchAbortController.current.abort();
+        } catch (error) {
+          console.log('Ошибка при очистке AbortController:', error);
+        }
+      }
+    };
   }, []);
   // -------------------------------------------
 
@@ -621,9 +646,13 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
 
   // Функция для получения товаров
   const fetchProducts = async (sourceName: string, page: number = 1) => {
-    // Отменяем предыдущий запрос, если он есть
-    if (fetchAbortController.current) {
-      fetchAbortController.current.abort();
+    // Отменяем предыдущий запрос, если он есть и не отменен
+    if (fetchAbortController.current && !fetchAbortController.current.signal.aborted) {
+      try {
+        fetchAbortController.current.abort();
+      } catch (abortError) {
+        console.log('Ошибка при отмене запроса:', abortError);
+      }
     }
     
     // Создаем новый AbortController для текущего запроса
@@ -736,13 +765,17 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
       
       // Извлекаем фильтры из всех найденных товаров
       extractFiltersFromProducts(result.products);
-    } catch (error) {
-      if (!axios.isCancel(error)) {
-        console.error('Error fetching products:', error);
-        setProducts([]);
-        setTotalPages(1);
-        setTotalProducts(0);
+    } catch (error: any) {
+      // Проверяем, является ли ошибка отменой запроса
+      if (axios.isCancel(error) || error.name === 'AbortError' || error.name === 'CanceledError') {
+        console.log('Запрос был отменен:', error.message);
+        return; // Выходим без обновления состояния
       }
+      
+      console.error('Error fetching products:', error);
+      setProducts([]);
+      setTotalPages(1);
+      setTotalProducts(0);
     } finally {
       setIsLoading(false);
     }
@@ -2078,65 +2111,99 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
               <div className="bg-white rounded-lg p-3 sm:p-4 mb-4 sm:mb-6 shadow-sm border border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-3">
                 <div className="text-sm text-gray-700 font-medium w-full sm:w-auto text-center sm:text-left">
                   Найдено: <span className="text-black font-semibold">{totalProducts}</span> {getTotalProductsText(totalProducts)}
-                  {/* Отладочная информация - удалить в продакшене */}
-                  {process.env.NODE_ENV === 'development' && (
-                    <span className="text-xs text-gray-500 ml-2">
-                      (Страница {currentPage}/{totalPages}, показано: {products.length})
-                    </span>
-                  )}
+                  
                 </div>
                 
                 <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
-                  {/* Переключатель режима отображения - упрощенный дизайн */}
-                  <div className="flex bg-white border border-gray-200 rounded-md shadow-sm px-1 py-1">
-                    <button
-                      onClick={() => setViewMode('grid')}
-                      className={`p-1.5 rounded-md transition-all ${
-                        viewMode === 'grid' 
-                          ? 'bg-gradient-to-r from-gray-800 to-gray-700 text-white shadow-sm' 
-                          : 'text-gray-600 hover:bg-gray-50'
-                      }`}
-                      title="Сетка"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                      </svg>
-                    </button>
-                    <button
-                      onClick={() => setViewMode('list')}
-                      className={`p-1.5 rounded-md transition-all ${
-                        viewMode === 'list' 
-                          ? 'bg-gradient-to-r from-gray-800 to-gray-700 text-white shadow-sm' 
-                          : 'text-gray-600 hover:bg-gray-50'
-                      }`}
-                      title="Список"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
-                      </svg>
-                    </button>
-                  </div>
+               
                   
-                  <select
-                    className="text-xs sm:text-sm px-2 py-1.5 sm:px-3 sm:py-2 
-                    bg-white/20 backdrop-blur-md border border-white/30 
-                    rounded-md shadow-lg hover:shadow-xl transition-all duration-300
-                    text-gray-800 font-medium
-                    focus:ring-2 focus:ring-white/50 focus:border-white/50 outline-none 
-                    flex-1 sm:flex-none appearance-none
-                    [&>option]:bg-white/90 [&>option]:backdrop-blur-xl [&>option]:text-gray-800"
-                    value={sortOrder || 'popularity'}
-                    onChange={(e) => handleSortOrderChange(e.target.value as any)}
-                    style={{
-                      WebkitBackdropFilter: 'blur(8px)',
-                      backdropFilter: 'blur(8px)'
-                    }}
-                  >
-                    <option value="popularity">По популярности</option>
-                    <option value="newest">Сначала новые</option>
-                    <option value="asc">Цена ↑</option>
-                    <option value="desc">Цена ↓</option>
-                  </select>
+                    <div className="relative">
+                      <button
+                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                        className="flex items-center justify-between min-w-[180px] text-xs sm:text-sm px-2 py-1.5 sm:px-3 sm:py-2 
+                        bg-white/10 backdrop-blur-xl border border-white/20 
+                        rounded-lg shadow-[0_8px_32px_rgba(0,0,0,0.12)] 
+                        hover:shadow-[0_8px_32px_rgba(31,38,135,0.15)] 
+                        transition-all duration-300 ease-in-out
+                        text-gray-800 font-medium group"
+                        style={{
+                          WebkitBackdropFilter: 'blur(16px)',
+                          backdropFilter: 'blur(16px)',
+                          background: 'linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05))'
+                        }}
+                      >
+                        <span>
+                          {!sortOrder || sortOrder === 'popularity' ? 'По популярности' : 
+                           sortOrder === 'newest' ? 'Сначала новые' :
+                           sortOrder === 'asc' ? 'Цена ↑' : 'Цена ↓'}
+                        </span>
+                        <svg 
+                          className={`w-4 h-4 ml-2 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`}
+                          fill="none" 
+                          stroke="currentColor" 
+                          viewBox="0 0 24 24" 
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
+                      
+                      {isDropdownOpen && (
+                        <>
+                          <div 
+                            className="fixed inset-0 z-30"
+                            onClick={() => setIsDropdownOpen(false)}
+                          />
+                          <div 
+                            className="absolute z-40 w-full mt-2 origin-top-right rounded-lg shadow-lg
+                            bg-white/95 backdrop-blur-xl border border-white/20 overflow-hidden"
+                            style={{
+                              WebkitBackdropFilter: 'blur(16px)',
+                              backdropFilter: 'blur(16px)',
+                            }}
+                          >
+                            <div className="py-1">
+                              <button
+                                onClick={() => {
+                                  handleSortOrderChange('popularity');
+                                  setIsDropdownOpen(false);
+                                }}
+                                className="block w-full px-4 py-2 text-sm text-left text-gray-800 hover:bg-white/50 transition-colors"
+                              >
+                                По популярности
+                              </button>
+                              <button
+                                onClick={() => {
+                                  handleSortOrderChange('newest');
+                                  setIsDropdownOpen(false);
+                                }}
+                                className="block w-full px-4 py-2 text-sm text-left text-gray-800 hover:bg-white/50 transition-colors"
+                              >
+                                Сначала новые
+                              </button>
+                              <button
+                                onClick={() => {
+                                  handleSortOrderChange('asc');
+                                  setIsDropdownOpen(false);
+                                }}
+                                className="block w-full px-4 py-2 text-sm text-left text-gray-800 hover:bg-white/50 transition-colors"
+                              >
+                                Цена ↑
+                              </button>
+                              <button
+                                onClick={() => {
+                                  handleSortOrderChange('desc');
+                                  setIsDropdownOpen(false);
+                                }}
+                                className="block w-full px-4 py-2 text-sm text-left text-gray-800 hover:bg-white/50 transition-colors"
+                              >
+                                Цена ↓
+                              </button>
+                            </div>
+                          </div>
+                        </>
+                      )}
+                    </div>
                 </div>
               </div>
 
@@ -2304,18 +2371,7 @@ const CatalogIndex: React.FC<CatalogIndexProps> = ({
                       text="Товары не найдены" 
                       showText={true}
                     />
-                    <div className="mt-6">
-                      <p className="text-gray-500 text-lg mb-2">Попробуйте изменить параметры фильтрации</p>
-                      <button 
-                        onClick={handleResetFilters} 
-                        className="mt-4 px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors text-sm font-medium flex items-center gap-2 mx-auto"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                        </svg>
-                        Сбросить все фильтры
-                      </button>
-                    </div>
+                    
                   </div>
                 )}
               </div> {/* Конец Products Area */}
