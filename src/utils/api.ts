@@ -2,7 +2,7 @@ export const getApiUrl = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   if (!apiUrl) {
     console.warn('API URL не определен, используется fallback');
-    return 'https://more-elecktriki-backand.vercel.app';
+    return 'https://more-svet-backend.vercel.app';
   }
   return apiUrl;
 }; 
@@ -105,9 +105,10 @@ export const fetchProductsWithSorting = async (
     });
     
     return data;
-  } catch (error) {
+  } catch (error: unknown) {
     // Специальная обработка для ERR_BLOCKED_BY_CLIENT
-    if (error.code === 'ERR_NETWORK' || error.message?.includes('ERR_BLOCKED_BY_CLIENT')) {
+    const axiosError = error as { code?: string; message?: string };
+    if (axiosError.code === 'ERR_NETWORK' || axiosError.message?.includes('ERR_BLOCKED_BY_CLIENT')) {
       console.error('❌ Запрос заблокирован блокировщиком рекламы!');
       console.error('🔧 Решение: Отключите AdBlock/uBlock для домена more-elecktriki-backand.vercel.app');
       console.error('📋 Или добавьте домен в белый список блокировщика');
@@ -162,9 +163,10 @@ export const searchProductsWithSorting = async (
   try {
     const url = `/api/products/search`;
     return await fetchWithCache(url, finalParams, signal, forceFresh);
-  } catch (error) {
+  } catch (error: unknown) {
     // Специальная обработка для ERR_BLOCKED_BY_CLIENT
-    if (error.code === 'ERR_NETWORK' || error.message?.includes('ERR_BLOCKED_BY_CLIENT')) {
+    const axiosError = error as { code?: string; message?: string };
+    if (axiosError.code === 'ERR_NETWORK' || axiosError.message?.includes('ERR_BLOCKED_BY_CLIENT')) {
       console.error('❌ Запрос заблокирован блокировщиком рекламы!');
       console.error('🔧 Решение: Отключите AdBlock/uBlock для домена more-elecktriki-backand.vercel.app');
       console.error('📋 Или добавьте домен в белый список блокировщика');

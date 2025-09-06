@@ -6,69 +6,61 @@ interface LoadingSpinnerProps {
   showText?: boolean;
 }
 
-const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ 
-  size = 'md', 
-  text = 'Загружаем товары...', 
-  showText = true 
+const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
+  size = 'md',
+  text = 'Загружаем MORESVET...',
+  showText = true
 }) => {
   const getSizeClasses = () => {
     switch (size) {
-      case 'sm': return 'w-8 h-8';
-      case 'md': return 'w-12 h-12';
-      case 'lg': return 'w-16 h-16';
-      case 'xl': return 'w-24 h-24';
-      default: return 'w-12 h-12';
+      case 'sm': return 'w-16 h-16';
+      case 'md': return 'w-28 h-28';
+      case 'lg': return 'w-40 h-40';
+      case 'xl': return 'w-56 h-56';
+      default: return 'w-28 h-28';
     }
   };
 
   const getTextSize = () => {
     switch (size) {
-      case 'sm': return 'text-sm';
-      case 'md': return 'text-base';
-      case 'lg': return 'text-lg';
-      case 'xl': return 'text-xl';
-      default: return 'text-base';
+      case 'sm': return 'text-xs';
+      case 'md': return 'text-sm';
+      case 'lg': return 'text-base';
+      case 'xl': return 'text-lg';
+      default: return 'text-sm';
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-8">
+    <div className="flex flex-col items-center justify-center p-6">
+      <div className="text-center">
+        <h2
+          className={`font-extrabold ${getTextSize()}`}
+          style={{
+            background: 'linear-gradient(90deg, #b78d2b 0%, #ffd86b 50%, #b78d2b 100%)',
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+            color: 'transparent',
+            backgroundSize: '200% 100%',
+            animation: 'shimmer 2s linear infinite'
+          }}
+        >
+          MORESVET
+        </h2>
 
-     
-
-      {/* Анимированный текст MORELEKTRIKI */}
-      <div className="mt-6 text-center">
-        <div className="flex items-center justify-center space-x-1 mb-2">
-          {'MORELEKTRIKI'.split('').map((letter, index) => (
-            <span
-              key={index}
-              className={`font-bold text-black ${getTextSize()} animate-pulse`}
-              style={{
-                animationDelay: `${index * 0.1}s`,
-                animationDuration: '1.5s'
-              }}
-            >
-              {letter}
-            </span>
-          ))}
-        </div>
+        {showText && <div className="text-gray-500 mt-2" style={{ fontSize: '12px' }}>{text}</div>}
       </div>
 
-      {/* Дополнительная анимация волны */}
-      <div className="mt-4 flex space-x-1">
-        {[...Array(5)].map((_, i) => (
-          <div
-            key={i}
-            className="w-1 h-8 bg-gradient-to-t from-black to-gray-400 rounded-full animate-pulse"
-            style={{
-              animationDelay: `${i * 0.2}s`,
-              animationDuration: '1s'
-            }}
-          ></div>
-        ))}
-      </div>
+      <span className="sr-only" role="status" aria-live="polite">{text}</span>
+
+      <style jsx>{`
+        @keyframes shimmer {
+          0% { background-position: 0% 50%; }
+          100% { background-position: 200% 50%; }
+        }
+      `}</style>
     </div>
   );
 };
 
-export default LoadingSpinner; 
+export default LoadingSpinner;

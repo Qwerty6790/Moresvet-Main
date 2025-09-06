@@ -1,67 +1,61 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
-import { Phone, Mail, MessageCircle } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className=" text-black py-8 border-t border-gray-100">
-      <div className="container mx-auto px-4 max-w-7xl">
-        {/* Main Footer Content - Compact Version */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-10">
-        <h3 className="text-black font-medium text-3xl  mb-3">MoreElecriki</h3>
-          {/* About MoreElecriki */}
-          <div>
-          <h3 className="text-black font-medium text-lg mb-3">О компании</h3>
-            <ul className="space-y-2 text-sm">
-              <li><Link href="/about" className="hover:text-red-600 transition-colors duration-200">О компании</Link></li>
-              <li><Link href="/about" className="hover:text-red-600 transition-colors duration-200">Контакты</Link></li>
-              <li><Link href="/about" className="hover:text-red-600 transition-colors duration-200">Карта сайта</Link></li>
+    <footer className="bg-black text-white">
+      <div className="max-w-[1450px] mx-auto px-4 md:px-8 py-12">
+        {/* Main Footer Content */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Column 1: MoreSvet */}
+          <div className="space-y-6">
+            <h2 className="text-xl font-medium border-b border-white pb-2 mb-4 text-gray-200">MoreSvet</h2>
+            <div className="space-y-2 text-sm text-gray-300">
+              <p>Фактический адрес:</p>
+              <p>121601, город Москва, Мкад 25-километр,ТК КОНСТРУКТОР</p>
+              <p className="mt-4">По данному адресу шоу-рума нет. Ознакомиться с ассортиментом можно только на сайте.</p>
+              
+              <div className="mt-6">
+                <p>Контактный телефон:</p>
+                <p className="text-gray-100 hover:text-white transition-colors">+7 (926) 451-31-32</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Column 2: ОБ MORE SVET */}
+          <div className="space-y-6">
+            <h2 className="text-xl font-medium border-b border-white pb-2 mb-4 text-gray-200">ОБ MORE SVET</h2>
+            <ul className="space-y-3 text-sm text-gray-300">
+              <li><Link href="#" className="hover:text-white hover:underline transition-colors">О компании</Link></li>
+              <li><Link href="#" className="hover:text-white hover:underline transition-colors">Доставка</Link></li>
+              <li><Link href="#" className="hover:text-white hover:underline transition-colors">Способы оплаты</Link></li>
+              <li><Link href="#" className="hover:text-white hover:underline transition-colors">Скачать</Link></li>
+              <li><Link href="#" className="hover:text-white hover:underline transition-colors">Контакты</Link></li>
+              <li><Link href="#" className="hover:text-white hover:underline transition-colors">Договор-оферта</Link></li>
+              <li><Link href="#" className="hover:text-white hover:underline transition-colors">Дизайнерам</Link></li>
+              <li><Link href="#" className="hover:text-white hover:underline transition-colors">О товаре</Link></li>
             </ul>
           </div>
 
-          {/* For Buyers */}
-          <div>
-            <h3 className="text-black font-medium text-lg mb-3">Для дизайнеров</h3>
-            <ul className="space-y-2 text-sm">
-              <li><Link href="/auth/register" className="hover:text-red-600 transition-colors duration-200">Личный кабинет</Link></li>
-              <li><Link href="/auth/register" className="hover:text-red-600 transition-colors duration-200">Доставка и оплата</Link></li>
-              <li><Link href="/auth/register" className="hover:text-red-600 transition-colors duration-200">Гарантия</Link></li>
-            </ul>
-          </div>
-
-          {/* For Designers */}
-          <div>
-            <h3 className="text-black font-medium text-lg mb-3">Дизайнерам</h3>
-            <ul className="space-y-2 text-sm">
-              <li><Link href="/designers/3d-models" className="hover:text-red-600 transition-colors duration-200">База 3D моделей</Link></li>
-              <li><Link href="/designers/club" className="hover:text-red-600 transition-colors duration-200">Клуб дизайнеров</Link></li>
-              <li><Link href="/catalog/werkel" className="hover:text-red-600 transition-colors duration-200">Каталог Werkel 2024</Link></li>
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h3 className="text-black font-medium text-lg mb-3">Контакты</h3>
-            <ul className="space-y-2 text-sm">
-              <li className="flex items-center">
-                <Phone className="w-3 h-3 mr-2 text-black" /> 
-                <Link href="tel:88007771537" className="hover:text-red-600 transition-colors duration-200">8 800 777 15 37</Link>
-              </li>
-              <li className="flex items-center">
-                <Mail className="w-3 h-3 mr-2 text-black" /> 
-                <Link href="mailto:info@moreelecriki.ru" className="hover:text-red-600 transition-colors duration-200">info@moreelecriki.ru</Link>
-              </li>
-              <li className="flex items-center">
-                <MessageCircle className="w-3 h-3 mr-2 text-black" /> 
-                <Link href="https://wa.me/88007771537" className="hover:text-red-600 transition-colors duration-200">WhatsApp</Link>
-              </li>
+          {/* Column 3: НОВОСТИ */}
+          <div className="space-y-6">
+            <h2 className="text-xl font-medium border-b border-white pb-2 mb-4 text-gray-200">НОВОСТИ</h2>
+            <ul className="space-y-3 text-sm text-gray-300">
+              <li><Link href="#" className="hover:text-white hover:underline transition-colors">Точка на карте</Link></li>
+              <li><Link href="#" className="hover:text-white hover:underline transition-colors">Статьи</Link></li>
+              <li><Link href="#" className="hover:text-white hover:underline transition-colors">2025</Link></li>
+              <li><Link href="#" className="hover:text-white hover:underline transition-colors">2024</Link></li>
             </ul>
           </div>
         </div>
 
-        {/* Copyright */}
-        <div className="mt-6 pt-4 border-t border-gray-100 text-xs text-gray-500">
-         
+        {/* Bottom Bar */}
+        <div className="border-t border-white mt-8 pt-8">
+          <div className="text-sm text-center text-gray-400">
+            <div>© 2005—2025 moresvet.ru. Все права защищены</div>
+          </div>
         </div>
       </div>
     </footer>

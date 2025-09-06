@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Analytics } from "@vercel/analytics/react";
-import ImageHoverEffect from '@/components/Hero';
+import ImageHoverEffect, { ExtraSections } from '@/components/Hero';
 
 
 export default function Home() {
@@ -14,6 +14,8 @@ export default function Home() {
       {/* Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-b z-0" />
       <ImageHoverEffect />
+      {/* Extra sections внизу главной */}
+      <ExtraSections />
     </div>
     </div>
   );

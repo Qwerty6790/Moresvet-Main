@@ -1,9 +1,9 @@
-export const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://more-elecktriki-backand.vercel.app';
+export const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://more-svet-backend.vercel.app';
 // Для обратной совместимости временно оставляю BASE_URL
 export const BASE_URL = NEXT_PUBLIC_API_URL;
 export const IMAGE_QUALITY = 'q=75';
 export const IMAGE_WIDTH = 'w=400';
-export const DOMAIN = 'https://moreelectriki.ru/';
+export const DOMAIN = 'https://moresvet.ru/';
 
 // Улучшенная функция для работы с изображениями с гибкими параметрами
 export const getImageUrl = (url: string, options?: { quality?: number, width?: number }) => {

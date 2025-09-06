@@ -7,6 +7,16 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['lucide-react', 'react-icons'],
   },
+  async rewrites() {
+    return [
+      { source: '/catalog', destination: '/catalog' },
+      { source: '/catalog/:slug*', destination: '/catalog/:slug*' },
+    ];
+  },
+  // Removed problematic redirects that pointed to the same paths and caused redirect loops.
+  async redirects() {
+    return [];
+  },
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {

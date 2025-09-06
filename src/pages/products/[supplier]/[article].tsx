@@ -1,81 +1,59 @@
-'use client';
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useRouter } from 'next/router';
-import { Toaster, toast } from 'sonner';
+import Link from 'next/link';
 import 'tailwindcss/tailwind.css';
-import { Heart, ArrowLeft, Copy } from 'lucide-react';
 import Header from '@/components/Header';
+import { Toaster, toast } from 'sonner';
+import { ClipLoader } from 'react-spinners';
+import { ChevronRight, ArrowRight, Heart } from 'lucide-react';
+import { GetStaticPaths, GetStaticProps } from 'next';
+import { BASE_URL, getImageUrl } from '@/utils/constants';
+import SEO from '@/components/SEO';
 
 interface ProductI {
+  imageAddress: any;
   _id: string;
   article: string;
   name: string;
   price: number;
-  imageAddress: string | string[]; // Ссылка на изображение (строка или массив строк)
-  stock: number; // Количество на складе
-  source: string; // Источник данных
-  visible?: boolean; // Видимость товара (для админки)
-  quantity?: number; // Для корзины
-
-  // Размеры
-  height?: number; // Высота (мм)
-  length?: number; // Длина (мм)
-  width?: number;  // Ширина (мм)
-  diameter?: number; // Диаметр (мм)
-  
-  // Характеристики светильника
-  lightStyle?: string; // Стиль светильника (современный, классический, минимализм и т.д.)
-  lampType?: string; // Вид лампы (LED, галогенная, накаливания и т.д.)
-  color?: string; // Цвет
-  socketType?: string; // Цоколь (E27, E14, GU10 и т.д.)
-  lampsCount?: number; // Количество ламп
-  lampPower?: number; // Мощность лампы (Вт)
-  totalPower?: number; // Общая мощность (Вт)
-  voltage?: number; // Напряжение (В)
-  material?: string; // Материал (металл, пластик, стекло и т.д.)
-
-  // Для обратной совместимости
-  imageAddresses?: string[] | string;
+  stock: string;
+  imageAddresses: string[] | string;
+  source: string;
+  power: number;
+  voltage: number;
+  bulbType: string;
+  socket: string;
+  bulbCount: number;
+  lampPower: number;
+  material: string;
+  color: string;
+  style: string;
+  direction: string;
+  shape: string;
 }
 
-const ProductDetail: React.FC = () => {
+interface ProductDetailProps {
+  product: ProductI;
+}
+
+const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }) => {
   const router = useRouter();
-  const { supplier, article } = router.query;
-  const [product, setProduct] = useState<ProductI | null>(null);
-  const [loading, setLoading] = useState(true);
-  // Основное изображение, отображаемое в большом блоке
+  const [product, setProduct] = useState<ProductI | null>(initialProduct || null);
+  const [loading, setLoading] = useState(!initialProduct);
+  const [activeTab, setActiveTab] = useState('characteristics');
+  const [isMounted, setIsMounted] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+
+  // Состояния для логики изображений
   const [mainImage, setMainImage] = useState<string>('');
-  // Флаг ошибки загрузки для основного изображения
   const [mainImageError, setMainImageError] = useState(false);
-  // 5 случайных миниатюр (не включая первое изображение)
   const [thumbnails, setThumbnails] = useState<string[]>([]);
-  // Индексы миниатюр, у которых произошла ошибка загрузки
   const [failedThumbnailIndices, setFailedThumbnailIndices] = useState<number[]>([]);
-  // Состояние для избранного
-  const [isFavorite, setIsFavorite] = useState(false);
 
-  // Загрузка данных о товаре
   useEffect(() => {
-    const fetchProduct = async () => {
-      if (!supplier || !article) return;
-      setLoading(true);
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/product/${supplier}?productArticle=${article}`
-        );
-        setProduct(response.data);
-      } catch (error) {
-        console.error(error);
-        toast.error('Ошибка при загрузке товара');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProduct();
-  }, [supplier, article]);
+    setIsMounted(true);
+  }, []);
 
-  // Обработка изображений: выбираем основное (первое) и 5 случайных из оставшихся
   useEffect(() => {
     if (product) {
       const allImages =
@@ -89,13 +67,10 @@ const ProductDetail: React.FC = () => {
           ? product.imageAddress
           : [];
       if (allImages.length > 0) {
-        // Основное изображение — всегда первое
         setMainImage(allImages[0]);
         setMainImageError(false);
         if (allImages.length > 1) {
-          // Из оставшихся выбираем 5 случайных
           const remaining = allImages.slice(1);
-          // Перемешиваем массив (алгоритм Фишера-Йетса)
           for (let i = remaining.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [remaining[i], remaining[j]] = [remaining[j], remaining[i]];
@@ -107,42 +82,62 @@ const ProductDetail: React.FC = () => {
     }
   }, [product]);
 
-  // При загрузке товара проверяем, есть ли он в избранном
+  // Проверка, находится ли товар в избранном
   useEffect(() => {
-    if (product) {
-      const likedData = JSON.parse(localStorage.getItem('liked') || '{"products": []}');
-      const exists = likedData.products.some((p: ProductI) => p._id === product._id);
-      setIsFavorite(exists);
+    if (product && isMounted) {
+      const liked = JSON.parse(localStorage.getItem('liked') || '{"products": []}');
+      const isProductLiked = liked.products.some(
+        (item: any) => item.article === product.article && item.source === product.source
+      );
+      setIsLiked(isProductLiked);
     }
-  }, [product]);
+  }, [product, isMounted]);
 
-  // Функция для добавления/удаления товара в/из избранного
-  const toggleFavorite = () => {
+  const addToCart = () => {
     if (!product) return;
-    const likedData = JSON.parse(localStorage.getItem('liked') || '{"products": []}');
-    if (isFavorite) {
-      // Удаляем товар
-      likedData.products = likedData.products.filter((p: ProductI) => p._id !== product._id);
-      localStorage.setItem('liked', JSON.stringify(likedData));
-      setIsFavorite(false);
-      toast.success('Товар удалён из избранного');
+    const cart = JSON.parse(localStorage.getItem('cart') || '{"products": []}');
+    const existingProductIndex = cart.products.findIndex(
+      (item: any) => item.article === product.article
+    );
+
+    if (existingProductIndex > -1) {
+      cart.products[existingProductIndex].quantity += 1;
     } else {
-      // Добавляем товар
-      likedData.products.push(product);
-      localStorage.setItem('liked', JSON.stringify(likedData));
-      setIsFavorite(true);
-      toast.success('Товар добавлен в избранное');
+      cart.products.push({ article: product.article, source: product.source, quantity: 1 });
     }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    toast.success('Товар добавлен в корзину');
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen bg-white">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-      </div>
+  const toggleLiked = () => {
+    if (!product) return;
+    
+    const liked = JSON.parse(localStorage.getItem('liked') || '{"products": []}');
+    const existingProductIndex = liked.products.findIndex(
+      (item: any) => item.article === product.article && item.source === product.source
     );
-  }
 
+    if (existingProductIndex > -1) {
+      // Удаляем из избранного
+      liked.products.splice(existingProductIndex, 1);
+      setIsLiked(false);
+      toast.success('Товар удален из избранного');
+    } else {
+      // Добавляем в избранное
+      liked.products.push({ 
+        article: product.article, 
+        source: product.source,
+        _id: product._id
+      });
+      setIsLiked(true);
+      toast.success('Товар добавлен в избранное');
+    }
+
+    localStorage.setItem('liked', JSON.stringify(liked));
+  };
+
+  // Если продукт не найден
   if (!product) {
     return (
       <div className="flex justify-center items-center h-screen bg-white">
@@ -151,222 +146,329 @@ const ProductDetail: React.FC = () => {
     );
   }
 
-  return (
-    <div className="min-h-screen bg-white">
-      <Header />
-      <div className="max-w-[1420px] mt-10 mx-auto px-4 sm:px-6 lg:px-8 pt-16 md:pt-24">
-        {/* Top Navigation */}
-        <div className="flex items-center justify-between py-4 md:py-6">
-          <button 
-            onClick={() => router.back()}
-            className="flex items-center text-gray-900 hover:text-gray-700"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            <span className="text-xs sm:text-sm">Напольные светильники (Торшер)</span>
-          </button>
-          <div className="flex items-center gap-2 sm:gap-4">
-            <button className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-full">
-              <Copy className="w-4 h-4 sm:w-5 sm:h-5" />
-            </button>
-            <button 
-              onClick={toggleFavorite}
-              className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-full"
-            >
-              <Heart 
-                className={`w-4 h-4 sm:w-5 sm:h-5 ${isFavorite ? 'text-red-500 fill-red-500' : 'text-gray-500'}`} 
-              />
-            </button>
-          </div>
-        </div>
+  const structuredData = {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": product.name,
+    "image": product.imageAddresses?.[0] || product.imageAddress,
+    "description": `${product.name} - ${product.material}, ${product.color}`,
+    "brand": {
+      "@type": "Brand",
+      "name": product.source
+    },
+    "offers": {
+      "@type": "Offer",
+      "url": `${BASE_URL}/products/${product.source}/${product.article}`,
+      "priceCurrency": "RUB",
+      "price": product.price,
+      "availability": Number(product.stock) > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
+    }
+  };
 
-        {/* Main Content */}
-        <div className="flex flex-col lg:flex-row">
-          {/* Right Side - Image (показываем первым на мобильных) */}
-          <div className="w-full lg:w-7/12 lg:order-2 bg-[#f8f8f8] mb-6 lg:mb-0">
-            <div className="aspect-square relative">
-              {/* Основное изображение показывается только если загрузилось */}
-              {!mainImageError && mainImage && (
-                <img
-                  src={`${mainImage}?q=75&w=400`}
-                  alt="Product"
-                  className="w-full h-full object-contain p-6 sm:p-8 lg:p-12 mix-blend-multiply"
-                  onError={() => setMainImageError(true)}
-                />
-              )}
-              
-              {/* Thumbnails */}
-              {thumbnails.length > 0 && (
-                <div className="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 right-2 sm:right-4">
-                  <div className="flex gap-1 sm:gap-2 overflow-x-auto py-2">
-                    {thumbnails.map((img, idx) => {
-                      if (failedThumbnailIndices.includes(idx)) return null;
-                      return (
-                        <button
-                          key={idx}
-                          onClick={() => {
-                            setMainImage(img);
-                            setMainImageError(false);
-                          }}
-                          className={`relative flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-lg overflow-hidden ${
-                            mainImage === img ? 'ring-2 ring-black' : 'opacity-50'
-                          }`}
-                        >
-                          <img 
-                            src={`${img}?q=75&w=100`}
-                            alt=""
-                            className="w-full h-full object-cover"
-                            onError={() =>
-                              setFailedThumbnailIndices((prev) => [...prev, idx])
-                            }
-                          />
-                        </button>
-                      );
-                    })}
+  return (
+    <>
+      <SEO 
+        title={`${product.name} | PalermoLight`}
+        description={`Купить ${product.name} по выгодной цене. ${product.material}, ${product.color}. Доставка по всей России.`}
+        keywords={`${product.name}, ${product.source}, светильник, ${product.material}, ${product.color}`}
+        ogImage={product.imageAddresses?.[0] || product.imageAddress}
+        url={`${BASE_URL}/products/${product.source}/${product.article}`}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <div className="min-h-screen bg-white">
+        <Header />
+        <div className="container mt-5 mx-auto px-4 pt-4 ">
+          {/* Компактные хлебные крошки */}
+          <div className="flex items-center gap-1 text-xs mb-2 overflow-x-auto whitespace-nowrap">
+            <Link href="/" className="text-gray-500 hover:underline">Главная</Link>
+            <ChevronRight className="w-3 h-3 text-gray-500" />
+            <Link href="/catalog" className="text-gray-500 hover:underline">Каталог</Link>
+            <ChevronRight className="w-3 h-3 text-gray-500" />
+            <Link href="/catalog/lights" className="text-gray-500 hover:underline">Светильники</Link>
+            <ChevronRight className="w-3 h-3 text-gray-500" />
+            <span className="text-gray-900 truncate max-w-xs">{product.name}</span>
+          </div>
+
+          {/* Компактный заголовок и артикул */}
+          <div className="flex flex-col sm:flex-row justify-between items-start mb-3">
+            <h1 className="text-xl font-normal mb-2 sm:mb-0">{product.name}</h1>
+            <div className="flex flex-wrap items-center text-sm space-x-2">
+              <div className="flex items-center mb-1 sm:mb-0">
+                <span className="text-gray-500">Арт: </span>
+                <span>{product.article}</span>
+              </div>
+              <button className="text-gray-500 hover:underline text-sm mb-1 sm:mb-0">Сравнить</button>
+              <button 
+                onClick={toggleLiked}
+                className="flex items-center text-gray-500 hover:underline text-sm"
+              >
+                <Heart className={`w-4 h-4 mr-1 ${isLiked ? 'fill-black text-black' : ''}`} />
+                {isLiked ? 'В избранном' : 'В избранное'}
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
+            {/* Левая колонка - изображения */}
+            <div className="col-span-1 sm:col-span-5">
+              <div className="aspect-[4/3] relative bg-[#f8f8f8] rounded">
+                {!mainImageError && mainImage && (
+                  <img
+                    src={`${mainImage}?q=75&w=400`}
+                    alt={`${product.name} - основное фото`}
+                    className="w-full h-full object-contain p-4 mix-blend-multiply"
+                    onError={() => setMainImageError(true)}
+                  />
+                )}
+                {thumbnails.length > 0 && (
+                  <div className="absolute bottom-2 left-2 right-2">
+                    <div className="flex gap-1 overflow-x-auto py-1">
+                      {thumbnails.map((img, idx) => {
+                        if (failedThumbnailIndices.includes(idx)) return null;
+                        return (
+                          <button
+                            key={idx}
+                            onClick={() => {
+                              setMainImage(img);
+                              setMainImageError(false);
+                            }}
+                            className={`relative flex-shrink-0 w-12 h-12 rounded overflow-hidden ${
+                              mainImage === img ? 'ring-1 ring-black' : 'opacity-50'
+                            }`}
+                          >
+                            <img
+                              src={getImageUrl(img)}
+                              alt={`Миниатюра ${idx + 1}`}
+                              className="w-full h-full object-cover"
+                              onError={() =>
+                                setFailedThumbnailIndices((prev) => [...prev, idx])
+                              }
+                            />
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Правая колонка - информация о товаре */}
+            <div className="col-span-1 sm:col-span-7">
+              <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                {/* Основная информация о цене и кнопки действий */}
+                <div className="col-span-1 sm:col-span-6 mb-2 sm:mb-0">
+                  <div className="text-2xl font-medium">{product.price} ₽</div>
+                  <div className="flex items-center gap-2 text-sm mt-1">
+                    <div className="bg-green-100 text-green-600 px-2 py-0.5 rounded-full text-xs">6%</div>
+                    <div className="text-green-600">99 бонусов</div>
                   </div>
                 </div>
-              )}
-            </div>
-          </div>
-
-          {/* Left Side - Product Info */}
-          <div className="w-full lg:w-5/12 lg:order-1 lg:pr-12">
-            <div className="mb-4 sm:mb-8">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">{product.name}</h1>
-              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-                <p className="text-xs sm:text-sm text-gray-600">{product.article}</p>
-              </div>
-            </div>
-
-            {/* Dimensions */}
-            <div className="flex items-center gap-2 sm:gap-3 mb-6 sm:mb-12">
-              {product.height && <span className="text-base sm:text-xl">{product.height}</span>}
-              {product.length && product.height && <span className="text-base sm:text-xl">×</span>}
-              {product.length && <span className="text-base sm:text-xl">{product.length}</span>}
-              {product.width && (product.height || product.length) && <span className="text-base sm:text-xl">×</span>}
-              {product.width && <span className="text-base sm:text-xl">{product.width}</span>}
-              {product.diameter && (
-                <div className="flex items-center gap-2">
-                  <span className="text-xs sm:text-sm text-gray-600">⌀</span>
-                  <span className="text-base sm:text-xl">{product.diameter}</span>
+                
+                <div className="col-span-1 sm:col-span-6 mb-4 sm:mb-0">
+                  <div className="flex flex-col gap-2">
+                    <button
+                      onClick={addToCart}
+                      className="w-full bg-black text-white py-2 px-4 text-center font-medium text-sm"
+                    >
+                      В КОРЗИНУ
+                    </button>
+                    <button className="w-full border border-black py-2 px-4 text-center font-medium text-sm">
+                      КУПИТЬ В 1 КЛИК
+                    </button>
+                  </div>
                 </div>
-              )}
-            </div>
-
-            {/* Specifications */}
-            <div className="space-y-4 sm:space-y-6">
-              {product.lightStyle && (
-                <div>
-                  <p className="text-xs sm:text-sm mb-2">Стиль</p>
-                  <p className="text-xs sm:text-sm text-gray-600">{product.lightStyle}</p>
-                  <div className="h-px bg-gray-200"></div>
+                
+                {/* Наличие и доставка */}
+                <div className="col-span-1 sm:col-span-12 bg-gray-50 p-3 rounded text-sm mb-3 sm:mb-0">
+                  <div className="flex flex-col sm:flex-row sm:flex-wrap sm:justify-between">
+                    <div className="flex items-center gap-1 mb-1 sm:mb-0">
+                      <span className="text-green-600">В наличии {product.stock} шт.</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span>Доставка: 10 февраля</span>
+                    </div>
+                  </div>
                 </div>
-              )}
-
-              {product.lampType && (
-                <div>
-                  <p className="text-xs sm:text-sm mb-2">Тип лампы</p>
-                  <p className="text-xs sm:text-sm text-gray-600">{product.lampType}</p>
-                  <div className="h-px bg-gray-200"></div>
+                
+                {/* Основные характеристики */}
+                <div className="col-span-1 sm:col-span-12 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 text-sm mb-3 sm:mb-0">
+                  <div className="flex items-center gap-1">
+                    <span className="text-gray-500">Высота:</span>
+                    <span>100 мм</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="text-gray-500">Диаметр:</span>
+                    <span>70 мм</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="text-gray-500">Цоколь:</span>
+                    <span>GU10</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="text-gray-500">Тип лампы:</span>
+                    <span>Галогеновая</span>
+                  </div>
                 </div>
-              )}
-
-              {product.color && (
-                <div>
-                  <p className="text-xs sm:text-sm mb-2">Цвет</p>
-                  <p className="text-xs sm:text-sm text-gray-600">{product.color}</p>
-                  <div className="h-px bg-gray-200"></div>
+                
+                {/* Дополнительные преимущества - компактно */}
+                <div className="col-span-1 sm:col-span-12 grid grid-cols-1 sm:grid-cols-2 gap-x-2 gap-y-1 text-xs mt-1">
+                  <div className="flex items-center gap-1 mb-1 sm:mb-0">
+                    <ArrowRight className="w-3 h-3 flex-shrink-0" />
+                    <span className="line-clamp-1">Увеличенный срок возврата</span>
+                  </div>
+                  <div className="flex items-center gap-1 mb-1 sm:mb-0">
+                    <ArrowRight className="w-3 h-3 flex-shrink-0" />
+                    <span className="line-clamp-1">Расширенная гарантия</span>
+                  </div>
+                  <div className="flex items-center gap-1 mb-1 sm:mb-0">
+                    <ArrowRight className="w-3 h-3 flex-shrink-0" />
+                    <span className="line-clamp-1">Бесплатная доставка от 3000₽</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <ArrowRight className="w-3 h-3 flex-shrink-0" />
+                    <span className="line-clamp-1">Оплата бонусами СберСпасибо</span>
+                  </div>
                 </div>
-              )}
-
-              {product.socketType && (
-                <div>
-                  <p className="text-xs sm:text-sm mb-2">Цоколь</p>
-                  <p className="text-xs sm:text-sm text-gray-600">{product.socketType}</p>
-                  <div className="h-px bg-gray-200"></div>
-                </div>
-              )}
-
-              {product.lampsCount && (
-                <div>
-                  <p className="text-xs sm:text-sm mb-2">Количество ламп</p>
-                  <p className="text-xs sm:text-sm text-gray-600">{product.lampsCount}</p>
-                  <div className="h-px bg-gray-200"></div>
-                </div>
-              )}
-
-              {product.lampPower && (
-                <div>
-                  <p className="text-xs sm:text-sm mb-2">Мощность лампы, Вт</p>
-                  <p className="text-xs sm:text-sm text-gray-600">{product.lampPower}</p>
-                  <div className="h-px bg-gray-200"></div>
-                </div>
-              )}
-
-              {product.totalPower && (
-                <div>
-                  <p className="text-xs sm:text-sm mb-2">Общая мощность, Вт</p>
-                  <p className="text-xs sm:text-sm text-gray-600">{product.totalPower}</p>
-                  <div className="h-px bg-gray-200"></div>
-                </div>
-              )}
-
-              {product.voltage && (
-                <div>
-                  <p className="text-xs sm:text-sm mb-2">Напряжение, В</p>
-                  <p className="text-xs sm:text-sm text-gray-600">{product.voltage}</p>
-                  <div className="h-px bg-gray-200"></div>
-                </div>
-              )}
-
-              {product.material && (
-                <div>
-                  <p className="text-xs sm:text-sm mb-2">Материал</p>
-                  <p className="text-xs sm:text-sm text-gray-600">{product.material}</p>
-                  <div className="h-px bg-gray-200"></div>
-                </div>
-              )}
-
-              <div>
-                <p className="text-xs sm:text-sm mb-2">Цветовая температура, К</p>
-                <div className="h-px bg-gray-200"></div>
-              </div>
-
-              <div>
-                <p className="text-xs sm:text-sm mb-2">Мощность, Вт</p>
-                <p className="text-xs sm:text-sm text-gray-600">36</p>
-                <div className="h-px bg-gray-200"></div>
-              </div>
-
-              <div>
-                <p className="text-xs sm:text-sm mb-2">Степень защиты</p>
-                <p className="text-xs sm:text-sm text-gray-600">IP 20</p>
-                <div className="h-px bg-gray-200"></div>
-              </div>
-
-              {product.source && (
-                <div>
-                  <p className="text-xs sm:text-sm mb-2">Источник</p>
-                  <p className="text-xs sm:text-sm text-gray-600">{product.source}</p>
-                  <div className="h-px bg-gray-200"></div>
-                </div>
-              )}
-            </div>
-
-            {/* Price and Action */}
-            <div className="mt-6 sm:mt-12">
-              <div className="flex items-baseline justify-between mb-4 sm:mb-6">
-                <span className="text-2xl sm:text-3xl md:text-4xl font-bold">
-                  {new Intl.NumberFormat('ru-RU').format(product.price)} ₽
-                </span>
-                <span className="text-xs sm:text-sm text-gray-600">В наличии: {product.stock}</span>
               </div>
             </div>
           </div>
+
+          {/* Табы */}
+          <div className="mt-6 border-b">
+            <div className="flex overflow-x-auto">
+              {['characteristics', 'description', 'delivery', 'lamps', 'reviews'].map((tab) => (
+                <button
+                  key={tab}
+                  className={`pb-2 px-3 text-sm whitespace-nowrap ${
+                    activeTab === tab
+                      ? 'border-b-2 border-black font-medium'
+                      : 'text-gray-500'
+                  }`}
+                  onClick={() => setActiveTab(tab)}
+                >
+                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Содержимое таба */}
+          {activeTab === 'characteristics' && (
+            <div className="py-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <div>
+                <h3 className="font-medium mb-2 text-sm">ЭЛЕКТРИКА</h3>
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Вид ламп</span>
+                    <span>Галогеновая</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Цоколь</span>
+                    <span>GU10</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Количество ламп</span>
+                    <span>1</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Мощность лампы, W</span>
+                    <span>50</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Общая мощность, W</span>
+                    <span>50</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Напряжение</span>
+                    <span>220</span>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <h3 className="font-medium mb-2 text-sm">ВНЕШНИЙ ВИД</h3>
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Материал плафона</span>
+                    <span>Металл</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Цвет плафона</span>
+                    <span>Черный</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Материал арматуры</span>
+                    <span>Металл</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Цвет арматуры</span>
+                    <span>Черный</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Стиль</span>
+                    <span>Минимализм</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Направление</span>
+                    <span>Поворотное</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Форма плафона</span>
+                    <span>Цилиндр</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
+        <Toaster position="top-center" richColors />
       </div>
-      <Toaster position="top-center" richColors />
-    </div>
+    </>
   );
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: 'blocking'
+  };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const { supplier, article } = params as { supplier: string; article: string };
+  
+  try {
+    const url = `${BASE_URL}/api/product/${supplier}?productArticle=${article}`;
+    console.log('Fetching product from:', url);
+    const response = await fetch(url);
+    console.log('Product fetch status:', response.status);
+
+    if (!response.ok) {
+      const errText = await response.text().catch(() => 'no body');
+      console.error('Product fetch failed:', response.status, errText);
+      return { notFound: true };
+    }
+
+    const product = await response.json();
+    console.log('Product response:', product);
+
+    if (!product) {
+      return { notFound: true };
+    }
+
+    return {
+      props: {
+        product,
+      },
+      revalidate: 60,
+    };
+  } catch (error) {
+    console.error('Error fetching product:', error);
+    return { notFound: true };
+  }
 };
 
 export default ProductDetail;
