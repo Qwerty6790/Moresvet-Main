@@ -12,7 +12,7 @@ import LoadingSpinner from '@/components/LoadingSpinner';
 import { ProductI } from '@/types/interfaces';
 import Pagination from '@/components/PaginationComponents';
 import SEO from '@/components/SEO';
-import CatalogOfProductSearch from '@/components/catalogofsearch';
+import CatalogOfProductSearch from '@/components/Catalogofsearch';
 
 
 
