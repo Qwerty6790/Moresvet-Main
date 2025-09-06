@@ -4,13 +4,17 @@ interface LoadingSpinnerProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
   text?: string;
   showText?: boolean;
+  // Дополнительный флаг для удобства: если передан false — компонент ничего не рендерит
+  isLoading?: boolean;
 }
 
 const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   size = 'md',
   text = 'Загружаем MORESVET...',
-  showText = true
+  showText = true,
+  isLoading = true
 }) => {
+  if (!isLoading) return null;
   const getSizeClasses = () => {
     switch (size) {
       case 'sm': return 'w-16 h-16';

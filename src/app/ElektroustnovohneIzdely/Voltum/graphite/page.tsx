@@ -1,13 +1,13 @@
-﻿'use client';
+'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import axios from 'axios';
 import { ProductI } from '@/types/interfaces';
-import CatalogOfProductSearch from '@/components/catalogofsearch';
-import CriticalPreloader from '@/components/CriticalPreloader';
+import CatalogOfProductSearch from '@/components/Catalogofsearch';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import PaginationComponents from '@/components/PaginationComponents';
-import { fetchProductsOptimized, filterProducts, paginateProducts, preloadCriticalImages } from '@/utils/api';
+import { NEXT_PUBLIC_API_URL } from '@/utils/constants';
 
 export default function VoltumGraphitePage() {
   const [products, setProducts] = useState<ProductI[]>([]);
@@ -16,139 +16,71 @@ export default function VoltumGraphitePage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [viewMode, setViewMode] = useState<'grid' | 'list' | 'table'>('grid');
+  const [allFilteredProducts, setAllFilteredProducts] = useState<ProductI[]>([]);
   const itemsPerPage = 12;
 
-  const [allProducts, setAllProducts] = useState<ProductI[]>([]);
-
-  // Мемоизированные вычисления
-  const filteredProducts = useMemo(() => {
-    return filterProducts(allProducts, (product: any) => {
-      const category = product.category?.toLowerCase() || '';
-      const name = product.name?.toLowerCase() || '';
-      
-      // Быстрая проверка на графит
-      const hasGraphite = category.includes('графит') || 
-                         name.includes('графит') ||
-                         name.includes('graphite');
-      
-      // Исключаем хром
-      const notChrome = !category.includes('хром') && !name.includes('хром');
-      
-      const isMatch = hasGraphite && notChrome;
-      
-      // Логируем только подходящие товары
-      if (isMatch) {
-        console.log(`[Voltum Graphite] НАЙДЕН: "${product.name}"`);
-      }
-      
-      return isMatch;
-    });
-  }, [allProducts]);
-
-  const paginatedProducts = useMemo(() => {
-    return paginateProducts(filteredProducts, currentPage, itemsPerPage);
-  }, [filteredProducts, currentPage, itemsPerPage]);
-
-  const fetchProducts = async () => {
+  const fetchProducts = async (page: number = 1) => {
     try {
       setLoading(true);
-      
-      // Оптимизированная загрузка с поиском по ключевым словам
-      const products = await fetchProductsOptimized('Voltum', { 
-        source: 'Voltum',
-        name: 'графит',
-        include_name: 'графит,graphite'
-      });
-      setAllProducts(Array.isArray(products) ? products : []);
-      
-    } catch (error) {
-      console.error('Ошибка загрузки товаров:', error);
-      setAllProducts([]);
-    } finally {
-      setLoading(false);
-    }
+      if (allFilteredProducts.length > 0) {
+        const startIndex = (page - 1) * itemsPerPage;
+        setProducts(allFilteredProducts.slice(startIndex, startIndex + itemsPerPage));
+        setCurrentPage(page);
+        setLoading(false);
+        return;
+      }
+
+      const apiUrl = NEXT_PUBLIC_API_URL;
+      let allProducts: any[] = [];
+      for (let pageNum = 1; pageNum <= 5; pageNum++) {
+        try {
+          const params = { source: 'Voltum', page: pageNum, limit: 200, inStock: 'true' };
+          const response = await axios.get(`${apiUrl}/api/products/Voltum`, { params });
+          if (response.data && response.data.products && Array.isArray(response.data.products)) {
+            allProducts = [...allProducts, ...response.data.products];
+            if (response.data.products.length < params.limit) break;
+          } else break;
+          await new Promise(r => setTimeout(r, 50));
+        } catch (err) { console.error(err); break; }
+      }
+
+      const uniqueProducts = allProducts.filter((product, index, self) => index === self.findIndex(p => p.article === product.article));
+      if (uniqueProducts.length > 0) {
+        const filteredProducts = uniqueProducts.filter((product: any) => {
+          const category = (product.category || '').toLowerCase();
+          const name = (product.name || '').toLowerCase();
+          return category.includes('графит') || name.includes('графит');
+        });
+        setAllFilteredProducts(filteredProducts);
+        setTotalProducts(filteredProducts.length);
+        setTotalPages(Math.ceil(filteredProducts.length / itemsPerPage));
+        const startIndex = (page - 1) * itemsPerPage;
+        setProducts(filteredProducts.slice(startIndex, startIndex + itemsPerPage));
+      }
+    } catch (error) { console.error(error); setProducts([]); } finally { setLoading(false); }
   };
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  useEffect(() => {
-    setProducts(paginatedProducts);
-    setTotalProducts(filteredProducts.length);
-    setTotalPages(Math.ceil(filteredProducts.length / itemsPerPage));
-    
-    // Логируем результаты
-    console.log(`✅ Найдено товаров Voltum Graphite: ${filteredProducts.length}`);
-    if (filteredProducts.length > 0) {
-      console.log('Найденные товары:', filteredProducts.map((p: any) => ({
-        name: p.name,
-        article: p.article
-      })));
-    } else {
-      console.log('❌ Товары Voltum Graphite не найдены');
-    }
-    
-    // Принудительная предзагрузка критических изображений
-    if (filteredProducts.length > 0) {
-      preloadCriticalImages(filteredProducts);
-    }
-  }, [paginatedProducts, filteredProducts.length, itemsPerPage, filteredProducts]);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    // Прокручиваем вверх при смене страницы
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  useEffect(() => { fetchProducts(1); }, []);
+  const handlePageChange = (page: number) => { fetchProducts(page); };
 
   return (
     <div style={{ backgroundColor: 'var(--background)', minHeight: '100vh', color: 'var(--foreground)' }}>
-      {/* Принудительная предзагрузка критических изображений */}
-      <CriticalPreloader products={filteredProducts} />
-      
-      <div className="mx-auto px-4 sm:px-6 lg:px-8 mb-48" style={{ maxWidth: '88rem' }}>
-       
-      </div>
-
-      <div className="mx-auto px-4 sm:px-6 lg:px-8 py-8" style={{ maxWidth: '88rem' }}>
-        <div className="mb-8">
-          <h2 className="text-5xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-5">Графит</h2>
-          <nav className="flex flex-wrap items-center gap-1 sm:gap-2 text-sm sm:text-base text-white">
-          <Link href="/" className="hover:text-white transition-colors">Главная</Link>
+      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 mt-44">
+        <nav className="flex items-center space-x-2 text-sm text-gray-400">
+          <Link href="/">Главная</Link>
           <span>/</span>
-          <Link href="/ElektroustnovohneIzdely" className="hover:text-white transition-colors">Электроустановочные изделия</Link>
+          <Link href="/ElektroustnovohneIzdely">Электроустановочные изделия</Link>
           <span>/</span>
-          <Link href="/ElektroustnovohneIzdely/Voltum" className="hover:text-white transition-colors">Voltum</Link>
+          <Link href="/ElektroustnovohneIzdely/Voltum">Voltum</Link>
           <span>/</span>
-          <span className="text-white">Графит</span>
+          <span className="text-black">Графит</span>
         </nav>
-        </div>
-
-        <div className="mb-8">
-          { loading ? (
-  <LoadingSpinner isLoading={loading} />
-) : products.length > 0 ? (
-            <CatalogOfProductSearch products={products} viewMode={viewMode} isLoading={loading} />
-          ) : (
-            <div className="text-center py-16">
-              <div className="text-gray-400 text-lg mb-4">Товары не найдены</div>
-            </div>
-          )}
-        </div>
-
-        
-{ /* pagination */ }
-<PaginationComponents
-          totalPages={totalPages}
-          currentPage={currentPage}
-          onPageChange={handlePageChange}
-          isLoading={loading}
-          totalItems={totalProducts}
-          itemsPerPage={40}
-        />
-           
-          </div>
       </div>
-  
+      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <h2 className="text-5xl font-bold text-black mb-5">Графит</h2>
+        {loading ? <LoadingSpinner isLoading={loading} /> : products.length > 0 ? <CatalogOfProductSearch products={products} viewMode={viewMode} isLoading={loading} /> : <div className="text-center py-16"><div className="text-gray-400 text-lg mb-4">Товары не найдены</div></div>}
+        {totalPages > 1 && <PaginationComponents totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} isLoading={loading} totalItems={totalProducts} itemsPerPage={itemsPerPage} />}
+      </div>
+    </div>
   );
-} 
+}
