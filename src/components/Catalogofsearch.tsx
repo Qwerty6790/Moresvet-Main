@@ -1,3 +1,5 @@
+export { default } from './Catalogofsearch';
+
 import React, { useState, useMemo, useEffect, useRef, lazy, Suspense, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
