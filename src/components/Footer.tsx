@@ -26,10 +26,10 @@ const Footer = () => {
           <div className="space-y-6">
             <h2 className="text-xl font-medium border-b border-white pb-2 mb-4 text-white">ОБ MORE SVET</h2>
             <ul className="space-y-3 text-sm text-white">
-              <li><Link href="#" className="hover:text-white hover:underline transition-colors">О компании</Link></li>
-              <li><Link href="#" className="hover:text-white hover:underline transition-colors">Доставка</Link></li>
-              <li><Link href="#" className="hover:text-white hover:underline transition-colors">Способы оплаты</Link></li>
-              <li><Link href="#" className="hover:text-white hover:underline transition-colors">Контакты</Link></li>
+              <li><Link href="/about" className="hover:text-white hover:underline transition-colors">О компании</Link></li>
+              <li><Link href="/about" className="hover:text-white hover:underline transition-colors">Доставка</Link></li>
+              <li><Link href="/about" className="hover:text-white hover:underline transition-colors">Способы оплаты</Link></li>
+              <li><Link href="/about" className="hover:text-white hover:underline transition-colors">Контакты</Link></li>
             </ul>
           </div>
 
@@ -45,7 +45,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-white mt-8 pt-8">
           <div className="text-sm text-center text-white">
-            <div>© 2005—2025 moresvet.ru. Все права защищены</div>
+            <div>© 2025 moresvet.ru. Все права защищены</div>
           </div>
         </div>
       </div>

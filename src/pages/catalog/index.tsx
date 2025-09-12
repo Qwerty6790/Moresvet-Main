@@ -1305,7 +1305,22 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
       // Treat routes like /catalog/brand?page=2 as pretty if pathname starts with /catalog/
       const pathWithoutQuery = typeof router.asPath === 'string' ? router.asPath.split('?')[0] : '';
       const usingPrettyUrl = pathWithoutQuery.startsWith('/catalog/') && (!router.asPath.includes('?') || /\?page=\d+/i.test(router.asPath));
-      if (usingPrettyUrl) return;
+      // On initial render for pretty URLs we intentionally skip client refetch (use SSR data).
+      // But if user navigates client-side between pretty slugs (e.g. /catalog/denkirs -> /catalog/artelamp)
+      // we should allow refetch. Track previous path to distinguish initial load from client navigation.
+      if (!('prevPrettyPathRef' in (globalThis as any))) {
+        // store reference on globalThis to avoid moving other hooks around in this file
+        (globalThis as any).prevPrettyPathRef = { current: null };
+      }
+      const prevPrettyPathRef = (globalThis as any).prevPrettyPathRef as { current: string | null };
+
+      if (usingPrettyUrl && prevPrettyPathRef.current == null) {
+        // initial pretty-URL load: keep SSR result
+        prevPrettyPathRef.current = router.asPath as string;
+        return;
+      }
+      // subsequent client-side navigation between pretty URLs should refetch
+      prevPrettyPathRef.current = router.asPath as string;
       const { source: urlSource, page, category, sort, name } = router.query;
       const sourceName = urlSource || source || '';
       const pageNumber = page ? parseInt(page as string, 10) : 1;

@@ -154,21 +154,36 @@ const Header = () => {
 
   // Listen for cart-added events to briefly show mini modal
   useEffect(() => {
-    const handler = (e: Event) => {
+    const handler = (ev: Event) => {
+      let addedQuantity = 1;
       try {
-        const ce = e as CustomEvent;
+        const ce = ev as CustomEvent;
+        addedQuantity = typeof ce?.detail?.quantity === 'number' ? ce.detail.quantity : 1;
         setMiniCartMessage(ce?.detail?.name ? `${ce.detail.name}` : 'Товар добавлен');
         setMiniCartImageSrc(ce?.detail?.imageUrl || null);
-        setMiniCartQuantity(typeof ce?.detail?.quantity === 'number' ? ce.detail.quantity : 1);
+        setMiniCartQuantity(addedQuantity);
       } catch (err) {
         setMiniCartMessage('Товар добавлен');
         setMiniCartImageSrc(null);
         setMiniCartQuantity(1);
+        addedQuantity = 1;
       }
+
+      // Обновляем видимый мини-кошелёк
       setMiniCartVisible(true);
       if (miniCartTimeoutRef.current) window.clearTimeout(miniCartTimeoutRef.current);
       miniCartTimeoutRef.current = window.setTimeout(() => setMiniCartVisible(false), 1800);
+
+      // Обновляем глобальный счётчик корзины, читая актуальные данные из localStorage
+      try {
+        const cart = JSON.parse(localStorage.getItem('cart') || '{"products": []}');
+        setCartCount(Array.isArray(cart.products) ? cart.products.reduce((s: number, it: any) => s + (it.quantity || 0), 0) : 0);
+      } catch (err) {
+        // Если чтение localStorage не удалось, делаем локальное прибавление
+        setCartCount((prev) => prev + (typeof addedQuantity === 'number' ? addedQuantity : 1));
+      }
     };
+
     window.addEventListener('cart-added', handler as EventListener);
     // initialize cart count from localStorage
     try {
@@ -321,9 +336,9 @@ const Header = () => {
     };
 
     return (
-      <div 
-        key={product._id} 
-        className={`flex items-center px-4 py-3 text-white cursor-pointer transition-all duration-200 ${isHovering ? 'bg-black' : 'bg-black'}`}
+      <div
+        key={product._id}
+        className={`flex items-center px-4 py-4 text-white cursor-pointer transition-all duration-200 bg-black rounded-md`}
         onClick={handleClick}
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
@@ -335,8 +350,8 @@ const Header = () => {
           }
         }}
       >
-        <div className="relative w-12 h-12 mr-3 flex-shrink-0 overflow-hidden rounded-md">
-          <img 
+        <div className="relative w-20 h-20 mr-4 flex-shrink-0 overflow-hidden rounded-md">
+          <img
             src={imageUrl ? getImageUrl(imageUrl) : '/placeholder.jpg'}
             alt={product.name}
             className={`w-full h-full object-cover transition-all duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
@@ -346,10 +361,10 @@ const Header = () => {
             <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-md"></div>
           )}
         </div>
-        <div className="flex flex-col flex-1">
-          <span className="text-sm text-white line-clamp-2">{product.name}</span>
+        <div className="flex flex-col flex-1 min-w-0">
+          <span className="text-base text-white line-clamp-2">{product.name}</span>
           {product.article && (
-            <span className="text-xs text-white mt-0.5">Арт.: {product.article}</span>
+            <span className="text-sm text-white mt-1">Арт.: {product.article}</span>
           )}
         </div>
       </div>
@@ -370,14 +385,16 @@ const Header = () => {
           <div className=" py-2 px-4">
             <h3 className="text-xs font-medium uppercase text-white">Результаты поиска</h3>
           </div>
-          <div className="max-h-[60vh] bg-black overflow-y-auto">
-            {products.map((product) => (
-              <SearchResultItem 
-                key={product._id} 
-                product={product} 
-                handleSearch={handleSearch} 
-              />
-            ))}
+          <div className="max-h-[73vh] bg-black overflow-y-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3">
+              {products.map((product) => (
+                <SearchResultItem 
+                  key={product._id} 
+                  product={product} 
+                  handleSearch={handleSearch} 
+                />
+              ))}
+            </div>
           </div>
           <div className="border-t bg-black border-gray-100">
             <button
@@ -589,7 +606,7 @@ const Header = () => {
                 <div className="absolute right-0 top-full mt-2 w-96 bg-white text-black rounded-md shadow-lg z-50 p-3 text-sm">
                   <div className="flex items-start gap-4">
                     {miniCartImageSrc ? (
-                      <div className="w-20 h-20 bg-gray-100 rounded-md overflow-hidden flex items-center justify-center flex-shrink-0">
+                      <div className="w-52 h-52 bg-gray-100 rounded-md overflow-hidden flex items-center justify-center flex-shrink-0">
                         {/** product image will be injected via inline img src from state set by event **/}
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={getImageUrl(miniCartImageSrc)} alt={miniCartMessage || 'img'} className="w-full h-full object-cover" />
@@ -625,21 +642,30 @@ const Header = () => {
                     </div>
                     <div className="grid grid-cols-3 sm:grid-cols-6 gap-4 items-center">
                       {/* hardcoded logos from public/images/brands */}
-                      {[
-                        'artelamplogo.png','denkirslogo.png','elektrostandartlogo.png','favouritelogo.png','kinklightlogo.png','lightstarlogo.png',
-                        'lumionlogo.png','maytonilogo.png','novotechlogo.png','odeonlightlogo.png','sonexlogo.png','stlucelogo.png',
-                        'voltumlogo.png','werkellogo.png'
-                      ].map((fn) => {
-                        const slug = encodeURIComponent(fn.replace(/\.[^.]+$/, ''));
-                        return (
-                          <Link key={fn} href={`/catalog/${slug}`} className="flex items-center justify-center p-2 bg-black rounded">
+                      {(
+                        // массив объектов: имя файла и отдельная ссылка (href)
+                        [
+                          { file: 'artelamplogo.png', href: '/catalog/artelamp' },
+                          { file: 'denkirslogo.png', href: '/catalog/denkirs' },
+                          { file: 'elektrostandartlogo.png', href: '/catalog/elektrostandart' },
+                          { file: 'favouritelogo.png', href: '/catalog/favourite' },
+                          { file: 'kinklightlogo.png', href: '/catalog/kinklight' },
+                          { file: 'lightstarlogo.png', href: '/catalog/lightstar' },
+                          { file: 'lumionlogo.png', href: '/catalog/lumion' },
+                          { file: 'maytonilogo.png', href: '/catalog/maytoni' },
+                          { file: 'novotechlogo.png', href: '/catalog/novotech' },
+                          { file: 'odeonlightlogo.png', href: '/catalog/odeonlight' },
+                          { file: 'sonexlogo.png', href: '/catalog/sonex' },
+                          { file: 'stlucelogo.png', href: '/catalog/stluce' },
+                        ].map((b) => (
+                          <Link key={b.file} href={b.href} className="flex items-center justify-center p-2 bg-black rounded">
                             <div className="w-32 h-12 flex items-center justify-center bg-black rounded overflow-hidden">
                               {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <img src={`/images/brands/${fn}`} alt={fn.replace(/\.[^.]+$/, '')} className="max-w-full max-h-full object-contain" />
+                              <img src={`/images/brands/${b.file}`} alt={b.file.replace(/\.[^.]+$/, '')} className="max-w-full max-h-full object-contain" />
                             </div>
                           </Link>
-                        );
-                      })}
+                        ))
+                      )}
                     </div>
                   </div>
                   <div className="hidden md:block md:w-1/3 lg:w-1/4">

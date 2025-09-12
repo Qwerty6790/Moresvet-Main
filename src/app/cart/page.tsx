@@ -347,9 +347,9 @@ const Cart: React.FC = () => {
                 <div className="bg-white p-4 rounded-lg border border-gray-100 mb-4">
                   <h3 className="text-md font-semibold text-gray-900 mb-3">Оформление заказа</h3>
                   <div className="grid grid-cols-1 gap-3">
-                    <input value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="Имя*" className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none" />
-                    <input value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder="Телефон*" className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none" />
-                    <input value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="E-mail" className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none" />
+                    <input value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="Укажите имя" className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none" />
+                    <input value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder="Укажите телефон" className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none" />
+                    <input value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="Укажите E-mail" className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none" />
 
                     <div className="flex flex-wrap gap-2">
                       <button onClick={() => setDeliveryMethod('delivery')} className={`px-3 py-1.5 rounded-lg border text-sm ${deliveryMethod === 'delivery' ? 'bg-black text-white border-black' : 'border-gray-300 text-black'}`}>Доставка</button>
@@ -359,7 +359,7 @@ const Cart: React.FC = () => {
                     {deliveryMethod === 'delivery' ? (
                       <input value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Адрес доставки" className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none" />
                     ) : (
-                      <div className="p-3 bg-gray-50 rounded">Деревня Исаково 103А, Истринский район</div>
+                      <div className="p-3 text-black rounded">121601, город Москва, Мкад 25-километр,ТК КОНСТРУКТОР</div>
                     )}
 
                     <div className="flex flex-wrap gap-2">
