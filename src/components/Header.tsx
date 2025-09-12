@@ -632,7 +632,7 @@ const Header = () => {
                       ].map((fn) => {
                         const slug = encodeURIComponent(fn.replace(/\.[^.]+$/, ''));
                         return (
-                          <Link key={fn} href={`/brands/${slug}`} className="flex items-center justify-center p-2 bg-black rounded">
+                          <Link key={fn} href={`/catalog/${slug}`} className="flex items-center justify-center p-2 bg-black rounded">
                             <div className="w-32 h-12 flex items-center justify-center bg-black rounded overflow-hidden">
                               {/* eslint-disable-next-line @next/next/no-img-element */}
                               <img src={`/images/brands/${fn}`} alt={fn.replace(/\.[^.]+$/, '')} className="max-w-full max-h-full object-contain" />
