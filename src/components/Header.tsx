@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import { searchProductsWithSorting } from '@/utils/api';
 import { FiSearch, FiUser, FiHeart, FiShoppingCart, FiMenu, FiX, FiNavigation2 } from 'react-icons/fi';
 import { FaAccessibleIcon, FaHeart, FaShoppingCart, FaUser } from 'react-icons/fa';
 import { NEXT_PUBLIC_API_URL, getImageUrl } from '@/utils/constants';
@@ -24,6 +25,9 @@ const useSearchProducts = (query: string) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    const controller: AbortController | null = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    let mounted = true;
+
     const fetchProducts = async () => {
       if (!query || query.length < 2) {
         setProducts([]);
@@ -31,30 +35,34 @@ const useSearchProducts = (query: string) => {
       }
       setLoading(true);
       try {
-        // Добавляем cache-busting параметр _ts и заголовки, запрещающие кеширование
-        const ts = Date.now();
-        const response = await axios.get(`/api/products/search`, {
-          params: { name: query, limit: 6, _ts: ts },
-          headers: {
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            Pragma: 'no-cache',
-            Expires: '0',
-          },
-        });
-        setProducts(response.data.products || []);
+        const data = await searchProductsWithSorting(query, { limit: 6 }, controller ? controller.signal : undefined, true);
+        if (!mounted) return;
+        setProducts(data.products || []);
       } catch (error) {
+        if ((error as any)?.name === 'CanceledError' || (error as any)?.message === 'canceled') {
+          // запрос отменён — игнорируем
+          return;
+        }
         console.error('Ошибка при поиске товаров:', error);
         setProducts([]);
       } finally {
-        setLoading(false);
+        if (mounted) setLoading(false);
       }
     };
 
-    const timer = setTimeout(() => {
+    const timer = window.setTimeout(() => {
       fetchProducts();
     }, 300);
 
-    return () => clearTimeout(timer);
+    return () => {
+      mounted = false;
+      try {
+        if (controller) controller.abort();
+      } catch (e) {
+        // ignore
+      }
+      clearTimeout(timer);
+    };
   }, [query]);
 
   return { products, loading };
@@ -111,7 +119,10 @@ const Header = () => {
   const [mounted, setMounted] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [dropdownMounted, setDropdownMounted] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const mobileMenuTimeoutRef = useRef<number | null>(null);
+  const dropdownTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     return () => {
@@ -144,6 +155,38 @@ const Header = () => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
+  }, []);
+
+  // Управление монтированием дропдауна для плавного входа/выхода
+  useEffect(() => {
+    if (showSearchResults) {
+      if (dropdownTimeoutRef.current) window.clearTimeout(dropdownTimeoutRef.current);
+      setDropdownMounted(true);
+      return;
+    }
+
+    // при закрытии даём 320ms на анимацию, затем размонтируем
+    dropdownTimeoutRef.current = window.setTimeout(() => {
+      setDropdownMounted(false);
+      dropdownTimeoutRef.current = null;
+    }, 320);
+
+    return () => {
+      if (dropdownTimeoutRef.current) {
+        window.clearTimeout(dropdownTimeoutRef.current);
+        dropdownTimeoutRef.current = null;
+      }
+    };
+  }, [showSearchResults]);
+
+  // Отслеживание скролла для изменения внешнего вида логотипа
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   useEffect(() => {
@@ -235,7 +278,7 @@ const Header = () => {
     return (
       <div 
         key={product._id} 
-        className={`flex items-center px-4 py-3 cursor-pointer transition-all duration-200 border-b border-gray-50 ${isHovering ? 'bg-gray-50' : 'bg-white'}`}
+        className={`flex items-center px-4 py-3 text-white cursor-pointer transition-all duration-200 ${isHovering ? 'bg-black' : 'bg-black'}`}
         onClick={handleClick}
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
@@ -259,9 +302,9 @@ const Header = () => {
           )}
         </div>
         <div className="flex flex-col flex-1">
-          <span className="text-sm text-gray-800 line-clamp-2">{product.name}</span>
+          <span className="text-sm text-white line-clamp-2">{product.name}</span>
           {product.article && (
-            <span className="text-xs text-gray-500 mt-0.5">Арт.: {product.article}</span>
+            <span className="text-xs text-white mt-0.5">Арт.: {product.article}</span>
           )}
         </div>
       </div>
@@ -279,10 +322,10 @@ const Header = () => {
     if (products.length > 0) {
       return (
         <div>
-          <div className="border-b border-gray-100 py-2 px-4">
-            <h3 className="text-xs font-medium uppercase text-gray-600">Результаты поиска</h3>
+          <div className=" py-2 px-4">
+            <h3 className="text-xs font-medium uppercase text-white">Результаты поиска</h3>
           </div>
-          <div className="max-h-[60vh] overflow-y-auto">
+          <div className="max-h-[60vh] bg-black overflow-y-auto">
             {products.map((product) => (
               <SearchResultItem 
                 key={product._id} 
@@ -294,7 +337,7 @@ const Header = () => {
           <div className="border-t bg-black border-gray-100">
             <button
               onClick={() => handleSearch()}
-              className="w-full py-3 text-xs font-medium uppercase text-black hover:bg-gray-50 transition-colors"
+              className="w-full py-3 text-xs font-medium uppercase text-white hover:bg-gray-50 transition-colors"
             >
               Показать все результаты
             </button>
@@ -307,7 +350,7 @@ const Header = () => {
     
     return (
       <div className="py-6 px-4 text-center">
-        <p className="text-sm text-gray-500">Ничего не найдено. Попробуйте использовать другие ключевые слова.</p>
+        <p className="text-sm text-white">Ничего не найдено. Попробуйте использовать другие ключевые слова.</p>
       </div>
     );
   }, [products, loading, searchQuery, handleSearch, ]);
@@ -330,6 +373,20 @@ const Header = () => {
       setIsCatalogOpen(false);
       hoverTimeoutRef.current = null;
     }, 160);
+  };
+
+  const openSearchDropdown = () => {
+    // отменяем размонтирование если было
+    if (dropdownTimeoutRef.current) {
+      window.clearTimeout(dropdownTimeoutRef.current);
+      dropdownTimeoutRef.current = null;
+    }
+    // сначала монтируем контейнер, затем в следующем тике включаем анимацию
+    setDropdownMounted(true);
+    window.setTimeout(() => {
+      setShowSearchResults(true);
+      searchInputRef.current?.focus();
+    }, 20);
   };
 
   useEffect(() => {
@@ -374,14 +431,17 @@ const Header = () => {
       <div className="bg-black py-5 sm:py-4 ">
         <div className="max-w-screen-xl mx-auto px-4 flex items-center justify-between">
           {/* Логотип */}
-          <div className="absolute left-[54%] sm:left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-            <Link href="/" className="flex items-center pointer-events-auto">
-              <span className="text-5xl  font-bold tracking-widest text-white">MORESVET</span>
-            </Link>
+          <div className="absolute left-1/2 max-lg:left-[55%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+            <div className={`transition-all duration-300 ${showSearchResults || scrolled ? 'translate-x-[-1.5rem] scale-90' : 'translate-x-0 scale-100'}`}>
+              <Link href="/" className={`flex items-center ${showSearchResults || scrolled ? 'pointer-events-none' : 'pointer-events-auto'}`}>
+                <span className={`text-5xl font-bold tracking-widest transition-all duration-300 ${showSearchResults || scrolled ? 'text-4xl' : 'text-5xl'} text-white`}>MORESVET</span>
+                <span className={`text-1xl max-lg:hidden font-bold tracking-widest transition-all duration-300 ${showSearchResults || scrolled ? 'text-1xl' : 'text-1xl'} text-white`}>2025</span>
+              </Link>
+            </div>
           </div>
 
           {/* Центральная навигация */}
-          <nav className="hidden md:flex items-center gap-9 text-white uppercase text-sm font-semibold tracking-wide">
+          <nav className="hidden md:flex items-center gap-9 text-white uppercase text-sm font-bold tracking-wide">
             <Link href="/3d-models" className="hover:text-gray-300">ПРАВИЛА ДОСТАВКИ</Link>
             <Link href="/projects" className="hover:text-gray-300">О КОМПАНИИ</Link>
             <Link href="/team" className="hover:text-gray-300">БРЕНДЫ</Link>
@@ -402,7 +462,7 @@ const Header = () => {
               КАТАЛОГ
             </button>
             <button 
-              onClick={() => { setShowSearchResults(true); searchInputRef.current?.focus(); }} 
+              onClick={openSearchDropdown} 
               aria-label="Поиск" 
               className="p-2 hover:text-gray-300"
             >
@@ -437,59 +497,41 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Модальное окно поиска */}
-      {showSearchResults && (
-        <>
-          {/* Затемнение фона */}
-          <div 
-            className="fixed inset-0 bg-black/60 z-50 backdrop-blur-sm transition-opacity duration-300"
-            onClick={() => setShowSearchResults(false)}
-          />
-          
-          {/* Модальное окно поиска */}
-          <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4">
-            <div className="bg-white rounded-lg shadow-2xl w-full max-w-2xl max-h-[80vh] overflow-hidden">
-              {/* Заголовок и кнопка закрытия */}
-              <div className="flex items-center justify-between p-4 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900">Поиск по каталогу</h2>
-                <button 
-                  onClick={() => setShowSearchResults(false)}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                >
-                  <FiX size={20} className="text-gray-500" />
-                </button>
-              </div>
-              
-              {/* Поле поиска */}
-              <div className="p-4 border-b border-gray-200">
-                <div className="relative">
-                  <input
-                    ref={searchInputRef}
-                    type="text"
-                    placeholder="Введите название товара..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full px-4 py-3 pl-12 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:bg-white"
-                  />
-                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
-                    <SearchIcon />
+      {/* Встроенный выпадающий поиск (вместо модального окна) */}
+      {dropdownMounted && (
+        <div ref={searchResultsRef} className="absolute left-0 right-0 top-[100%] z-40 pointer-events-none">
+          <div className="max-w-screen-xl mx-auto px-4">
+            <div className={`bg-black rounded-b-lg shadow-lg overflow-hidden transform transition-all duration-300 ease-out ${showSearchResults ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-4 pointer-events-none'}`}>
+              <div className="p-4">
+                <div className="flex items-center gap-3">
+                  <div className="relative flex-1">
+                    <input
+                      ref={searchInputRef}
+                      type="text"
+                      placeholder="Введите название товара..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full px-4 py-3 pl-10 rounded-md  bg-transparent text-white focus:outline-none"
+                    />
+                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white">
+                      <SearchIcon />
+                    </div>
                   </div>
                   <button
-                    onClick={() => handleSearch()}
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors"
+                    onClick={() => { setShowSearchResults(false); }}
+                    className="p-2 text-white hover:text-gray-800"
+                    aria-label="Закрыть поиск"
                   >
-                    Найти
+                    <FiX />
                   </button>
                 </div>
               </div>
-              
-              {/* Результаты поиска */}
-              <div className="flex-1 overflow-y-auto">
+              <div className="border-t">
                 {searchResultsContent}
               </div>
             </div>
           </div>
-        </>
+        </div>
       )}
 
       {/* Мобильное меню */}

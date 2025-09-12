@@ -156,9 +156,9 @@ export default function Banner() {
               <div className="absolute inset-0 z-20">
                 <div className="mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
                   <div className="absolute z-30 p-4 md:p-8 max-w-md md:max-w-lg lg:max-w-xl top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-                    <h1 className={`text-white text-xl md:text-3xl lg:text-6xl font-bold tracking-tight drop-shadow-sm mb-2 transform transition-all duration-700 ${index === currentSlide ? 'opacity-100 translate-y-0 delay-100' : 'opacity-0 translate-y-6'}`}>{slide.title}</h1>
-                    <h2 className={`text-white text-base md:text-2xl lg:text-6xl font-bold drop-shadow-sm mb-4 transform transition-all duration-800 ${index === currentSlide ? 'opacity-100 translate-y-0 delay-200' : 'opacity-0 translate-y-6'}`}>{slide.subtitle}</h2>
-                    <Link href={slide.buttonLink} className={`inline-flex items-center px-4 py-2 md:px-6 md:py-2.5 border-2 border-white text-white text-xs md:text-sm hover:bg-white hover:text-black transition-all duration-900 ${index === currentSlide ? 'opacity-100 translate-y-0 delay-300' : 'opacity-0 translate-y-6'}`}>
+                    <h1 className={`text-white text-4xl md:text-3xl lg:text-6xl font-bold tracking-tight drop-shadow-sm mb-2 transform transition-all duration-700 ${index === currentSlide ? 'opacity-100 translate-y-0 delay-100' : 'opacity-0 translate-y-6'}`}>{slide.title}</h1>
+                    <h2 className={`text-white text-2xl md:text-2xl lg:text-6xl font-bold drop-shadow-sm mb-4 transform transition-all duration-800 ${index === currentSlide ? 'opacity-100 translate-y-0 delay-200' : 'opacity-0 translate-y-6'}`}>{slide.subtitle}</h2>
+                    <Link href={slide.buttonLink} className={`inline-flex items-center px-4 py-2 md:px-6 md:py-2.5 border-2 border-white text-white text-2xl md:text-sm hover:bg-white hover:text-black transition-all duration-900 ${index === currentSlide ? 'opacity-100 translate-y-0 delay-300' : 'opacity-0 translate-y-6'}`}>
                       {slide.buttonText}
                       <ArrowRight className="ml-2 h-3 w-3 md:h-4 md:w-4" />
                     </Link>

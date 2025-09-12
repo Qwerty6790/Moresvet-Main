@@ -566,6 +566,26 @@ const cacheImagesFromBackend = (products: ProductI[]): void => {
 
 // Удаляем функции getLQIPUrl и preloadAllLQIP временно
 
+// Простая компонент-коллаж для плейсхолдера с надписью MORESVET
+const CollagePlaceholder: React.FC<{ className?: string; style?: React.CSSProperties; label?: string }> = ({ className, style, label = 'MORESVET' }) => {
+  const defaultStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundImage: "linear-gradient(45deg,#f8fafc 25%,#eef2f7 25%,#eef2f7 50%,#f8fafc 50%,#f8fafc 75%,#eef2f7 75%,#eef2f7 100%)",
+    backgroundSize: '40px 40px',
+    color: '#374151',
+    fontWeight: 700,
+    letterSpacing: '0.08em',
+    fontSize: 12,
+  };
+  return (
+    <div className={className || ''} style={{ ...defaultStyle, ...style }}>
+      <span>{label}</span>
+    </div>
+  );
+};
+
 // Радикально упрощаем SafeOptimizedImage для борьбы с CLS
 const SafeOptimizedImage: React.FC<{
   src: string;
@@ -591,11 +611,10 @@ const SafeOptimizedImage: React.FC<{
   if (!src || error) {
     return (
       <div
-        className={`w-full h-full flex items-center justify-center bg-gray-100 ${className || ''} block`}
-        // Применяем и aspect-ratio и явные размеры к плейсхолдеру
+        className={`${className || ''} block w-full h-full`}
         style={{ ...aspectRatioStyle, ...sizeStyle }}
       >
-        {/* Убираем текст "Нет фото" для максимальной простоты */}
+        <CollagePlaceholder style={{ width: '100%', height: '100%' }} />
       </div>
     );
   }
@@ -722,9 +741,9 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({
                       <td className="px-2 py-2 whitespace-nowrap">
                         <div className="h-10 w-10 sm:h-12 sm:w-12 overflow-hidden rounded-md bg-gray-100 flex items-center justify-center">
                           {mainImage ? (
-                            <img src={mainImage} alt={product.name || 'Товар'} className="h-full w-full object-cover" loading="lazy" />
+                            <SafeOptimizedImage src={mainImage} alt={product.name || 'Товар'} className="h-full w-full object-cover" />
                           ) : (
-                            <span className="text-gray-400 text-[8px] sm:text-xs">Нет фото</span>
+                            <CollagePlaceholder className="w-full h-full" style={{ borderRadius: '6px' }} />
                           )}
                         </div>
                       </td>
@@ -813,7 +832,7 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({
               {shouldLoad && mainImage ? (
                 <SafeOptimizedImage src={mainImage} alt={product.name || 'Товар'} />
               ) : (
-                <div className="w-full h-full bg-gray-100 animate-pulse"></div>
+                <CollagePlaceholder className="w-full h-full" />
               )}
             </div>
           </Link>

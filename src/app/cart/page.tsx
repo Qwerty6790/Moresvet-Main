@@ -14,7 +14,6 @@ const Cart: React.FC = () => {
   const [cartProducts, setCartProducts] = useState<ProductI[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [cartCount, setCartCount] = useState<number>(0);
-  const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [paymentMethod, setPaymentMethod] = useState<'online' | 'cod'>('online');
@@ -180,7 +179,6 @@ const Cart: React.FC = () => {
 
       toast.success('Заказ успешно создан!');
       handleClearCart();
-      setIsCheckoutModalOpen(false);
       if (token) {
         router.push('/orders');
       } else {
@@ -209,7 +207,6 @@ const Cart: React.FC = () => {
 
             toast.success('Заказ успешно создан!');
             handleClearCart();
-            setIsCheckoutModalOpen(false);
             router.push('/');
           } catch (guestErr) {
             toast.error('Ошибка при создании заказа. Повторите попытку.');
@@ -236,225 +233,164 @@ const Cart: React.FC = () => {
 
   return (
     <motion.section
-      className="min-h-screen bg-gray-50"
+      className="min-h-screen bg-gradient-to-b from-white to-gray-50"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.45 }}
     >
       <Toaster position="top-center" richColors />
 
-      {/* Hero секция */}
-      <div className="relative mt-32 h-[300px] bg-black overflow-hidden">
-        <div className="relative max-w-7xl mx-auto px-4 h-full flex items-center">
-          <div className="space-y-4">
-            <h1 className="text-7xl font-bold text-white tracking-tight">Корзина</h1>
-            <div className="flex items-center text-black/60 text-sm">
-              <Link href="/" className="hover:text-black transition-colors">
-                Главная
-              </Link>
+      <div className="max-w-6xl mx-auto px-4 py-16">
+        <div className="flex items-start justify-between mb-8">
+          <div>
+            <h1 className="text-4xl font-extrabold text-gray-900">Корзина</h1>
+            <div className="text-sm text-gray-500 mt-1">
+              <Link href="/" className="hover:underline">Главная</Link>
               <span className="mx-2">/</span>
-              <span className="text-black">Корзина</span>
+              <span>Корзина</span>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Основной контент */}
-      <div className="max-w-7xl mx-auto px-4 -mt-10 relative z-10 pb-20">
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Секция товаров корзины */}
-          <div className={`${!error ? 'lg:col-span-2' : 'lg:col-span-3'}`}>
+          <div className="text-right">
+            <div className="text-sm text-gray-500">Товаров: <span className="font-medium text-gray-900">{cartProducts.length}</span></div>
+            <div className="text-sm text-gray-500">Итого: <span className="font-bold text-gray-900">{totalToPay.toLocaleString()} ₽</span></div>
+          </div>
+        </div>
+
+        <div className="grid lg:grid-cols-12 gap-6">
+          <div className={`${!error ? 'lg:col-span-8' : 'lg:col-span-12'}`}>
             {isLoading ? (
-              <div className="bg-white rounded-2xl shadow-xl p-12 flex flex-col items-center">
-                <ClipLoader color="#000000" size={40} />
-                <p className="mt-4 text-black">Загружаем вашу корзину...</p>
+              <div className="bg-white rounded-2xl shadow p-12 flex flex-col items-center">
+                <ClipLoader color="#111827" size={36} />
+                <p className="mt-4 text-gray-700">Загружаем корзину...</p>
               </div>
             ) : error ? (
-              <div className="bg-white rounded-2xl shadow-xl p-12">
-                <div className="flex flex-col items-center text-center">
-                  <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-6">
-                    <svg
-                      className="w-12 h-12 text-black/40"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M16 6v2h3v12H5V8h3V6H3v16h18V6h-5z" />
-                      <path d="M11 11V3H9v8H6l4 4 4-4h-3z" />
-                    </svg>
-                  </div>
-                  <p className="text-2xl font-medium text-black mb-6">{error}</p>
-                  <Link
-                    href="/catalog"
-                    className="inline-flex items-center px-6 py-3 border-2 border-black text-black rounded-xl hover:bg-black hover:text-white transition-colors text-lg font-medium"
-                  >
-                    Перейти в каталог
-                    <svg
-                      className="w-5 h-5 ml-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M17 8l4 4m0 0l-4 4m4-4H3"
-                      />
-                    </svg>
-                  </Link>
-                </div>
+              <div className="bg-white rounded-2xl shadow p-10 text-center">
+                <p className="text-2xl font-medium text-gray-800 mb-6">{error}</p>
+                <Link href="/catalog" className="inline-flex items-center px-5 py-3 bg-black text-white rounded-xl">Перейти в каталог</Link>
               </div>
             ) : (
-              <div className="bg-white rounded-2xl shadow-xl p-6">
-                {/* Хедер с информацией и кнопкой поделиться */}
-                <div className="flex flex-col sm:flex-row items-center justify-between mb-6">
-                  <h1 className="text-2xl font-medium text-black">
-                    В корзине {cartProducts.length} {cartProducts.length === 1 ? 'товар' : cartProducts.length > 1 && cartProducts.length < 5 ? 'товара' : 'товаров'}
-                  </h1>
-                  <div className="flex items-center gap-4">
-                    <button
-                      onClick={handleClearCart}
-                      className="flex items-center gap-2 text-red-500 hover:text-red-700 transition-colors"
+              <div className="space-y-4">
+                {cartProducts.map((product) => {
+                  const images = (() => {
+                    if (typeof product.imageAddresses === 'string') return [product.imageAddresses];
+                    if (Array.isArray(product.imageAddresses)) return product.imageAddresses;
+                    if (typeof product.imageAddress === 'string') return [product.imageAddress];
+                    if (Array.isArray(product.imageAddress)) return product.imageAddress;
+                    return [];
+                  })();
+                  const imageUrl = images.length > 0 ? images[0] : '/placeholder.jpg';
+
+                  return (
+                    <motion.div
+                      key={product._id}
+                      className="bg-white rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col sm:flex-row gap-4 items-center"
+                      whileHover={{ y: -2 }}
                     >
-                      <FaTrash />
-                      Очистить корзину
-                    </button>
-                    <button
-                      onClick={handleShareCart}
-                      className="flex items-center gap-2 text-black hover:underline transition-colors"
-                    >
-                      <FaShareAlt />
-                      Поделиться корзиной
-                    </button>
-                  </div>
-                </div>
+                      <div className="w-28 h-28 flex-shrink-0 bg-gray-50 rounded-lg overflow-hidden flex items-center justify-center">
+                        <img src={`${imageUrl}?q=75&w=400`} alt={product.name} className="w-full h-full object-contain p-2" />
+                      </div>
 
-                {/* Список товаров */}
-                <div className="divide-y divide-gray-200">
-                  {cartProducts.map((product) => {
-                    // Определяем URL изображения
-                    const images = (() => {
-                      if (typeof product.imageAddresses === 'string') {
-                        return [product.imageAddresses];
-                      } else if (Array.isArray(product.imageAddresses)) {
-                        return product.imageAddresses;
-                      } else if (typeof product.imageAddress === 'string') {
-                        return [product.imageAddress];
-                      } else if (Array.isArray(product.imageAddress)) {
-                        return product.imageAddress;
-                      }
-                      return [];
-                    })();
-                    
-                    const imageUrl = images.length > 0 ? images[0] : '/placeholder.jpg';
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-lg font-semibold text-gray-900 truncate">{product.name}</h3>
+                        <p className="text-sm text-gray-500">Артикул: {product.article}</p>
+                        {product.source && <p className="text-sm text-gray-400 mt-1">Производитель: {product.source}</p>}
+                      </div>
 
-                    return (
-                      <motion.div 
-                        key={product._id} 
-                        className="p-6 hover:bg-gray-50 rounded-xl transition-colors my-2"
-                        whileHover={{ scale: 1.02 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <div className="flex gap-6">
-                          <div className="w-28 h-28 bg-gray-50 rounded-lg flex items-center justify-center overflow-hidden">
-                            <img
-                              src={`${imageUrl}?q=75&w=400`}
-                              alt={product.name}
-                              className="w-full h-full object-contain p-2"
-                            />
-                          </div>
+                      <div className="flex flex-col items-end gap-3">
+                        <div className="text-lg font-bold text-gray-900">{typeof product.price === 'number' ? `${product.price.toLocaleString()} ₽` : `${product.price} ₽`}</div>
 
-                          <div className="flex-grow">
-                            <h3 className="text-lg font-medium text-black mb-1">{product.name}</h3>
-                            <p className="text-sm text-black/60 mb-3">Артикул: {product.article}</p>
-                            
-                            <div className="flex flex-wrap items-center gap-6 mt-2">
-                              <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
-                                <button
-                                  onClick={() => handleDecreaseQuantity(product._id)}
-                                  className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-black"
-                                >
-                                  <FaMinus size={12} />
-                                </button>
-                                <span className="px-4 py-1 text-black font-medium">{product.quantity ?? 0}</span>
-                                <button
-                                  onClick={() => handleIncreaseQuantity(product._id)}
-                                  className="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-black"
-                                >
-                                  <FaPlus size={12} />
-                                </button>
-                              </div>
-                              
-                              <div className="text-xl font-bold text-black">
-                                {typeof product.price === 'number' && !isNaN(product.price)
-                                  ? `${product.price.toLocaleString()} ₽`
-                                  : `${product.price} ₽`}
-                              </div>
-                              
-                              <button 
-                                onClick={() => handleRemoveProduct(product._id)} 
-                                className="ml-auto text-red-500 hover:text-red-700 flex items-center gap-2"
-                              >
-                                <FaTrash size={16} />
-                                <span className="hidden sm:inline">Удалить</span>
-                              </button>
-                            </div>
-                          </div>
+                        <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden">
+                          <button onClick={() => handleDecreaseQuantity(product._id)} className="w-9 h-9 flex items-center justify-center text-gray-700 hover:bg-gray-100">
+                            <FaMinus />
+                          </button>
+                          <div className="px-4 text-sm font-medium">{product.quantity ?? 0}</div>
+                          <button onClick={() => handleIncreaseQuantity(product._id)} className="w-9 h-9 flex items-center justify-center text-gray-700 hover:bg-gray-100">
+                            <FaPlus />
+                          </button>
                         </div>
-                        
-                       
-                      </motion.div>
-                    );
-                  })}
-                </div>
+
+                        <button onClick={() => handleRemoveProduct(product._id)} className="text-sm text-red-600 hover:text-red-700">Удалить</button>
+                      </div>
+                    </motion.div>
+                  );
+                })}
               </div>
             )}
           </div>
 
-          {/* Сводка заказа */}
           {!error && (
-            <div className="lg:col-span-1">
-              <div className="bg-white p-8 rounded-2xl shadow-xl sticky top-24">
-                <h2 className="text-2xl font-bold text-black mb-6 pb-3 border-b border-gray-200">Ваш заказ</h2>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center text-lg">
-                    <span className="text-black/70">Товары ({cartProducts.length})</span>
-                    <span className="text-black font-medium">{totalAmount.toLocaleString()} ₽</span>
-                  </div>
-                  <div className="flex justify-between items-center text-lg">
-                    <span className="text-black/70">Доставка</span>
-                    <span className="text-green-600 font-medium">Бесплатно</span>
-                  </div>
-                  <div className="pt-4 mt-4 border-t border-gray-200">
-                    <div className="flex justify-between items-center mb-6">
-                      <span className="text-2xl font-bold text-black">ИТОГО</span>
-                      <span className="text-2xl font-bold text-black">{totalToPay.toLocaleString()} ₽</span>
+            <aside className="lg:col-span-4">
+              <div className="sticky top-28 bg-gradient-to-br from-white via-white to-gray-50 rounded-2xl p-6 shadow-md border border-gray-100">
+                <div className="flex items-center justify-between mb-3">
+                  <h2 className="text-lg font-bold text-gray-900">Ваш заказ</h2>
+                  <button onClick={handleClearCart} className="text-sm text-red-600 hover:text-red-700">Очистить</button>
+                </div>
+
+                <div className="space-y-2 text-sm text-gray-600 mb-4">
+                  <div className="flex justify-between"><span>Товары</span><span className="font-medium text-gray-900">{cartProducts.length}</span></div>
+                  <div className="flex justify-between"><span>Сумма</span><span className="font-medium text-gray-900">{totalAmount.toLocaleString()} ₽</span></div>
+                  <div className="flex justify-between"><span>Доставка</span><span className="text-green-600 font-medium">Бесплатно</span></div>
+                </div>
+
+                <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 mb-4">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <div className="text-sm text-gray-500">Итого к оплате</div>
+                      <div className="text-xl font-extrabold text-gray-900">{totalToPay.toLocaleString()} ₽</div>
                     </div>
-                   
-                    <button
-                      onClick={() => setIsCheckoutModalOpen(true)}
-                      className="w-full py-4 bg-black text-white text-center font-medium rounded-xl hover:bg-gray-900 transition-all shadow-md hover:shadow-lg text-lg"
-                    >
-                      ОФОРМИТЬ ЗАКАЗ
-                    </button>
-                    <p className="text-sm text-black/60 text-center mt-4">
-                      Способ и время доставки можно выбрать при оформлении
-                    </p>
+                    <div className="text-xs text-gray-400">VAT не включен</div>
+                  </div>
+                </div>
+
+                {/* Inline checkout form (moved from modal) */}
+                <div className="bg-white p-4 rounded-lg border border-gray-100 mb-4">
+                  <h3 className="text-md font-semibold text-gray-900 mb-3">Оформление заказа</h3>
+                  <div className="grid grid-cols-1 gap-3">
+                    <input value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="Имя*" className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none" />
+                    <input value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder="Телефон*" className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none" />
+                    <input value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="E-mail" className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none" />
+
+                    <div className="flex flex-wrap gap-2">
+                      <button onClick={() => setDeliveryMethod('delivery')} className={`px-3 py-1.5 rounded-lg border text-sm ${deliveryMethod === 'delivery' ? 'bg-black text-white border-black' : 'border-gray-300 text-black'}`}>Доставка</button>
+                      <button onClick={() => setDeliveryMethod('pickup')} className={`px-3 py-1.5 rounded-lg border text-sm ${deliveryMethod === 'pickup' ? 'bg-black text-white border-black' : 'border-gray-300 text-black'}`}>Самовывоз</button>
+                    </div>
+
+                    {deliveryMethod === 'delivery' ? (
+                      <input value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Адрес доставки" className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none" />
+                    ) : (
+                      <div className="p-3 bg-gray-50 rounded">Деревня Исаково 103А, Истринский район</div>
+                    )}
+
+                    <div className="flex flex-wrap gap-2">
+                      <button onClick={() => setPaymentMethod('online')} className={`px-3 py-1.5 rounded-lg border text-sm ${paymentMethod === 'online' ? 'bg-black text-white border-black' : 'border-gray-300 text-black'}`}>Онлайн</button>
+                      <button onClick={() => setPaymentMethod('cod')} className={`px-3 py-1.5 rounded-lg border text-sm ${paymentMethod === 'cod' ? 'bg-black text-white border-black' : 'border-gray-300 text-black'}`}>Без предоплаты</button>
+                    </div>
+
+                    {paymentMethod === 'online' && (
+                      <div className="text-xs text-gray-500">Безопасный платеж через YooKassa</div>
+                    )}
+
+                    <textarea value={comment} onChange={(e) => setComment(e.target.value)} placeholder="Комментарий к заказу" className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none min-h-[64px]" />
+
+                    <div className="flex gap-2">
+                      <button onClick={confirmOrder} disabled={isSubmitting} className="flex-1 py-2 bg-black text-white rounded-lg text-sm">{isSubmitting ? 'Отправляем...' : paymentMethod === 'online' ? 'Перейти к оплате' : 'Оформить без предоплаты'}</button>
+                      <button onClick={() => { setContactName(''); setContactPhone(''); setContactEmail(''); setAddress(''); setComment(''); }} className="py-2 px-3 bg-gray-100 rounded-lg text-sm">Очистить</button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </aside>
           )}
         </div>
       </div>
 
-      {/* Модальное окно оформления заказа (гость/аккаунт, оплата/самовывоз) */}
-      {isCheckoutModalOpen && (
+      {false && (
         <motion.div
           className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 z-50"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          onClick={() => setIsCheckoutModalOpen(false)}
+          onClick={() => {}}
         >
           <motion.div
             className="bg-white rounded-2xl p-4 sm:p-6 w-full max-w-lg md:max-w-2xl lg:max-w-3xl"
@@ -525,20 +461,11 @@ const Cart: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex gap-3">
-              <button
-                onClick={confirmOrder}
-                disabled={isSubmitting}
-                className="flex-1 py-2.5 bg-black text-white rounded-xl hover:bg-gray-900 transition-all duration-300 font-medium disabled:opacity-60 text-sm"
-              >
+            <div className="flex gap-3 mt-3">
+              <button onClick={confirmOrder} disabled={isSubmitting} className="flex-1 py-2.5 bg-black text-white rounded-xl hover:bg-gray-900 transition-all duration-300 font-medium disabled:opacity-60 text-sm">
                 {isSubmitting ? 'Отправляем...' : paymentMethod === 'online' ? 'Перейти к оплате' : 'Оформить без предоплаты'}
               </button>
-              <button
-                onClick={() => setIsCheckoutModalOpen(false)}
-                className="flex-1 py-2.5 bg-gray-100 text-black rounded-xl hover:bg-gray-200 transition-all duration-300 font-medium text-sm"
-              >
-                Отмена
-              </button>
+              <button onClick={() => {}} className="flex-1 py-2.5 bg-gray-100 text-black rounded-xl hover:bg-gray-200 transition-all duration-300 font-medium text-sm">Отмена</button>
             </div>
           </motion.div>
         </motion.div>

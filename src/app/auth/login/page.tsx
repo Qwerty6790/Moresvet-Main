@@ -42,91 +42,55 @@ const Login: React.FC = () => {
 };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br bg-white">
-    <div className="flex flex-col md:flex-row bg-white rounded-lg overflow-hidden w-full max-w-9xl">
-      {/* Левая часть - Приветствие */}
-      <div className="md:w-1/2 bg-gradient-to-br bg-white p-12 flex items-center justify-center text-black">
-        <div>
-          <h1 className="text-8xl font-bold mb-4 text-center md:text-left">
-            Войдите в MoreElectriki
-          </h1>
-        </div>
-      </div>
-  
-      {/* Правая часть - Форма авторизации */}
-      <div className="md:w-2/4 p-8">
-        <h2 className="text-4xl font-bold text-black text-center mb-6">
-          Войти
-        </h2>
+    <div className="flex items-center justify-center min-h-screen bg-white">
+        <h1 className="text-2xl md:text-6xl font-extrabold text-neutral-900 mb-2 text-left">Войти чтобы получить персональные предложения</h1>
+      <div className="w-full max-w-md mt-16 bg-white rounded-xl shadow-sm p-8">
+      
+      <h2 className="text-center font-bold text-3xl text-black  mb-6">Для дизайнеров</h2>
         {error && (
-          <div className="text-gray-900 mb-4 text-center text-sm font-medium">
-            {error}
-          </div>
+          <div className="text-red-600 mb-4 text-sm font-medium text-left">{error}</div>
         )}
-        <form onSubmit={handleSubmit}>
-          <div className="mb-6">
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-800"
-            >
-              Email
-            </label>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-neutral-700 mb-1">Email</label>
             <input
               type="email"
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-neutral-600 focus:border-neutral-50000 text-base"
+              className="w-full px-4 py-3 border border-neutral-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black"
               placeholder="example@mail.com"
               required
             />
           </div>
-  
-          <div className="mb-6">
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-800"
-            >
-              Пароль
-            </label>
+
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-neutral-700 mb-1">Пароль</label>
             <input
               type="password"
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-neutral-600 focus:border-neutral-500 text-base"
+              className="w-full px-4 py-3 border border-neutral-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black"
               placeholder="Пароль"
               required
             />
           </div>
-  
-          <div className="flex items-center justify-between mb-6">
-            <a
-              href="/auth/reset-password"
-              className="text-sm text-black font-bold hover:underline"
-            >
-              Восстановить пароль
-            </a>
-            <a
-              className="text-sm text-black font-bold hover:underline"
-              href="/auth/register"
-            >
-              Нет аккаунта?
-            </a>
+
+          <div className="flex items-center justify-between text-sm">
+            <a href="/auth/register" className="text-black hover:underline">Нет аккаунта?</a>
           </div>
-  
+
           <button
             type="submit"
-            className="w-full py-3 px-4 bg-white text-black font-medium rounded-md shadow-md transition duration-300 hover:bg-black hover:text-white focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
+            className="w-full py-3 bg-black text-white text-sm font-semibold rounded-lg shadow-sm hover:bg-gray-900 transition-colors"
           >
             Войти
           </button>
         </form>
       </div>
     </div>
-  </div>
-  
-
   );
 };
 

@@ -2946,12 +2946,12 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
             return (
               <div key={category.label}>
                 <div
-                  className={`py-1 px-4 text-sm rounded-lg cursor-pointer transition-all duration-200 ${
+                  className={`py-1 px-4 ${isMainCategory(category) ? 'text-2xl font-semibold' : 'text-sm'} rounded-lg cursor-pointer transition-all duration-200 ${
                     isActive
                       ? 'bg-[#812626]/80 backdrop-blur-sm text-white font-medium'
                       : isHovered
                         ? 'bg-[#1a1a1a]/60 backdrop-blur-sm  text-white'
-                        : (isChildActive ? 'text-white bg-[#2a2a2a]/50 backdrop-blur-sm ' : 'text-gray-300 hover:text-white hover:bg-[#1a1a1a]/40 hover:backdrop-blur-sm hover:border-white/10 border border-transparent')
+                        : (isChildActive ? 'text-white bg-[#2a2a2a]/50 backdrop-blur-sm ' : 'text-gray-300 hover:text-white hover:bg-[#1a1a1a]/40 hover:backdrop-blur-sm hover:border-white/10 ')
                   }`}
                   onClick={handleClick}
                   onMouseEnter={() => setHoveredCategoryId(category.label)}
@@ -3835,13 +3835,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
       // Декодируем category из URL
       const decodedCategory = category ? decodeURIComponent(category as string) : '';
 
-      // Проверяем, является ли текущий URL одним из указанных путей с 
-      const isHeatingSpecialPage = urlSource === 'heating' && 
-        (decodedCategory === 'МНФ|МНД' || 
-         decodedCategory === 'Инфакрасная нагревательная панель' || 
-         decodedCategory === 'Инфракрасная нагревательная панель' || // Добавляем обе возможные версии написания
-         decodedCategory === 'Нагревательные кабели' || 
-         decodedCategory === 'Терморегулятор');
+    
 
       // Устанавливаем обычные категории
       setProductCategoriesState(productCategories);
@@ -4103,49 +4097,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
     // Проверяем, являемся ли мы в контексте 
     const isHeatingPage = router.query.source === 'heating';
     
-    // Если мы в контексте  и активная категория одна из главных -категорий
-    if (isHeatingPage && mainHeatingCategories.some(c => c.toLowerCase() === mainCategoryLower)) {
-      // Специальные правила для категорий 
-      switch (mainCategoryLower) {
-        case 'мат нагревательный':
-          return categoryNameLower.includes('мат') || 
-                 categoryNameLower.includes('нагревательный мат') ||
-                 categoryNameLower.includes('тёплый пол') ||
-                 categoryNameLower.includes('теплый пол') ||
-                 categoryNameLower.includes('мнд') ||
-                 categoryNameLower.includes('мнф');
-        case 'обогрев кровли и площадок':
-          return categoryNameLower.includes('обогрев кровли') || 
-                 categoryNameLower.includes('антиобледенение') ||
-                 categoryNameLower.includes('снеготаяние') ||
-                 categoryNameLower.includes('водостоки') ||
-                 categoryNameLower.includes('площадок') ||
-                 categoryNameLower.includes('снег');
-        case 'специальный греющий кабель':
-          return categoryNameLower.includes('греющий кабель') || 
-                 categoryNameLower.includes('специальный') ||
-                 categoryNameLower.includes('нагревательный кабель') ||
-                 categoryNameLower.includes('снт-') || 
-                 categoryNameLower.includes('снгт') || 
-                 categoryNameLower.includes('сн-');
-        case 'терморегулятор':
-          return categoryNameLower.includes('терморегулятор') || 
-                 categoryNameLower.includes('термостат') ||
-                 categoryNameLower.includes('термодатчик') ||
-                 categoryNameLower.includes('управление');
-        case 'комплектующие':
-          return categoryNameLower.includes('коннектор') || 
-                 categoryNameLower.includes('патрон') ||
-                 categoryNameLower.includes('крепление') ||
-                 categoryNameLower.includes('плафон') ||
-                 categoryNameLower.includes('шнур') ||
-                 categoryNameLower.includes('профиль') ||
-                 categoryNameLower.includes('блок питания') ||
-                 categoryNameLower.includes('контроллер');
-        default:
-          return false;
-      }
-    }
+    
     
     // Стандартные правила для категорий освещения
     switch (mainCategoryLower) {
@@ -4403,7 +4355,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
         openGraph={{
           title: `${getPageTitle()} | Elektromos`,
           description: getPageDescription(),
-          url: `https://elektromos.ru/catalog${router.asPath.includes('?') ? router.asPath : ''}`,
+          url: `https://moresvet.ru/catalog${router.asPath.includes('?') ? router.asPath : ''}`,
           type: "website",
           image: "/images/logo.webp",
           site_name: "Elektromos"
@@ -4413,7 +4365,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
           "@type": "ItemList",
           "name": getPageTitle(),
           "description": getPageDescription(),
-          "url": `https://elektromos.ru/catalog${router.asPath.includes('?') ? router.asPath : ''}`,
+          "url": `https://moresvet.ru/catalog${router.asPath.includes('?') ? router.asPath : ''}`,
           "numberOfItems": products.length,
           "itemListElement": products.slice(0, 10).map((product, index) => ({
             "@type": "ListItem",
@@ -4422,7 +4374,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
               "@type": "Product",
               "name": product.name,
               "description": product.description || product.name,
-              "url": `https://elektromos.ru/products/${product.supplier}/${product.article}`,
+              "url": `https://moresvet.ru/products/${product.supplier}/${product.article}`,
               "image": Array.isArray(product.images) && product.images.length > 0 ? product.images[0] : "/images/logo.webp",
               "brand": {
                 "@type": "Brand",
@@ -4539,47 +4491,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
                 {/* Добавляем фильтр по мощности для  */}
                 {selectedBrand && selectedBrand.name === 'heating' && <PowerFilter />}
 
-                {/* Accordion: Сортировка / Показать / Страница - перенос в боковую панель */}
-                <div className="mt-6 px-3">
-                  <div className="mb-4">
-                    <div
-                      className="flex items-center justify-between cursor-pointer py-2 px-3 bg-[#ffffff]/0 rounded-lg border border-transparent hover:border-black/5 transition-all duration-200"
-                      onClick={() => setIsSortAccordionOpen(!isSortAccordionOpen)}
-                    >
-                      <h3 className="font-bold text-black/90 text-sm uppercase tracking-wide">Сортировка и показать</h3>
-                      <svg className={`w-4 h-4 text-black/70 transition-transform duration-200 ${isSortAccordionOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </div>
-
-                    {isSortAccordionOpen && (
-                      <div className="mt-3 space-y-3">
-                        <div className="grid grid-cols-1 gap-2">
-                          <button onClick={() => handleSortOrderChange('newest')} className={`w-full px-3 py-2 rounded-lg text-sm font-medium ${sortOrder === 'newest' ? 'bg-black text-white' : 'bg-white text-black border border-black/5'}`}>По новизне</button>
-                          <button onClick={() => handleSortOrderChange('popularity')} className={`w-full px-3 py-2 rounded-lg text-sm font-medium ${sortOrder === 'popularity' ? 'bg-black text-white' : 'bg-white text-black border border-black/5'}`}>По популярности</button>
-                          <div className="grid grid-cols-2 gap-2">
-                            <button onClick={() => handleSortOrderChange('asc')} className={`w-full px-3 py-2 rounded-lg text-sm font-medium ${sortOrder === 'asc' ? 'bg-black text-white' : 'bg-white text-black border border-black/5'}`}>Цена ↑</button>
-                            <button onClick={() => handleSortOrderChange('desc')} className={`w-full px-3 py-2 rounded-lg text-sm font-medium ${sortOrder === 'desc' ? 'bg-black text-white' : 'bg-white text-black border border-black/5'}`}>Цена ↓</button>
-                          </div>
-                        </div>
-
-                        <div className="mt-2">
-                          <h4 className="text-sm font-medium text-black/80 mb-2">Показать</h4>
-                          <div className="grid grid-cols-1 gap-2">
-                            <button onClick={() => handleAvailabilityFilter('all')} className={`w-full px-3 py-2 rounded-lg text-sm font-medium ${availabilityFilter === 'all' ? 'bg-black text-white' : 'bg-white text-black border border-black/5'}`}>Все</button>
-                            <button onClick={() => handleAvailabilityFilter('inStock')} className={`w-full px-3 py-2 rounded-lg text-sm font-medium ${availabilityFilter === 'inStock' ? 'bg-black text-white' : 'bg-white text-black border border-black/5'}`}>В наличии</button>
-                            <button onClick={() => handleAvailabilityFilter('outOfStock')} className={`w-full px-3 py-2 rounded-lg text-sm font-medium ${availabilityFilter === 'outOfStock' ? 'bg-black text-white' : 'bg-white text-black border border-black/5'}`}>Под заказ</button>
-                            <button onClick={() => handleNewItemsFilter(!showOnlyNewItems)} className={`w-full px-3 py-2 rounded-lg text-sm font-medium ${showOnlyNewItems ? 'bg-black text-white' : 'bg-white text-black border border-black/5'}`}>Новинки</button>
-                          </div>
-                        </div>
-
-                        <div className="mt-2 text-sm text-black/70">
-                          Страница {currentPage} из {totalPages}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
+             
 
                 {/* Фильтрация по цене */}
                 <div className="mt-6 px-3">
@@ -4628,16 +4540,50 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
                 
 
 
-                
-                
+                 
                 {/* Фильтры для светильников - показываем если есть данные */}
                 {(extractedFilters.socketTypes.length > 0 ||
                   extractedFilters.lampCounts.length > 0 ||
                   extractedFilters.shadeColors.length > 0 ||
                   extractedFilters.frameColors.length > 0) && (
                   <div className="mt-6">
+                      {/* Accordion: Сортировка / Показать / Страница - перенос в боковую панель */}
+                   <div className="mt-6 px-3">
+                  <div className="mb-4">
+                    <div
+                      className="flex items-center justify-between cursor-pointer py-2 px-3 bg-[#ffffff]/0 rounded-lg border border-transparent hover:border-black/5 transition-all duration-200"
+                      onClick={() => setIsSortAccordionOpen(!isSortAccordionOpen)}
+                    >
+                      <h3 className="font-bold text-black/90 text-sm uppercase tracking-wide">Сортировка и показать</h3>
+                      <svg className={`w-4 h-4 text-black/70 transition-transform duration-200 ${isSortAccordionOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
+
+                    {isSortAccordionOpen && (
+                      <div className="mt-3 space-y-3">
+                        {/* Sorting moved to top manual select; keep availability controls here */}
+                        <div className="mt-2">
+                          <h4 className="text-sm font-medium text-black/80 mb-2">Показать</h4>
+                          <div className="grid grid-cols-1 gap-2">
+                            <button onClick={() => handleAvailabilityFilter('all')} className={`w-full px-3 py-2 rounded-lg text-sm font-medium ${availabilityFilter === 'all' ? 'bg-black text-white' : 'bg-white text-black border border-black/5'}`}>Все</button>
+                            <button onClick={() => handleAvailabilityFilter('inStock')} className={`w-full px-3 py-2 rounded-lg text-sm font-medium ${availabilityFilter === 'inStock' ? 'bg-black text-white' : 'bg-white text-black border border-black/5'}`}>В наличии</button>
+                            <button onClick={() => handleAvailabilityFilter('outOfStock')} className={`w-full px-3 py-2 rounded-lg text-sm font-medium ${availabilityFilter === 'outOfStock' ? 'bg-black text-white' : 'bg-white text-black border border-black/5'}`}>Под заказ</button>
+                            <button onClick={() => handleNewItemsFilter(!showOnlyNewItems)} className={`w-full px-3 py-2 rounded-lg text-sm font-medium ${showOnlyNewItems ? 'bg-black text-white' : 'bg-white text-black border border-black/5'}`}>Новинки</button>
+                          </div>
+                        </div>
+
+                        <div className="mt-2 text-sm text-black/70">
+                          Страница {currentPage} из {totalPages}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
                     {/* Фильтр по типу цоколя */}
                     {extractedFilters.socketTypes.length > 0 && (
+                      
                       <div className="mb-4 px-3">
                         <div
                           className="flex items-center justify-between cursor-pointer py-2 px-3 bg-[#1a1a1a]/30 backdrop-blur-sm rounded-lg border border-white/10 hover:bg-[#2a2a2a]/40 transition-all duration-200"
@@ -4800,6 +4746,24 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
               {/* Верхняя панель сортировки/фильтров удалена — перемещено в боковой аккордеон */}
 
               {/* Product List */}
+              {/* Manual sort select above products */}
+              <div className="mb-4 flex items-center justify-between gap-4">
+                <div className="flex-1">
+                  <label htmlFor="manual-sort" className="sr-only">Сортировка</label>
+                  <select
+                    id="manual-sort"
+                    value={sortOrder || ''}
+                    onChange={(e) => handleSortOrderChange(e.target.value ? (e.target.value as any) : null)}
+                    className="w-full max-w-xs px-3 py-2 rounded-lg bg-[#1a1a1a]/40 text-white text-sm "
+                  >
+                    <option value="newest">По новизне</option>
+                    <option value="popularity">По популярности</option>
+                    <option value="asc">Цена по возрастанию</option>
+                    <option value="desc">Цена по убыванию</option>
+                  </select>
+                </div>
+              </div>
+
               {/* Active filters display */}
               <div className="mb-4">
                 <ActiveFilters />
