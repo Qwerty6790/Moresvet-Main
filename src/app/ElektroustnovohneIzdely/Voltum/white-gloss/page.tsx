@@ -126,37 +126,18 @@ export default function VoltumWhiteGlossPage() {
     
 
       <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-44">
-        <div className="mb-8">
-          <h2 className="text-5xl font-bold text-black mb-5">Белый глянцевый</h2>
+      <div className="mb-8">
+          <h2 className="text-5xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-black mb-5">Белый глянцевый</h2>
           <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 ">
-        <nav className="flex items-center space-x-2 text-2xl text-black">
-          <Link href="/" className="hover:text-white transition-colors">Главная</Link>
-          <span className='mb-3'>.</span>
-          <Link href="/ElektroustnovohneIzdely" className="hover:text-white transition-colors">Электроустановочные изделия</Link>
-          <span className='mb-3'>.</span>
-          <Link href="/ElektroustnovohneIzdely/Voltum" className="hover:text-white transition-colors">Voltum</Link>
-          <span className='mb-3'>.</span>
+          <nav className="flex flex-wrap items-center gap-1 sm:gap-2 text-2xl text-black">
+          <Link href="/ElektroustnovohneIzdely" className="hover:text-transition-colors">Электроустановочные изделия</Link>
+           <Link href="/ElektroustnovohneIzdely/Voltum" className="hover:text-gray-200 transition-colors">Voltum</Link>
           <span className="text-white">Белый глянцевый</span>
         </nav>
-      </div>
-          {totalProducts > 0 ? (
-            <p className="text-white">Найдено {totalProducts} {totalProducts === 1 ? 'товар' : totalProducts < 5 ? 'товара' : 'товаров'}</p>
-          ) : !loading && (
-            <p className="text-gray-400">Электроустановочные изделия Voltum цвета Белый глянцевый</p>
-          )}
+        </div>
         </div>
 
-        <div className="flex justify-end mb-6">
-          <div className="flex gap-1 items-center rounded-lg  p-1">
-            {['grid', 'list', 'table'].map(mode => (
-              <button key={mode} onClick={() => setViewMode(mode as any)} className={`p-2 rounded transition-colors ${viewMode === mode ? 'bg-white text-black' : 'text-white hover:bg-white/10'}`}>
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d={mode === 'grid' ? "M3 3h7v7H3V3zm0 11h7v7H3v-7zm11-11h7v7h-7V3zm0 11h7v7h-7v-7z" : mode === 'list' ? "M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z" : "M3 3h18a1 1 0 011 1v16a1 1 0 01-1 1H3a1 1 0 01-1-1V4a1 1 0 011-1zm1 2v3h16V5H4zm0 5v3h7v-3H4zm9 0v3h7v-3h-7zm-9 5v3h7v-3H4zm9 0v3h7v-3h-7z"}/>
-                </svg>
-              </button>
-            ))}
-          </div>
-        </div>
+        
 
         <div className="mb-8">
           {loading ? (

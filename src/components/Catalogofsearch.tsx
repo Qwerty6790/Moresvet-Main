@@ -765,6 +765,11 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({
                               if (idx > -1) cart.products[idx].quantity += 1;
                               else cart.products.push({ article: product.article, source: product.source, name: product.name || 'Товар', quantity: 1, imageUrl: mainImage });
                               localStorage.setItem('cart', JSON.stringify(cart));
+                              try {
+                                const addedItem = cart.products.find((it: any) => it.article === product.article);
+                                const ev = new CustomEvent('cart-added', { detail: { article: product.article, name: product.name, imageUrl: mainImage || null, quantity: addedItem ? addedItem.quantity : 1 } });
+                                window.dispatchEvent(ev);
+                              } catch (e) {}
                               toast.success('Товар добавлен');
                             } catch (err) { console.error('Ошибка добавления в корзину (table):', err); toast.error('Ошибка'); }
                           }}
@@ -814,10 +819,14 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({
           try {
               const cart = JSON.parse(localStorage.getItem('cart') || '{"products": []}');
               const idx = cart.products.findIndex((item: any) => item.article === product.article);
-              // Используем mainImage из внешнего useMemo
               if (idx > -1) cart.products[idx].quantity += 1;
               else cart.products.push({ article: product.article, source: product.source, name: product.name || 'Товар', quantity: 1, imageUrl: mainImage });
               localStorage.setItem('cart', JSON.stringify(cart));
+              try {
+                const addedItem = cart.products.find((it: any) => it.article === product.article);
+                const ev = new CustomEvent('cart-added', { detail: { article: product.article, name: product.name, imageUrl: mainImage || null, quantity: addedItem ? addedItem.quantity : 1 } });
+                window.dispatchEvent(ev);
+              } catch (e) {}
               toast.success('Товар добавлен');
           } catch (err) { console.error('Ошибка добавления в корзину (list):', err); toast.error('Ошибка'); }
       }, [product, mainImage, isPurchasable]); // <--- ДОБАВЛЕНЫ ЗАВИСИМОСТИ
@@ -899,10 +908,14 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({
        try {
            const cart = JSON.parse(localStorage.getItem('cart') || '{"products": []}');
            const idx = cart.products.findIndex((item: any) => item.article === product.article);
-           // Используем targetImageSrc, вычисленный в рендере
            if (idx > -1) cart.products[idx].quantity += 1;
            else cart.products.push({ article: product.article, source: product.source, name: product.name || 'Товар', quantity: 1, imageUrl: targetImageSrc });
            localStorage.setItem('cart', JSON.stringify(cart));
+           try {
+             const addedItem = cart.products.find((it: any) => it.article === product.article);
+             const ev = new CustomEvent('cart-added', { detail: { article: product.article, name: product.name, imageUrl: targetImageSrc || null, quantity: addedItem ? addedItem.quantity : 1 } });
+             window.dispatchEvent(ev);
+           } catch (e) {}
            toast.success('Товар добавлен');
        } catch (err) { console.error('Ошибка добавления в корзину (grid):', err); toast.error('Ошибка'); }
     }, [product, targetImageSrc, isPurchasable]); // <--- ДОБАВЛЕНЫ ЗАВИСИМОСТИ

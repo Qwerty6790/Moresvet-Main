@@ -138,8 +138,53 @@ const Header = () => {
   const hoverTimeoutRef = useRef<number | null>(null);
   const catalogButtonRef = useRef<HTMLButtonElement | null>(null);
   const catalogMenuRef = useRef<HTMLDivElement | null>(null);
+  const brandsButtonRef = useRef<HTMLButtonElement | null>(null);
+  const brandsMenuRef = useRef<HTMLDivElement | null>(null);
+  const brandsHoverTimeoutRef = useRef<number | null>(null);
+  // Mini cart indicator
+  const cartIconRef = useRef<HTMLDivElement | null>(null);
+  const [miniCartVisible, setMiniCartVisible] = useState(false);
+  const [miniCartMessage, setMiniCartMessage] = useState<string | null>(null);
+  const miniCartTimeoutRef = useRef<number | null>(null);
+  const [miniCartImageSrc, setMiniCartImageSrc] = useState<string | null>(null);
+  const [miniCartQuantity, setMiniCartQuantity] = useState<number | null>(null);
+  const [cartCount, setCartCount] = useState<number>(0);
 
   const { products, loading } = useSearchProducts(searchQuery);
+
+  // Listen for cart-added events to briefly show mini modal
+  useEffect(() => {
+    const handler = (e: Event) => {
+      try {
+        const ce = e as CustomEvent;
+        setMiniCartMessage(ce?.detail?.name ? `${ce.detail.name}` : 'Товар добавлен');
+        setMiniCartImageSrc(ce?.detail?.imageUrl || null);
+        setMiniCartQuantity(typeof ce?.detail?.quantity === 'number' ? ce.detail.quantity : 1);
+      } catch (err) {
+        setMiniCartMessage('Товар добавлен');
+        setMiniCartImageSrc(null);
+        setMiniCartQuantity(1);
+      }
+      setMiniCartVisible(true);
+      if (miniCartTimeoutRef.current) window.clearTimeout(miniCartTimeoutRef.current);
+      miniCartTimeoutRef.current = window.setTimeout(() => setMiniCartVisible(false), 1800);
+    };
+    window.addEventListener('cart-added', handler as EventListener);
+    // initialize cart count from localStorage
+    try {
+      const cart = JSON.parse(localStorage.getItem('cart') || '{"products": []}');
+      setCartCount(Array.isArray(cart.products) ? cart.products.reduce((s: number, it: any) => s + (it.quantity || 0), 0) : 0);
+    } catch (e) {
+      setCartCount(0);
+    }
+    return () => {
+      window.removeEventListener('cart-added', handler as EventListener);
+      if (miniCartTimeoutRef.current) {
+        window.clearTimeout(miniCartTimeoutRef.current);
+        miniCartTimeoutRef.current = null;
+      }
+    };
+  }, []);
 
   useEffect(() => {
     setMounted(true);
@@ -358,6 +403,24 @@ const Header = () => {
   const toggleCatalogMenu = () => {
     setIsCatalogOpen(!isCatalogOpen);
   };
+  const [isBrandsOpen, setIsBrandsOpen] = useState(false);
+  const toggleBrandsMenu = () => setIsBrandsOpen(prev => !prev);
+
+  const openBrands = () => {
+    if (brandsHoverTimeoutRef.current) {
+      window.clearTimeout(brandsHoverTimeoutRef.current);
+      brandsHoverTimeoutRef.current = null;
+    }
+    setIsBrandsOpen(true);
+  };
+
+  const closeBrands = () => {
+    if (brandsHoverTimeoutRef.current) window.clearTimeout(brandsHoverTimeoutRef.current);
+    brandsHoverTimeoutRef.current = window.setTimeout(() => {
+      setIsBrandsOpen(false);
+      brandsHoverTimeoutRef.current = null;
+    }, 160);
+  };
 
   const openCatalog = () => {
     if (hoverTimeoutRef.current) {
@@ -409,9 +472,24 @@ const Header = () => {
 
     document.addEventListener('mousedown', handleClickOutsideCatalog);
     document.addEventListener('keydown', handleKeyDown);
+    // brands outside click handler
+    const handleClickOutsideBrands = (event: MouseEvent) => {
+      if (!isBrandsOpen) return;
+      const target = event.target as Node;
+      if (
+        brandsMenuRef.current &&
+        brandsButtonRef.current &&
+        !brandsMenuRef.current.contains(target) &&
+        !brandsButtonRef.current.contains(target)
+      ) {
+        setIsBrandsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutsideBrands);
     return () => {
       document.removeEventListener('mousedown', handleClickOutsideCatalog);
       document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('mousedown', handleClickOutsideBrands);
     };
   }, [isCatalogOpen]);
 
@@ -442,9 +520,19 @@ const Header = () => {
 
           {/* Центральная навигация */}
           <nav className="hidden md:flex items-center gap-9 text-white uppercase text-sm font-bold tracking-wide">
-            <Link href="/3d-models" className="hover:text-gray-300">ПРАВИЛА ДОСТАВКИ</Link>
-            <Link href="/projects" className="hover:text-gray-300">О КОМПАНИИ</Link>
-            <Link href="/team" className="hover:text-gray-300">БРЕНДЫ</Link>
+            <Link href="/about" className="hover:text-gray-300">ПРАВИЛА ДОСТАВКИ</Link>
+            <Link href="/about" className="hover:text-gray-300">О КОМПАНИИ</Link>
+            <button
+              ref={brandsButtonRef}
+              onMouseEnter={openBrands}
+              onMouseLeave={closeBrands}
+              onClick={toggleBrandsMenu}
+              aria-haspopup="true"
+              aria-expanded={isBrandsOpen}
+              className="hover:text-gray-300"
+            >
+              БРЕНДЫ
+            </button>
           </nav>
 
           {/* Правые элементы */}
@@ -474,9 +562,92 @@ const Header = () => {
             <Link href="/liked" aria-label="Избранное" className="p-2 hover:text-gray-300">
               <FaHeart size={20} />
             </Link>
-            <Link href="/cart" aria-label="Корзина" className="p-2 hover:text-gray-300">
-              <FaShoppingCart size={20} />
-            </Link>
+            <div
+              ref={cartIconRef}
+              className="relative p-2"
+              onMouseEnter={() => {
+                if (miniCartTimeoutRef.current) window.clearTimeout(miniCartTimeoutRef.current);
+                // show empty message if no items
+                if (cartCount === 0) {
+                  setMiniCartMessage('В корзине нет товаров');
+                  setMiniCartImageSrc(null);
+                  setMiniCartQuantity(0);
+                }
+                setMiniCartVisible(true);
+              }}
+              onMouseLeave={() => {
+                if (miniCartTimeoutRef.current) window.clearTimeout(miniCartTimeoutRef.current);
+                miniCartTimeoutRef.current = window.setTimeout(() => setMiniCartVisible(false), 180);
+              }}
+            >
+              <Link href="/cart" aria-label="Корзина" className="hover:text-gray-300">
+                <FaShoppingCart size={20} />
+              </Link>
+
+              {/* Мини-модальное окно под иконкой корзины */}
+              {miniCartVisible && (
+                <div className="absolute right-0 top-full mt-2 w-96 bg-white text-black rounded-md shadow-lg z-50 p-3 text-sm">
+                  <div className="flex items-start gap-4">
+                    {miniCartImageSrc ? (
+                      <div className="w-20 h-20 bg-gray-100 rounded-md overflow-hidden flex items-center justify-center flex-shrink-0">
+                        {/** product image will be injected via inline img src from state set by event **/}
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={getImageUrl(miniCartImageSrc)} alt={miniCartMessage || 'img'} className="w-full h-full object-cover" />
+                      </div>
+                    ) : null}
+                    <div className="flex-1 min-w-0">
+                      <div className="font-semibold text-base whitespace-normal break-words">{miniCartMessage || 'Товар добавлен'}</div>
+                      <div className="flex items-center justify-end mt-2">
+                        <div className="text-sm text-black">В корзине товаров:</div>
+                        <div className="text-sm  text-black px-3 py-1 rounded">{miniCartQuantity ?? 1}</div>
+                      </div>
+                      <div className="mt-3">
+                        <Link href="/cart" className="inline-block w-full text-center bg-black text-white py-2 rounded text-sm">Перейти в корзину</Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+            {/* Brands dropdown menu */}
+            {isBrandsOpen && (
+              <div
+                ref={brandsMenuRef}
+                onMouseEnter={openBrands}
+                onMouseLeave={closeBrands}
+                className="absolute left-0 right-0 top-[calc(100%)] bg-white shadow-lg z-40 overflow-visible transition-all duration-300 border-t border-gray-200"
+              >
+                <div className="w-full flex flex-col md:flex-row">
+                  <div className="w-full md:flex-1 py-6 px-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className="text-xl font-bold text-black uppercase">Бренды</h2>
+                      <button onClick={() => setIsBrandsOpen(false)} className="p-2 hover:bg-gray-100 rounded-full"><FiX size={20} className="text-gray-700" /></button>
+                    </div>
+                    <div className="grid grid-cols-3 sm:grid-cols-6 gap-4 items-center">
+                      {/* hardcoded logos from public/images/brands */}
+                      {[
+                        'artelamplogo.png','denkirslogo.png','elektrostandartlogo.png','favouritelogo.png','kinklightlogo.png','lightstarlogo.png',
+                        'lumionlogo.png','maytonilogo.png','novotechlogo.png','odeonlightlogo.png','sonexlogo.png','stlucelogo.png',
+                        'voltumlogo.png','werkellogo.png'
+                      ].map((fn) => {
+                        const slug = encodeURIComponent(fn.replace(/\.[^.]+$/, ''));
+                        return (
+                          <Link key={fn} href={`/brands/${slug}`} className="flex items-center justify-center p-2 bg-black rounded">
+                            <div className="w-32 h-12 flex items-center justify-center bg-black rounded overflow-hidden">
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img src={`/images/brands/${fn}`} alt={fn.replace(/\.[^.]+$/, '')} className="max-w-full max-h-full object-contain" />
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                  <div className="hidden md:block md:w-1/3 lg:w-1/4">
+                    <div className="w-full  bg-center h-96" style={{ backgroundImage: "url('/images/banners/Bannersbrandsmenu.png')" }} />
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Мобильные элементы (гамбургер) */}
@@ -604,57 +775,68 @@ const Header = () => {
             ref={catalogMenuRef}
             onMouseEnter={openCatalog}
             onMouseLeave={closeCatalog}
-            className="absolute left-0 right-0 top-[calc(100%)] bg-white shadow-lg z-40 max-h-[60vh] overflow-y-auto transition-all duration-300 border-t border-gray-200"
+            className="absolute left-0 right-0 top-[calc(100%)] bg-white shadow-lg z-40 overflow-visible transition-all duration-300 border-t border-gray-200"
           >
-            <div className="max-w-screen-xl mx-auto py-8 px-4 sm:px-6 md:px-8">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-black uppercase">Каталог</h2>
-                <button 
-                  onClick={() => setIsCatalogOpen(false)}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                >
-                  <FiX size={24} className="text-gray-700" />
-                </button>
+            {/* Основной контейнер растянут на всю ширину; внутри — блок с колонкой категорий и блок для фото справа */}
+            <div className="w-full flex flex-col md:flex-row">
+              <div className="w-full md:flex-1 py-8 px-4 sm:px-6 md:px-8">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-bold text-black uppercase">Каталог</h2>
+                  <button 
+                    onClick={() => setIsCatalogOpen(false)}
+                    className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                  >
+                    <FiX size={24} className="text-gray-700" />
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-8">
+                  <div className="text-black">
+                    <h3 className="text-lg font-bold mb-4">Декоративный свет</h3>
+                    <ul className="space-y-3">
+                      <li><Link href="/catalog?category=Подвесная+люстра&subcategory=&page=1" className="block text-base hover:text-black">Подвесные люстры</Link></li>
+                      <li><Link href="/catalog?category=Потолочная+люстра&subcategory=&page=1" className="block text-base hover:text-black">Потолочные люстры</Link></li>
+                      <li><Link href="/catalog?category=Люстры+на+штанге&subcategory=&page=1" className="block text-base hover:text-black">Люстры на штанге</Link></li>
+                      <li><Link href="/catalog?category=Подвесы&subcategory=&page=1" className="block text-base hover:text-black">Подвесы</Link></li>
+                      <li><Link href="/catalog?category=Бра&subcategory=&page=1" className="block text-base hover:text-black">Бра</Link></li>
+                    </ul>
+                  </div>
+
+                  <div className="text-black">
+                    <h3 className="text-lg font-bold mb-4">Функциональный свет</h3>
+                    <ul className="space-y-3">
+                      <li><Link href="/catalog?category=Трековые+системы&subcategory=&page=1" className="block text-base hover:text-black">Трековые системы</Link></li>
+                      <li><Link href="/catalog?category=Светодиодная+лента&subcategory=&page=1" className="block text-base hover:text-black">Светодиодная лента</Link></li>
+                      <li><Link href="/catalog?category=Профили&subcategory=&page=1" className="block text-base hover:text-black">Профили</Link></li>
+                      <li><Link href="/catalog?category=Гибкий+неон&subcategory=&page=1" className="block text-base hover:text-black">Гибкий неон</Link></li>
+                    </ul>
+                  </div>
+
+                  <div className="text-black">
+                    <h3 className="text-lg font-bold mb-4">Уличный свет</h3>
+                    <ul className="space-y-3">
+                      <li><Link href="/catalog?category=Уличные+светильники&subcategory=&page=1" className="block text-base hover:text-black">Уличные и фасадные светильники</Link></li>
+                      <li><Link href="/catalog?category=Светильник+уличный&subcategory=&page=1" className="block text-base hover:text-black">Светильники уличные</Link></li>
+                    </ul>
+                  </div>
+
+                  <div className="text-black">
+                    <h3 className="text-lg font-bold mb-4">Новинки и акции</h3>
+                    <ul className="space-y-3">
+                      <li><Link href="/catalog?filter=new&subcategory=&page=1" className="block text-base hover:text-black">Новинки</Link></li>
+                      <li><Link href="/promotions" className="block text-base hover:text-black">Акции</Link></li>
+                      <li><Link href="/catalog?filter=sale&subcategory=&page=1" className="block text-base hover:text-black">Скидки</Link></li>
+                    </ul>
+                  </div>
+                </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-4 gap-8">
-                <div className="text-black">
-                  <h3 className="text-lg font-bold mb-4">Декоративный свет</h3>
-                  <ul className="space-y-3">
-                    <li><Link href="/catalog?category=Подвесная+люстра&subcategory=&page=1" className="block text-base hover:text-black">Подвесные люстры</Link></li>
-                    <li><Link href="/catalog?category=Потолочная+люстра&subcategory=&page=1" className="block text-base hover:text-black">Потолочные люстры</Link></li>
-                    <li><Link href="/catalog?category=Люстры+на+штанге&subcategory=&page=1" className="block text-base hover:text-black">Люстры на штанге</Link></li>
-                    <li><Link href="/catalog?category=Подвесы&subcategory=&page=1" className="block text-base hover:text-black">Подвесы</Link></li>
-                    <li><Link href="/catalog?category=Бра&subcategory=&page=1" className="block text-base hover:text-black">Бра</Link></li>
-                  </ul>
-                </div>
-
-                <div className="text-black">
-                  <h3 className="text-lg font-bold mb-4">Функциональный свет</h3>
-                  <ul className="space-y-3">
-                    <li><Link href="/catalog?category=Трековые+системы&subcategory=&page=1" className="block text-base hover:text-black">Трековые системы</Link></li>
-                    <li><Link href="/catalog?category=Светодиодная+лента&subcategory=&page=1" className="block text-base hover:text-black">Светодиодная лента</Link></li>
-                    <li><Link href="/catalog?category=Профили&subcategory=&page=1" className="block text-base hover:text-black">Профили</Link></li>
-                    <li><Link href="/catalog?category=Гибкий+неон&subcategory=&page=1" className="block text-base hover:text-black">Гибкий неон</Link></li>
-                  </ul>
-                </div>
-
-                <div className="text-black">
-                  <h3 className="text-lg font-bold mb-4">Уличный свет</h3>
-                  <ul className="space-y-3">
-                    <li><Link href="/catalog?category=Уличные+светильники&subcategory=&page=1" className="block text-base hover:text-black">Уличные и фасадные светильники</Link></li>
-                    <li><Link href="/catalog?category=Светильник+уличный&subcategory=&page=1" className="block text-base hover:text-black">Светильники уличные</Link></li>
-                  </ul>
-                </div>
-
-                <div className="text-black">
-                  <h3 className="text-lg font-bold mb-4">Новинки и акции</h3>
-                  <ul className="space-y-3">
-                    <li><Link href="/catalog?filter=new&subcategory=&page=1" className="block text-base hover:text-black">Новинки</Link></li>
-                    <li><Link href="/promotions" className="block text-base hover:text-black">Акции</Link></li>
-                    <li><Link href="/catalog?filter=sale&subcategory=&page=1" className="block text-base hover:text-black">Скидки</Link></li>
-                  </ul>
-                </div>
+              {/* Image area: full-height block on the right that stretches to the screen edge */}
+              <div className="hidden md:block md:w-1/3 lg:w-1/4">
+                <div
+                  className="w-full  bg-center h-96"
+                  style={{ backgroundImage: "url('/images/banners/Bannersmenu.png')" }}
+                />
               </div>
             </div>
           </div>

@@ -10,7 +10,7 @@ interface LoadingSpinnerProps {
 
 const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   size = 'md',
-  text = 'Загружаем MORESVET...',
+  text = '',
   showText = true,
   isLoading = true
 }) => {
@@ -20,18 +20,18 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
       case 'sm': return 'w-16 h-16';
       case 'md': return 'w-28 h-28';
       case 'lg': return 'w-40 h-40';
-      case 'xl': return 'w-56 h-56';
-      default: return 'w-28 h-28';
+      case 'xl': return 'w-72 h-72';
+      default: return 'w-52 h-52';
     }
   };
 
   const getTextSize = () => {
     switch (size) {
-      case 'sm': return 'text-xs';
-      case 'md': return 'text-sm';
-      case 'lg': return 'text-base';
-      case 'xl': return 'text-lg';
-      default: return 'text-sm';
+      case 'sm': return 'text-4xl';
+      case 'md': return 'text-4xl';
+      case 'lg': return 'text-4xl';
+      case 'xl': return 'text-4xl';
+      default: return 'text-4xl';
     }
   };
 

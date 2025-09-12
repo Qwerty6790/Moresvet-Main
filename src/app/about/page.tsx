@@ -20,81 +20,9 @@ import {
 const About = () => {
   const [activeSection, setActiveSection] = useState('expertise');
 
-  const expertise = [
-    {
-      icon: <Lightbulb className="w-8 h-8" />,
-      title: "Дизайнерские люстры",
-      description: "Эксклюзивные коллекции от ведущих европейских дизайнеров"
-    },
-    {
-      icon: <Sparkles className="w-8 h-8" />,
-      title: "Умное освещение",
-      description: "Современные системы управления светом для вашего комфорта"
-    },
-    {
-      icon: <Shield className="w-8 h-8" />,
-      title: "Гарантия качества",
-      description: "5 лет гарантии на всю продукцию и профессиональный монтаж"
-    }
-  ];
 
-  const advantages = [
-    {
-      icon: <Star className="w-6 h-6" />,
-      title: "15+ лет опыта",
-      description: "Создаем уникальные световые решения с 2008 года"
-    },
-    {
-      icon: <Award className="w-6 h-6" />,
-      title: "1000+ проектов",
-      description: "Успешно реализованных дизайнерских проектов"
-    },
-    {
-      icon: <MessageSquare className="w-6 h-6" />,
-      title: "Консультации",
-      description: "Бесплатные консультации дизайнера по свету"
-    }
-  ];
 
-  const services = [
-    {
-      title: "Подбор освещения",
-      description: "Профессиональный подбор светильников под ваш интерьер",
-      items: ["Расчет освещенности", "3D-визуализация", "Подбор цветовой температуры"]
-    },
-    {
-      title: "Монтаж и установка",
-      description: "Квалифицированная установка любой сложности",
-      items: ["Профессиональный монтаж", "Настройка систем управления", "Гарантийное обслуживание"]
-    },
-    {
-      title: "Проектирование",
-      description: "Создание проекта освещения для вашего помещения",
-      items: ["Светотехнический расчет", "Схема размещения", "Спецификация оборудования"]
-    }
-  ];
 
-  const photos = [
-    "/images/moreelecktrikiabout.webp",
-  ];
-
-  const theses = [
-    {
-   
-      title: "ЛИДЕР РЫНКА",
-      description: "MoreElectriki — ведущий поставщик электрооборудования и светотехники в России"
-    },
-    {
-    
-      title: "КАЧЕСТВО",
-      description: "Только сертифицированная продукция от проверенных производителей"
-    },
-    {
-      
-      title: "ОПЫТ",
-      description: "Более 15 лет успешной работы на рынке электрооборудования"
-    }
-  ];
 
   return (
     <div className="min-h-screen mt-20">
@@ -108,115 +36,44 @@ const About = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-16"
           >
-            <h2 className="text-6xl font-black mb-8 text-gray-900 tracking-tight">
-              MOREELECTRIKI
+            <h2 className="text-6xl font-black mb-8 text-left text-black tracking-tight">
+             MORESVET В ВАШЕМ ДОМЕ И ОФИСЕ
             </h2>
-          </motion.div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {theses.map((thesis, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="text-center p-6"
-              >
-              
-                <h3 className="text-2xl font-bold mb-4 text-gray-900">{thesis.title}</h3>
-                <p className="text-gray-600">{thesis.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </div>
+            <p className=' font-black mb-8 text-black tracking-tight'> Moresvet — это магазин стильных люстр и светильников для вашего дома и офиса. Мы собрали широкий ассортимент современного и классического освещения: от изящных хрустальных люстр и уютных бра до функциональных потолочных светильников и светодиодных решений.
 
-      {/* Hero Section */}
-      <div className="relative overflow-hidden">
-        <div 
-          className="w-full h-[600px] bg-cover bg-center"
-          style={{
-            backgroundImage: "url('/images/d.png')",
-            backgroundPosition: 'center 30%'
-          }}
-        >
-          
+            Наша цель — помочь вам создать комфортное и гармоничное пространство, где каждый источник             света не только освещает, но и украшает интерьер. Мы тщательно подбираем товары разных ценовых             категорий, чтобы каждый мог найти подходящий вариант — будь то лаконичный светильник для кухни             или роскошная люстра для гостиной.
+
+            Мы ценим качество, стиль и надёжность, поэтому сотрудничаем только с проверенными             производителями. Для клиентов доступны консультации специалистов, быстрая доставка и гарантия             на всю продукцию.Доставка в Москве и Московской области
+
+            Мы заботимся о том, чтобы ваши заказы приходили быстро и в удобное время.
+
+            Москва — доставка по городу осуществляется в течение 1–2 рабочих дней. Возможен самовывоз из             пункта выдачи.
+
+            Московская область — доставляем в любой населённый пункт региона. Сроки — от 2 до 4 рабочих             дней, в зависимости от расстояния.
+
+            Все светильники и люстры надёжно упаковываются, чтобы исключить повреждения при перевозке.
+
+            Курьер заранее свяжется с вами, чтобы согласовать удобное время получения заказа. 
+            Политика конфиденциальности
+
+            Мы ценим доверие наших клиентов и гарантируем безопасность предоставленных данных.
+
+            При оформлении заказа вы оставляете только необходимую информацию: имя, телефон, адрес             доставки и e-mail.
+
+            Все данные используются исключительно для обработки заказа, связи с вами и доставки товара.
+
+            Мы не передаём личную информацию третьим лицам, за исключением служб доставки, которым она             необходима для выполнения заказа.
+
+            Вся информация хранится в защищённой системе и обрабатывается в соответствии с             законодательством РФ о защите персональных данных.
+
+            Вы всегда можете уточнить, изменить или удалить свои данные, обратившись к нам через             контактные формы.</p>
+          </motion.div>
         </div>
       </div>
 
      
 
-      {/* Collaboration Request Section */}
-      <div className="w-full bg-white py-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-center mb-10"
-            >
-            </motion.div>
-            
-            <form className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Название компании</label>
-                  <input 
-                    type="text" 
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                    placeholder="ООО 'Компания'"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Контактное лицо</label>
-                  <input 
-                    type="text" 
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                    placeholder="Иван Иванов"
-                  />
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Электронная почта</label>
-                  <input 
-                    type="email" 
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                    placeholder="info@company.ru"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Телефон</label>
-                  <input 
-                    type="tel" 
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                    placeholder="+7 (999) 123-45-67"
-                  />
-                </div>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Комментарий</label>
-                <textarea 
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 h-32"
-                  placeholder="Расскажите о ваших потребностях или предложениях"
-                ></textarea>
-              </div>
-              
-              <div className="text-center">
-                <button 
-                  type="submit"
-                  className="bg-yellow-400 text-black px-8 py-4 rounded-lg font-medium hover:bg-yellow-300 transition-colors inline-flex items-center"
-                >
-                  <Mail className="w-5 h-5 mr-2" />
-                  Отправить заявку
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
+ 
 
      
     </div>

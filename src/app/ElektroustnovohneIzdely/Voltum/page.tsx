@@ -127,11 +127,23 @@ const WerkelPage: React.FC = () => {
 
       <div className="min-h-screen bg-white py-12">
         <div className="container mx-auto px-4">
-  
+     
           {!selectedSeries ? (
             <div className="max-w-7xl mx-auto">
               {/* Desktop complex grid using CSS grid areas */}
-              <h2 className="text-4xl font-bold text-black mb-4">VOLTUM</h2>
+              <h2 className="text-4xl  font-bold text-black mb-4">VOLTUM</h2>
+               {/* Mobile / tablet fallback grid */}
+               <div className="lg:hidden grid grid-cols-1 md:grid-cols-2 gap-6">
+                {werkelSeriesData.map((series) => (
+                  <div key={series.id} onClick={() => handleSeriesClick(series)} className="relative overflow-hidden rounded-lg cursor-pointer">
+                    <img src={series.image} alt={series.name} className="w-full h-48 object-cover" />
+                    <div className="p-4">
+                      <h2 className="text-2xl text-black font-bold">{series.name}</h2>
+                      <p className="text-sm text-black">Перейти к цветам</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
               <div
                 className="hidden lg:block"
                 style={{
@@ -150,7 +162,7 @@ const WerkelPage: React.FC = () => {
                       key={series.id}
                       onClick={() => handleSeriesClick(series)}
                       style={{ gridArea: area }}
-                      className="relative cursor-pointer overflow-hidden rounded-lg group"
+                      className="relative cursor-pointer max-lg:hidden  overflow-hidden rounded-lg group"
                     >
                       <img
                         src={series.image}
@@ -168,18 +180,7 @@ const WerkelPage: React.FC = () => {
                 })}
               </div>
 
-              {/* Mobile / tablet fallback grid */}
-              <div className="lg:hidden grid grid-cols-1 md:grid-cols-2 gap-6">
-                {werkelSeriesData.map((series) => (
-                  <div key={series.id} onClick={() => handleSeriesClick(series)} className="relative overflow-hidden rounded-lg cursor-pointer">
-                    <img src={series.image} alt={series.name} className="w-full h-48 object-cover" />
-                    <div className="p-4">
-                      <h2 className="text-2xl font-bold">{series.name}</h2>
-                      <p className="text-sm text-gray-600">Перейти к цветам</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+          
             </div>
           ) : (
             <div className="max-w-7xl mx-auto">    
