@@ -546,6 +546,13 @@ const Header = () => {
               </button>
             </div>
             <div className="p-4 overflow-y-auto h-[calc(100%-64px)]">
+              <div className="flex items-center justify-between mb-4">
+                <Link href="/auth/register" className="text-base font-bold text-black">ДЛЯ ДИЗАЙНЕРОВ</Link>
+                <div className="flex items-center gap-4">
+                  <Link href="/liked" className="p-2 text-black hover:text-gray-700"><FaHeart size={20} /></Link>
+                  <Link href="/cart" className="p-2 text-black hover:text-gray-700"><FaShoppingCart size={20} /></Link>
+                </div>
+              </div>
               <div className="space-y-6 text-black">
                 <div>
                   <h3 className="text-lg font-bold mb-3">Декоративный свет</h3>

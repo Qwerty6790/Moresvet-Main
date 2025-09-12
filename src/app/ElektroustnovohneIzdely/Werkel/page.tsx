@@ -111,6 +111,15 @@ const werkelSeriesData: WerkelSeries[] = [
       { id: 'Runda', name: 'Runda', image: '/images/rundretroрамкаWerkel.webp', url: '/' },
     ]
   },
+  {
+    id: 'vidvihnyblock',
+    name: 'Серия Выдвижной блок',
+    image: '/images/series/vidvihnoyblock.jpg',
+    colors: [
+      { id: 'Металлическое', name: 'Металлическое', image: '/images/colors/ретрометалическоеWerkel.webp', url: '/ElektroustnovohneIzdely/Werkel/retro-metallic' },
+    ],
+  },
+ 
 ];
 
 const WerkelPage: React.FC = () => {
@@ -191,18 +200,19 @@ const WerkelPage: React.FC = () => {
 
       <div className="min-h-screen bg-white py-12">
         <div className="container mx-auto px-4">
-  
+             
           {!selectedSeries ? (
             <div className="max-w-7xl mx-auto">
+    <h2 className="text-4xl font-bold text-black mb-4">WERKEL</h2>
               {/* Desktop complex grid using CSS grid areas */}
               <div
                 className="hidden lg:block"
                 style={{
                   display: 'grid',
-                  // 4 main columns so tile1 (retro) and tile2 (vintage) can span 2 cols each
-                  gridTemplateColumns: 'repeat(4, minmax(0,1fr)) 620px',
-                  gridTemplateRows: '420px 300px',
-                  gridTemplateAreas: '"hero hero hero hero side" "tile1 tile1 tile2 tile2 side"',
+                  // 4 main columns + fixed side column; добавлена третья строка для tile3
+                  gridTemplateColumns: 'repeat(4, minmax(0,1fr)) 740px',
+                  gridTemplateRows: '420px 300px 170px',
+                  gridTemplateAreas: '"hero hero hero hero side" "tile1 tile1 tile2 tile2 side" "tile3 tile3 tile3 tile3 side"',
                   gap: '24px',
                 }}
               >
