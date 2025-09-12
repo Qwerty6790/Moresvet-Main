@@ -1084,32 +1084,6 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({
 
   return (
     <>
-      {/* Мобильные элементы управления */}
-      <div className="block md:hidden mb-4 bg-white p-2 border border-gray-200 rounded-lg shadow-sm sticky top-0 z-10">
-         <div className="flex justify-between items-center">
-           <div className="flex items-center space-x-3">
-             {/* ... Кнопки Grid/List ... */}
-              <button
-                onClick={() => { /* Логика смены viewMode */ console.log('Grid'); }}
-                className={`p-2 rounded-md ${viewMode === 'grid' ? 'bg-black text-white' : 'bg-gray-100'}`}
-                title="Отображение сеткой"
-              >
-                {/* SVG */}
-              </button>
-              <button
-                onClick={() => { /* Логика смены viewMode */ console.log('List'); }}
-                className={`p-2 rounded-md ${viewMode === 'list' ? 'bg-black text-white' : 'bg-gray-100'}`}
-                title="Отображение списком"
-              >
-                {/* SVG */}
-              </button>
-           </div>
-           <div className="text-xs text-gray-500">
-             Товаров: {filteredProducts.length} {/* Используем длину уже отфильтрованного массива */}
-           </div>
-         </div>
-      </div>
-
       {/* Основной контент */}
       {viewMode === 'table' ? (
         <TableView />
