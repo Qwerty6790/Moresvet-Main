@@ -29,11 +29,7 @@ const Footer = () => {
               <li><Link href="#" className="hover:text-white hover:underline transition-colors">О компании</Link></li>
               <li><Link href="#" className="hover:text-white hover:underline transition-colors">Доставка</Link></li>
               <li><Link href="#" className="hover:text-white hover:underline transition-colors">Способы оплаты</Link></li>
-              <li><Link href="#" className="hover:text-white hover:underline transition-colors">Скачать</Link></li>
               <li><Link href="#" className="hover:text-white hover:underline transition-colors">Контакты</Link></li>
-              <li><Link href="#" className="hover:text-white hover:underline transition-colors">Договор-оферта</Link></li>
-              <li><Link href="#" className="hover:text-white hover:underline transition-colors">Дизайнерам</Link></li>
-              <li><Link href="#" className="hover:text-white hover:underline transition-colors">О товаре</Link></li>
             </ul>
           </div>
 
