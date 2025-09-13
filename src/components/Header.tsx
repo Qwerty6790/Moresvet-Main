@@ -732,9 +732,9 @@ const Header = () => {
 
       {/* Встроенный выпадающий поиск (вместо модального окна) */}
       {dropdownMounted && (
-        <div ref={searchResultsRef} className="absolute left-0 right-0 top-[100%] z-40 pointer-events-none">
-          <div className="max-w-screen-xl mx-auto px-4">
-            <div className={`bg-black rounded-b-lg shadow-lg overflow-hidden transform transition-all duration-300 ease-out ${showSearchResults ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-4 pointer-events-none'}`}>
+        <div ref={searchResultsRef} className="absolute left-0 right-0 top-[calc(100%+10px)] z-40 pointer-events-none">
+          <div className="max-w-screen-xl mx-auto px-4 flex justify-center">
+            <div className={`bg-black rounded-2xl shadow-xl overflow-hidden max-w-3xl w-full transform transition-all duration-300 ease-out ${showSearchResults ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-4 pointer-events-none'}`}>
               <div className="p-4">
                 <div className="flex items-center gap-3">
                   <div className="relative flex-1">
@@ -744,7 +744,7 @@ const Header = () => {
                       placeholder="Введите название товара..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full px-4 py-3 pl-10 rounded-md  bg-transparent text-white focus:outline-none"
+                      className="w-full px-4 py-3 pl-10 rounded-lg bg-black/20 text-white backdrop-blur-sm focus:outline-none"
                     />
                     <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white">
                       <SearchIcon />
@@ -759,7 +759,7 @@ const Header = () => {
                   </button>
                 </div>
               </div>
-              <div className="border-t">
+              <div className="border-t border-white/10">
                 {searchResultsContent}
               </div>
             </div>
