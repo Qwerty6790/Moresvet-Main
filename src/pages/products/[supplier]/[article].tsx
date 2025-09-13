@@ -259,14 +259,14 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
                 </div>
                 
                 <div className="col-span-1 sm:col-span-6 mb-4 sm:mb-0">
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col  gap-2">
                     <button
                       onClick={addToCart}
-                      className="w-full bg-black text-white py-2 px-4 text-center font-medium text-sm"
+                      className="w-full bg-black rounded-full text-white py-2 px-4 text-center font-medium text-sm"
                     >
                       В КОРЗИНУ
                     </button>
-                    <button className="w-full border border-black py-2 px-4 text-center font-medium text-sm">
+                    <button className="w-full border rounded-full border-black py-2 px-4 text-center font-medium text-sm">
                       КУПИТЬ В 1 КЛИК
                     </button>
                   </div>
@@ -330,7 +330,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
           {/* Табы */}
           <div className="mt-6 border-b">
             <div className="flex overflow-x-auto">
-              {['characteristics', 'description', 'delivery', 'lamps', 'reviews'].map((tab) => (
+              {['Характеристики', 'Описание', 'Доставка', 'Лампы', 'Отзывы'].map((tab) => (
                 <button
                   key={tab}
                   className={`pb-2 px-3 text-sm whitespace-nowrap ${
