@@ -2287,7 +2287,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
             const hiddenBrands = ['Voltum', 'Werkel', 'Donel'];
             const beforeBrandFilter = filteredProducts.length;
             filteredProducts = filteredProducts.filter((product: ProductI) => {
-              return !hiddenBrands.includes(product.source);
+              return !hiddenBrands.includes(product.source ?? '');
             });
             if (beforeBrandFilter !== filteredProducts.length) {
               console.log(`🚫 Клиентская фильтрация брендов: ${beforeBrandFilter} → ${filteredProducts.length} товаров`);
@@ -4285,7 +4285,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
             {selectedShadeColor && (
               <div className="flex items-center bg-gray-100 text-black text-sm rounded-full overflow-hidden">
                 <div className="px-3 py-1.5">
-                  <span className="font-medium">Цвет плафона: {capitalizeFirst(selectedShadeColor)}</span>
+                  <span className="font-medium">Цвет плафона: {capitalizeFirst(selectedShadeColor ?? '')}</span>
                 </div>
                 <button 
                   onClick={() => handleShadeColorChange(null)}
@@ -4299,7 +4299,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
             {selectedFrameColor && (
               <div className="flex items-center bg-gray-100 text-black text-sm rounded-full overflow-hidden">
                 <div className="px-3 py-1.5">
-                  <span className="font-medium">Цвет арматуры: {capitalizeFirst(selectedFrameColor)}</span>
+                  <span className="font-medium">Цвет арматуры: {capitalizeFirst(selectedFrameColor ?? '')}</span>
                 </div>
                 <button 
                   onClick={() => handleFrameColorChange(null)}
@@ -4700,7 +4700,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
                                     : 'bg-[#1a1a1a]/40 text-white/90 border border-white/10 hover:bg-[#2a2a2a]/60 hover:border-[#812626]/30'
                                 }`}
                               >
-                                {capitalizeFirst(shadeColor)}
+                                {capitalizeFirst(shadeColor ?? '')}
                               </button>
                             ))}
                           </div>
@@ -4737,7 +4737,7 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
                                     : 'bg-[#1a1a1a]/40 text-white/90 border border-white/10 hover:bg-[#2a2a2a]/60 hover:border-[#812626]/30'
                                 }`}
                               >
-                                {capitalizeFirst(frameColor)}
+                                {capitalizeFirst(frameColor ?? '')}
                               </button>
                             ))}
                           </div>

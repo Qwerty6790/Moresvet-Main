@@ -10,27 +10,7 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import { BASE_URL, getImageUrl } from '@/utils/constants';
 import SEO from '@/components/SEO';
 
-interface ProductI {
-  imageAddress: any;
-  _id: string;
-  article: string;
-  name: string;
-  price: number;
-  stock: string;
-  imageAddresses: string[] | string;
-  source: string;
-  power: number;
-  voltage: number;
-  bulbType: string;
-  socket: string;
-  bulbCount: number;
-  lampPower: number;
-  material: string;
-  color: string;
-  style: string;
-  direction: string;
-  shape: string;
-}
+import type { ProductI } from '@/types/interfaces';
 
 interface ProductDetailProps {
   product: ProductI;
@@ -146,11 +126,21 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
     );
   }
 
+  const mainImageForStructured: string | undefined = Array.isArray(product.imageAddresses)
+    ? product.imageAddresses[0]
+    : typeof product.imageAddresses === 'string'
+    ? product.imageAddresses
+    : typeof product.imageAddress === 'string'
+    ? product.imageAddress
+    : Array.isArray(product.imageAddress)
+    ? product.imageAddress[0]
+    : undefined;
+
   const structuredData = {
     "@context": "https://schema.org/",
     "@type": "Product",
     "name": product.name,
-    "image": product.imageAddresses?.[0] || product.imageAddress,
+    "image": mainImageForStructured,
     "description": `${product.name} - ${product.material}, ${product.color}`,
     "brand": {
       "@type": "Brand",
@@ -171,7 +161,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product: initialProduct }
         title={`${product.name} | PalermoLight`}
         description={`Купить ${product.name} по выгодной цене. ${product.material}, ${product.color}. Доставка по всей России.`}
         keywords={`${product.name}, ${product.source}, светильник, ${product.material}, ${product.color}`}
-        ogImage={product.imageAddresses?.[0] || product.imageAddress}
+        ogImage={mainImageForStructured}
         url={`${BASE_URL}/products/${product.source}/${product.article}`}
       />
       <script

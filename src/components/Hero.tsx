@@ -29,8 +29,8 @@ interface Category {
 const slides: Slide[] = [
   {
     id: 1,
-    media: '/images/banners/Evolution Изображение особенности серии продуктов (1).jpg',
-    mobileMedia: '/images/banners/8538 Интерьерное изображение квадрат для серии продуктов.jpg',
+    media: '/images/banners/BannersOsveheny1.jpg',
+    mobileMedia: '/images/banners/BannersOsveheny1.jpg',
     title: 'ИЩИ НА MORESVET',
     subtitle: 'СВЕТОЧНЫЕ РЕШЕНИЯ ДЛЯ ВАШЕГО ДОМА',
     buttonText: 'ПОДРОБНЕЕ',
@@ -38,8 +38,8 @@ const slides: Slide[] = [
   },
   {
     id: 2,
-    media: '/images/banners/Toys Изображение особенности серии продуктов.jpg',
-    mobileMedia: '/images/banners/Toys Изображение особенности серии продуктов.jpg',
+    media: '/images/banners/BannersOsveheny2.jpg',
+    mobileMedia: '/images/banners/BannersOsveheny2.jpg',
     title: 'ИЩИ НА MORESVET',
     subtitle: 'РЕШЕНИЯ ДЛЯ ВАШЕГО ДОМА',
     buttonText: 'ПОДРОБНЕЕ',
@@ -51,43 +51,43 @@ const popularCategories: Category[] = [
   {
     id: 1,
     title: 'Люстры',
-    image: '/images/categories/Снимок экрана 2025-08-28 103635.png',
+    image: '/images/categories/lustaypopularcategory.png',
     link: '/catalog/chandeliers'
   },
   {
     id: 2,
     title: 'Настольные лампы',
-    image: '/images/categories/Снимок экрана 2025-08-28 103752.png',
+    image: '/images/categories/nastolnylampapopularcategory.png',
     link: '/catalog/table-lamps'
   },
   {
     id: 3,
     title: 'Бра',
-    image: '/images/categories/Снимок экрана 2025-08-28 103841.png',
+    image: '/images/categories/brapopularcategory.png',
     link: '/catalog/wall-sconces'
   },
   {
     id: 4,
     title: 'Торшеры',
-    image: '/images/categories/image.png',
+    image: '/images/categories/torherpopularcategory.png',
     link: '/catalog/floor-lamps'
   },
   {
     id: 5,
     title: 'Светильники',
-    image: '/images/categories/Jelly Изображение особенности серии продуктов.jpg',
+    image: '/images/categories/svetilnikipopularcategory.jpg',
     link: '/catalog/track-lights'
   },
   {
     id: 6,
     title: 'Уличные светильники',
-    image: '/images/categories/O488DL-L12GF3K Интерьерное изображение квадрат для серии продуктов.jpeg',
+    image: '/images/categories/ylihnoepopularcategory.jpeg',
     link: '/catalog/outdoor-lights'
   },
   {
     id: 7,
     title: 'Розетки,выключатели',
-    image: '/images/categories/elektroustnovohneIzdelycategoriy.jpg',
+    image: '/images/categories/elektroustnovohneIzdelypopularcategory.jpg',
     link: '/ElektroustnovohneIzdely'
   },
 ];
@@ -255,7 +255,7 @@ export function ExtraSections() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="w-full md:w-1/2">
-              <img src="/images/banners/MOD407PL-L12G3K1 Интерьерное изображение квадрат для серии продуктов.jpg" alt="Интерьер" className="w-full h-[540px] object-cover rounded-lg shadow-md" />
+              <img src="/images/banners/BannersAbout1.jpg" alt="Интерьер" className="w-full h-[540px] object-cover rounded-lg shadow-md" />
             </div>
             <div className="w-full md:w-1/2">
   <h3 className="text-4xl font-bold text-black mb-4">Почему выбирают нас</h3>
@@ -270,7 +270,7 @@ export function ExtraSections() {
             <div>
             <div>
               <div>
-                <img src="/images/banners/P097PL-L45BS3K Интерьерное изображение квадрат для серии продуктов.jpg" alt="Фото 1" className="w-full h-[540px]  object-cover rounded-lg  shadow-sm" />
+                <img src="/images/banners/BannersAbout2.jpg" alt="Фото 1" className="w-full h-[540px]  object-cover rounded-lg  shadow-sm" />
               </div> 
             </div>
           </div>
