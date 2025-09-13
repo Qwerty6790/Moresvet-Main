@@ -64,7 +64,7 @@ const popularCategories: Category[] = [
     id: 3,
     title: 'Бра',
     image: '/images/categories/Снимок экрана 2025-08-28 103841.png',
-    link: '/catalog/wall-lights'
+    link: '/catalog/wall-sconces'
   },
   {
     id: 4,

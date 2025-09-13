@@ -43,7 +43,7 @@ const SeriesLayout = () => {
           <h1 className="text-3xl md:text-7xl font-bold tracking-wide">
             Электроустановочные изделия
           </h1>
-          <span className="text-1xl md:text-sm font-bold tracking-wide">
+          <span className="text-1xl max-lg:hidden md:text-sm font-bold tracking-wide">
             MORESVET
           </span>
         </div>
