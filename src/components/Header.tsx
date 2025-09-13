@@ -649,13 +649,13 @@ const Header = () => {
                       </div>
                     ) : null}
                     <div className="flex-1 min-w-0">
-                      <div className="font-semibold text-base whitespace-normal break-words">{miniCartMessage || 'Товар добавлен'}</div>
-                      <div className="flex items-center justify-end mt-2">
-                        <div className="text-sm text-black">В корзине товаров:</div>
-                        <div className="text-sm  text-black px-3 py-1 rounded">{miniCartQuantity ?? 1}</div>
+                      <div className="font-semibold text-2xl whitespace-normal break-words">{miniCartMessage || 'Товар добавлен'}</div>
+                      <div className="flex items-center bg-neutral-200 rounded-full justify-end mt-2">
+                        <div className="text-2xl text-black">В корзине </div>
+                        <div className="text-2xl  text-black px-3 py-1 rounded">{miniCartQuantity ?? 1} товаров</div>
                       </div>
                       <div className="mt-3">
-                        <Link href="/cart" className="inline-block w-full text-center bg-black text-white py-2 rounded text-sm">Перейти в корзину</Link>
+                        <Link href="/cart" className="inline-block rounded-full w-full text-center bg-black text-white py-2  text-sm">Перейти в корзину</Link>
                       </div>
                     </div>
                   </div>
@@ -790,9 +790,9 @@ const Header = () => {
                 <div>
                   <h3 className="text-lg font-bold mb-3">Декоративный свет</h3>
                   <ul className="space-y-2">
-                    <li><Link href="/catalog?category=Подвесная+люстра&subcategory=&page=1" className="block text-base text-black hover:text-gray-700">Подвесные люстры</Link></li>
-                    <li><Link href="/catalog?category=Потолочная+люстра&subcategory=&page=1" className="block text-base text-black hover:text-gray-700">Потолочные люстры</Link></li>
-                    <li><Link href="/catalog?category=Люстры+на+штанге&subcategory=&page=1" className="block text-base text-black hover:text-gray-700">Люстры на штанге</Link></li>
+                    <li><Link href="/catalog/chandeliers/pendant-chandeliers" className="block text-base text-black hover:text-gray-700">Подвесные люстры</Link></li>
+                    <li><Link href="/catalog/chandeliers/ceiling-chandeliers" className="block text-base text-black hover:text-gray-700">Потолочные люстры</Link></li>
+                    <li><Link href="/catalog/chandeliers/rod-chandeliers" className="block text-base text-black hover:text-gray-700">Люстры на штанге</Link></li>
                     <li><Link href="/catalog?category=Подвесы&subcategory=&page=1" className="block text-base text-black hover:text-gray-700">Подвесы</Link></li>
                     <li><Link href="/catalog?category=Бра&subcategory=&page=1" className="block text-base text-black hover:text-gray-700">Бра</Link></li>
                   </ul>
@@ -856,20 +856,22 @@ const Header = () => {
                   <div className="text-black">
                     <h3 className="text-lg font-bold mb-4">Декоративный свет</h3>
                     <ul className="space-y-3">
-                      <li><Link href="/catalog?category=Подвесная+люстра&subcategory=&page=1" className="block text-base hover:text-black">Подвесные люстры</Link></li>
-                      <li><Link href="/catalog?category=Потолочная+люстра&subcategory=&page=1" className="block text-base hover:text-black">Потолочные люстры</Link></li>
-                      <li><Link href="/catalog?category=Люстры+на+штанге&subcategory=&page=1" className="block text-base hover:text-black">Люстры на штанге</Link></li>
-                      <li><Link href="/catalog?category=Подвесы&subcategory=&page=1" className="block text-base hover:text-black">Подвесы</Link></li>
-                      <li><Link href="/catalog?category=Бра&subcategory=&page=1" className="block text-base hover:text-black">Бра</Link></li>
+                      <li><Link href="/catalog/chandeliers/pendant-chandeliers" className="block text-base hover:text-black">Подвесные люстры</Link></li>
+                      <li><Link href="/catalog/chandeliers/ceiling-chandeliers" className="block text-base hover:text-black">Потолочные люстры</Link></li>
+                      <li><Link href="/catalog/chandeliers/rod-chandeliers" className="block text-base hover:text-black">Люстры на штанге</Link></li>
+                      <li><Link href="/catalog/table-lamps" className="block text-base hover:text-black">Настольная лампа</Link></li>
+                      <li><Link href="/catalog/wall-sconces" className="block text-base hover:text-black">Бра</Link></li>
+                      <li><Link href="/catalog/floor-lamps" className="block text-base hover:text-black">Торшер</Link></li>
                     </ul>
                   </div>
 
                   <div className="text-black">
                     <h3 className="text-lg font-bold mb-4">Функциональный свет</h3>
                     <ul className="space-y-3">
-                      <li><Link href="/catalog?category=Трековые+системы&subcategory=&page=1" className="block text-base hover:text-black">Трековые системы</Link></li>
-                      <li><Link href="/catalog?category=Светодиодная+лента&subcategory=&page=1" className="block text-base hover:text-black">Светодиодная лента</Link></li>
-                      <li><Link href="/catalog?category=Профили&subcategory=&page=1" className="block text-base hover:text-black">Профили</Link></li>
+                      <li><Link href="/catalog/lights/track-lights" className="block text-base hover:text-black">Трековые системы</Link></li>
+                      <li><Link href="/catalog/lights/pendant-lights" className="block text-base hover:text-black">Подвесные светильники</Link></li>
+                      <li><Link href="/catalog/led-lamp" className="block text-base hover:text-black">Светодиодная лента</Link></li>
+                      <li><Link href="/catalog/led-strip-profiles" className="block text-base hover:text-black">Профили</Link></li>
                       <li><Link href="/catalog?category=Гибкий+неон&subcategory=&page=1" className="block text-base hover:text-black">Гибкий неон</Link></li>
                     </ul>
                   </div>
@@ -877,18 +879,12 @@ const Header = () => {
                   <div className="text-black">
                     <h3 className="text-lg font-bold mb-4">Уличный свет</h3>
                     <ul className="space-y-3">
-                      <li><Link href="/catalog?category=Уличные+светильники&subcategory=&page=1" className="block text-base hover:text-black">Уличные и фасадные светильники</Link></li>
-                      <li><Link href="/catalog?category=Светильник+уличный&subcategory=&page=1" className="block text-base hover:text-black">Светильники уличные</Link></li>
+                      <li><Link href="/catalog/outdoor-lights" className="block text-base hover:text-black">Уличные светильники</Link></li>
                     </ul>
                   </div>
 
                   <div className="text-black">
                     <h3 className="text-lg font-bold mb-4">Новинки и акции</h3>
-                    <ul className="space-y-3">
-                      <li><Link href="/catalog?filter=new&subcategory=&page=1" className="block text-base hover:text-black">Новинки</Link></li>
-                      <li><Link href="/promotions" className="block text-base hover:text-black">Акции</Link></li>
-                      <li><Link href="/catalog?filter=sale&subcategory=&page=1" className="block text-base hover:text-black">Скидки</Link></li>
-                    </ul>
                   </div>
                 </div>
               </div>
