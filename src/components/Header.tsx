@@ -161,13 +161,23 @@ const Header = () => {
         addedQuantity = typeof ce?.detail?.quantity === 'number' ? ce.detail.quantity : 1;
         setMiniCartMessage(ce?.detail?.name ? `${ce.detail.name}` : 'Товар добавлен');
         setMiniCartImageSrc(ce?.detail?.imageUrl || null);
-        setMiniCartQuantity(addedQuantity);
       } catch (err) {
         setMiniCartMessage('Товар добавлен');
         setMiniCartImageSrc(null);
-        setMiniCartQuantity(1);
         addedQuantity = 1;
       }
+
+      // Попробуем прочитать общее количество из localStorage — это приоритет
+      let totalQuantity: number | null = null;
+      try {
+        const cart = JSON.parse(localStorage.getItem('cart') || '{"products": []}');
+        totalQuantity = Array.isArray(cart.products) ? cart.products.reduce((s: number, it: any) => s + (it.quantity || 0), 0) : 0;
+      } catch (e) {
+        totalQuantity = null;
+      }
+
+      // Если есть значение из localStorage — используем его, иначе используем добавленное количество
+      setMiniCartQuantity(typeof totalQuantity === 'number' ? totalQuantity : addedQuantity);
 
       // Обновляем видимый мини-кошелёк
       setMiniCartVisible(true);
@@ -185,15 +195,41 @@ const Header = () => {
     };
 
     window.addEventListener('cart-added', handler as EventListener);
+    // слушаем обновления корзины, которые диспатчит внутренняя логика корзины
+    const handleCartUpdated = (ev: Event) => {
+      try {
+        const ce = ev as CustomEvent;
+        const count = typeof ce?.detail?.count === 'number' ? ce.detail.count : null;
+        // пробуем взять число из detail, иначе читаем localStorage
+        if (typeof count === 'number') {
+          setCartCount(count);
+          setMiniCartQuantity(count);
+        } else {
+          const cart = JSON.parse(localStorage.getItem('cart') || '{"products": []}');
+          const total = Array.isArray(cart.products) ? cart.products.reduce((s: number, it: any) => s + (it.quantity || 0), 0) : 0;
+          setCartCount(total);
+          setMiniCartQuantity(total);
+        }
+      } catch (e) {
+        // если чтение не удалось — сброс
+        setCartCount(0);
+        setMiniCartQuantity(0);
+      }
+    };
+    window.addEventListener('cart:updated', handleCartUpdated as EventListener);
     // initialize cart count from localStorage
     try {
       const cart = JSON.parse(localStorage.getItem('cart') || '{"products": []}');
-      setCartCount(Array.isArray(cart.products) ? cart.products.reduce((s: number, it: any) => s + (it.quantity || 0), 0) : 0);
+      const total = Array.isArray(cart.products) ? cart.products.reduce((s: number, it: any) => s + (it.quantity || 0), 0) : 0;
+      setCartCount(total);
+      setMiniCartQuantity(total);
     } catch (e) {
       setCartCount(0);
+      setMiniCartQuantity(0);
     }
     return () => {
       window.removeEventListener('cart-added', handler as EventListener);
+      window.removeEventListener('cart:updated', handleCartUpdated as EventListener);
       if (miniCartTimeoutRef.current) {
         window.clearTimeout(miniCartTimeoutRef.current);
         miniCartTimeoutRef.current = null;
