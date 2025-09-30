@@ -36,59 +36,44 @@ const slides: Slide[] = [
     buttonText: 'ПОДРОБНЕЕ',
     buttonLink: '/catalog/track-lights'
   },
-  {
-    id: 2,
-    media: '/images/banners/BannersOsveheny2.jpg',
-    mobileMedia: '/images/banners/BannersOsveheny2.jpg',
-    title: 'ИЩИ НА MORESVET',
-    subtitle: 'РЕШЕНИЯ ДЛЯ ВАШЕГО ДОМА',
-    buttonText: 'ПОДРОБНЕЕ',
-    buttonLink: '/catalog/track-lights'
-  },
 ];
 
 const popularCategories: Category[] = [
   {
     id: 1,
     title: 'Люстры',
-    image: '/images/categories/lustaypopularcategory.png',
+    image: '/images/categories/lustaypopularcategory.webp',
     link: '/catalog/chandeliers'
   },
   {
     id: 2,
     title: 'Настольные лампы',
-    image: '/images/categories/nastolnylampapopularcategory.png',
+    image: '/images/categories/nastolnylampapopularcategory.jpeg',
     link: '/catalog/table-lamps'
   },
   {
     id: 3,
     title: 'Бра',
-    image: '/images/categories/brapopularcategory.png',
+    image: '/images/categories/brapopularcategory.jpg',
     link: '/catalog/wall-sconces'
   },
   {
     id: 4,
     title: 'Торшеры',
-    image: '/images/categories/torherpopularcategory.png',
+    image: '/images/categories/torherpopularcategory.webp',
     link: '/catalog/floor-lamps'
   },
   {
     id: 5,
-    title: 'Светильники',
+    title: 'Подвесные светильники',
     image: '/images/categories/svetilnikipopularcategory.jpg',
     link: '/catalog/track-lights'
   },
   {
     id: 6,
     title: 'Уличные светильники',
-    image: '/images/categories/ylihnoepopularcategory.jpeg',
+    image: '/images/categories/ylihnoepopularcategory.webp',
     link: '/catalog/outdoor-lights'
-  },
-  {
-    id: 7,
-    title: 'Розетки,выключатели',
-    image: '/images/categories/elektroustnovohneIzdelypopularcategory.jpg',
-    link: '/ElektroustnovohneIzdely'
   },
 ];
 
@@ -213,10 +198,10 @@ export default function Banner() {
 
                 <div ref={categoriesRef} className={`flex gap-3 items-center py-4 overflow-x-auto md:overflow-x-hidden snap-x snap-mandatory pl-4 md:pl-0`} style={{ WebkitOverflowScrolling: 'touch' }}>
                   {popularCategories.map((category) => (
-                    <div key={category.id} className="flex-shrink-0 min-w-[110px] w-[110px] sm:min-w-[140px] sm:w-[140px] md:w-[200px] transform transition-transform duration-200 hover:scale-105 snap-center sm:snap-start">
+                    <div key={category.id} className="flex-shrink-0 min-w-[110px] w-[110px] sm:min-w-[140px] sm:w-[140px] md:w-[420px] transform transition-transform duration-200 hover:scale-105 snap-center sm:snap-start">
                       <a href={category.link} className="group block text-center">
-                        <div className="relative rounded-md h-[100px] sm:h-[120px] md:h-[330px] overflow-visible">
-                          <img src={category.image} alt={category.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out p-1" />
+                        <div className="relative rounded-md h-[100px] sm:h-[120px] md:h-[530px] overflow-visible">
+                          <img src={category.image} alt={category.title} className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300 ease-in-out p-1" />
                         </div>
                         <p className="font-bold text-xs sm:text-sm md:text-base text-black mt-2 group-hover:text-yellow-300 transition-colors duration-200 text-center">{category.title}</p>
                       </a>

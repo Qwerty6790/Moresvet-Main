@@ -104,18 +104,15 @@ export default function ChampagneCorrugatedPage() {
 
   return (
     <div className="text-black" style={{ backgroundColor: 'var(--background)', minHeight: '100vh', color: 'var(--foreground)' }}>
-      <div className="mx-auto max-w-[1550px] px-4 sm:px-6 lg:px-8 mb-52">
-        
-      </div>
-
-      <div className="mx-auto max-w-[1550px] px-4 sm:px-6 lg:px-8">
+   
+      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-44">
       <div className="mb-8">
-          <h2 className="text-5xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-black mb-5">Retro - Белое</h2>
+          <h2 className="text-5xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-black mb-5">Шампань рифленый</h2>
           <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 ">
           <nav className="flex flex-wrap items-center gap-1 sm:gap-2 text-2xl text-black">
           <Link href="/ElektroustnovohneIzdely" className="hover:text-transition-colors">Электроустановочные изделия</Link>
            <Link href="/ElektroustnovohneIzdely/Werkel" className="hover:text-gray-200 transition-colors">Werkel</Link>
-          <span className="text-white">Retro - Белое</span>
+          <span className="text-white">Шампань рифленый</span>
         </nav>
         </div>
         </div>

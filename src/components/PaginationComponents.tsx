@@ -16,7 +16,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
       key={key}
       onClick={onClick}
       disabled={disabled}
-      className={`px-3 py-1 rounded-lg transition-opacity duration-150 ${disabled ? 'opacity-30 pointer-events-none' : 'opacity-100'}`}
+      className={`px-3 py-1 text-black rounded-lg transition-opacity duration-150 ${disabled ? 'opacity-30 pointer-events-none' : 'opacity-100'}`}
     >
       {children}
     </button>

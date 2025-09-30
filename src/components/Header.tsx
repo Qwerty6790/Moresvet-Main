@@ -374,7 +374,7 @@ const Header = () => {
     return (
       <div
         key={product._id}
-        className={`flex items-center px-4 py-4 text-white cursor-pointer transition-all duration-200 bg-black rounded-md`}
+        className={`flex items-center px-4 py-4 text-white cursor-pointer transition-all duration-200 bg-transparent rounded-md`}
         onClick={handleClick}
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
@@ -421,8 +421,8 @@ const Header = () => {
           <div className=" py-2 px-4">
             <h3 className="text-xs font-medium uppercase text-white">Результаты поиска</h3>
           </div>
-          <div className="max-h-[73vh] bg-black overflow-y-auto">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3">
+          <div className="max-h-[60vh] max-w-[140vh] bg-black overflow-y-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-1 gap-3 p-3">
               {products.map((product) => (
                 <SearchResultItem 
                   key={product._id} 
@@ -435,7 +435,7 @@ const Header = () => {
           <div className="border-t bg-black border-gray-100">
             <button
               onClick={() => handleSearch()}
-              className="w-full py-3 text-xs font-medium uppercase text-white hover:bg-gray-50 transition-colors"
+              className="w-full py-3 text-xs font-medium uppercase text-white  transition-colors"
             >
               Показать все результаты
             </button>
@@ -557,7 +557,7 @@ const Header = () => {
   // Client-only behaviors are controlled via state/effects without changing markup shape.
 
   return (
-    <header className="w-full bg-black z-50 fixed top-0 left-0 right-0 shadow-lg h-18 md:h-18">
+    <header className="w-full bg-transparent z-50 fixed top-0 left-0 right-0 shadow-lg h-18 md:h-18">
       {/* Основной хедер */}
       <div className="bg-black py-5 sm:py-4 ">
         <div className="max-w-screen-xl mx-auto px-4 flex items-center justify-between">
@@ -574,18 +574,7 @@ const Header = () => {
           {/* Центральная навигация */}
           <nav className="hidden md:flex items-center gap-9 text-white uppercase text-sm font-bold tracking-wide">
             <Link href="/about" className="hover:text-gray-300">ПРАВИЛА ДОСТАВКИ</Link>
-            <Link href="/about" className="hover:text-gray-300">О КОМПАНИИ</Link>
-            <button
-              ref={brandsButtonRef}
-              onMouseEnter={openBrands}
-              onMouseLeave={closeBrands}
-              onClick={toggleBrandsMenu}
-              aria-haspopup="true"
-              aria-expanded={isBrandsOpen}
-              className="hover:text-gray-300"
-            >
-              БРЕНДЫ
-            </button>
+            <Link href="/about" className="hover:text-gray-300">ПРАВИЛА КОМПАНИИ</Link>
           </nav>
 
           {/* Правые элементы */}
@@ -649,10 +638,10 @@ const Header = () => {
                       </div>
                     ) : null}
                     <div className="flex-1 min-w-0">
-                      <div className="font-semibold text-2xl whitespace-normal break-words">{miniCartMessage || 'Товар добавлен'}</div>
-                      <div className="flex items-center bg-neutral-200 rounded-full justify-end mt-2">
-                        <div className="text-2xl text-black">В корзине </div>
-                        <div className="text-2xl  text-black px-3 py-1 rounded">{miniCartQuantity ?? 1} товаров</div>
+                      <div className="font-semibold text-1xl whitespace-normal break-words">{miniCartMessage || 'Товар добавлен'}</div>
+                      <div className="flex items-center  rounded-full justify-end mt-2">
+                        <div className="text-[8px] text-black">В корзине </div>
+                        <div className="text-1xl  text-black px-3 py-1 rounded">{miniCartQuantity ?? 1} товаров</div>
                       </div>
                       <div className="mt-3">
                         <Link href="/cart" className="inline-block rounded-full w-full text-center bg-black text-white py-2  text-sm">Перейти в корзину</Link>
