@@ -891,12 +891,12 @@ const Header = () => {
             {/* Footer buttons */}
             <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 bg-white">
               <div className="flex items-center justify-around">
-                <Link href="/liked" className="flex flex-col items-center text-gray-600 hover:text-black transition-colors">
+                <Link href="/liked" className="flex flex-col items-center text-black hover:text-black transition-colors">
                   <FaHeart size={22} />
                   <span className="text-xs mt-1">Избранное</span>
                 </Link>
-                <Link href="/cart" className="relative flex flex-col items-center text-gray-600 hover:text-black transition-colors">
-                  <FaShoppingBag size={22} />
+                <Link href="/cart" className="relative flex flex-col items-center text-black hover:text-black transition-colors">
+                <FaShoppingCart size={20} />
                   {cartCount > 0 && (
                     <span className="absolute -top-1 -right-2 flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-600 rounded-full">
                       {cartCount}
