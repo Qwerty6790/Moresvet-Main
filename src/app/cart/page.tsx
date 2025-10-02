@@ -8,6 +8,7 @@ import { ProductI } from '../../types/interfaces';
 import { ClipLoader } from 'react-spinners';
 import Link from 'next/link';
 import { FaMinus, FaPlus, FaTrash, FaShareAlt } from 'react-icons/fa';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 const Cart: React.FC = () => {
   const router = useRouter();
@@ -261,8 +262,7 @@ const Cart: React.FC = () => {
           <div className={`${!error ? 'lg:col-span-8' : 'lg:col-span-12'}`}>
             {isLoading ? (
               <div className="bg-white rounded-2xl shadow p-12 flex flex-col items-center">
-                <ClipLoader color="#111827" size={36} />
-                <p className="mt-4 text-gray-700">Загружаем корзину...</p>
+              <LoadingSpinner />
               </div>
             ) : error ? (
               <div className="bg-white rounded-2xl shadow p-10 text-center">

@@ -647,22 +647,24 @@ const Header = () => {
                                     <h3 className="text-lg font-semibold text-gray-800">Корзина ({cartCount})</h3>
                                 </div>
                                 <div className="max-h-80 overflow-y-auto border-t border-b border-gray-200">
-                                    {miniCartItems.map(item => (
-                                        <div key={item.id} className="flex items-center gap-4 p-4">
-                                            <div className="w-16 h-16 flex-shrink-0 bg-gray-100 rounded-md overflow-hidden">
-                                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                                <img src={item.imageUrl || '/placeholder.jpg'} alt={item.name} className="w-full h-full object-cover" />
-                                            </div>
-                                            <div className="flex-1 min-w-0">
-                                                <p className="text-sm font-medium text-gray-900 truncate">{item.name}</p>
-                                                <p className="text-sm text-gray-500">{item.quantity} x {(item.price || 0).toLocaleString('ru-RU')} ₽</p>
-                                            </div>
-                                            <p className="text-sm font-semibold text-gray-900">
-                                                {(item.quantity * (item.price || 0)).toLocaleString('ru-RU')} ₽
-                                            </p>
-                                        </div>
-                                    ))}
-                                </div>
+    {/* Добавляем 'index' в параметры map */}
+    {miniCartItems.map((item, index) => (
+        /* Создаем гарантированно уникальный ключ */
+        <div key={`${item.id}-${index}`} className="flex items-center gap-4 p-4">
+            <div className="w-16 h-16 flex-shrink-0 bg-gray-100 rounded-md overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={item.imageUrl || '/placeholder.jpg'} alt={item.name} className="w-full h-full object-cover" />
+            </div>
+            <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-900 truncate">{item.name}</p>
+                <p className="text-sm text-gray-500">{item.quantity} x {(item.price || 0).toLocaleString('ru-RU')} ₽</p>
+            </div>
+            <p className="text-sm font-semibold text-gray-900">
+                {(item.quantity * (item.price || 0)).toLocaleString('ru-RU')} ₽
+            </p>
+        </div>
+    ))}
+</div>
                                 <div className="p-4 bg-gray-50">
                                     <div className="flex justify-between items-center mb-4">
                                         <span className="text-base font-medium text-gray-900">Итого:</span>
