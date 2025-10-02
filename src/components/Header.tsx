@@ -838,9 +838,11 @@ const Header = () => {
                     </div>
                     <div>
                       <h4 className="font-bold text-lg mb-2">Функциональный свет</h4>
+                      <ul className='space-y-1 pl-2 border-l-2'>
                       <li><Link href="/catalog/lights/track-lights" className="block text-base hover:text-black">Трековые светильники</Link></li>
                         <li><Link href="/catalog/lights/pendant-lights" className="block text-base hover:text-black">Подвесные светильники</Link></li>
                         <li><Link href="/catalog/led-strip-profiles" className="block text-base hover:text-black">Профили</Link></li>
+                        </ul>
                     </div>
                     <div>
                       <h4 className="font-bold text-lg mb-2">Уличный свет</h4>
