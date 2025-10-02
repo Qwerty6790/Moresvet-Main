@@ -33,9 +33,11 @@ const Footer = () => {
             <Link href="/" className="inline-block mb-6">
               <h2 className="text-3xl font-bold tracking-wider">MORESVET</h2>
             </Link>
-            <p className="text-sm text-white opacity-90 max-w-xs">
-              Современные решения для освещения вашего пространства. Откройте для себя мир света.
-            </p>
+        
+          <p className="text-white">
+            © {new Date().getFullYear()} moresvet.ru. Все права защищены.
+          </p>
+        
           </div>
 
           {/* Колонка 2: Компания */}
@@ -81,12 +83,7 @@ const Footer = () => {
         </div>
 
         {/* Нижняя панель с копирайтом и соцсетями */}
-        <div className="mt-16 pt-8 border-t  flex flex-col sm:flex-row justify-between items-center text-sm">
-          <p className="text-white opacity-70">
-            © {new Date().getFullYear()} moresvet.ru. Все права защищены.
-          </p>
-        
-        </div>
+     
       </div>
     </footer>
   );
