@@ -4281,19 +4281,20 @@ const CatalogIndex: React.FunctionComponent<CatalogIndexProps> = ({
                 <div className="max-w-9xl mx-auto overflow-hidden">
 
 
-                    {/* Заголовок с переключателем режима просмотра */}
-                    <div className="flex justify-end items-center mt-10 flex-wrap">
-                        <h1 className="text-4xl md:text-5xl font-medium text-black flex items-baseline flex-wrap gap-x-4">
-
-                            {totalProducts > 0 && (
-                                <span className="text-sm  text-black">
-                                    {totalProducts} {totalProducts === 1 ? 'товар' :
-                                        (totalProducts >= 2 && totalProducts <= 4) ? 'товара' : 'товаров'}
-                                </span>
-                            )}
+                    {/* === MODIFIED BLOCK START === */}
+                    {/* Заголовок страницы */}
+                    <div className="flex justify-between items-end flex-wrap gap-4 mt-10 mb-6">
+                        <h1 className="text-5xl font-bold text-black">
+                            {selectedCategory ? selectedCategory.label : (selectedBrand && selectedBrand.name !== 'Все товары' ? selectedBrand.name : 'Каталог товаров')}
                         </h1>
-
+                        {totalProducts > 0 && (
+                            <span className="text-base text-gray-600 font-medium whitespace-nowrap">
+                                Найдено {totalProducts} {totalProducts === 1 ? 'товар' :
+                                    (totalProducts >= 2 && totalProducts <= 4) ? 'товара' : 'товаров'}
+                            </span>
+                        )}
                     </div>
+                    {/* === MODIFIED BLOCK END === */}
                     
                     {/* NEW: Render Active Filters */}
                     <ActiveFilters />

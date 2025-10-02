@@ -1,6 +1,7 @@
-import React, { useState, useMemo, useEffect, useRef, lazy, Suspense, useCallback } from 'react';
+// ...
+
+import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { ProductI } from '../types/interfaces';
 import { toast } from 'sonner';
 
@@ -132,14 +133,9 @@ const isAvifSupported = (): boolean => {
   if (typeof window === 'undefined') return true;
   if (supportCache.avif !== null) return supportCache.avif;
   try {
-    const cached = typeof localStorage !== 'undefined' ? localStorage.getItem('avif_supported') : null;
-    if (cached !== null) { supportCache.avif = cached === 'true'; return supportCache.avif; }
-  } catch (e) {}
-  try {
     const canvas = document.createElement('canvas');
     const isLikelySupported = canvas.toDataURL('image/avif', 0.1).indexOf('data:image/avif') === 0;
     supportCache.avif = isLikelySupported;
-    if (typeof localStorage !== 'undefined') localStorage.setItem('avif_supported', String(isLikelySupported));
     return isLikelySupported;
   } catch (e) { supportCache.avif = false; return false; }
 }
@@ -148,15 +144,10 @@ const isWebPSupported = (): boolean => {
   if (typeof window === 'undefined') return true;
   if (supportCache.webp !== null) return supportCache.webp;
   try {
-    const cached = typeof localStorage !== 'undefined' ? localStorage.getItem('webp_supported') : null;
-    if (cached !== null) { supportCache.webp = cached === 'true'; return supportCache.webp; }
-  } catch (e) {}
-  try {
     const canvas = document.createElement('canvas');
     canvas.width = 1; canvas.height = 1;
     const isSupported = canvas.toDataURL('image/webp', 0.1).indexOf('data:image/webp') === 0;
     supportCache.webp = isSupported;
-    if (typeof localStorage !== 'undefined') localStorage.setItem('webp_supported', String(isSupported));
     return isSupported;
   } catch (e) { supportCache.webp = false; return false; }
 }
@@ -286,28 +277,56 @@ const cacheImagesFromBackend = (products: ProductI[]): void => {
 
 const CollagePlaceholder: React.FC<{ className?: string; style?: React.CSSProperties; label?: string }> = ({ className, style, label = 'MORESVET' }) => {
   const defaultStyle: React.CSSProperties = {
-    display: 'flex', alignItems: 'center', justifyContent: 'center',
-    backgroundImage: "linear-gradient(45deg,#f8fafc 25%,#eef2f7 25%,#eef2f7 50%,#f8fafc 50%,#f8fafc 75%,#eef2f7 75%,#eef2f7 100%)",
-    backgroundSize: '40px 40px', color: '#374151', fontWeight: 700, letterSpacing: '0.08em', fontSize: 12,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: '#000000',
+    color: '#ffff',
+    fontWeight: 600,
+    letterSpacing: '0.1em',
+    fontSize: '1rem',
+    width: '100%',
+    height: '100%',
+    textAlign: 'center',
+    padding: '0.5rem'
   };
-  return <div className={className || ''} style={{ ...defaultStyle, ...style }}><span>{label}</span></div>;
+
+  return (
+    <div className={className || ''} style={{ ...defaultStyle, ...style }}>
+      <span>{label}</span>
+    </div>
+  );
 };
 
 const SafeOptimizedImage: React.FC<{
-  src: string; alt: string; className?: string; priority?: boolean; isLCP?: boolean; width?: number; height?: number;
-}> = React.memo(({ src, alt, className, priority = false, isLCP = false, width, height }) => {
+  src: string; alt: string; className?: string; priority?: boolean; isLCP?: boolean; width?: number; height?: number; decoding?: 'async' | 'sync' | 'auto';
+}> = React.memo(({ src, alt, className, priority = false, isLCP = false, width, height, decoding }) => {
   const [error, setError] = useState(false);
   const handleError = useCallback(() => { setError(true); }, []);
   const aspectRatioStyle = width && height ? { aspectRatio: `${width}/${height}` } : undefined;
-  const sizeStyle = width && height ? { width: `${width}px`, height: `${height}px` } : undefined;
+  
   if (!src || error) {
-    return <div className={`${className || ''} block w-full h-full`} style={{ ...aspectRatioStyle, ...sizeStyle }}>
-      <CollagePlaceholder style={{ width: '100%', height: '100%' }} />
-    </div>;
+    return (
+      <div className={`${className || ''} flex items-center justify-center w-full h-full`} style={aspectRatioStyle}>
+        <CollagePlaceholder />
+      </div>
+    );
   }
-  return <img src={src} alt={alt} className={`w-full h-full object-contain ${className || ''}`} onError={handleError}
-      decoding="async" loading={isLCP || priority ? "eager" : "lazy"} fetchPriority={isLCP ? "high" : "auto"}
-      width={width} height={height} style={aspectRatioStyle} />;
+
+  return (
+      <img 
+          src={src} 
+          alt={alt} 
+          className={`w-full h-full object-contain ${className || ''}`} 
+          onError={handleError}
+          decoding={decoding || 'async'}
+          loading={isLCP || priority ? "eager" : "lazy"} 
+          fetchPriority={isLCP ? "high" : "auto"}
+          width={width} 
+          height={height} 
+          style={aspectRatioStyle} 
+      />
+  );
 });
 SafeOptimizedImage.displayName = 'SafeOptimizedImage';
 
@@ -319,13 +338,13 @@ const CartButton: React.FC<{
 
   useEffect(() => {
     try {
-      const cart = JSON.parse(localStorage.getItem('cart') || '{"products": []}');
+      const cart = JSON.parse(window.localStorage?.getItem('cart') || '{"products": []}');
       const item = cart.products.find((p: any) => p.article === product.article);
       setQuantity(item ? item.quantity : 0);
     } catch (e) {}
     const handleCartUpdate = () => {
       try {
-        const cart = JSON.parse(localStorage.getItem('cart') || '{"products": []}');
+        const cart = JSON.parse(window.localStorage?.getItem('cart') || '{"products": []}');
         const item = cart.products.find((p: any) => p.article === product.article);
         setQuantity(item ? item.quantity : 0);
       } catch (e) {}
@@ -334,25 +353,40 @@ const CartButton: React.FC<{
     return () => window.removeEventListener('cart-updated', handleCartUpdate);
   }, [product.article]);
 
+  // --- THIS IS THE CORRECTED FUNCTION ---
   const updateCart = useCallback((newQuantity: number) => {
     try {
-      const cart = JSON.parse(localStorage.getItem('cart') || '{"products": []}');
+      const cart = JSON.parse(window.localStorage?.getItem('cart') || '{"products": []}');
       const idx = cart.products.findIndex((item: any) => item.article === product.article);
+      
       if (newQuantity <= 0) {
         if (idx > -1) cart.products.splice(idx, 1);
       } else {
         if (idx > -1) {
+          // If item exists, update its quantity and price
           cart.products[idx].quantity = newQuantity;
+          cart.products[idx].price = product.price; // Update price in case it changed
         } else {
-          cart.products.push({ article: product.article, source: product.source, name: product.name || 'Товар', quantity: newQuantity, imageUrl: imageUrl });
+          // If new item, add it with all details, including price
+          cart.products.push({ 
+            article: product.article, 
+            source: product.source, 
+            name: product.name || 'Товар', 
+            price: product.price, // **THE FIX IS HERE**
+            quantity: newQuantity, 
+            imageUrl: imageUrl 
+          });
         }
       }
-      localStorage.setItem('cart', JSON.stringify(cart));
+      
+      window.localStorage?.setItem('cart', JSON.stringify(cart));
       setQuantity(newQuantity);
       window.dispatchEvent(new CustomEvent('cart-updated'));
       window.dispatchEvent(new CustomEvent('cart-added', { detail: { article: product.article, name: product.name, imageUrl: imageUrl || null, quantity: newQuantity }}));
+      
       if (newQuantity > quantity) toast.success('Товар добавлен');
       else if (newQuantity === 0) toast.success('Товар удален');
+
     } catch (err) { console.error('Ошибка обновления корзины:', err); toast.error('Ошибка'); }
   }, [product, imageUrl, quantity]);
 
@@ -368,22 +402,23 @@ const CartButton: React.FC<{
   }, [quantity, updateCart]);
 
   if (!isPurchasable) {
-    return <button className={`${compact ? 'text-[10px] sm:text-xs py-1 px-2' : 'px-4 py-2 text-xs'} rounded-md bg-gray-200 text-gray-500 cursor-not-allowed`} disabled>
+    return <button className={`${compact ? 'text-[10px] sm:text-xs py-1.5 px-3' : 'px-4 py-2.5 text-xs'} rounded-lg bg-gray-100 text-gray-400 cursor-not-allowed font-medium transition-all`} disabled>
       Нет в наличии
     </button>;
   }
   if (quantity === 0) {
-    return <button onClick={handleAdd} className={`${compact ? 'text-[10px] sm:text-xs py-1 px-2' : 'px-4 py-2 text-xs'} rounded-md bg-black text-white hover:bg-gray-800 transition-colors`}>
+    return <button onClick={handleAdd} className={`${compact ? 'text-[10px] sm:text-xs py-1.5 px-3' : 'px-4 py-2.5 text-xs'} rounded-lg bg-gray-900 text-white hover:bg-gray-800 transition-all font-medium shadow-sm hover:shadow`}>
       В корзину
     </button>;
   }
-  return <div className={`flex items-center gap-1 ${compact ? '' : 'gap-2'}`} onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
-    <button onClick={handleRemove} className={`${compact ? 'w-6 h-6 text-xs' : 'w-8 h-8'} flex items-center justify-center rounded-md bg-gray-200 hover:bg-gray-300 text-gray-700 transition-colors`}>−</button>
-    <span className={`${compact ? 'min-w-[20px] text-xs' : 'min-w-[24px] text-sm'} text-center text-black font-medium`}>{quantity}</span>
-    <button onClick={handleAdd} className={`${compact ? 'w-6 h-6 text-xs' : 'w-8 h-8'} flex items-center justify-center rounded-md bg-black hover:bg-gray-800 text-white transition-colors`}>+</button>
+  return <div className={`flex items-center ${compact ? 'gap-1.5' : 'gap-2'} bg-gray-50 rounded-lg p-0.5`} onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
+    <button onClick={handleRemove} className={`${compact ? 'w-7 h-7 text-base' : 'w-9 h-9 text-lg'} flex items-center justify-center rounded-md bg-white hover:bg-gray-100 text-gray-700 transition-all shadow-sm font-medium`}>−</button>
+    <span className={`${compact ? 'min-w-[24px] text-xs' : 'min-w-[28px] text-sm'} text-center text-gray-900 font-semibold`}>{quantity}</span>
+    <button onClick={handleAdd} className={`${compact ? 'w-7 h-7 text-base' : 'w-9 h-9 text-lg'} flex items-center justify-center rounded-md bg-gray-900 hover:bg-gray-800 text-white transition-all shadow-sm font-medium`}>+</button>
   </div>;
 });
 CartButton.displayName = 'CartButton';
+
 
 const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, viewMode, isLoading = false }) => {
   const [isClient, setIsClient] = useState(false);
@@ -417,18 +452,18 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
    const TableView = useCallback(() => { 
       if (!filteredProducts || filteredProducts.length === 0) return null;
       return (
-        <div className="w-full overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+        <div className="w-full overflow-x-auto rounded-xl border border-gray-100 bg-white shadow-sm">
+          <table className="min-w-full divide-y divide-gray-100">
+            <thead className="">
               <tr>
-                <th scope="col" className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Фото</th>
-                <th scope="col" className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Название</th>
-                <th scope="col" className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">Артикул</th>
-                <th scope="col" className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Цена</th>
-                <th scope="col" className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Действия</th>
+                <th scope="col" className="px-4 py-3.5 text-left text-xs font-semibold text-gray-600 uppercase tracking-wide">Фото</th>
+                <th scope="col" className="px-4 py-3.5 text-left text-xs font-semibold text-gray-600 uppercase tracking-wide">Название</th>
+                <th scope="col" className="px-4 py-3.5 text-left text-xs font-semibold text-gray-600 uppercase tracking-wide hidden sm:table-cell">Артикул</th>
+                <th scope="col" className="px-4 py-3.5 text-left text-xs font-semibold text-gray-600 uppercase tracking-wide">Цена</th>
+                <th scope="col" className="px-4 py-3.5 text-left text-xs font-semibold text-gray-600 uppercase tracking-wide">Действия</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white  ">
               {filteredProducts.map((product) => {
                   if (!product) return null;
                   let originalUrl: string | null = null;
@@ -440,19 +475,19 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
                   const isPurchasable = Number(product.stock) > 0;
                   return (
                     <tr key={`table-${product._id || ''}-${product.article}`} className="hover:bg-gray-50 transition-colors">
-                      <td className="px-2 py-2 whitespace-nowrap">
-                        <div className="h-10 w-10 sm:h-12 sm:w-12 overflow-hidden rounded-md bg-gray-100 flex items-center justify-center">
-                          {mainImage ? <SafeOptimizedImage src={mainImage} alt={product.name || 'Товар'} className="h-full w-full object-cover" /> : <CollagePlaceholder className="w-full h-full" style={{ borderRadius: '6px' }} />}
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <div className="h-12 w-12 sm:h-14 sm:w-14 overflow-hidden rounded-lg flex items-center justify-center shadow-sm">
+                          <SafeOptimizedImage src={mainImage!} alt={product.name || 'Товар'} className="h-full w-full object-cover" />
                         </div>
                       </td>
-                      <td className="px-2 py-2">
-                        <Link href={`/products/${product.source}/${encodeURIComponent(product.article)}`} className="text-xs sm:text-sm font-medium text-gray-900 hover:text-black hover:underline truncate block max-w-[120px] sm:max-w-[200px]">
+                      <td className="px-4 py-3">
+                        <Link href={`/products/${product.source}/${encodeURIComponent(product.article)}`} className="text-sm font-medium text-gray-900 hover:text-gray-700 hover:underline truncate block max-w-[140px] sm:max-w-[220px] transition-colors">
                           {product.name}
                         </Link>
                       </td>
-                      <td className="px-2 py-2 hidden sm:table-cell"><span className="text-xs text-gray-500">{product.article}</span></td>
-                      <td className="px-2 py-2"><span className="text-xs sm:text-sm font-medium">{product.price ? `${product.price} ₽` : 'По запросу'}</span></td>
-                      <td className="px-2 py-2 whitespace-nowrap">
+                      <td className="px-4 py-3 hidden sm:table-cell"><span className="text-xs text-gray-500 font-mono">{product.article}</span></td>
+                      <td className="px-4 py-3"><span className="text-sm font-semibold text-gray-900">{product.price ? `${product.price} ₽` : 'По запросу'}</span></td>
+                      <td className="px-4 py-3 whitespace-nowrap">
                         <CartButton product={product} mainImage={mainImage} isPurchasable={isPurchasable} compact />
                       </td>
                     </tr>
@@ -481,24 +516,25 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
            else if (typeof product.imageAddress === 'string') originalUrl = product.imageAddress;
            else if (Array.isArray(product.imageAddress) && product.imageAddress.length > 0) originalUrl = product.imageAddress[0];
           return originalUrl ? normalizeUrl(originalUrl) : null;
-      }, [product]);const isPurchasable = useMemo(() => product ? Number(product.stock) > 0 : false, [product]);
+      }, [product]);
+      const isPurchasable = useMemo(() => product ? Number(product.stock) > 0 : false, [product]);
       if (!product) return null;
       return (
-        <div ref={cardRef} className="flex flex-col sm:flex-row gap-3 p-3 border border-gray-50 rounded-lg bg-white hover:shadow-md transition-shadow">
-          <Link href={`/products/${product.source}/${encodeURIComponent(product.article)}`} className="block w-full sm:w-[120px] sm:min-w-[120px] md:w-[150px] md:min-w-[150px]">
-            <div className="relative aspect-square bg-gray-100 overflow-hidden rounded-md min-h-[120px] md:min-h-[150px]">
-              {shouldLoad && mainImage ? <SafeOptimizedImage src={mainImage} alt={product.name || 'Товар'} /> : <CollagePlaceholder className="w-full h-full" />}
+        <div ref={cardRef} className="flex flex-col sm:flex-row gap-4 p-4 border border-gray-100 rounded-xl bg-white hover:shadow-lg transition-all duration-300">
+          <Link href={`/products/${product.source}/${encodeURIComponent(product.article)}`} className="block w-full sm:w-[140px] sm:min-w-[140px] md:w-[160px] md:min-w-[160px]">
+            <div className="relative aspect-square overflow-hidden rounded-lg min-h-[140px] md:min-h-[160px] shadow-sm">
+              {shouldLoad ? <SafeOptimizedImage src={mainImage!} alt={product.name || 'Товар'} /> : <CollagePlaceholder />}
             </div>
           </Link>
           <div className="flex flex-col flex-grow justify-between py-1">
             <div>
-              <h3 className="text-sm font-medium text-gray-900 line-clamp-2 product-name">
+              <h3 className="text-sm sm:text-base font-semibold text-gray-900 line-clamp-2 mb-2 hover:text-gray-700 transition-colors">
                 <Link href={`/products/${product.source}/${encodeURIComponent(product.article)}`} className="hover:underline">{product.name}</Link>
               </h3>
-              <p className="text-xs text-gray-400 mt-1">Арт: {product.article}</p>
+              <p className="text-xs text-gray-400 font-mono">Арт: {product.article}</p>
             </div>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-2 gap-2">
-              <p className="text-sm sm:text-base font-semibold text-gray-900 price-text">{product.price ? `${product.price} ₽` : 'По запросу'}</p>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-3 gap-3">
+              <p className="text-base sm:text-lg font-bold text-gray-900">{product.price ? `${product.price} ₽` : 'По запросу'}</p>
               <CartButton product={product} mainImage={mainImage} isPurchasable={isPurchasable} />
             </div>
           </div>
@@ -512,16 +548,17 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
     const isLCPCandidate = index < 3;
     const isFirstProduct = index === 0;
 
-    let targetImageSrc: string | null = null;
-    if (product) {
+    const targetImageSrc = useMemo(() => {
+        if (!product) return null;
         let originalUrl: string | null = null;
         if (typeof product.imageAddresses === 'string') originalUrl = product.imageAddresses;
         else if (Array.isArray(product.imageAddresses) && product.imageAddresses.length > 0) originalUrl = product.imageAddresses[0];
         else if (typeof product.imageAddress === 'string') originalUrl = product.imageAddress;
         else if (Array.isArray(product.imageAddress) && product.imageAddress.length > 0) originalUrl = product.imageAddress[0];
-        if (originalUrl) targetImageSrc = normalizeUrl(originalUrl, isLCPCandidate, isFirstProduct);
-    }
-
+        
+        return originalUrl ? normalizeUrl(originalUrl, isLCPCandidate, isFirstProduct) : null;
+    }, [product, isLCPCandidate, isFirstProduct]);
+    
     const isPurchasable = product ? Number(product.stock) > 0 : false;
 
     useEffect(() => {
@@ -534,68 +571,37 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
     }, [shouldLoad, isLCPCandidate]);
 
     if (!product) return null;
-    const finalImageSrc = targetImageSrc;
     
-    if (isLCPCandidate) {
-      if (!finalImageSrc) {
-        return <div className={`group bg-gray-100 rounded-lg border border-gray-50 flex flex-col h-full animate-pulse shadow-sm hover:shadow-lg transition-all duration-300`} style={{ aspectRatio: '1 / 1' }}></div>;
-      }
-       
-      const lcpContainerStyle: React.CSSProperties = { 
-        aspectRatio: '1 / 1', backgroundColor: '#fbfbfb', display: 'flex', alignItems: 'center', justifyContent: 'center',
-        overflow: 'hidden', position: 'relative', borderTopLeftRadius: '0.5rem', borderTopRightRadius: '0.5rem',
-      };
-      const imageStyle: React.CSSProperties = { objectFit: 'contain', width: '100%', height: '100%', display: 'block' };
-      const lcpWidth = isFirstProduct ? IMAGE_SIZES.ULTRA_SMALL_LCP : IMAGE_SIZES.SMALL_LCP;
-      const lcpHeight = lcpWidth;
-      const loadingAttr = "eager";
-      const fetchPriorityAttr = "high";
-      const decodingAttr = isFirstProduct ? "sync" : "async";
-
-      return (
-        <div className={`group bg-white rounded-lg border border-gray-50 flex flex-col h-full shadow-sm hover:shadow-lg transition-all duration-300`}>
-          <Link href={`/products/${product.source}/${encodeURIComponent(product.article)}`} className="flex flex-col h-full" prefetch={false}>
-            <div style={lcpContainerStyle}>
-              <img src={finalImageSrc} alt={product.name || 'Товар'}
-                className={`w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500 ${isFirstProduct ? 'first-product-img' : ''}`}
-                loading={loadingAttr} fetchPriority={fetchPriorityAttr} decoding={decodingAttr} style={imageStyle} width={lcpWidth} height={lcpHeight} />
-            </div>
-            <div className="p-3 sm:p-4 flex flex-col flex-grow border-t border-gray-50">
-              <div className="mb-auto">
-                <h3 className="text-xs sm:text-sm font-medium text-gray-900 mb-1.5 line-clamp-2 group-hover:text-black transition-colors leading-snug">{product.name}</h3>
-                <p className="text-[10px] text-gray-400 mb-2">Арт: {product.article}</p>
-              </div>
-              <div className="mt-3 flex items-center justify-between gap-2">
-                <p className="text-sm sm:text-base font-semibold text-gray-900">{product.price ? `${product.price} ₽` : 'По запросу'}</p>
-                <CartButton product={product} targetImageSrc={finalImageSrc} isPurchasable={isPurchasable} />
-              </div>
-            </div>
-          </Link>
-        </div>
-      ); 
-    }
-
-    const imageDivStyle: React.CSSProperties = {
-       aspectRatio: '1 / 1', backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center',
-       backgroundColor: '#fbfbfb', padding: '1rem', transition: 'transform 0.3s ease',
-    };
-    if (shouldLoad && finalImageSrc) imageDivStyle.backgroundImage = `url('${finalImageSrc.replace(/'/g, "\\'")}')`;
+    const lcpWidth = isFirstProduct ? IMAGE_SIZES.ULTRA_SMALL_LCP : IMAGE_SIZES.SMALL_LCP;
+    const lcpHeight = lcpWidth;
 
     return (
-      <div ref={cardRef} className={`group bg-white rounded-lg border border-gray-50 flex flex-col h-full shadow-sm hover:shadow-lg transition-all duration-300`}>
+      <div ref={cardRef} className="group bg-white rounded-xl border border-gray-100 flex flex-col h-full shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden">
         <Link href={`/products/${product.source}/${encodeURIComponent(product.article)}`} className="flex flex-col h-full" prefetch={false}>
-          <div style={imageDivStyle} className={`overflow-hidden rounded-t-lg group-hover:scale-105 transition-transform duration-500 ${!shouldLoad || !finalImageSrc ? 'animate-pulse' : ''}`}
-            role="img" aria-label={product.name || 'Товар'}>
-            {(!shouldLoad || !finalImageSrc) && <div style={{ aspectRatio: '1 / 1' }} className="w-full h-auto "></div>}
+          <div className="relative aspect-square overflow-hidden bg-gray-50">
+            {shouldLoad ? (
+              <SafeOptimizedImage 
+                src={targetImageSrc!}
+                alt={product.name || 'Товар'}
+                className="p-5 group-hover:scale-105 transition-transform duration-500"
+                isLCP={isLCPCandidate}
+                priority={isLCPCandidate}
+                width={isLCPCandidate ? lcpWidth : undefined}
+                height={isLCPCandidate ? lcpHeight : undefined}
+                decoding={isFirstProduct ? "sync" : "async"}
+              />
+            ) : (
+              <CollagePlaceholder />
+            )}
           </div>
-          <div className="p-3 sm:p-4 flex flex-col flex-grow border-t border-gray-50">
+          <div className="p-4 sm:p-5 flex flex-col flex-grow border-t border-gray-50">
             <div className="mb-auto">
-              <h3 className="text-xs sm:text-sm font-medium text-gray-900 mb-1.5 line-clamp-2 group-hover:text-black transition-colors leading-snug">{product.name}</h3>
-              <p className="text-[10px] text-gray-400 mb-2">Арт: {product.article}</p>
+              <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-gray-700 transition-colors leading-snug">{product.name}</h3>
+              <p className="text-[10px] text-gray-400 font-mono mb-3">Арт: {product.article}</p>
             </div>
-            <div className="mt-3 flex items-center justify-between gap-2">
-              <p className="text-sm sm:text-base font-semibold text-gray-900">{product.price ? `${product.price} ₽` : 'По запросу'}</p>
-              <CartButton product={product} targetImageSrc={finalImageSrc} isPurchasable={isPurchasable} />
+            <div className="mt-3 flex items-center justify-between gap-2 pt-3 border-t border-gray-50">
+              <p className="text-base sm:text-lg font-bold text-gray-900">{product.price ? `${product.price} ₽` : 'По запросу'}</p>
+              <CartButton product={product} targetImageSrc={targetImageSrc} isPurchasable={isPurchasable} />
             </div>
           </div>
         </Link>
@@ -606,16 +612,16 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
   if (isLoading || !isClient) {
      if (viewMode === 'grid' && !isLoading) {
          return (
-             <div className="grid auto-rows-auto w-full grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-2 md:grid-cols-3 md:gap-3 lg:grid-cols-3 lg:gap-3 xl:grid-cols-3 xl:gap-3">
+             <div className="grid auto-rows-auto w-full grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-3 lg:gap-4 xl:grid-cols-3 xl:gap-4">
                  {Array.from({ length: 8 }).map((_, i) => (
-                     <div key={i} className="bg-white rounded-lg border border-gray-50 flex flex-col h-full">
-                         <div className="relative aspect-square bg-gray-100 rounded-t-lg"></div>
-                         <div className="p-2 sm:p-4 flex flex-col flex-grow">
-                             <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                             <div className="h-3 bg-gray-200 rounded w-1/2 mb-3"></div>
-                             <div className="mt-auto flex items-center justify-between gap-2">
-                                 <div className="h-5 bg-gray-200 rounded w-1/3"></div>
-                                 <div className="h-8 bg-gray-300 rounded w-1/2"></div>
+                     <div key={i} className="bg-white rounded-xl border border-gray-100 flex flex-col h-full shadow-sm">
+                         <div className="relative aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-t-xl animate-pulse"></div>
+                         <div className="p-4 sm:p-5 flex flex-col flex-grow">
+                             <div className="h-5 bg-gray-200 rounded-lg w-3/4 mb-2 animate-pulse"></div>
+                             <div className="h-3 bg-gray-200 rounded-lg w-1/2 mb-4 animate-pulse"></div>
+                             <div className="mt-auto flex items-center justify-between gap-2 pt-3 border-t border-gray-100">
+                                 <div className="h-6 bg-gray-200 rounded-lg w-1/3 animate-pulse"></div>
+                                 <div className="h-9 bg-gray-300 rounded-lg w-1/2 animate-pulse"></div>
                              </div>
                          </div>
                      </div>
@@ -631,49 +637,61 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
       {viewMode === 'table' ? (
         <TableView />
       ) : viewMode === 'list' ? (
-        <div className="space-y-3">
+        <div className="space-y-4">
           {filteredProducts.map((product, index) => (
               product ? <ListProductCard key={`list-${product._id || ''}-${product.article}`} product={product} index={index} /> : null
            ))}
           {filteredProducts.length === 0 && (
-             <div className="col-span-full py-8 sm:py-12 text-center">
-                <h3 className="mt-2 text-xs sm:text-sm font-medium text-gray-900">Товары не найдены</h3>
-                <p className="mt-1 text-xs sm:text-sm text-gray-500">Попробуйте изменить параметры поиска</p>
+             <div className="col-span-full py-12 sm:py-16 text-center">
+                <div className="mx-auto w-24 h-24 mb-4 rounded-full  flex items-center justify-center">
+                  <svg className="w-12 h-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                  </svg>
+                </div>
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">Товары не найдены</h3>
+                <p className="text-sm text-gray-500">Попробуйте изменить параметры поиска</p>
              </div>
           )}
           {filteredProducts.length > 8 && (
-             <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="fixed bottom-4 right-4 bg-black text-white rounded-full p-3 shadow-lg md:hidden z-10" aria-label="Прокрутить наверх">
+             <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
+               className="fixed bottom-6 right-6 bg-gray-900 text-white rounded-full p-3.5 shadow-xl md:hidden z-10 hover:bg-gray-800 transition-all hover:scale-110" 
+               aria-label="Прокрутить наверх">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
              </button>
           )}
         </div>
       ) : (
          (isLoading || !isClient) ? (
-           <div className="grid w-full grid-cols-1 gap-2 xs:grid-cols-2 sm:gap-2 md:grid-cols-3 md:gap-3 lg:grid-cols-3 lg:gap-3 xl:grid-cols-3 xl:gap-3">
+           <div className="grid w-full grid-cols-1 gap-3 xs:grid-cols-2 sm:gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-3 lg:gap-4 xl:grid-cols-3 xl:gap-4">
              {Array.from({ length: 12 }).map((_, i) => (
-               <div key={`skeleton-grid-${i}`} className="bg-white rounded-lg border border-gray-50 flex flex-col h-full">
-                 <div className="relative aspect-square bg-gray-100 animate-pulse rounded-t-lg min-h-[150px] sm:min-h-[180px]"></div>
-                 <div className="p-2 sm:p-4 flex flex-col flex-grow">
-                   <div className="h-4 bg-gray-200 rounded w-3/4 mb-2 animate-pulse min-h-[1rem]"></div>
-                   <div className="h-3 bg-gray-200 rounded w-1/2 mb-3 animate-pulse min-h-[0.75rem]"></div>
-                   <div className="mt-auto flex items-center justify-between gap-2">
-                     <div className="h-5 bg-gray-200 rounded w-1/3 animate-pulse min-h-[1.25rem]"></div>
-                     <div className="h-8 bg-gray-300 rounded w-1/2 animate-pulse min-h-[2rem]"></div>
+               <div key={`skeleton-grid-${i}`} className="bg-white rounded-xl border border-gray-100 flex flex-col h-full shadow-sm">
+                 <div className="relative aspect-square bg-gradient-to-br from-gray-100 to-gray-200 animate-pulse rounded-t-xl min-h-[150px] sm:min-h-[180px]"></div>
+                 <div className="p-4 sm:p-5 flex flex-col flex-grow">
+                   <div className="h-5 bg-gray-200 rounded-lg w-3/4 mb-2 animate-pulse"></div>
+                   <div className="h-3 bg-gray-200 rounded-lg w-1/2 mb-4 animate-pulse"></div>
+                   <div className="mt-auto flex items-center justify-between gap-2 pt-3 border-t border-gray-100">
+                     <div className="h-6 bg-gray-200 rounded-lg w-1/3 animate-pulse"></div>
+                     <div className="h-9 bg-gray-300 rounded-lg w-1/2 animate-pulse"></div>
                    </div>
                  </div>
                </div>
              ))}
            </div>
          ) : filteredProducts.length > 0 ? (
-           <div className="grid w-full grid-cols-1 gap-2 xs:grid-cols-2 sm:gap-2 md:grid-cols-3 md:gap-3 lg:grid-cols-3 lg:gap-3 xl:grid-cols-3 xl:gap-3">
+           <div className="grid w-full grid-cols-1 gap-3 xs:grid-cols-2 sm:gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-3 lg:gap-4 xl:grid-cols-3 xl:gap-4">
              {filteredProducts.map((product, index) => (
                 product ? <ProductCard key={`grid-${product._id || ''}-${product.article}`} product={product} index={index} /> : null
               ))}
            </div>
          ) : (
-            <div className="col-span-full py-8 sm:py-12 text-center">
-                <h3 className="mt-2 text-xs sm:text-sm font-medium text-gray-900">Товары не найдены</h3>
-                <p className="mt-1 text-xs sm:text-sm text-gray-500">Попробуйте изменить параметры поиска</p>
+            <div className="col-span-full py-12 sm:py-16 text-center">
+                <div className="mx-auto w-24 h-24 mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+                  <svg className="w-12 h-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                  </svg>
+                </div>
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">Товары не найдены</h3>
+                <p className="text-sm text-gray-500">Попробуйте изменить параметры поиска</p>
             </div>
          )
       )}
