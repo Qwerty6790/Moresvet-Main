@@ -40,29 +40,26 @@ const Footer = () => {
 
           {/* Колонка 2: Компания */}
           <div>
-            <h3 className="text-sm font-semibold tracking-wider uppercase mb-4">Компания</h3>
+            <h3 className="text-2xl font-semibold tracking-wider uppercase mb-4">Компания</h3>
             <ul className="space-y-3">
-              <FooterLink href="/about">О нас</FooterLink>
-              <FooterLink href="/about">Доставка и оплата</FooterLink>
-              <FooterLink href="/about">Контакты</FooterLink>
-              <FooterLink href="/about">Политика</FooterLink>
+              <FooterLink href="/about">Компания</FooterLink>
+              <FooterLink href="/about">Доставка</FooterLink>
+              
             </ul>
           </div>
 
           {/* Колонка 3: Каталог */}
           <div>
-            <h3 className="text-sm font-semibold tracking-wider uppercase mb-4">Каталог</h3>
+            <h3 className="text-2xl font-semibold tracking-wider uppercase mb-4">Каталог</h3>
             <ul className="space-y-3">
-              <FooterLink href="/catalog/chandeliers">Люстры</FooterLink>
-              <FooterLink href="/catalog/wall-sconces">Бра</FooterLink>
-              <FooterLink href="/catalog/lights/track-lights">Трековые светильники</FooterLink>
-              <FooterLink href="/catalog/outdoor-lights">Уличный свет</FooterLink>
+            <FooterLink href="/about">Контакты</FooterLink>
+            <FooterLink href="/about">Политика</FooterLink>
             </ul>
           </div>
 
           {/* Колонка 4: Контакты */}
           <div>
-             <h3 className="text-sm font-semibold tracking-wider uppercase mb-4">Связаться с нами</h3>
+             <h3 className="text-2xl font-semibold tracking-wider uppercase mb-4">Связаться с нами</h3>
              <div className="space-y-3 text-sm">
                  <p>
                      <a href="tel:+79264513132" className="text-white hover:opacity-80 transition-opacity">
@@ -71,7 +68,7 @@ const Footer = () => {
                  </p>
                  <p>
                      <a href="mailto:info@moresvet.ru" className="text-white hover:opacity-80 transition-opacity">
-                         info@moresvet.ru
+                
                      </a>
                  </p>
                  <p className="text-white opacity-90">
@@ -84,7 +81,7 @@ const Footer = () => {
         </div>
 
         {/* Нижняя панель с копирайтом и соцсетями */}
-        <div className="mt-16 pt-8 border-t border-gray-800 flex flex-col sm:flex-row justify-between items-center text-sm">
+        <div className="mt-16 pt-8 border-t  flex flex-col sm:flex-row justify-between items-center text-sm">
           <p className="text-white opacity-70">
             © {new Date().getFullYear()} moresvet.ru. Все права защищены.
           </p>
