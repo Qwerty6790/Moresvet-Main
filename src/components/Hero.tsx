@@ -21,7 +21,7 @@ const slides: Slide[] = [
     title: 'ИЩИ НА MORESVET',
     subtitle: 'СВЕТОЧНЫЕ РЕШЕНИЯ ДЛЯ ВАШЕГО ДОМА',
     buttonText: 'ПОДРОБНЕЕ',
-    buttonLink: '/catalog/track-lights'
+    buttonLink: '/about'
   },
 ];
 

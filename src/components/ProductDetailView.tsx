@@ -321,7 +321,6 @@ const ProductDetailView: React.FC<{ product: ProductI }> = ({ product }) => {
                 <div className="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />)}
                 </div>
-                <span className="text-sm text-gray-600">4.8 (32 отзыва)</span>
               </div>
               
               <div className="bg-white rounded-lg p-6 shadow-sm mb-6">

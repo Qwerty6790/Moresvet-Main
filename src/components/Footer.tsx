@@ -2,51 +2,93 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { FaInstagram, FaTelegramPlane, FaWhatsapp } from 'react-icons/fa';
+
+// Компонент для ссылок в футере
+const FooterLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
+  <li>
+    <Link href={href} className="text-white hover:opacity-80 transition-opacity duration-200">
+      {children}
+    </Link>
+  </li>
+);
+
+// Компонент для иконок социальных сетей
+const SocialLink = ({ href, icon }: { href: string; icon: React.ReactNode }) => (
+    <a href={href} target="_blank" rel="noopener noreferrer" className="text-white hover:opacity-80 transition-opacity duration-200">
+        {icon}
+    </a>
+);
 
 const Footer = () => {
   return (
     <footer className="bg-black text-white">
-      <div className="max-w-[1450px] mx-auto px-4 md:px-8 py-12">
-        {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Column 1: MoreSvet */}
-          <div className="space-y-6">
-            <h2 className="text-5xl font-medium border-b border-white pb-2 mb-4 text-white">MoreSvet</h2>
-            <div className="space-y-2 text-sm text-white">
-              <p>Фактический адрес:</p>
-              <p>121601, город Москва, Мкад 25-километр,ТК КОНСТРУКТОР</p>
-              <div className="mt-6">
-                <p>Контактный телефон:</p>
-                <p className="text-white hover:text-white transition-colors">+7 (926) 451-31-32</p>
-              </div>
-            </div>
+      <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        
+        {/* Основная сетка футера */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          
+          {/* Колонка 1: Бренд и информация */}
+          <div className="col-span-2 md:col-span-1">
+            <Link href="/" className="inline-block mb-6">
+              <h2 className="text-3xl font-bold tracking-wider">MORESVET</h2>
+            </Link>
+            <p className="text-sm text-white opacity-90 max-w-xs">
+              Современные решения для освещения вашего пространства. Откройте для себя мир света.
+            </p>
           </div>
 
-          {/* Column 2: ОБ MORE SVET */}
-          <div className="space-y-6">
-            <h2 className="text-xl font-medium border-b border-white pb-2 mb-4 text-white">ОБ MORE SVET</h2>
-            <ul className="space-y-3 text-sm text-white">
-              <li><Link href="/about" className="hover:text-white hover:underline transition-colors">О компании</Link></li>
-              <li><Link href="/about" className="hover:text-white hover:underline transition-colors">Доставка</Link></li>
-              <li><Link href="/about" className="hover:text-white hover:underline transition-colors">Способы оплаты</Link></li>
-              <li><Link href="/about" className="hover:text-white hover:underline transition-colors">Контакты</Link></li>
+          {/* Колонка 2: Компания */}
+          <div>
+            <h3 className="text-sm font-semibold tracking-wider uppercase mb-4">Компания</h3>
+            <ul className="space-y-3">
+              <FooterLink href="/about">О нас</FooterLink>
+              <FooterLink href="/delivery">Доставка и оплата</FooterLink>
+              <FooterLink href="/contacts">Контакты</FooterLink>
+              <FooterLink href="/policy">Политика</FooterLink>
             </ul>
           </div>
 
-          {/* Column 3: НОВОСТИ */}
-          <div className="space-y-6">
-            <h2 className="text-xl font-medium border-b border-white pb-2 mb-4 text-white">НОВОСТИ</h2>
-            <ul className="space-y-3 text-sm text-white">
-              <li><Link href="#" className="hover:text-white hover:underline transition-colors">Точка на карте</Link></li>
+          {/* Колонка 3: Каталог */}
+          <div>
+            <h3 className="text-sm font-semibold tracking-wider uppercase mb-4">Каталог</h3>
+            <ul className="space-y-3">
+              <FooterLink href="/catalog/chandeliers">Люстры</FooterLink>
+              <FooterLink href="/catalog/wall-sconces">Бра</FooterLink>
+              <FooterLink href="/catalog/lights/track-lights">Трековые системы</FooterLink>
+              <FooterLink href="/catalog/outdoor-lights">Уличный свет</FooterLink>
             </ul>
           </div>
+
+          {/* Колонка 4: Контакты */}
+          <div>
+             <h3 className="text-sm font-semibold tracking-wider uppercase mb-4">Связаться с нами</h3>
+             <div className="space-y-3 text-sm">
+                 <p>
+                     <a href="tel:+79264513132" className="text-white hover:opacity-80 transition-opacity">
+                         +7 (926) 451-31-32
+                     </a>
+                 </p>
+                 <p>
+                     <a href="mailto:info@moresvet.ru" className="text-white hover:opacity-80 transition-opacity">
+                         info@moresvet.ru
+                     </a>
+                 </p>
+                 <p className="text-white opacity-90">
+                    Москва, ТК КОНСТРУКТОР, <br />
+                    25-й км МКАД
+                 </p>
+             </div>
+          </div>
+
         </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-white mt-8 pt-8">
-          <div className="text-sm text-center text-white">
-            <div>© 2025 moresvet.ru. Все права защищены</div>
-          </div>
+        {/* Нижняя панель с копирайтом и соцсетями */}
+        <div className="mt-16 pt-8 border-t border-gray-800 flex flex-col sm:flex-row justify-between items-center text-sm">
+          <p className="text-white opacity-70">
+            © {new Date().getFullYear()} moresvet.ru. Все права защищены.
+          </p>
+        
         </div>
       </div>
     </footer>
