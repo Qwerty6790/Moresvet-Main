@@ -612,9 +612,13 @@ const Header = () => {
             >
               <SearchIcon className="w-6 h-6" />
             </button>
-            <Link href="/auth/register" aria-label="Личный кабинет" className="text-sm font-bold hover:text-gray-300 px-3 py-2">
+            <button 
+              disabled 
+              aria-label="Личный кабинет" 
+              className="text-sm font-bold px-3 py-2 cursor-not-allowed opacity-50"
+            >
               ДЛЯ ДИЗАЙНЕРОВ
-            </Link>
+            </button>
             <Link href="/liked" aria-label="Избранное" className="p-2 hover:text-gray-300">
               <FaHeart size={20} />
             </Link>
@@ -644,7 +648,7 @@ const Header = () => {
                         {miniCartItems.length > 0 ? (
                             <>
                                 <div className="p-4">
-                                    <h3 className="text-lg font-semibold text-gray-800">Корзина ({cartCount})</h3>
+                                    <h3 className="text-lg font-semibold text-black">Корзина</h3>
                                 </div>
                                 <div className="max-h-80 overflow-y-auto border-t border-b border-gray-200">
     {/* Добавляем 'index' в параметры map */}
@@ -657,7 +661,7 @@ const Header = () => {
             </div>
             <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-gray-900 truncate">{item.name}</p>
-                <p className="text-sm text-gray-500">{item.quantity} x {(item.price || 0).toLocaleString('ru-RU')} ₽</p>
+                <p className="text-sm text-black">{item.quantity} для {(item.price || 0).toLocaleString('ru-RU')} ₽</p>
             </div>
             <p className="text-sm font-semibold text-gray-900">
                 {(item.quantity * (item.price || 0)).toLocaleString('ru-RU')} ₽
@@ -670,7 +674,7 @@ const Header = () => {
                                         <span className="text-base font-medium text-gray-900">Итого:</span>
                                         <span className="text-lg font-bold text-gray-900">{cartTotal.toLocaleString('ru-RU')} ₽</span>
                                     </div>
-                                    <Link href="/cart" className="block w-full text-center bg-black text-white py-3 rounded-lg text-sm font-semibold hover:bg-gray-800 transition-colors">
+                                    <Link href="/cart" className="block w-full text-center bg-black text-white py-3 rounded-lg text-sm font-semibold  transition-colors">
                                         Перейти в корзину
                                     </Link>
                                 </div>
@@ -824,22 +828,19 @@ const Header = () => {
                     <div>
                       <h4 className="font-bold text-lg mb-2">Декоративный свет</h4>
                       <ul className="space-y-1 pl-2 border-l-2">
-                          <li><Link href="/catalog/chandeliers/pendant-chandeliers" className="block text-base py-1.5 hover:text-black transition-colors">Подвесные люстры</Link></li>
-                          <li><Link href="/catalog/chandeliers/ceiling-chandeliers" className="block text-base py-1.5 hover:text-black transition-colors">Потолочные люстры</Link></li>
-                          <li><Link href="/catalog/chandeliers/rod-chandeliers" className="block text-base py-1.5 hover:text-black transition-colors">Люстры на штанге</Link></li>
-                          <li><Link href="/catalog/table-lamps" className="block text-base py-1.5 hover:text-black transition-colors">Настольная лампа</Link></li>
+                          <li><Link href="/catalog/chandeliers/" className="block text-base py-1.5 hover:text-black transition-colors">Люстры</Link></li>
+                          <li><Link href="/catalog/floor-lamps" className="block text-base py-1.5 hover:text-black transition-colors">Торшеры</Link></li>
                           <li><Link href="/catalog/wall-sconces" className="block text-base py-1.5 hover:text-black transition-colors">Бра</Link></li>
-                          <li><Link href="/catalog/floor-lamps" className="block text-base py-1.5 hover:text-black transition-colors">Торшер</Link></li>
+                          <li><Link href="/catalog/table-lamps" className="block text-base py-1.5 hover:text-black transition-colors">Настольная лампа</Link></li>
+                          <li><Link href="/catalog/led-lamp" className="block text-base py-1.5 hover:text-black transition-colors">Лампы LED</Link></li>
+                          <li><Link href="/catalog/led-strips" className="block text-base py-1.5 hover:text-black transition-colors">Светоидодная лампы</Link></li>
                       </ul>
                     </div>
                     <div>
                       <h4 className="font-bold text-lg mb-2">Функциональный свет</h4>
-                      <ul className="space-y-1 pl-2 border-l-2">
-                          <li><Link href="/catalog/lights/track-lights" className="block text-base py-1.5 hover:text-black transition-colors">Трековые системы</Link></li>
-                          <li><Link href="/catalog/lights/pendant-lights" className="block text-base py-1.5 hover:text-black transition-colors">Подвесные светильники</Link></li>
-                          <li><Link href="/catalog/led-lamp" className="block text-base py-1.5 hover:text-black transition-colors">Светодиодная лента</Link></li>
-                          <li><Link href="/catalog/led-strip-profiles" className="block text-base py-1.5 hover:text-black transition-colors">Профили</Link></li>
-                      </ul>
+                      <li><Link href="/catalog/lights/track-lights" className="block text-base hover:text-black">Трековые светильники</Link></li>
+                        <li><Link href="/catalog/lights/pendant-lights" className="block text-base hover:text-black">Подвесные светильники</Link></li>
+                        <li><Link href="/catalog/led-strip-profiles" className="block text-base hover:text-black">Профили</Link></li>
                     </div>
                     <div>
                       <h4 className="font-bold text-lg mb-2">Уличный свет</h4>
@@ -855,34 +856,21 @@ const Header = () => {
                   <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Розетки и выключатели</h3>
                   <div className="space-y-4">
                     <div>
-                      <h4 className="font-bold text-lg mb-2">Розетки</h4>
+                      <h4 className="font-bold text-lg mb-2">Серии Voltum</h4>
                       <ul className="space-y-1 pl-2 border-l-2">
-                          <li><Link href="/catalog/sockets/power-sockets" className="block text-base py-1.5 hover:text-black">Силовые розетки</Link></li>
-                          <li><Link href="/catalog/sockets/usb-sockets" className="block text-base py-1.5 hover:text-black">USB и Type-C розетки</Link></li>
-                          <li><Link href="/catalog/sockets/tv-sockets" className="block text-base py-1.5 hover:text-black">Телевизионные</Link></li>
-                          <li><Link href="/catalog/sockets/internet-sockets" className="block text-base py-1.5 hover:text-black">Интернет-розетки (RJ45)</Link></li>
-                          <li><Link href="/catalog/sockets/waterproof-sockets" className="block text-base py-1.5 hover:text-black">Влагозащищенные</Link></li>
+                          <li><Link href="/ElektroustnovohneIzdely/Voltum" className="block text-base py-1.5 hover:text-black">Встраиваемые серии</Link></li>
                       </ul>
                     </div>
                     <div>
-                      <h4 className="font-bold text-lg mb-2">Выключатели</h4>
+                      <h4 className="font-bold text-lg mb-2">Серия Werkel</h4>
                       <ul className="space-y-1 pl-2 border-l-2">
-                          <li><Link href="/catalog/switches/one-key-switches" className="block text-base py-1.5 hover:text-black">Одноклавишные</Link></li>
-                          <li><Link href="/catalog/switches/two-key-switches" className="block text-base py-1.5 hover:text-black">Двухклавишные</Link></li>
-                          <li><Link href="/catalog/switches/pass-through-switches" className="block text-base py-1.5 hover:text-black">Проходные</Link></li>
-                          <li><Link href="/catalog/switches/dimmers" className="block text-base py-1.5 hover:text-black">Диммеры</Link></li>
-                          <li><Link href="/catalog/switches/smart-switches" className="block text-base py-1.5 hover:text-black">Умные выключатели</Link></li>
+                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-base py-1.5 hover:text-black">Встраиваемые серии</Link></li>
+                          <li><Link href="/catalog/switches/two-key-switches" className="block text-base py-1.5 hover:text-black">Накладные серии</Link></li>
+                          <li><Link href="/catalog/switches/pass-through-switches" className="block text-base py-1.5 hover:text-black">Серия Retro</Link></li>
+                          <li><Link href="/catalog/switches/dimmers" className="block text-base py-1.5 hover:text-black">Серия Vintage</Link></li>
+                          <li><Link href="/catalog/switches/dimmers" className="block text-base py-1.5 hover:text-black">Серия выдвижных блоков</Link></li>
                       </ul>
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-lg mb-2">Рамки и аксессуары</h4>
-                      <ul className="space-y-1 pl-2 border-l-2">
-                          <li><Link href="/catalog/frames/one-post-frames" className="block text-base py-1.5 hover:text-black">1-постовые рамки</Link></li>
-                          <li><Link href="/catalog/frames/two-post-frames" className="block text-base py-1.5 hover:text-black">2-постовые рамки</Link></li>
-                          <li><Link href="/catalog/frames/multi-post-frames" className="block text-base py-1.5 hover:text-black">3-5 постовые рамки</Link></li>
-                          <li><Link href="/catalog/accessories/mechanisms" className="block text-base py-1.5 hover:text-black">Механизмы</Link></li>
-                      </ul>
-                    </div>
+                    </div> 
                   </div>
                 </div>
 
@@ -891,7 +879,7 @@ const Header = () => {
                    <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Информация</h3>
                    <ul className="space-y-1">
                       <li><Link href="/about" className="block text-lg py-2 hover:text-black transition-colors">Правила доставки</Link></li>
-                      <li><Link href="/auth/register" className="block text-lg py-2 hover:text-black transition-colors">Для дизайнеров</Link></li>
+                      <li><span className="block text-lg py-2 text-gray-400 cursor-not-allowed">Для дизайнеров</span></li>
                       <li><Link href="/catalog?filter=new&subcategory=&page=1" className="block text-lg py-2 text-black hover:text-gray-700">Новинки</Link></li>
                    </ul>
                 </div>
@@ -942,41 +930,30 @@ const Header = () => {
 
                     <div className="grid grid-cols-1 sm:grid-cols-4 gap-8">
                         <div className="text-black">
-                            <h3 className="text-lg font-bold mb-4">Розетки</h3>
-                            <ul className="space-y-3">
-                                <li><Link href="/catalog/sockets/power-sockets" className="block text-base hover:text-black">Силовые розетки</Link></li>
-                                <li><Link href="/catalog/sockets/usb-sockets" className="block text-base hover:text-black">USB и Type-C розетки</Link></li>
-                                <li><Link href="/catalog/sockets/tv-sockets" className="block text-base hover:text-black">Телевизионные</Link></li>
-                                <li><Link href="/catalog/sockets/internet-sockets" className="block text-base hover:text-black">Интернет-розетки (RJ45)</Link></li>
-                                <li><Link href="/catalog/sockets/waterproof-sockets" className="block text-base hover:text-black">Влагозащищенные</Link></li>
-                            </ul>
+                        <h3 className="font-bold text-lg mb-2">Серии Voltum</h3>
+                      <ul className="space-y-1 pl-2 border-l-2">
+                          <li><Link href="/ElektroustnovohneIzdely/Voltum" className="block text-base py-1.5 hover:text-black">Встраиваемые серии</Link></li>
+                      </ul>
                         </div>
 
                         <div className="text-black">
-                            <h3 className="text-lg font-bold mb-4">Выключатели</h3>
-                            <ul className="space-y-3">
-                                <li><Link href="/catalog/switches/one-key-switches" className="block text-base hover:text-black">Одноклавишные</Link></li>
-                                <li><Link href="/catalog/switches/two-key-switches" className="block text-base hover:text-black">Двухклавишные</Link></li>
-                                <li><Link href="/catalog/switches/pass-through-switches" className="block text-base hover:text-black">Проходные</Link></li>
-                                <li><Link href="/catalog/switches/dimmers" className="block text-base hover:text-black">Диммеры</Link></li>
-                                <li><Link href="/catalog/switches/smart-switches" className="block text-base hover:text-black">Умные выключатели</Link></li>
-                            </ul>
+                        <h3 className="font-bold text-lg mb-2">Серия Werkel</h3>
+                      <ul className="space-y-1 pl-2 border-l-2">
+                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-base py-1.5 hover:text-black">Встраиваемые серии</Link></li>
+                          <li><Link href="/catalog/switches/two-key-switches" className="block text-base py-1.5 hover:text-black">Накладные серии</Link></li>
+                          <li><Link href="/catalog/switches/pass-through-switches" className="block text-base py-1.5 hover:text-black">Серия Retro</Link></li>
+                          <li><Link href="/catalog/switches/dimmers" className="block text-base py-1.5 hover:text-black">Серия Vintage</Link></li>
+                          <li><Link href="/catalog/switches/dimmers" className="block text-base py-1.5 hover:text-black">Серия выдвижных блоков</Link></li>
+                      </ul>
                         </div>
 
-                        <div className="text-black">
-                            <h3 className="text-lg font-bold mb-4">Рамки и аксессуары</h3>
-                            <ul className="space-y-3">
-                                <li><Link href="/catalog/frames/one-post-frames" className="block text-base hover:text-black">1-постовые рамки</Link></li>
-                                <li><Link href="/catalog/frames/two-post-frames" className="block text-base hover:text-black">2-постовые рамки</Link></li>
-                                <li><Link href="/catalog/frames/multi-post-frames" className="block text-base hover:text-black">3-5 постовые рамки</Link></li>
-                                <li><Link href="/catalog/accessories/mechanisms" className="block text-base hover:text-black">Механизмы</Link></li>
-                            </ul>
-                        </div>
+                   
                         
                         <div className="text-black">
                             <h3 className="text-lg font-bold mb-4">Терморегуляторы</h3>
                             <ul className="space-y-3">
                                 <li><Link href="/catalog/thermostats/floor-heating" className="block text-base hover:text-black">Для теплого пола</Link></li>
+                                <li><Link href="/catalog/thermostats/floor-heating" className="block text-base hover:text-black">Теплый пол</Link></li>
                             </ul>
                         </div>
                     </div>
@@ -1014,22 +991,21 @@ const Header = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-8">
                     <div className="text-black">
                     <h3 className="text-lg font-bold mb-4">Декоративный свет</h3>
-                    <ul className="space-y-3">
-                        <li><Link href="/catalog/chandeliers/pendant-chandeliers" className="block text-base hover:text-black">Подвесные люстры</Link></li>
-                        <li><Link href="/catalog/chandeliers/ceiling-chandeliers" className="block text-base hover:text-black">Потолочные люстры</Link></li>
-                        <li><Link href="/catalog/chandeliers/rod-chandeliers" className="block text-base hover:text-black">Люстры на штанге</Link></li>
-                        <li><Link href="/catalog/table-lamps" className="block text-base hover:text-black">Настольная лампа</Link></li>
-                        <li><Link href="/catalog/wall-sconces" className="block text-base hover:text-black">Бра</Link></li>
-                        <li><Link href="/catalog/floor-lamps" className="block text-base hover:text-black">Торшер</Link></li>
-                    </ul>
+                    <ul className="space-y-1 pl-2 border-l-2">
+                          <li><Link href="/catalog/chandeliers/" className="block text-base py-1.5 hover:text-black transition-colors">Люстры</Link></li>
+                          <li><Link href="/catalog/floor-lamps" className="block text-base py-1.5 hover:text-black transition-colors">Торшеры</Link></li>
+                          <li><Link href="/catalog/wall-sconces" className="block text-base py-1.5 hover:text-black transition-colors">Бра</Link></li>
+                          <li><Link href="/catalog/table-lamps" className="block text-base py-1.5 hover:text-black transition-colors">Настольная лампа</Link></li>
+                          <li><Link href="/catalog/led-lamp" className="block text-base py-1.5 hover:text-black transition-colors">Лампы LED</Link></li>
+                          <li><Link href="/catalog/led-strips" className="block text-base py-1.5 hover:text-black transition-colors">Светоидодная лампы</Link></li>
+                      </ul>
                     </div>
 
                     <div className="text-black">
                     <h3 className="text-lg font-bold mb-4">Функциональный свет</h3>
                     <ul className="space-y-3">
-                        <li><Link href="/catalog/lights/track-lights" className="block text-base hover:text-black">Трековые системы</Link></li>
+                        <li><Link href="/catalog/lights/track-lights" className="block text-base hover:text-black">Трековые светильники</Link></li>
                         <li><Link href="/catalog/lights/pendant-lights" className="block text-base hover:text-black">Подвесные светильники</Link></li>
-                        <li><Link href="/catalog/led-lamp" className="block text-base hover:text-black">Светодиодная лента</Link></li>
                         <li><Link href="/catalog/led-strip-profiles" className="block text-base hover:text-black">Профили</Link></li>
                     </ul>
                     </div>

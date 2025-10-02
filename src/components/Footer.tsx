@@ -29,9 +29,9 @@ const Footer = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           
           {/* Колонка 1: Бренд и информация */}
-          <div className="col-span-2 md:col-span-1">
+          <div className="col-span-2 md:col-span-2">
             <Link href="/" className="inline-block mb-6">
-              <h2 className="text-3xl font-bold tracking-wider">MORESVET</h2>
+              <h2 className="text-5xl font-bold tracking-wider">MORESVET</h2>
             </Link>
         
           <p className="text-white">
@@ -74,9 +74,10 @@ const Footer = () => {
                      </a>
                  </p>
                  <p className="text-white opacity-90">
-                    Москва, ТК КОНСТРУКТОР, <br />
-                    25-й км МКАД
+                    Москва, ТК КОНСТРУКТОР,  <br />
                  </p>
+                 <p>ИНН: 616712200437
+                 ИП: Багдасарян Ашот ОГРИНП: 3241508100292179</p>
              </div>
           </div>
 
