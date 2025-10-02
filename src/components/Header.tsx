@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'; // Добавлен useCallback
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { searchProductsWithSorting } from '@/utils/api';
@@ -290,7 +290,8 @@ const Header = () => {
     }
   }, [searchQuery]);
 
-  const handleSearch = (queryOrEvent?: string | React.FormEvent) => {
+  // --- ИСПРАВЛЕНИЕ: Оборачиваем handleSearch в useCallback ---
+  const handleSearch = useCallback((queryOrEvent?: string | React.FormEvent) => {
     let finalQuery = '';
     if (typeof queryOrEvent === 'string') {
       finalQuery = queryOrEvent;
@@ -306,7 +307,7 @@ const Header = () => {
     setShowSearchResults(false);
     const encodedSearchQuery = encodeURIComponent(finalQuery);
     router.push(`/search/${encodedSearchQuery}?query=${encodedSearchQuery}`);
-  };
+  }, [router, searchQuery]); // Зависимости функции
 
   const SearchResultItem: React.FC<SearchResultItemProps> = ({ product, handleSearch }) => {
     const [imageLoaded, setImageLoaded] = useState<boolean>(false);
@@ -443,7 +444,7 @@ const Header = () => {
         <p className="text-sm text-white">Ничего не найдено. Попробуйте использовать другие ключевые слова.</p>
       </div>
     );
-  }, [products, loading, searchQuery, handleSearch, ]);
+  }, [products, loading, handleSearch]); // searchQuery убран, т.к. handleSearch уже зависит от него
 
   // --- Handlers for Catalog Menu ---
   const toggleCatalogMenu = () => setIsCatalogOpen(prev => !prev);

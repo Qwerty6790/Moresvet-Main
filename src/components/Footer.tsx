@@ -43,9 +43,9 @@ const Footer = () => {
             <h3 className="text-sm font-semibold tracking-wider uppercase mb-4">Компания</h3>
             <ul className="space-y-3">
               <FooterLink href="/about">О нас</FooterLink>
-              <FooterLink href="/delivery">Доставка и оплата</FooterLink>
-              <FooterLink href="/contacts">Контакты</FooterLink>
-              <FooterLink href="/policy">Политика</FooterLink>
+              <FooterLink href="/about">Доставка и оплата</FooterLink>
+              <FooterLink href="/about">Контакты</FooterLink>
+              <FooterLink href="/about">Политика</FooterLink>
             </ul>
           </div>
 
@@ -55,7 +55,7 @@ const Footer = () => {
             <ul className="space-y-3">
               <FooterLink href="/catalog/chandeliers">Люстры</FooterLink>
               <FooterLink href="/catalog/wall-sconces">Бра</FooterLink>
-              <FooterLink href="/catalog/lights/track-lights">Трековые системы</FooterLink>
+              <FooterLink href="/catalog/lights/track-lights">Трековые светильники</FooterLink>
               <FooterLink href="/catalog/outdoor-lights">Уличный свет</FooterLink>
             </ul>
           </div>
