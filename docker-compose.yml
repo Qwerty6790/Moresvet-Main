@@ -1,3 +1,20 @@
+version: "3.9"
+
+services:
+  nextjs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: moresvet-nextjs
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - PORT=3005
+      - NEXT_PUBLIC_API_URL=https://more-svet-backend.vercel.app/api
+      - HOST=0.0.0.0
+    networks:
+      - app-network
+
   nginx:
     image: nginx:alpine
     container_name: moresvet-nginx
@@ -7,7 +24,7 @@
       - "443:443"
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./certbot/www:/var/www/certbot/www:rw   # <-- совпадает с alias
+      - ./certbot/www:/var/www/certbot/www:rw
       - ./certbot/conf:/etc/letsencrypt:rw
     depends_on:
       - nextjs
@@ -34,3 +51,7 @@
       --force-renewal
     networks:
       - app-network
+
+networks:
+  app-network:
+    driver: bridge
