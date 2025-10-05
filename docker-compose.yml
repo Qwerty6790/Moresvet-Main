@@ -24,7 +24,7 @@ services:
       - "443:443"
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./certbot/www:/var/www/certbot:rw
+      - ./certbot/www:/var/www/certbot/www:rw   # <--- путь совпадает с alias
       - ./certbot/conf:/etc/letsencrypt:rw
     depends_on:
       - nextjs
@@ -36,13 +36,13 @@ services:
     container_name: moresvet-certbot
     restart: "no"
     volumes:
-      - ./certbot/www:/var/www/certbot:rw
+      - ./certbot/www:/var/www/certbot/www:rw   # <--- путь совпадает с alias
       - ./certbot/conf:/etc/letsencrypt:rw
     depends_on:
       - nginx
     command: >
       certonly --webroot
-      --webroot-path=/var/www/certbot
+      --webroot-path=/var/www/certbot/www
       --email admin@moresvet.ru
       -d moresvet.ru
       -d www.moresvet.ru
