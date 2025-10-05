@@ -34,12 +34,21 @@ services:
   certbot:
     image: certbot/certbot
     container_name: moresvet-certbot
+    restart: unless-stopped
     volumes:
       - ./certbot/www:/var/www/certbot:rw
       - ./certbot/conf:/etc/letsencrypt:rw
     depends_on:
       - nginx
-    command: certonly --webroot --webroot-path=/var/www/certbot --email admin@moresvet.ru -d moresvet.ru -d www.moresvet.ru --agree-tos --no-eff-email --force-renewal
+    command: >
+      sh -c "
+      certbot certonly --webroot --webroot-path=/var/www/certbot
+      --email admin@moresvet.ru
+      -d moresvet.ru
+      -d www.moresvet.ru
+      --agree-tos --no-eff-email --force-renewal &&
+      trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done
+      "
     networks:
       - app-network
 
