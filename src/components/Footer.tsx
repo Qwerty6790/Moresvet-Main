@@ -23,13 +23,13 @@ const SocialLink = ({ href, icon }: { href: string; icon: React.ReactNode }) => 
 const Footer = () => {
   return (
     <footer className="bg-black text-white">
-      <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         
         {/* Основная сетка футера */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
           
           {/* Колонка 1: Бренд и информация */}
-          <div className="col-span-2 md:col-span-2">
+          <div className="col-span-2 md:col-span-1">
             <Link href="/" className="inline-block mb-6">
               <h2 className="text-5xl font-bold tracking-wider">MORESVET</h2>
             </Link>
@@ -42,7 +42,7 @@ const Footer = () => {
 
           {/* Колонка 2: Компания */}
           <div>
-            <h3 className="text-2xl font-semibold tracking-wider uppercase mb-4">Компания</h3>
+            <h3 className="text-2xl font-semibold tracking-wider uppercase mb-3">Компания</h3>
             <ul className="space-y-3">
               <FooterLink href="/about">Компания</FooterLink>
               <FooterLink href="/about">Доставка</FooterLink>
@@ -52,10 +52,19 @@ const Footer = () => {
 
           {/* Колонка 3: Каталог */}
           <div>
-            <h3 className="text-2xl font-semibold tracking-wider uppercase mb-4">Каталог</h3>
+            <h3 className="text-2xl font-semibold tracking-wider uppercase mb-3">Каталог</h3>
             <ul className="space-y-3">
             <FooterLink href="/about">Контакты</FooterLink>
             <FooterLink href="/about">Политика</FooterLink>
+            </ul>
+          </div>
+
+
+           {/* Колонка 3.5: Политика */}
+           <div>
+            <h3 className="text-2xl font-semibold tracking-wider uppercase mb-3">Политика</h3>
+            <ul className="space-y-3">
+            <FooterLink href="/about">Правила</FooterLink>
             </ul>
           </div>
 
@@ -72,9 +81,6 @@ const Footer = () => {
                      <a href="mailto:info@moresvet.ru" className="text-white hover:opacity-80 transition-opacity">
                 
                      </a>
-                 </p>
-                 <p className="text-white opacity-90">
-                    Москва, ТК КОНСТРУКТОР,  <br />
                  </p>
                  <p>ИНН: 616712200437
                  ИП: Багдасарян Ашот ОГРИНП: 3241508100292179</p>

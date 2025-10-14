@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { searchProductsWithSorting } from '@/utils/api';
 import { FiSearch, FiX, FiMenu } from 'react-icons/fi'; // FiMenu added
-import { FaHeart, FaShoppingCart, FaShoppingBag } from 'react-icons/fa';
+// import { FaHeart, FaShoppingCart, FaShoppingBag } from 'react-icons/fa'; // Удалены импорты FaHeart и FaShoppingCart
 import { getImageUrl } from '@/utils/constants';
 
 interface Product {
@@ -117,6 +117,23 @@ const SearchIcon = ({ className = "" }) => (
     <path d="M19 19l-4.35-4.35" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
+
+// Новая кастомная иконка "Избранное"
+const HeartIcon = ({ className = "" }) => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    </svg>
+);
+
+// Новая кастомная иконка "Корзина"
+const CartIcon = ({ className = "" }) => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4H6z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+        <path d="M3 6h18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M16 10a4 4 0 01-8 0" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+);
+
 
 const Header = () => {
   const router = useRouter();
@@ -565,12 +582,12 @@ const Header = () => {
     <header className="w-full bg-transparent z-50 fixed top-0 left-0 right-0 shadow-lg h-18 md:h-18">
       {/* Основной хедер */}
       <div className="bg-black py-5 sm:py-4 ">
-        <div className="max-w-screen-xl mx-auto px-4 flex items-center justify-between">
+        <div className="max-w-screen-2xl mx-auto px-4 flex items-center justify-between">
           {/* Логотип */}
           <div className="absolute left-1/2 max-lg:left-[55%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
             <div className={`transition-all duration-300 ${showSearchResults || scrolled ? 'translate-x-[-1.5rem] scale-90' : 'translate-x-0 scale-100'}`}>
               <Link href="/" className={`flex items-center ${showSearchResults || scrolled ? 'pointer-events-none' : 'pointer-events-auto'}`}>
-                <span className={`text-5xl font-bold tracking-widest transition-all duration-300 ${showSearchResults || scrolled ? 'text-4xl' : 'text-5xl'} text-white`}>MORESVET</span>
+                <span className={`md:text-5xl text-4xl font-bold tracking-widest transition-all duration-300 ${showSearchResults || scrolled ? 'text-1xl' : 'text-1xl'} text-white`}>LUMORALIGHT</span>
                 <span className={`text-1xl max-lg:hidden font-bold tracking-widest transition-all duration-300 ${showSearchResults || scrolled ? 'text-1xl' : 'text-1xl'} text-white`}>2025</span>
               </Link>
             </div>
@@ -620,7 +637,7 @@ const Header = () => {
               ДЛЯ ДИЗАЙНЕРОВ
             </button>
             <Link href="/liked" aria-label="Избранное" className="p-2 hover:text-gray-300">
-              <FaHeart size={20} />
+              <HeartIcon className="w-6 h-6" />
             </Link>
             <div
                 ref={cartIconRef}
@@ -629,7 +646,7 @@ const Header = () => {
                 onMouseLeave={handleMiniCartLeave}
             >
                 <Link href="/cart" aria-label="Корзина" className="relative hover:text-gray-300">
-                    <FaShoppingCart size={20} />
+                    <CartIcon className="w-6 h-6" />
                     {cartCount > 0 && (
                         <span className="absolute -top-2 -right-2 flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-600 rounded-full">
                             {cartCount}
@@ -805,7 +822,7 @@ const Header = () => {
             aria-modal="true"
           >
             <div className="flex items-center justify-between p-4 border-b border-gray-200">
-              <Link href="/" className="text-2xl font-bold text-gray-900 tracking-wider">MORESVET</Link>
+              <Link href="/" className="text-2xl font-bold text-gray-900 tracking-wider">LUMORALIGHT</Link>
               <button 
                 onClick={() => { 
                   setShowMobileMenu(false); 
@@ -892,11 +909,11 @@ const Header = () => {
             <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 bg-white">
               <div className="flex items-center justify-around">
                 <Link href="/liked" className="flex flex-col items-center text-black hover:text-black transition-colors">
-                  <FaHeart size={22} />
+                  <HeartIcon className="w-6 h-6" />
                   <span className="text-xs mt-1">Избранное</span>
                 </Link>
                 <Link href="/cart" className="relative flex flex-col items-center text-black hover:text-black transition-colors">
-                <FaShoppingCart size={20} />
+                <CartIcon className="w-6 h-6" />
                   {cartCount > 0 && (
                     <span className="absolute -top-1 -right-2 flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-600 rounded-full">
                       {cartCount}
