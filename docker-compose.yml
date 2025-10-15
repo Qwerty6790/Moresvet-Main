@@ -31,7 +31,7 @@ services:
 
   certbot:
     image: certbot/certbot
-    container_name: moresvet-certbot
+    container_name: lumoralight-certbot
     restart: "no"
     volumes:
       - ./certbot/www:/var/www/certbot/www:rw
@@ -41,9 +41,9 @@ services:
     command: >
       certonly --webroot
       --webroot-path=/var/www/certbot/www
-      --email admin@moresvet.ru
-      -d moresvet.ru
-      -d www.moresvet.ru
+      --email admin@lumoralight.ru
+      -d lumoralight.ru
+      -d www.lumoralight.ru
       --agree-tos
       --no-eff-email
       --force-renewal
