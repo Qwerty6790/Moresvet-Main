@@ -402,7 +402,7 @@ const CartButton: React.FC<{
   }, [quantity, updateCart]);
 
   if (!isPurchasable) {
-    return <button className={`${compact ? 'text-[10px] sm:text-xs py-1.5 px-3' : 'px-4 py-2.5 text-xs'} rounded-lg bg-gray-100 text-gray-400 cursor-not-allowed font-medium transition-all`} disabled>
+    return <button className={`${compact ? 'text-[10px] sm:text-xs py-1.5 px-3' : 'px-4 py-2.5 text-xs'} rounded-lg  text-gray-400 cursor-not-allowed font-medium transition-all`} disabled>
       Нет в наличии
     </button>;
   }
@@ -578,7 +578,7 @@ const CatalogOfProductSearch: React.FC<CatalogOfProductProps> = ({ products, vie
     return (
       <div ref={cardRef} className="group bg-white rounded-xl border border-gray-100 flex flex-col h-full shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden">
         <Link href={`/products/${product.source}/${encodeURIComponent(product.article)}`} className="flex flex-col h-full" prefetch={false}>
-          <div className="relative aspect-square overflow-hidden bg-gray-50">
+          <div className="relative aspect-square overflow-hidden ">
             {shouldLoad ? (
               <SafeOptimizedImage 
                 src={targetImageSrc!}

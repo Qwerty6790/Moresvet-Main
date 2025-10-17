@@ -14,28 +14,22 @@ export default function Banner() {
           playsInline
           className="absolute z-0 w-full h-full object-cover"
         >
-          <source src="/images/banners/steel.mp4" type="video/mp4" />
+          <source src="/images/banners/tekovysvetmaytoni.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
 
-        <div className="absolute inset-0 bg-black opacity-50"></div>
+        <div className="absolute inset-0 bg-black opacity-30"></div>
 
         {/* Content Overlay */}
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center px-6 max-w-4xl">
-            <h1 className="text-white text-5xl md:text-7xl lg:text-8xl font-light tracking-wider mb-6">
-              ИЩИ НА LumoraLight
+            <h1 className="text-white  text-5xl md:text-7xl lg:text-8xl font-light tracking-widest mb-6">
+             Воплощения света в твоем доме
             </h1>
             <p className="text-white/90 text-lg md:text-xl lg:text-2xl font-light tracking-wide mb-12">
-              СВЕТОЧНЫЕ РЕШЕНИЯ ДЛЯ ВАШЕГО ДОМА
+             Искусство света в наших руках
             </p>
-            <a
-              href="/about"
-              className="inline-flex items-center gap-3 px-10 py-4 bg-transparent border border-white text-white text-sm tracking-widest hover:bg-white hover:text-black transition-all duration-500"
-            >
-              ПОДРОБНЕЕ
-              <ArrowRight className="w-4 h-4" />
-            </a>
+           
           </div>
         </div>
       </div>

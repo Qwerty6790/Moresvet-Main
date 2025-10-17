@@ -162,6 +162,13 @@ const productCategories = [
         isOpen: false
     },
     {
+        id: 'lampa',
+        label: 'Светодиодная лампа',
+        searchName: 'Светодиодная лампа',
+        aliases: ['Светодиодная лампа', 'LED лампа', 'Лампа светодиодная',  'Светодиодная лампа'],
+        isOpen: false
+    },
+    {
         id: 'ulichni',
         label: 'Уличный светильник',
         searchName: 'Уличный светильник',

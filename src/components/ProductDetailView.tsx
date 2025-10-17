@@ -1,3 +1,6 @@
+
+'use client';
+
 import React, { useEffect, useState, useMemo } from 'react';
 import { Heart, Copy, ChevronDown, Star, MessageSquare } from 'lucide-react';
 import Header from '@/components/Header';
@@ -241,7 +244,7 @@ const ProductDetailView: React.FC<{ product: ProductI }> = ({ product }) => {
       <span className="font-medium text-gray-800 text-right">{value}</span>
     </div>
   );
-
+  
   const AccordionSection = ({ title, children }: { title: string, children: React.ReactNode }) => {
     const isOpen = openAccordion === title;
     return (
@@ -251,21 +254,26 @@ const ProductDetailView: React.FC<{ product: ProductI }> = ({ product }) => {
                 onClick={() => setOpenAccordion(isOpen ? null : title)}
             >
                 <h3 className="text-lg font-semibold">{title}</h3>
-                <ChevronDown className={`w-5 h-5 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
             </button>
-            {isOpen && <div className="pb-4">{children}</div>}
+            <div className={`overflow-hidden transition-[max-height] duration-500 ease-in-out ${isOpen ? 'max-h-screen' : 'max-h-0'}`}>
+                <div className="pb-4">
+                  {children}
+                </div>
+            </div>
         </div>
     );
   };
   
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className=" min-h-screen">
       <Header />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 lg:items-start gap-x-12">
           
           {/* Левая колонка: Галерея изображений */}
-          <div className="flex flex-col-reverse sm:flex-row gap-4">
+          {/* --- ИЗМЕНЕНИЕ ЗДЕСЬ --- */}
+          <div className="flex flex-col-reverse sm:flex-row gap-4 lg:sticky top-24">
             <div className="flex sm:flex-col gap-2 overflow-x-auto sm:overflow-y-auto pr-2">
                 {thumbnails.map((img, idx) => {
                   if (failedThumbnailIndices.includes(idx)) return null;
@@ -317,17 +325,13 @@ const ProductDetailView: React.FC<{ product: ProductI }> = ({ product }) => {
 
               <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">{product.name}</h1>
               
-              <div className="flex items-center gap-4 mb-6">
-                <div className="flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />)}
-                </div>
-              </div>
+             
               
               <div className="bg-white rounded-lg p-6 shadow-sm mb-6">
                 <div className="flex items-baseline justify-between mb-4">
                     <span className="text-4xl font-extrabold text-gray-900">{new Intl.NumberFormat('ru-RU').format(product.price)} ₽</span>
                     {product.stock > 0 ? (
-                      <span className="text-sm font-medium text-green-600">В наличии: {product.stock} шт.</span>
+                      <span className="text-sm font-medium text-black">В наличии: {product.stock} шт.</span>
                     ) : (
                       <span className="text-sm font-medium text-red-600">Нет в наличии</span>
                     )}

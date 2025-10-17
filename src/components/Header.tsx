@@ -1,23 +1,11 @@
+
 'use client';
 
-import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'; // Добавлен useCallback
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { searchProductsWithSorting } from '@/utils/api';
-import { FiSearch, FiX, FiMenu } from 'react-icons/fi'; // FiMenu added
-// import { FaHeart, FaShoppingCart, FaShoppingBag } from 'react-icons/fa'; // Удалены импорты FaHeart и FaShoppingCart
+import { FiSearch, FiX, FiMenu } from 'react-icons/fi';
 import { getImageUrl } from '@/utils/constants';
-
-interface Product {
-  _id: string;
-  article: string;
-  name: string;
-  source: string;
-  stock: string;
-  price: number;
-  imageAddresses: string | string[];
-  imageAddress?: string | string[];
-}
 
 // A new interface for items in the mini cart
 interface CartItem {
@@ -26,89 +14,6 @@ interface CartItem {
     imageUrl: string | null;
     quantity: number;
     price: number;
-}
-
-
-const useSearchProducts = (query: string) => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const controller: AbortController | null = typeof AbortController !== 'undefined' ? new AbortController() : null;
-    let mounted = true;
-
-    const fetchProducts = async () => {
-      if (!query || query.length < 2) {
-        setProducts([]);
-        return;
-      }
-      setLoading(true);
-      try {
-        const data = await searchProductsWithSorting(query, { limit: 6 }, controller ? controller.signal : undefined, true);
-        if (!mounted) return;
-        setProducts(data.products || []);
-      } catch (error) {
-        if ((error as any)?.name === 'CanceledError' || (error as any)?.message === 'canceled') {
-          // запрос отменён — игнорируем
-          return;
-        }
-        console.error('Ошибка при поиске товаров:', error);
-        setProducts([]);
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    };
-
-    const timer = window.setTimeout(() => {
-      fetchProducts();
-    }, 300);
-
-    return () => {
-      mounted = false;
-      try {
-        if (controller) controller.abort();
-      } catch (e) {
-        // ignore
-      }
-      clearTimeout(timer);
-    };
-  }, [query]);
-
-  return { products, loading };
-};
-
-const normalizeUrl = (url: string): string | null => {
-  if (!url) return null;
-  url = url.trim();
-  if (url.includes('lightstar.ru')) {
-    return url;
-  }
-  if (!url.startsWith('http://') && !url.startsWith('https://')) {
-    if (url.startsWith('/')) {
-      return url;
-    }
-    url = 'https://' + url;
-  }
-  try {
-    new URL(url);
-    return url;
-  } catch (e) {
-    console.warn('Invalid URL:', url);
-    return null;
-  }
-};
-
-interface ProductI {
-  _id: string;
-  name: string;
-  imageAddresses?: string | string[];
-  imageAddress?: string | string[];
-  article?: string;
-}
-
-interface SearchResultItemProps {
-  product: ProductI;
-  handleSearch: (searchTerm?: string) => void;
 }
 
 const SearchIcon = ({ className = "" }) => (
@@ -183,8 +88,6 @@ const Header = () => {
   const [cartTotal, setCartTotal] = useState<number>(0);
   const miniCartTimeoutRef = useRef<number | null>(null);
 
-  const { products, loading } = useSearchProducts(searchQuery);
-
   const updateCartState = () => {
     try {
       const cartData = JSON.parse(localStorage.getItem('cart') || '{"products": []}');
@@ -254,9 +157,7 @@ const Header = () => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (searchInputRef.current && searchResultsRef.current && 
-          !searchInputRef.current.contains(event.target as Node) && 
-          !searchResultsRef.current.contains(event.target as Node)) {
+      if (searchResultsRef.current && !searchResultsRef.current.contains(event.target as Node)) {
         setShowSearchResults(false);
       }
     };
@@ -299,20 +200,11 @@ const Header = () => {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  useEffect(() => {
-    if (searchQuery.trim()) {
-      setShowSearchResults(true);
-    } else {
-      setShowSearchResults(false);
-    }
-  }, [searchQuery]);
-
   // --- ИСПРАВЛЕНИЕ: Оборачиваем handleSearch в useCallback ---
   const handleSearch = useCallback((queryOrEvent?: string | React.FormEvent) => {
     let finalQuery = '';
     if (typeof queryOrEvent === 'string') {
       finalQuery = queryOrEvent;
-      setSearchQuery(queryOrEvent);
     } else if (queryOrEvent && 'preventDefault' in queryOrEvent) {
       queryOrEvent.preventDefault();
       finalQuery = searchQuery;
@@ -322,146 +214,10 @@ const Header = () => {
     if (!finalQuery.trim()) return;
     
     setShowSearchResults(false);
+    setSearchQuery(''); // Очищаем поле поиска после отправки
     const encodedSearchQuery = encodeURIComponent(finalQuery);
     router.push(`/search/${encodedSearchQuery}?query=${encodedSearchQuery}`);
   }, [router, searchQuery]); // Зависимости функции
-
-  const SearchResultItem: React.FC<SearchResultItemProps> = ({ product, handleSearch }) => {
-    const [imageLoaded, setImageLoaded] = useState<boolean>(false);
-    const [imageError, setImageError] = useState<boolean>(false);
-
-    const { mainImage, debugImageUrl, hasImage } = useMemo(() => {
-      if (
-        typeof product.imageAddresses === 'string' &&
-        product.imageAddresses.includes('lightstar.ru')
-      ) {
-        return {
-          mainImage: null,
-          debugImageUrl: product.imageAddresses,
-          hasImage: true,
-        };
-      }
-
-      let image: string | null = null;
-
-      if (typeof product.imageAddresses === 'string') {
-        const url = product.imageAddresses.trim();
-        image = url.startsWith('http://') || url.startsWith('https://')
-          ? url
-          : normalizeUrl(url);
-      } else if (Array.isArray(product.imageAddresses) && product.imageAddresses.length > 0) {
-        image = normalizeUrl(product.imageAddresses[0]);
-      }
-
-      if (!image) {
-        if (typeof product.imageAddress === 'string') {
-          image = normalizeUrl(product.imageAddress);
-        } else if (Array.isArray(product.imageAddress) && product.imageAddress.length > 0) {
-          image = normalizeUrl(product.imageAddress[0]);
-        }
-      }
-
-      return {
-        mainImage: image,
-        debugImageUrl: null,
-        hasImage: !!image,
-      };
-    }, [product]);
-
-    useEffect(() => {
-      if (mainImage || debugImageUrl) {
-        const img = new Image();
-        img.onload = () => setImageLoaded(true);
-        img.onerror = () => setImageError(true);
-        img.src = mainImage || debugImageUrl || '';
-      }
-    }, [mainImage, debugImageUrl]);
-
-    const imageUrl = hasImage && !imageError ? (debugImageUrl || mainImage) : '/placeholder.jpg';
-
-    const handleClick = (e: React.MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      handleSearch(product.name);
-    };
-
-    return (
-      <div
-        key={product._id}
-        className={`flex items-center px-4 py-4 text-white cursor-pointer transition-all duration-200 bg-transparent rounded-md`}
-        onClick={handleClick}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            handleClick(e as unknown as React.MouseEvent);
-          }
-        }}
-      >
-        <div className="relative w-20 h-20 mr-4 flex-shrink-0 overflow-hidden rounded-md">
-          <img
-            src={imageUrl ? getImageUrl(imageUrl) : '/placeholder.jpg'}
-            alt={product.name}
-            className={`w-full h-full object-cover transition-all duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
-            loading="lazy"
-          />
-          {!imageLoaded && (
-            <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-md"></div>
-          )}
-        </div>
-        <div className="flex flex-col flex-1 min-w-0">
-          <span className="text-base text-white line-clamp-2">{product.name}</span>
-          {product.article && (
-            <span className="text-sm text-white mt-1">Арт.: {product.article}</span>
-          )}
-        </div>
-      </div>
-    );
-  };
-
-  const searchResultsContent = useMemo(() => {
-    if (loading) {
-      return (
-        <div className="flex justify-center items-center py-8">
-          <div className="animate-spin rounded-full h-6 w-6 border-2 border-black border-t-transparent"></div>
-        </div>
-      );
-    }
-    if (products.length > 0) {
-      return (
-        <div>
-          <div className=" py-2 px-4">
-            <h3 className="text-xs font-medium uppercase text-white">Результаты поиска</h3>
-          </div>
-          <div className="max-h-[60vh] max-w-[140vh] bg-black overflow-y-auto">
-            <div className="grid grid-cols-1 sm:grid-cols-1 gap-3 p-3">
-              {products.map((product) => (
-                <SearchResultItem 
-                  key={product._id} 
-                  product={product} 
-                  handleSearch={handleSearch} 
-                />
-              ))}
-            </div>
-          </div>
-          <div className="border-t bg-black border-gray-100">
-            <button
-              onClick={() => handleSearch()}
-              className="w-full py-3 text-xs font-medium uppercase text-white  transition-colors"
-            >
-              Показать все результаты
-            </button>
-          </div>
-        </div>
-      );
-    }
-    
-    return (
-      <div className="py-6 px-4 text-center">
-        <p className="text-sm text-white">Ничего не найдено. Попробуйте использовать другие ключевые слова.</p>
-      </div>
-    );
-  }, [products, loading, handleSearch]); // searchQuery убран, т.к. handleSearch уже зависит от него
 
   // --- Handlers for Catalog Menu ---
   const toggleCatalogMenu = () => setIsCatalogOpen(prev => !prev);
@@ -567,6 +323,7 @@ const Header = () => {
         setIsCatalogOpen(false);
         setIsSocketsOpen(false);
         setIsBrandsOpen(false);
+        setShowSearchResults(false);
       }
     };
 
@@ -585,7 +342,7 @@ const Header = () => {
         <div className="max-w-screen-2xl mx-auto px-4 flex items-center justify-between">
           {/* Логотип */}
           <div className="absolute left-1/2 max-lg:left-[55%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-            <div className={`transition-all duration-300 ${showSearchResults || scrolled ? 'translate-x-[-1.5rem] scale-90' : 'translate-x-0 scale-100'}`}>
+            <div className={`transition-all duration-300 ${showSearchResults || scrolled ? 'translate-x-[-1rem] scale-90' : 'translate-x-0 scale-100'}`}>
               <Link href="/" className={`flex items-center ${showSearchResults || scrolled ? 'pointer-events-none' : 'pointer-events-auto'}`}>
                 <span className={`md:text-5xl text-4xl font-bold tracking-widest transition-all duration-300 ${showSearchResults || scrolled ? 'text-1xl' : 'text-1xl'} text-white`}>LUMORALIGHT</span>
                 <span className={`text-1xl max-lg:hidden font-bold tracking-widest transition-all duration-300 ${showSearchResults || scrolled ? 'text-1xl' : 'text-1xl'} text-white`}>2025</span>
@@ -598,14 +355,11 @@ const Header = () => {
             <Link href="/about" className="hover:text-gray-300">ПРАВИЛА ДОСТАВКИ</Link>
             <button
                 ref={socketsButtonRef}
-                onClick={() => setIsSocketsOpen(prev => !prev)}
-                onMouseEnter={openSocketsMenu}
-                onMouseLeave={closeSocketsMenu}
                 aria-haspopup="true"
-                aria-expanded={isSocketsOpen}
+
                 className="relative flex items-center uppercase text-sm font-bold text-white hover:text-gray-300 transition-colors px-3 py-1"
             >
-                РОЗЕТКИ И ВЫКЛЮЧАТЕЛИ
+               Правила политики сайта
             </button>
           </nav>
 
@@ -665,20 +419,20 @@ const Header = () => {
                         {miniCartItems.length > 0 ? (
                             <>
                                 <div className="p-4">
-                                    <h3 className="text-lg font-semibold text-black">Корзина</h3>
+                                    <h3 className="text-2xl font-semibold text-black">Корзина</h3>
                                 </div>
-                                <div className="max-h-80 overflow-y-auto border-t border-b border-gray-200">
+                                <div className="max-h-80 overflow-y-auto  border-gray-200">
     {/* Добавляем 'index' в параметры map */}
     {miniCartItems.map((item, index) => (
         /* Создаем гарантированно уникальный ключ */
         <div key={`${item.id}-${index}`} className="flex items-center gap-4 p-4">
-            <div className="w-16 h-16 flex-shrink-0 bg-gray-100 rounded-md overflow-hidden">
+            <div className="w-24 h-24 flex-shrink-0  rounded-md overflow-hidden">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={item.imageUrl || '/placeholder.jpg'} alt={item.name} className="w-full h-full object-cover" />
             </div>
             <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 truncate">{item.name}</p>
-                <p className="text-sm text-black">{item.quantity} для {(item.price || 0).toLocaleString('ru-RU')} ₽</p>
+                <p className="text-1xl font-medium text-gray-900 truncate">{item.name}</p>
+                <p className="text-1xl text-black">{item.quantity} для {(item.price || 0).toLocaleString('ru-RU')} ₽</p>
             </div>
             <p className="text-sm font-semibold text-gray-900">
                 {(item.quantity * (item.price || 0)).toLocaleString('ru-RU')} ₽
@@ -686,12 +440,12 @@ const Header = () => {
         </div>
     ))}
 </div>
-                                <div className="p-4 bg-gray-50">
+                                <div className="p-4 ">
                                     <div className="flex justify-between items-center mb-4">
-                                        <span className="text-base font-medium text-gray-900">Итого:</span>
-                                        <span className="text-lg font-bold text-gray-900">{cartTotal.toLocaleString('ru-RU')} ₽</span>
+                                        <span className="text-base font-medium text-black">Итого:</span>
+                                        <span className="text-lg font-bold text-black">{cartTotal.toLocaleString('ru-RU')} ₽</span>
                                     </div>
-                                    <Link href="/cart" className="block w-full text-center bg-black text-white py-3 rounded-lg text-sm font-semibold  transition-colors">
+                                    <Link href="/cart" className="block w-full text-center bg-black text-white py-4 rounded-full text-sm font-semibold  transition-colors">
                                         Перейти в корзину
                                     </Link>
                                 </div>
@@ -771,11 +525,11 @@ const Header = () => {
 
       {/* Встроенный выпадающий поиск (вместо модального окна) */}
       {dropdownMounted && (
-        <div ref={searchResultsRef} className="absolute left-0 right-0 top-[calc(100%+10px)] z-40 pointer-events-none">
+        <div ref={searchResultsRef} className="absolute left-0 right-0 top-full mt-0 z-40 pointer-events-none">
           <div className="max-w-screen-xl mx-auto px-4 flex justify-center">
             <div className={`bg-black rounded-2xl shadow-xl overflow-hidden max-w-3xl w-full transform transition-all duration-300 ease-out ${showSearchResults ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-4 pointer-events-none'}`}>
               <div className="p-4">
-                <div className="flex items-center gap-3">
+                <form onSubmit={handleSearch} className="flex items-center gap-3">
                   <div className="relative flex-1">
                     <input
                       ref={searchInputRef}
@@ -793,13 +547,11 @@ const Header = () => {
                     onClick={() => { setShowSearchResults(false); }}
                     className="p-2 text-white hover:text-gray-800"
                     aria-label="Закрыть поиск"
+                    type="button"
                   >
                     <FiX />
                   </button>
-                </div>
-              </div>
-              <div className="border-t border-white/10">
-                {searchResultsContent}
+                </form>
               </div>
             </div>
           </div>
@@ -866,33 +618,12 @@ const Header = () => {
                       <ul className="space-y-1 pl-2 border-l-2">
                         <li><Link href="/catalog/outdoor-lights" className="block text-base py-1.5 hover:text-black transition-colors">Уличные светильники</Link></li>
                       </ul>
+                      
                     </div>
                   </div>
                 </div>
 
-                {/* Sockets and Switches Section */}
-                <div>
-                  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Розетки и выключатели</h3>
-                  <div className="space-y-4">
-                    <div>
-                      <h4 className="font-bold text-lg mb-2">Серии Voltum</h4>
-                      <ul className="space-y-1 pl-2 border-l-2">
-                          <li><Link href="/ElektroustnovohneIzdely/Voltum" className="block text-base py-1.5 hover:text-black">Встраиваемые серии</Link></li>
-                      </ul>
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-lg mb-2">Серия Werkel</h4>
-                      <ul className="space-y-1 pl-2 border-l-2">
-                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-base py-1.5 hover:text-black">Встраиваемые серии</Link></li>
-                          <li><Link href="/catalog/switches/two-key-switches" className="block text-base py-1.5 hover:text-black">Накладные серии</Link></li>
-                          <li><Link href="/catalog/switches/pass-through-switches" className="block text-base py-1.5 hover:text-black">Серия Retro</Link></li>
-                          <li><Link href="/catalog/switches/dimmers" className="block text-base py-1.5 hover:text-black">Серия Vintage</Link></li>
-                          <li><Link href="/catalog/switches/dimmers" className="block text-base py-1.5 hover:text-black">Серия выдвижных блоков</Link></li>
-                      </ul>
-                    </div> 
-                  </div>
-                </div>
-
+               
                 {/* Other Links */}
                 <div>
                    <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Информация</h3>
@@ -959,10 +690,10 @@ const Header = () => {
                         <h3 className="font-bold text-lg mb-2">Серия Werkel</h3>
                       <ul className="space-y-1 pl-2 border-l-2">
                           <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-base py-1.5 hover:text-black">Встраиваемые серии</Link></li>
-                          <li><Link href="/catalog/switches/two-key-switches" className="block text-base py-1.5 hover:text-black">Накладные серии</Link></li>
-                          <li><Link href="/catalog/switches/pass-through-switches" className="block text-base py-1.5 hover:text-black">Серия Retro</Link></li>
-                          <li><Link href="/catalog/switches/dimmers" className="block text-base py-1.5 hover:text-black">Серия Vintage</Link></li>
-                          <li><Link href="/catalog/switches/dimmers" className="block text-base py-1.5 hover:text-black">Серия выдвижных блоков</Link></li>
+                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-base py-1.5 hover:text-black">Накладные серии</Link></li>
+                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-base py-1.5 hover:text-black">Серия Retro</Link></li>
+                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-base py-1.5 hover:text-black">Серия Vintage</Link></li>
+                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-base py-1.5 hover:text-black">Серия выдвижных блоков</Link></li>
                       </ul>
                         </div>
 
@@ -980,7 +711,7 @@ const Header = () => {
                 <div className="hidden md:block md:w-1/3 lg:w-2/1">
                     <div
                         className="w-full bg-cover bg-center h-96"
-                        style={{ backgroundImage: "url('/images/banners/Bannersrostekaivikluhately.png')" }}
+                        style={{ backgroundImage: "url('/images/banners/Bannersrostekaivikluhately.jpg')" }}
                     />
                 </div>
             </div>
@@ -1037,7 +768,20 @@ const Header = () => {
                     </div>
 
                     <div className="text-black">
-                    <h3 className="text-lg font-bold mb-4">Новинки и акции</h3>
+                    <div>
+                      <h4 className="font-bold text-lg mb-2">Серия Werkel</h4>
+                      <ul className="space-y-1 pl-2 border-l-2">
+                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-base py-1.5 hover:text-black">Встраиваемые серии</Link></li>
+                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-base py-1.5 hover:text-black">Накладные серии</Link></li>
+                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-base py-1.5 hover:text-black">Серия Retro</Link></li>
+                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-base py-1.5 hover:text-black">Серия Vintage</Link></li>
+                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-base py-1.5 hover:text-black">Серия выдвижных блоков</Link></li>
+                          <h4 className="font-bold text-lg mb-2">Серии Voltum</h4>
+                      <ul className="space-y-1 pl-2 border-l-2">
+                          <li><Link href="/ElektroustnovohneIzdely/Voltum" className="block text-base py-1.5 hover:text-black">Встраиваемые серии</Link></li>
+                      </ul>
+                      </ul>
+                    </div> 
                     </div>
                 </div>
                 </div>

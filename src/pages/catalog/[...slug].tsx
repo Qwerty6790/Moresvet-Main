@@ -40,6 +40,7 @@ const categorySlugToName: Record<string, string> = {
   'table-lamps': 'Настольная лампа',
   'led-strip-profiles': 'Профиль для ленты',
   'led-strips': 'Светодиодная лента',
+  'led-lamp': 'Светодиодная лампа',
   'outdoor-lights': 'Уличный светильник',
   'outdoor-lights/outdoor-wall-lights': 'Настенный уличный светильник',
   'outdoor-lights/ground-lights': 'Грунтовый светильник',

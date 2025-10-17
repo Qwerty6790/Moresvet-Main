@@ -1,19 +1,72 @@
+
 'use client';
+
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { Toaster, toast } from 'sonner';
+import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import { ProductI } from '../../types/interfaces';
-import { ClipLoader } from 'react-spinners';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { FaShareAlt } from 'react-icons/fa';
 import LoadingSpinner from '@/components/LoadingSpinner';
+
+// --- Минималистичный компонент уведомления ---
+
+interface ToastProps {
+  message: string;
+  onClose: () => void;
+}
+
+const CustomToast: React.FC<ToastProps> = ({ message, onClose }) => {
+  // Автоматическое закрытие уведомления через 3 секунды
+  useEffect(() => {
+    const timer = setTimeout(onClose, 3000);
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
+  const toastVariants = {
+    initial: { opacity: 0, y: 40 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: 20 },
+  };
+
+  return (
+    <motion.div
+      layout
+      variants={toastVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      transition={{ type: 'spring', stiffness: 200, damping: 25 }}
+      className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 px-5 py-2.5 bg-black text-white text-sm font-medium rounded-full shadow-lg"
+    >
+      {message}
+    </motion.div>
+  );
+};
+
+// Контейнер для управления анимацией
+const ToastContainer: React.FC<{
+  toastMessage: string | null;
+  setToastMessage: (message: null) => void;
+}> = ({ toastMessage, setToastMessage }) => (
+  <AnimatePresence>
+    {toastMessage && (
+      <CustomToast
+        message={toastMessage}
+        onClose={() => setToastMessage(null)}
+      />
+    )}
+  </AnimatePresence>
+);
+
+
+// --- Основной компонент страницы "Избранное" ---
 
 const Liked: React.FC = () => {
   const [likedProducts, setLikedProducts] = useState<ProductI[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [toastMessage, setToastMessage] = useState<string | null>(null); // Состояние теперь хранит только текст
   const router = useRouter();
 
   useEffect(() => {
@@ -21,14 +74,13 @@ const Liked: React.FC = () => {
       setLoading(true);
       const liked = JSON.parse(localStorage.getItem('liked') || '{"products": []}');
 
-      if (liked.products.length > 0) {
+      if (liked.products && liked.products.length > 0) {
         try {
           const response = await axios.post(
             `${process.env.NEXT_PUBLIC_API_URL}/api/products/list`,
             { products: liked.products },
             { headers: { 'Content-Type': 'application/json' } }
           );
-
           setLikedProducts(
             response.data.products.map((product: any) => ({
               ...product,
@@ -36,11 +88,11 @@ const Liked: React.FC = () => {
             }))
           );
         } catch (err) {
-          setError('Произошла ошибка при загрузке продуктов из Избранного.');
+          setError('Произошла ошибка при загрузке избранных товаров.');
           console.error(err);
         }
       } else {
-        setError('Ваш список Избранного пустой');
+        setError('Ваш список избранного пуст');
       }
       setLoading(false);
     };
@@ -49,90 +101,73 @@ const Liked: React.FC = () => {
   }, []);
 
   const handleRemoveProduct = (id: string) => {
-    setLikedProducts((prevProducts) => prevProducts.filter((product) => product._id !== id));
+    const updatedProducts = likedProducts.filter((product) => product._id !== id);
+    setLikedProducts(updatedProducts);
+
     const updatedLiked = JSON.parse(localStorage.getItem('liked') || '{"products": []}');
     updatedLiked.products = updatedLiked.products.filter((productId: string) => productId !== id);
     localStorage.setItem('liked', JSON.stringify(updatedLiked));
-    toast.success('Товар удален из Избранного');
+
+    localStorage.setItem('likedCount', updatedLiked.products.length.toString());
+    window.dispatchEvent(new CustomEvent('liked-updated', { detail: { count: updatedLiked.products.length } }));
+    
+    setToastMessage('Товар удален из избранного'); // Просто передаем текст
+
+    if (updatedProducts.length === 0) {
+      setError('Ваш список избранного пуст');
+    }
   };
 
   const handleClearLiked = () => {
     setLikedProducts([]);
     localStorage.setItem('liked', JSON.stringify({ products: [] }));
-    setError('Ваш список Избранного пуст.');
-    toast.success('Избранное очищено');
-  };
-
-  const handleProductClick = (article: string, source: string) => {
-    const encodedArticle = article.replace(/\//g, '%2F');
-    router.push(`/products/${source}/${encodedArticle}`);
-  };
-
-  const handleShareLiked = () => {
-    if (navigator.share) {
-      navigator
-        .share({
-          title: 'Избранное товары',
-          text: 'Посмотрите, какие товары у меня в избранном!',
-          url: window.location.href,
-        })
-        .then(() => console.log('Share successful'))
-        .catch((error) => console.error('Ошибка при шаринге', error));
-    } else {
-      navigator.clipboard.writeText(window.location.href);
-      toast.success('Ссылка скопирована');
-    }
+    localStorage.setItem('likedCount', '0');
+    window.dispatchEvent(new CustomEvent('liked-updated', { detail: { count: 0 } }));
+    setError('Ваш список избранного пуст');
+    setToastMessage('Избранное очищено'); // Просто передаем текст
   };
 
   const totalAmount = likedProducts.reduce((sum, product) => {
     const price = typeof product.price === 'number' ? product.price : parseFloat(String(product.price)) || 0;
-    const qty = product.quantity ?? 1;
-    return sum + price * qty;
+    return sum + price;
   }, 0);
-
-  const totalToPay = totalAmount;
 
   return (
     <motion.section
-      className="min-h-screen bg-gradient-to-b from-white to-gray-50"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.45 }}
+      className="min-h-screen bg-gray-50"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
     >
-      <Toaster position="top-center" richColors />
+      <ToastContainer toastMessage={toastMessage} setToastMessage={setToastMessage} />
 
-      <div className="max-w-6xl mx-auto px-4 py-16">
-        <div className="flex items-start justify-between mb-8">
-          <div>
-            <h1 className="text-4xl font-extrabold text-gray-900">Избранное</h1>
-            <div className="text-sm text-gray-500 mt-1">
-              <Link href="/" className="hover:underline">Главная</Link>
-              <span className="mx-2">/</span>
-              <span>Избранное</span>
-            </div>
-          </div>
-
-          <div className="text-right">
-            <div className="text-sm text-gray-500">Товаров: <span className="font-medium text-gray-900">{likedProducts.length}</span></div>
-            <div className="text-sm text-gray-500">Итого: <span className="font-bold text-gray-900">{totalToPay.toLocaleString()} ₽</span></div>
-          </div>
+      <div className="max-w-6xl mx-auto px-4 py-12">
+        <div className="text-center mb-10">
+            <h1 className="text-4xl font-bold text-black tracking-tight">Избранное</h1>
+            <p className="text-gray-500 mt-2">
+                <Link href="/" className="hover:text-black transition-colors">Главная</Link>
+                <span className="mx-2">/</span>
+                <span>Избранное</span>
+            </p>
         </div>
 
-        <div className="grid lg:grid-cols-12 gap-6">
+        <div className="grid lg:grid-cols-12 lg:gap-12 lg:items-start">
           <div className={`${!error ? 'lg:col-span-8' : 'lg:col-span-12'}`}>
             {loading ? (
-              <div className="bg-white rounded-2xl shadow p-12 flex flex-col items-center">
-              <LoadingSpinner />
+              <div className="flex justify-center items-center p-20 bg-white rounded-lg shadow-sm">
+                <LoadingSpinner />
               </div>
             ) : error ? (
-              <div className="bg-white rounded-2xl shadow p-10 text-center">
-                <p className="text-2xl font-medium text-gray-800 mb-6">{error}</p>
-               
+              <div className="bg-white rounded-lg p-10 text-center shadow-sm">
+                <p className="text-xl text-gray-700 mb-6">{error}</p>
+                <Link href="/catalog" className="inline-flex items-center px-8 py-3 bg-black text-white rounded-lg font-semibold hover:bg-gray-800 transition-all duration-300 transform hover:scale-105">
+                  Перейти в каталог
+                </Link>
               </div>
             ) : (
               <div className="space-y-4">
                 {likedProducts.map((product) => {
-                  const images = (() => {
+                   const images = (() => {
                     if (typeof product.imageAddresses === 'string') return [product.imageAddresses];
                     if (Array.isArray(product.imageAddresses)) return product.imageAddresses;
                     if (typeof product.imageAddress === 'string') return [product.imageAddress];
@@ -144,23 +179,25 @@ const Liked: React.FC = () => {
                   return (
                     <motion.div
                       key={product._id}
-                      className="bg-white rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col sm:flex-row gap-4 items-center"
-                      whileHover={{ y: -2 }}
+                      layout
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="bg-white rounded-lg p-4 flex items-center gap-4 border border-gray-100 shadow-sm"
                     >
-                      <div className="w-28 h-28 flex-shrink-0 bg-gray-50 rounded-lg overflow-hidden flex items-center justify-center">
-                        <img src={`${imageUrl}?q=75&w=400`} alt={product.name} className="w-full h-full object-contain p-2" />
+                      <div className="w-24 h-24 flex-shrink-0 bg-gray-100 rounded-md flex items-center justify-center">
+                        <img src={`${imageUrl}?q=75&w=200`} alt={product.name} className="w-full h-full object-contain p-1" />
                       </div>
 
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-lg font-semibold text-gray-900 truncate">{product.name}</h3>
+                        <h3 className="text-md font-semibold text-black truncate">{product.name}</h3>
                         <p className="text-sm text-gray-500">Артикул: {product.article}</p>
-                        {product.source && <p className="text-sm text-gray-400 mt-1">Производитель: {product.source}</p>}
                       </div>
 
-                      <div className="flex flex-col items-end gap-3">
-                        <div className="text-lg font-bold text-gray-900">{typeof product.price === 'number' ? `${product.price.toLocaleString()} ₽` : `${product.price} ₽`}</div>
-                        <button onClick={() => handleRemoveProduct(product._id)} className="text-sm text-red-600 hover:text-red-700">Удалить</button>
+                      <div className="text-md font-bold text-black w-28 text-right hidden lg:block">
+                        {typeof product.price === 'number' ? `${product.price.toLocaleString()} ₽` : `${product.price} ₽`}
                       </div>
+
+                      <button onClick={() => handleRemoveProduct(product._id)} className="text-sm text-red-500 hover:text-red-700 transition-colors font-medium">Удалить</button>
                     </motion.div>
                   );
                 })}
@@ -168,31 +205,25 @@ const Liked: React.FC = () => {
             )}
           </div>
 
-          {!error && (
-            <aside className="lg:col-span-4">
-              <div className="sticky top-28 bg-gradient-to-br from-white via-white to-gray-50 rounded-2xl p-6 shadow-md border border-gray-100">
-                <div className="flex items-center justify-between mb-3">
-                  <h2 className="text-lg font-bold text-gray-900">Ваш список</h2>
-                  <button onClick={handleClearLiked} className="text-sm text-red-600 hover:text-red-700">Очистить</button>
+          {!error && likedProducts.length > 0 && (
+            <aside className="lg:col-span-4 mt-8 lg:mt-0">
+              <div className="sticky top-28 bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+                <div className="flex items-center justify-between mb-5">
+                  <h2 className="text-xl font-bold text-black">Ваш список</h2>
+                  <button onClick={handleClearLiked} className="text-sm text-gray-500 hover:text-red-500 transition-colors">Очистить</button>
                 </div>
 
-                <div className="space-y-2 text-sm text-gray-600 mb-4">
-                  <div className="flex justify-between"><span>Товары</span><span className="font-medium text-gray-900">{likedProducts.length}</span></div>
-                  <div className="flex justify-between"><span>Общая стоимость</span><span className="font-medium text-gray-900">{totalAmount.toLocaleString()} ₽</span></div>
-                </div>
-
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 mb-4">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <div className="text-sm text-gray-500">Итого</div>
-                      <div className="text-xl font-extrabold text-gray-900">{totalToPay.toLocaleString()} ₽</div>
-                    </div>
-                    <div className="text-xs text-gray-400">VAT не включен</div>
+                <div className="space-y-2 text-sm text-gray-600 mb-6">
+                  <div className="flex justify-between"><span>Количество товаров</span><span className="font-medium text-black">{likedProducts.length}</span></div>
+                  <div className="flex justify-between items-center pt-2">
+                    <span className="text-lg font-bold text-black">Итого</span><span className="text-xl font-extrabold text-black">{totalAmount.toLocaleString()} ₽</span>
                   </div>
                 </div>
 
-                <Link href="/cart" className="w-full inline-block text-center py-3 bg-black text-white rounded-lg font-medium">Перейти в корзину</Link>
-                <div className="mt-3 text-center text-xs text-gray-500">Добавьте товары в корзину для оформления заказа</div>
+                <Link href="/cart" className="w-full text-center block py-3 bg-black text-white rounded-lg text-sm font-semibold hover:bg-gray-800 transition-all duration-300 transform hover:scale-105">
+                  Перейти в корзину
+                </Link>
+                <div className="mt-3 text-center text-xs text-gray-500">Оформите заказ в корзине</div>
               </div>
             </aside>
           )}
