@@ -4,7 +4,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { FiSearch, FiX, FiMenu } from 'react-icons/fi';
+import { FiSearch, FiX, FiMenu, FiChevronDown } from 'react-icons/fi'; // Ensure FiChevronDown is imported
 import { getImageUrl } from '@/utils/constants';
 
 // A new interface for items in the mini cart
@@ -23,21 +23,31 @@ const SearchIcon = ({ className = "" }) => (
   </svg>
 );
 
-// Новая кастомная иконка "Избранное"
+// MODIFIED: Custom Heart Icon to better match the image
 const HeartIcon = ({ className = "" }) => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
 );
 
-// Новая кастомная иконка "Корзина"
+
 const CartIcon = ({ className = "" }) => (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4H6z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-        <path d="M3 6h18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M16 10a4 4 0 01-8 0" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={1.5}
+    stroke="currentColor"
+    className={className}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M2.25 2.25h2.786a1 1 0 0 1 .98.804l.682 3.412m0 0h13.091a1 1 0 0 1 .981 1.196l-1.285 6.427a2 2 0 0 1-1.961 1.573H8.702a2 2 0 0 1-1.962-1.573L5.718 6.466zm0 0L4.5 2.25M9 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zm10.5 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0z"
+    />
+  </svg>
 );
+
 
 
 const Header = () => {
@@ -52,6 +62,14 @@ const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const mobileMenuTimeoutRef = useRef<number | null>(null);
   const dropdownTimeoutRef = useRef<number | null>(null);
+  
+  // State for mobile menu accordion
+  const [openAccordion, setOpenAccordion] = useState<string | null>(null);
+
+  const toggleAccordion = (id: string) => {
+    setOpenAccordion(openAccordion === id ? null : id);
+  };
+
 
   useEffect(() => {
     return () => {
@@ -558,7 +576,7 @@ const Header = () => {
         </div>
       )}
 
-      {/* --- COMPREHENSIVE MOBILE MENU --- */}
+      {/* --- UPDATED: MOBILE MENU WITH LARGE, CENTERED TITLES --- */}
       {isMobileMenuOpen && (
         <>
           <div 
@@ -574,77 +592,107 @@ const Header = () => {
             aria-modal="true"
           >
             <div className="flex items-center justify-between p-4 border-b border-gray-200">
-              <Link href="/" className="text-2xl font-bold text-gray-900 tracking-wider">LUMORALIGHT</Link>
+              <Link href="/" className="text-2xl font-bold text-black tracking-wider">LUMORALIGHT</Link>
               <button 
                 onClick={() => { 
                   setShowMobileMenu(false); 
                   mobileMenuTimeoutRef.current = window.setTimeout(() => setIsMobileMenuOpen(false), 300); 
                 }} 
-                className="p-2 text-gray-600 hover:text-black" 
+                className="p-2 text-gray-800 hover:text-black" 
                 aria-label="Закрыть меню"
               >
                 <FiX size={24} />
               </button>
             </div>
             
-            <div className="p-5 overflow-y-auto h-[calc(100%-140px)]">
-              <div className="space-y-6 text-gray-800">
-                
-                {/* Catalog Section */}
-                <div>
-                  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Каталог</h3>
-                  <div className="space-y-4">
+            <div className="p-4 overflow-y-auto h-[calc(100%-140px)] text-black">
+              {/* Accordion Item: Catalog */}
+              <div className="">
+                <button 
+                  onClick={() => toggleAccordion('catalog')}
+                  className="w-full flex flex-col items-center  justify-center py-32 text-center"
+                >
+                  <span className="text-6xl  transition duration-200 hover:text-black/20 font-semibold text-black">Каталог</span>
+                 
+                </button>
+                <div className={`overflow-hidden transition-all duration-300 ease-in-out ${openAccordion === 'catalog' ? 'max-h-screen' : 'max-h-0'}`}>
+                  <div className="pl-4 pb-4 space-y-4 text-left">
                     <div>
-                      <h4 className="font-bold text-lg mb-2">Декоративный свет</h4>
-                      <ul className="space-y-1 pl-2 border-l-2">
-                          <li><Link href="/catalog/chandeliers/" className="block text-base py-1.5 hover:text-black transition-colors">Люстры</Link></li>
-                          <li><Link href="/catalog/floor-lamps" className="block text-base py-1.5 hover:text-black transition-colors">Торшеры</Link></li>
-                          <li><Link href="/catalog/wall-sconces" className="block text-base py-1.5 hover:text-black transition-colors">Бра</Link></li>
-                          <li><Link href="/catalog/table-lamps" className="block text-base py-1.5 hover:text-black transition-colors">Настольная лампа</Link></li>
-                          <li><Link href="/catalog/led-lamp" className="block text-base py-1.5 hover:text-black transition-colors">Лампы LED</Link></li>
-                          <li><Link href="/catalog/led-strips" className="block text-base py-1.5 hover:text-black transition-colors">Светоидодная лампы</Link></li>
+                      <h4 className="font-bold text-base text-black mb-2">Декоративный свет</h4>
+                      <ul className="space-y-2 pl-2 ">
+                          <li><Link href="/catalog/chandeliers/" className="block text-base text-black hover:underline">Люстры</Link></li>
+                          <li><Link href="/catalog/floor-lamps" className="block text-base text-black hover:underline">Торшеры</Link></li>
+                          <li><Link href="/catalog/wall-sconces" className="block text-base text-black hover:underline">Бра</Link></li>
+                          <li><Link href="/catalog/table-lamps" className="block text-base text-black hover:underline">Настольная лампа</Link></li>
+                          <li><Link href="/catalog/led-lamp" className="block text-base text-black hover:underline">Лампы LED</Link></li>
+                          <li><Link href="/catalog/led-strips" className="block text-base text-black hover:underline">Светодиодная лента</Link></li>
                       </ul>
                     </div>
                     <div>
-                      <h4 className="font-bold text-lg mb-2">Функциональный свет</h4>
-                      <ul className='space-y-1 pl-2 border-l-2'>
-                      <li><Link href="/catalog/lights/track-lights" className="block text-base hover:text-black">Трековые светильники</Link></li>
-                        <li><Link href="/catalog/lights/pendant-lights" className="block text-base hover:text-black">Подвесные светильники</Link></li>
-                        <li><Link href="/catalog/led-strip-profiles" className="block text-base hover:text-black">Профили</Link></li>
+                        <h4 className="font-bold text-base text-black mb-2">Функциональный свет</h4>
+                        <ul className='space-y-2 pl-2 '>
+                            <li><Link href="/catalog/lights/track-lights" className="block text-base text-black hover:underline">Трековые светильники</Link></li>
+                            <li><Link href="/catalog/lights/pendant-lights" className="block text-base text-black hover:underline">Подвесные светильники</Link></li>
+                            <li><Link href="/catalog/led-strip-profiles" className="block text-base text-black hover:underline">Профили</Link></li>
                         </ul>
                     </div>
                     <div>
-                      <h4 className="font-bold text-lg mb-2">Уличный свет</h4>
-                      <ul className="space-y-1 pl-2 border-l-2">
-                        <li><Link href="/catalog/outdoor-lights" className="block text-base py-1.5 hover:text-black transition-colors">Уличные светильники</Link></li>
-                      </ul>
-                      
+                        <h4 className="font-bold text-base text-black mb-2">Уличный свет</h4>
+                        <ul className="space-y-2 pl-2 border-l-2 border-gray-200">
+                            <li><Link href="/catalog/outdoor-lights" className="block text-base text-black hover:underline">Уличные светильники</Link></li>
+                        </ul>
                     </div>
+                    <div className="text-black">
+                        <h3 className="font-bold text-lg mb-2">Серия Werkel</h3>
+                      <ul className="space-y-1 pl-2 border-l-2">
+                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-base py-1.5 hover:text-black">Встраиваемые серии</Link></li>
+                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-base py-1.5 hover:text-black">Накладные серии</Link></li>
+                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-base py-1.5 hover:text-black">Серия Retro</Link></li>
+                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-base py-1.5 hover:text-black">Серия Vintage</Link></li>
+                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-base py-1.5 hover:text-black">Серия выдвижных блоков</Link></li>
+                      </ul>
+                        </div>
+                        <div className="text-black">
+                            <h3 className="text-lg font-bold mb-4">Терморегуляторы</h3>
+                            <ul className="space-y-3">
+                                <li><Link href="/catalog/thermostats/floor-heating" className="block text-base hover:text-black">Для теплого пола</Link></li>
+                                <li><Link href="/catalog/thermostats/floor-heating" className="block text-base hover:text-black">Теплый пол</Link></li>
+                            </ul>
+                        </div>
+                        <ul className="space-y-1 pl-2 border-l-2">
+                          <li><Link href="/ElektroustnovohneIzdely/Voltum" className="block text-base py-1.5 hover:text-black">Встраиваемые серии Voltum</Link></li>
+                      </ul>
                   </div>
                 </div>
+              </div>
 
-               
-                {/* Other Links */}
-                <div>
-                   <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Информация</h3>
-                   <ul className="space-y-1">
-                      <li><Link href="/about" className="block text-lg py-2 hover:text-black transition-colors">Правила доставки</Link></li>
-                      <li><span className="block text-lg py-2 text-gray-400 cursor-not-allowed">Для дизайнеров</span></li>
-                      <li><Link href="/catalog?filter=new&subcategory=&page=1" className="block text-lg py-2 text-black hover:text-gray-700">Новинки</Link></li>
-                   </ul>
+              {/* Accordion Item: Information */}
+              <div >
+                <button 
+                  onClick={() => toggleAccordion('info')}
+                  className="w-full flex flex-col items-center justify-center py-6 text-center"
+                >
+                  <span className="text-5xl transition duration-200 hover:text-black/20 font-semibold text-black">Информация</span>
+                
+                </button>
+                <div className={`overflow-hidden transition-all duration-300 ease-in-out ${openAccordion === 'info' ? 'max-h-96' : 'max-h-0'}`}>
+                  <ul className="pl-4 pb-4 space-y-3 text-left">
+                    <li><Link href="/about" className="block text-base text-black hover:underline">Правила доставки</Link></li>
+                    <li><span className="block text-base text-gray-400 cursor-not-allowed">Для дизайнеров</span></li>
+                  </ul>
                 </div>
               </div>
             </div>
 
             {/* Footer buttons */}
-            <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 bg-white">
+            <div className="absolute bottom-0 left-0 right-0 p-4  bg-white">
               <div className="flex items-center justify-around">
-                <Link href="/liked" className="flex flex-col items-center text-black hover:text-black transition-colors">
-                  <HeartIcon className="w-6 h-6" />
+                <Link href="/liked" className="flex flex-col items-center text-black hover:text-gray-600 transition-colors">
+                  <HeartIcon className="w-12 h-12" />
                   <span className="text-xs mt-1">Избранное</span>
                 </Link>
-                <Link href="/cart" className="relative flex flex-col items-center text-black hover:text-black transition-colors">
-                <CartIcon className="w-6 h-6" />
+                <Link href="/cart" className="relative flex flex-col items-center text-black hover:text-gray-600 transition-colors">
+                  <CartIcon className="w-12 h-12" />
                   {cartCount > 0 && (
                     <span className="absolute -top-1 -right-2 flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-600 rounded-full">
                       {cartCount}

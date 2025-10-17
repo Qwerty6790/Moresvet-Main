@@ -53,8 +53,8 @@ const Footer = () => {
             </h3>
             <ul className="space-y-3 text-sm">
               <FooterLink href="/about">О нас</FooterLink>
-              <FooterLink href="/delivery">Доставка и оплата</FooterLink>
-              <FooterLink href="/warranty">Гарантия</FooterLink>
+              <FooterLink href="/about">Доставка и оплата</FooterLink>
+              <FooterLink href="/about">Гарантия</FooterLink>
             </ul>
           </div>
 
@@ -64,9 +64,9 @@ const Footer = () => {
               Информация
             </h3>
             <ul className="space-y-3 text-sm">
-              <FooterLink href="/contacts">Контакты</FooterLink>
-              <FooterLink href="/privacy">Политика конфиденциальности</FooterLink>
-              <FooterLink href="/terms">Правила и условия</FooterLink>
+              <FooterLink href="/about">Контакты</FooterLink>
+              <FooterLink href="/about">Политика конфиденциальности</FooterLink>
+              <FooterLink href="/about">Правила и условия</FooterLink>
             </ul>
           </div>
 
