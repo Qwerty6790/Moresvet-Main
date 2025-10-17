@@ -49,7 +49,7 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
             animation: 'shimmer 2s linear infinite'
           }}
         >
-          MORESVET
+          LUMORALIGHT
         </h2>
 
         {showText && <div className="text-gray-500 mt-2" style={{ fontSize: '12px' }}>{text}</div>}

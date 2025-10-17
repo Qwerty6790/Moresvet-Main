@@ -407,7 +407,7 @@ const CartButton: React.FC<{
     </button>;
   }
   if (quantity === 0) {
-    return <button onClick={handleAdd} className={`${compact ? 'text-[10px] sm:text-xs py-1.5 px-3' : 'px-4 py-2.5 text-xs'} rounded-lg bg-gray-900 text-white hover:bg-gray-800 transition-all font-medium shadow-sm hover:shadow`}>
+    return <button onClick={handleAdd} className={`${compact ? 'text-[10px] sm:text-xs py-1.5 px-3' : 'px-4 py-2.5 text-xs'} rounded-lg bg-black text-white hover:bg-black/30 transition-all font-medium shadow-sm hover:shadow`}>
       В корзину
     </button>;
   }

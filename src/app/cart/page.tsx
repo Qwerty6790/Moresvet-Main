@@ -23,8 +23,7 @@ interface ProductI {
 
 const LoadingSpinner: React.FC = () => (
   <div className="flex flex-col items-center justify-center gap-4">
-    <div className="w-12 h-12 border-4 border-gray-300 border-t-black rounded-full animate-spin"></div>
-    <p className="text-gray-500">Загрузка товаров...</p>
+    <p className="text-black font-bold text-2xl">LUMORALIGHT</p>
   </div>
 );
 
@@ -117,7 +116,7 @@ const Cart: React.FC = () => {
           console.error(err);
         }
       } else {
-        setError('Ваша корзина пуста. Добавьте товары из каталога.');
+        setError('LUMORALIGHT');
       }
       setIsLoading(false);
     };
@@ -133,7 +132,7 @@ const Cart: React.FC = () => {
     window.dispatchEvent(new CustomEvent('cart-updated', { detail: { count: productsToStore.length } }));
     
     if (updatedProducts.length === 0) {
-      setError('Ваша корзина пуста. Добавьте товары из каталога.');
+      setError('LUMORALIGHT');
     }
   };
 
@@ -160,10 +159,10 @@ const Cart: React.FC = () => {
 
   const confirmOrder = async () => {
     if (!contactName.trim() || !contactPhone.trim()) {
-      return setToastMessage('Пожалуйста, укажите ваше имя и телефон.');
+      return setToastMessage('LUMORALIGHT');
     }
     if (deliveryMethod === 'delivery' && !address.trim()) {
-      return setToastMessage('Пожалуйста, укажите адрес для доставки.');
+      return setToastMessage('LUMORALIGHT');
     }
 
     setIsSubmitting(true);
@@ -222,7 +221,7 @@ const Cart: React.FC = () => {
         <div className="text-center mb-8 md:mb-12">
            {/* Изменено: text-3xl и md:text-4xl для адаптивного заголовка */}
           <h1 className="text-3xl md:text-4xl font-bold text-black tracking-tight">Корзина</h1>
-          <p className="text-gray-500 mt-2">
+          <p className="text-black mt-2">
             <Link href="/" className="hover:text-black transition-colors">Главная</Link>
             <span className="mx-2">/</span>
             <span>Корзина</span>
@@ -239,8 +238,8 @@ const Cart: React.FC = () => {
               </div>
             ) : error ? (
               <div className="bg-white rounded-lg p-8 md:p-10 text-center shadow-sm">
-                <p className="text-lg md:text-xl text-gray-700 mb-6">{error}</p>
-                <Link href="/catalog" className="inline-flex items-center px-6 py-3 md:px-8 bg-black text-white rounded-lg font-semibold hover:bg-gray-800 transition-all duration-300 transform hover:scale-105">
+                <p className="text-lg md:text-xl font-bold text-black mb-6">{error}</p>
+                <Link href="/catalog/lights/pendant-lights" className="inline-flex items-center px-6 py-3 md:px-8 bg-black text-white rounded-lg font-semibold hover:bg-gray-800 transition-all duration-300 transform hover:scale-105">
                   Перейти в каталог
                 </Link>
               </div>

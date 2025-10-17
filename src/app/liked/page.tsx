@@ -91,7 +91,7 @@ const Liked: React.FC = () => {
           console.error(err);
         }
       } else {
-        setError('Ваш список избранного пуст');
+        setError('lumoralight');
       }
       setLoading(false);
     };
@@ -113,7 +113,7 @@ const Liked: React.FC = () => {
     setToastMessage('Товар удален из избранного');
 
     if (updatedProducts.length === 0) {
-      setError('Ваш список избранного пуст');
+      setError('lumoralight');
     }
   };
 
@@ -122,7 +122,7 @@ const Liked: React.FC = () => {
     localStorage.setItem('liked', JSON.stringify({ products: [] }));
     localStorage.setItem('likedCount', '0');
     window.dispatchEvent(new CustomEvent('liked-updated', { detail: { count: 0 } }));
-    setError('Ваш список избранного пуст');
+    setError('lumoralight');
     setToastMessage('Избранное очищено');
   };
 
@@ -218,30 +218,7 @@ const Liked: React.FC = () => {
             )}
           </div>
 
-          {/* Боковая панель (итоги) */}
-          {!error && likedProducts.length > 0 && (
-            // Изменено: ширина и отступы для адаптивности
-            <aside className="w-full lg:w-1/3 lg:max-w-sm mt-8 lg:mt-0">
-              <div className="sticky top-28 bg-white rounded-lg p-6 shadow-sm border border-gray-100">
-                <div className="flex items-center justify-between mb-5">
-                  <h2 className="text-xl font-bold text-black">Ваш список</h2>
-                  <button onClick={handleClearLiked} className="text-sm text-gray-500 hover:text-red-500 transition-colors">Очистить</button>
-                </div>
-
-                <div className="space-y-2 text-sm text-gray-600 mb-6">
-                  <div className="flex justify-between"><span>Количество товаров</span><span className="font-medium text-black">{likedProducts.length}</span></div>
-                  <div className="flex justify-between items-center pt-2">
-                    <span className="text-lg font-bold text-black">Итого</span><span className="text-xl font-extrabold text-black">{totalAmount.toLocaleString()} ₽</span>
-                  </div>
-                </div>
-
-                <Link href="/cart" className="w-full text-center block py-3 bg-black text-white rounded-lg text-sm font-semibold hover:bg-gray-800 transition-all duration-300 transform hover:scale-105">
-                  Перейти в корзину
-                </Link>
-                <div className="mt-3 text-center text-xs text-gray-500">Оформите заказ в корзине</div>
-              </div>
-            </aside>
-          )}
+         
         </div>
       </div>
     </motion.section>
