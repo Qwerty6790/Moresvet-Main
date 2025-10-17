@@ -62,7 +62,7 @@ const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const mobileMenuTimeoutRef = useRef<number | null>(null);
   const dropdownTimeoutRef = useRef<number | null>(null);
-  
+
   // State for mobile menu accordion
   const [openAccordion, setOpenAccordion] = useState<string | null>(null);
 
@@ -79,10 +79,10 @@ const Header = () => {
       }
     };
   }, []);
-  
+
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchResultsRef = useRef<HTMLDivElement>(null);
-  
+
   // Refs for Catalog Menu
   const catalogHoverTimeoutRef = useRef<number | null>(null);
   const catalogButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -92,11 +92,11 @@ const Header = () => {
   const socketsHoverTimeoutRef = useRef<number | null>(null);
   const socketsButtonRef = useRef<HTMLButtonElement | null>(null);
   const socketsMenuRef = useRef<HTMLDivElement | null>(null);
-  
+
   const brandsButtonRef = useRef<HTMLButtonElement | null>(null);
   const brandsMenuRef = useRef<HTMLDivElement | null>(null);
   const brandsHoverTimeoutRef = useRef<number | null>(null);
-  
+
   // Mini cart state and refs
   const cartIconRef = useRef<HTMLDivElement | null>(null);
   const miniCartRef = useRef<HTMLDivElement | null>(null);
@@ -114,7 +114,7 @@ const Header = () => {
         const totalCost = cartData.products.reduce((sum: number, item: any) => sum + ((item.price || 0) * (item.quantity || 0)), 0);
         setCartCount(total);
         setCartTotal(totalCost);
-        
+
         // Map products from localStorage to the CartItem interface
         const items: CartItem[] = cartData.products.map((p: any) => ({
             id: p.id,
@@ -132,26 +132,26 @@ const Header = () => {
       setMiniCartItems([]);
     }
   };
-  
+
   // Listen for cart events
   useEffect(() => {
       const handleCartUpdate = () => {
           updateCartState();
       };
-      
+
       const handleCartAdded = () => {
           updateCartState();
           setIsMiniCartVisible(true);
           if (miniCartTimeoutRef.current) window.clearTimeout(miniCartTimeoutRef.current);
           miniCartTimeoutRef.current = window.setTimeout(() => setIsMiniCartVisible(false), 2500);
       };
-      
+
       window.addEventListener('cart:updated', handleCartUpdate);
       window.addEventListener('cart-added', handleCartAdded);
-      
+
       // Initial cart state load
       updateCartState();
-      
+
       return () => {
           window.removeEventListener('cart:updated', handleCartUpdate);
           window.removeEventListener('cart-added', handleCartAdded);
@@ -166,7 +166,7 @@ const Header = () => {
       if (miniCartTimeoutRef.current) clearTimeout(miniCartTimeoutRef.current);
       setIsMiniCartVisible(true);
   };
-  
+
   const handleMiniCartLeave = () => {
       miniCartTimeoutRef.current = window.setTimeout(() => {
           setIsMiniCartVisible(false);
@@ -230,7 +230,7 @@ const Header = () => {
       finalQuery = searchQuery;
     }
     if (!finalQuery.trim()) return;
-    
+
     setShowSearchResults(false);
     setSearchQuery(''); // Очищаем поле поиска после отправки
     const encodedSearchQuery = encodeURIComponent(finalQuery);
@@ -324,7 +324,7 @@ const Header = () => {
       ) {
         setIsSocketsOpen(false);
       }
-      
+
       if (
         isBrandsOpen &&
         brandsMenuRef.current &&
@@ -360,11 +360,23 @@ const Header = () => {
         <div className="max-w-screen-2xl mx-auto px-4 flex items-center justify-between">
           {/* Логотип */}
           <div className="absolute left-1/2 max-lg:left-[55%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-            <div className={`transition-all duration-300 ${showSearchResults || scrolled ? 'translate-x-[-1rem] scale-90' : 'translate-x-0 scale-100'}`}>
-              <Link href="/" className={`flex items-center ${showSearchResults || scrolled ? 'pointer-events-none' : 'pointer-events-auto'}`}>
-                <span className={`md:text-5xl text-4xl font-bold tracking-widest transition-all duration-300 ${showSearchResults || scrolled ? 'text-1xl' : 'text-1xl'} text-white`}>LUMORALIGHT</span>
-                <span className={`text-1xl max-lg:hidden font-bold tracking-widest transition-all duration-300 ${showSearchResults || scrolled ? 'text-1xl' : 'text-1xl'} text-white`}>2025</span>
-              </Link>
+            <div className="flex items-center">
+              <div className={`transition-all duration-300 ${showSearchResults || scrolled ? 'translate-x-[-1rem] scale-90' : 'translate-x-0 scale-100'}`}>
+                <Link href="/" className={`flex items-center ${showSearchResults || scrolled ? 'pointer-events-none' : 'pointer-events-auto'}`}>
+                  <span className={`md:text-5xl text-4xl font-bold tracking-widest transition-all duration-300 ${showSearchResults || scrolled ? 'text-1xl' : 'text-1xl'} text-white`}>LUMORALIGHT</span>
+                  <span className={`text-1xl max-lg:hidden font-bold tracking-widest transition-all duration-300 ${showSearchResults || scrolled ? 'text-1xl' : 'text-1xl'} text-white`}>2025</span>
+                </Link>
+              </div>
+              {/* --- NEW: SEARCH ICON FOR MOBILE --- */}
+              <div className="sm:hidden text-white pointer-events-auto ml-2">
+                <button 
+                  onClick={openSearchDropdown} 
+                  aria-label="Поиск" 
+                  className="p-2"
+                >
+                  <SearchIcon className="w-6 h-6" />
+                </button>
+              </div>
             </div>
           </div>
 
@@ -397,7 +409,7 @@ const Header = () => {
             <button 
               onClick={openSearchDropdown} 
               aria-label="Поиск" 
-              className="p-2 hover:text-gray-300"
+              className="p-2  hover:text-gray-300"
             >
               <SearchIcon className="w-6 h-6" />
             </button>
@@ -470,7 +482,7 @@ const Header = () => {
                             </>
                         ) : (
                             <div className="p-8 text-center">
-                                <p className="text-base text-gray-600">В корзине нет товаров</p>
+                                <p className="text-2xl text-black">В корзине нет товаров</p>
                             </div>
                         )}
                     </div>
@@ -525,7 +537,7 @@ const Header = () => {
           </div>
 
           {/* --- MOBILE BURGER BUTTON --- */}
-          <div className="flex sm:hidden items-center text-white">
+          <div className="flex -mx-2 sm:hidden items-center text-white">
             <button
               onClick={() => {
                 setIsMobileMenuOpen(true);
@@ -533,9 +545,9 @@ const Header = () => {
                 mobileMenuTimeoutRef.current = window.setTimeout(() => setShowMobileMenu(true), 20);
               }}
               aria-label="Открыть меню"
-              className="p-2"
+              className="p-1"
             >
-              <FiMenu size={24} />
+              <FiMenu size={28} />
             </button>
           </div>
         </div>
@@ -591,17 +603,17 @@ const Header = () => {
             role="dialog" 
             aria-modal="true"
           >
-            <div className="flex items-center justify-between p-4 border-b border-gray-200">
-              <Link href="/" className="text-2xl font-bold text-black tracking-wider">LUMORALIGHT</Link>
+            <div className="flex items-center justify-between p-4 ">
+      
               <button 
                 onClick={() => { 
                   setShowMobileMenu(false); 
                   mobileMenuTimeoutRef.current = window.setTimeout(() => setIsMobileMenuOpen(false), 300); 
                 }} 
-                className="p-2 text-gray-800 hover:text-black" 
+                className="p-2 text-black hover:text-black" 
                 aria-label="Закрыть меню"
               >
-                <FiX size={24} />
+                <FiX size={32} />
               </button>
             </div>
             
@@ -612,56 +624,57 @@ const Header = () => {
                   onClick={() => toggleAccordion('catalog')}
                   className="w-full flex flex-col items-center  justify-center py-32 text-center"
                 >
-                  <span className="text-6xl  transition duration-200 hover:text-black/20 font-semibold text-black">Каталог</span>
+                  <span className="text-5xl  transition duration-200 hover:text-black/40 font-semibold text-black">Каталог</span>
                  
                 </button>
                 <div className={`overflow-hidden transition-all duration-300 ease-in-out ${openAccordion === 'catalog' ? 'max-h-screen' : 'max-h-0'}`}>
                   <div className="pl-4 pb-4 space-y-4 text-left">
                     <div>
-                      <h4 className="font-bold text-base text-black mb-2">Декоративный свет</h4>
+                      <h4 className="font-bold text-2xl text-black mb-2">Декоративный свет</h4>
                       <ul className="space-y-2 pl-2 ">
-                          <li><Link href="/catalog/chandeliers/" className="block text-base text-black hover:underline">Люстры</Link></li>
-                          <li><Link href="/catalog/floor-lamps" className="block text-base text-black hover:underline">Торшеры</Link></li>
-                          <li><Link href="/catalog/wall-sconces" className="block text-base text-black hover:underline">Бра</Link></li>
-                          <li><Link href="/catalog/table-lamps" className="block text-base text-black hover:underline">Настольная лампа</Link></li>
-                          <li><Link href="/catalog/led-lamp" className="block text-base text-black hover:underline">Лампы LED</Link></li>
-                          <li><Link href="/catalog/led-strips" className="block text-base text-black hover:underline">Светодиодная лента</Link></li>
+                          <li><Link href="/catalog/chandeliers/" className="block text-2xl text-black hover:underline">Люстры</Link></li>
+                          <li><Link href="/catalog/floor-lamps" className="block text-2xl text-black hover:underline">Торшеры</Link></li>
+                          <li><Link href="/catalog/wall-sconces" className="block text-2xl text-black hover:underline">Бра</Link></li>
+                          <li><Link href="/catalog/table-lamps" className="block text-2xl text-black hover:underline">Настольная лампа</Link></li>
+                          <li><Link href="/catalog/led-lamp" className="block text-2xl text-black hover:underline">Лампы LED</Link></li>
+                          <li><Link href="/catalog/led-strips" className="block text-2xl text-black hover:underline">Светодиодная лента</Link></li>
                       </ul>
                     </div>
                     <div>
-                        <h4 className="font-bold text-base text-black mb-2">Функциональный свет</h4>
+                        <h4 className="font-bold text-2xl text-black mb-2">Функциональный свет</h4>
                         <ul className='space-y-2 pl-2 '>
-                            <li><Link href="/catalog/lights/track-lights" className="block text-base text-black hover:underline">Трековые светильники</Link></li>
-                            <li><Link href="/catalog/lights/pendant-lights" className="block text-base text-black hover:underline">Подвесные светильники</Link></li>
-                            <li><Link href="/catalog/led-strip-profiles" className="block text-base text-black hover:underline">Профили</Link></li>
+                            <li><Link href="/catalog/lights/track-lights" className="block text-2xl text-black hover:underline">Трековые светильники</Link></li>
+                            <li><Link href="/catalog/lights/pendant-lights" className="block text-2xl text-black hover:underline">Подвесные светильники</Link></li>
+                            <li><Link href="/catalog/led-strip-profiles" className="block text-2xl text-black hover:underline">Профили</Link></li>
                         </ul>
                     </div>
                     <div>
-                        <h4 className="font-bold text-base text-black mb-2">Уличный свет</h4>
-                        <ul className="space-y-2 pl-2 border-l-2 border-gray-200">
-                            <li><Link href="/catalog/outdoor-lights" className="block text-base text-black hover:underline">Уличные светильники</Link></li>
+                        <h4 className="font-bold text-2xl text-black mb-2">Уличный свет</h4>
+                        <ul className="space-y-2 pl-2 ">
+                            <li><Link href="/catalog/outdoor-lights" className="block text-2xl text-black hover:underline">Уличные светильники</Link></li>
                         </ul>
                     </div>
                     <div className="text-black">
-                        <h3 className="font-bold text-lg mb-2">Серия Werkel</h3>
+                        <h3 className="font-bold text-2xl mb-2">Серия Werkel</h3>
                       <ul className="space-y-1 pl-2 border-l-2">
-                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-base py-1.5 hover:text-black">Встраиваемые серии</Link></li>
-                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-base py-1.5 hover:text-black">Накладные серии</Link></li>
-                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-base py-1.5 hover:text-black">Серия Retro</Link></li>
-                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-base py-1.5 hover:text-black">Серия Vintage</Link></li>
-                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-base py-1.5 hover:text-black">Серия выдвижных блоков</Link></li>
+                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-2xl py-1.5 hover:text-black">Встраиваемые серии</Link></li>
+                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-2xl py-1.5 hover:text-black">Накладные серии</Link></li>
+                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-2xl py-1.5 hover:text-black">Серия Retro</Link></li>
+                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-2xl py-1.5 hover:text-black">Серия Vintage</Link></li>
+                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-2xl py-1.5 hover:text-black">Серия выдвижных блоков</Link></li>
+                          <ul className="space-y-1 pl-2 border-l-2">
+                          <li><Link href="/ElektroustnovohneIzdely/Voltum" className="block text-2xl py-1.5 hover:text-black">Встраиваемые серии Voltum</Link></li>
+                      </ul>
                       </ul>
                         </div>
                         <div className="text-black">
-                            <h3 className="text-lg font-bold mb-4">Терморегуляторы</h3>
+                            <h3 className="text-2xl font-bold mb-4">Терморегуляторы</h3>
                             <ul className="space-y-3">
-                                <li><Link href="/catalog/thermostats/floor-heating" className="block text-base hover:text-black">Для теплого пола</Link></li>
-                                <li><Link href="/catalog/thermostats/floor-heating" className="block text-base hover:text-black">Теплый пол</Link></li>
+                                <li><Link href="/catalog/thermostats/floor-heating" className="block text-2xl hover:text-black">Для теплого пола</Link></li>
+                                <li><Link href="/catalog/thermostats/floor-heating" className="block text-2xl hover:text-black">Теплый пол</Link></li>
                             </ul>
                         </div>
-                        <ul className="space-y-1 pl-2 border-l-2">
-                          <li><Link href="/ElektroustnovohneIzdely/Voltum" className="block text-base py-1.5 hover:text-black">Встраиваемые серии Voltum</Link></li>
-                      </ul>
+                       
                   </div>
                 </div>
               </div>
@@ -672,13 +685,13 @@ const Header = () => {
                   onClick={() => toggleAccordion('info')}
                   className="w-full flex flex-col items-center justify-center py-6 text-center"
                 >
-                  <span className="text-5xl transition duration-200 hover:text-black/20 font-semibold text-black">Информация</span>
+                  <span className="text-5xl transition duration-200 hover:text-black/20 font-semibold text-black">О нас</span>
                 
                 </button>
                 <div className={`overflow-hidden transition-all duration-300 ease-in-out ${openAccordion === 'info' ? 'max-h-96' : 'max-h-0'}`}>
                   <ul className="pl-4 pb-4 space-y-3 text-left">
-                    <li><Link href="/about" className="block text-base text-black hover:underline">Правила доставки</Link></li>
-                    <li><span className="block text-base text-gray-400 cursor-not-allowed">Для дизайнеров</span></li>
+                    <li><Link href="/about" className="block text-2xl text-black hover:underline">Правила доставки</Link></li>
+                    <li><span className="block text-2xl text-gray-400 cursor-not-allowed">Для дизайнеров</span></li>
                   </ul>
                 </div>
               </div>
