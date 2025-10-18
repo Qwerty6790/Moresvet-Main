@@ -632,46 +632,46 @@ const Header = () => {
                     <div>
                       <h4 className="font-bold text-2xl text-black mb-2">Декоративный свет</h4>
                       <ul className="space-y-2 pl-2 ">
-                          <li><Link href="/catalog/chandeliers/" className="block text-2xl text-black hover:underline">Люстры</Link></li>
-                          <li><Link href="/catalog/floor-lamps" className="block text-2xl text-black hover:underline">Торшеры</Link></li>
-                          <li><Link href="/catalog/wall-sconces" className="block text-2xl text-black hover:underline">Бра</Link></li>
-                          <li><Link href="/catalog/table-lamps" className="block text-2xl text-black hover:underline">Настольная лампа</Link></li>
-                          <li><Link href="/catalog/led-lamp" className="block text-2xl text-black hover:underline">Лампы LED</Link></li>
-                          <li><Link href="/catalog/led-strips" className="block text-2xl text-black hover:underline">Светодиодная лента</Link></li>
+                          <li><Link href="/catalog/chandeliers/" className="block text-1xl text-black hover:underline">Люстры</Link></li>
+                          <li><Link href="/catalog/floor-lamps" className="block text-1xl text-black hover:underline">Торшеры</Link></li>
+                          <li><Link href="/catalog/wall-sconces" className="block text-1xl text-black hover:underline">Бра</Link></li>
+                          <li><Link href="/catalog/table-lamps" className="block text-1xl text-black hover:underline">Настольная лампа</Link></li>
+                          <li><Link href="/catalog/led-lamp" className="block text-1xl text-black hover:underline">Лампы LED</Link></li>
+                          <li><Link href="/catalog/led-strips" className="block text-1xl text-black hover:underline">Светодиодная лента</Link></li>
                       </ul>
                     </div>
                     <div>
                         <h4 className="font-bold text-2xl text-black mb-2">Функциональный свет</h4>
                         <ul className='space-y-2 pl-2 '>
-                            <li><Link href="/catalog/lights/track-lights" className="block text-2xl text-black hover:underline">Трековые светильники</Link></li>
-                            <li><Link href="/catalog/lights/pendant-lights" className="block text-2xl text-black hover:underline">Подвесные светильники</Link></li>
-                            <li><Link href="/catalog/led-strip-profiles" className="block text-2xl text-black hover:underline">Профили</Link></li>
+                            <li><Link href="/catalog/lights/track-lights" className="block text-1xl text-black hover:underline">Трековые светильники</Link></li>
+                            <li><Link href="/catalog/lights/pendant-lights" className="block text-1xl text-black hover:underline">Подвесные светильники</Link></li>
+                            <li><Link href="/catalog/led-strip-profiles" className="block text-1xl text-black hover:underline">Профили</Link></li>
                         </ul>
                     </div>
                     <div>
                         <h4 className="font-bold text-2xl text-black mb-2">Уличный свет</h4>
                         <ul className="space-y-2 pl-2 ">
-                            <li><Link href="/catalog/outdoor-lights" className="block text-2xl text-black hover:underline">Уличные светильники</Link></li>
+                            <li><Link href="/catalog/outdoor-lights" className="block text-1xl text-black hover:underline">Уличные светильники</Link></li>
                         </ul>
                     </div>
                     <div className="text-black">
                         <h3 className="font-bold text-2xl mb-2">Серия Werkel</h3>
                       <ul className="space-y-1 pl-2 border-l-2">
-                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-2xl py-1.5 hover:text-black">Встраиваемые серии</Link></li>
-                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-2xl py-1.5 hover:text-black">Накладные серии</Link></li>
-                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-2xl py-1.5 hover:text-black">Серия Retro</Link></li>
-                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-2xl py-1.5 hover:text-black">Серия Vintage</Link></li>
-                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-2xl py-1.5 hover:text-black">Серия выдвижных блоков</Link></li>
+                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-1xl py-1.5 hover:text-black">Встраиваемые серии</Link></li>
+                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-1xl py-1.5 hover:text-black">Накладные серии</Link></li>
+                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-1xl py-1.5 hover:text-black">Серия Retro</Link></li>
+                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-1xl py-1.5 hover:text-black">Серия Vintage</Link></li>
+                          <li><Link href="/ElektroustnovohneIzdely/Werkel" className="block text-1xl py-1.5 hover:text-black">Серия выдвижных блоков</Link></li>
                           <ul className="space-y-1 pl-2 border-l-2">
-                          <li><Link href="/ElektroustnovohneIzdely/Voltum" className="block text-2xl py-1.5 hover:text-black">Встраиваемые серии Voltum</Link></li>
+                          <li><Link href="/ElektroustnovohneIzdely/Voltum" className="block text-1xl py-1.5 hover:text-black">Встраиваемые серии Voltum</Link></li>
                       </ul>
                       </ul>
                         </div>
                         <div className="text-black">
                             <h3 className="text-2xl font-bold mb-4">Терморегуляторы</h3>
                             <ul className="space-y-3">
-                                <li><Link href="/catalog/thermostats/floor-heating" className="block text-2xl hover:text-black">Для теплого пола</Link></li>
-                                <li><Link href="/catalog/thermostats/floor-heating" className="block text-2xl hover:text-black">Теплый пол</Link></li>
+                                <li><Link href="/catalog/thermostats/floor-heating" className="block text-1xl hover:text-black">Для теплого пола</Link></li>
+                                <li><Link href="/catalog/thermostats/floor-heating" className="block text-1xl hover:text-black">Теплый пол</Link></li>
                             </ul>
                         </div>
                        
