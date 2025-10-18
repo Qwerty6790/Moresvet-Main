@@ -361,7 +361,7 @@ const Header = () => {
           {/* Логотип */}
           <div className="absolute left-1/2 max-lg:left-[55%] top-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
             <div className="flex items-center">
-              <div className={`transition-all duration-300 ${showSearchResults || scrolled ? 'translate-x-[-1rem] scale-90' : 'translate-x-0 scale-100'}`}>
+              <div className={`transition-all duration-300 ${showSearchResults || scrolled ? 'translate-x-[-0rem] scale-90' : 'translate-x-0 scale-100'}`}>
                 <Link href="/" className={`flex items-center ${showSearchResults || scrolled ? 'pointer-events-none' : 'pointer-events-auto'}`}>
                   <span className={`md:text-5xl text-4xl font-bold tracking-widest transition-all duration-300 ${showSearchResults || scrolled ? 'text-1xl' : 'text-1xl'} text-white`}>LUMORALIGHT</span>
                   <span className={`text-1xl max-lg:hidden font-bold tracking-widest transition-all duration-300 ${showSearchResults || scrolled ? 'text-1xl' : 'text-1xl'} text-white`}>2025</span>
@@ -413,13 +413,13 @@ const Header = () => {
             >
               <SearchIcon className="w-6 h-6" />
             </button>
-            <button 
-              disabled 
-              aria-label="Личный кабинет" 
-              className="text-sm font-bold px-3 py-2 cursor-not-allowed opacity-50"
+            <Link href='/about'
+               
+              
+              className="text-sm font-bold px-3 py-2 "
             >
               ДЛЯ ДИЗАЙНЕРОВ
-            </button>
+            </Link>
             <Link href="/liked" aria-label="Избранное" className="p-2 hover:text-gray-300">
               <HeartIcon className="w-6 h-6" />
             </Link>
@@ -691,7 +691,6 @@ const Header = () => {
                 <div className={`overflow-hidden transition-all duration-300 ease-in-out ${openAccordion === 'info' ? 'max-h-96' : 'max-h-0'}`}>
                   <ul className="pl-4 pb-4 space-y-3 text-left">
                     <li><Link href="/about" className="block text-2xl text-black hover:underline">Правила доставки</Link></li>
-                    <li><span className="block text-2xl text-gray-400 cursor-not-allowed">Для дизайнеров</span></li>
                   </ul>
                 </div>
               </div>
@@ -790,7 +789,7 @@ const Header = () => {
             <div className="w-full flex flex-col md:flex-row">
                 <div className="w-full md:flex-1 py-8 px-4 sm:px-6 md:px-8">
                 <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-xl font-bold text-black uppercase">Каталог</h2>
+                    <h2 className="text-2xl font-bold text-black uppercase">Каталог</h2>
                     <button 
                     onClick={() => setIsCatalogOpen(false)}
                     className="p-2 hover:bg-gray-100 rounded-full transition-colors"

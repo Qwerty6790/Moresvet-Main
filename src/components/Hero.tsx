@@ -14,7 +14,7 @@ export default function Banner() {
           playsInline
           className="absolute z-0 w-full h-full object-cover"
         >
-          <source src="/images/banners/tekovysvetmaytoni.mp4" type="video/mp4" />
+          <source src="/images/banners/steel.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
 
@@ -62,7 +62,7 @@ export function ExtraSections() {
             
             <div className="space-y-6 text-gray-700 leading-relaxed">
               <p className="text-lg">
-                LumoraLight — это не просто магазин светильников, а команда специалистов, которые помогают каждому клиенту подобрать оптимальное решение. Мы учитываем особенности интерьера, стиль помещения, ваши пожелания и бюджет, чтобы создать гармоничное освещение для любой задачи.
+ это не просто магазин светильников, а команда специалистов, которые помогают каждому клиенту подобрать оптимальное решение. Мы учитываем особенности интерьера, стиль помещения, ваши пожелания и бюджет, чтобы создать гармоничное освещение для любой задачи.
               </p>
               
               <p>

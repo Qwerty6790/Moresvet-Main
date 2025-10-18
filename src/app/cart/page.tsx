@@ -3,9 +3,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useRouter } from 'next/navigation';
-import axios from 'axios';
 import Link from 'next/link';
+import axios from 'axios';
 import { FaMinus, FaPlus, FaTrash } from 'react-icons/fa';
 
 // --- Заглушки: Замените на ваши реальные компоненты и типы ---
@@ -78,19 +77,10 @@ const ToastContainer: React.FC<{
 // --- Основной компонент корзины ---
 
 const Cart: React.FC = () => {
-  const router = useRouter();
   const [cartProducts, setCartProducts] = useState<ProductI[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-
-  const [paymentMethod, setPaymentMethod] = useState<'online' | 'cod'>('online');
-  const [deliveryMethod, setDeliveryMethod] = useState<'delivery' | 'pickup'>('delivery');
-  const [contactName, setContactName] = useState('');
-  const [contactPhone, setContactPhone] = useState('');
-  const [address, setAddress] = useState('');
-  const [comment, setComment] = useState('');
 
   useEffect(() => {
     const fetchCartProducts = async () => {
@@ -157,56 +147,8 @@ const Cart: React.FC = () => {
     setToastMessage('Товар удален из корзины');
   };
 
-  const confirmOrder = async () => {
-    if (!contactName.trim() || !contactPhone.trim()) {
-      return setToastMessage('LUMORALIGHT');
-    }
-    if (deliveryMethod === 'delivery' && !address.trim()) {
-      return setToastMessage('LUMORALIGHT');
-    }
-
-    setIsSubmitting(true);
-    const token = localStorage.getItem('token');
-    const orderPayload = {
-      products: cartProducts.map(p => ({ name: p.name, article: p.article, price: p.price, quantity: p.quantity })),
-      contactName,
-      contactPhone,
-      address: deliveryMethod === 'delivery' ? address : 'Самовывоз',
-      paymentMethod,
-      deliveryMethod,
-      comment: comment || undefined,
-      isGuest: !token,
-    };
-
-    try {
-      const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/orders/add-order`,
-        orderPayload,
-        { headers: { Authorization: token ? `Bearer ${token}` : '' } }
-      );
-
-      if (paymentMethod === 'online' && data?.confirmation?.confirmation_url) {
-        window.location.href = data.confirmation.confirmation_url;
-      } else {
-        setToastMessage('Ваш заказ успешно создан!');
-        updateCartStorageAndState([]);
-        router.push(token ? '/orders' : '/');
-      }
-    } catch (err) {
-      setToastMessage('Ошибка при создании заказа. Попробуйте еще раз.');
-      console.error(err);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   const totalAmount = cartProducts.reduce((sum, p) => sum + (Number(p.price) || 0) * (p.quantity ?? 1), 0);
-  const inputStyles = "w-full bg-transparent border-b-2 border-gray-300 text-black px-3 py-2.5 text-sm focus:outline-none focus:border-black transition-colors placeholder-gray-400";
-  const buttonStyles = (isActive: boolean) =>
-    `flex-1 py-2.5 rounded-md text-sm font-semibold transition-all duration-300 ${
-      isActive ? 'bg-black text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-    }`;
-  
+
   return (
     <motion.section
       className="min-h-screen bg-gray-50"
@@ -216,21 +158,15 @@ const Cart: React.FC = () => {
     >
       <ToastContainer toastMessage={toastMessage} setToastMessage={setToastMessage} />
 
-      {/* Изменено: py-8 и md:py-12 для адаптивных отступов */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         <div className="text-center mb-8 md:mb-12">
-           {/* Изменено: text-3xl и md:text-4xl для адаптивного заголовка */}
           <h1 className="text-3xl md:text-4xl font-bold text-black tracking-tight">Корзина</h1>
           <p className="text-black mt-2">
             <Link href="/" className="hover:text-black transition-colors">Главная</Link>
-            <span className="mx-2">/</span>
-            <span>Корзина</span>
           </p>
         </div>
 
-        {/* Изменено: flex-col и lg:flex-row для адаптивной раскладки */}
         <div className="flex flex-col lg:flex-row lg:gap-12 lg:items-start">
-          {/* Основной контент (список товаров) */}
           <div className="flex-1 w-full">
             {isLoading ? (
               <div className="flex justify-center items-center p-10 md:p-20 bg-white rounded-lg shadow-sm">
@@ -249,28 +185,23 @@ const Cart: React.FC = () => {
                   <motion.div
                     key={product._id}
                     layout
-                    // Изменено: flex-col, sm:flex-row, sm:flex-wrap для адаптивной карточки
                     className="bg-white rounded-lg p-4 flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center gap-4 border border-gray-100 shadow-sm"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                   >
-                    {/* Изображение */}
                     <div className="w-24 h-24 flex-shrink-0 bg-gray-100 rounded-md flex items-center justify-center">
                       <img
                         src={`${product.imageAddresses?.[0] || product.imageAddress?.[0] || '/placeholder.jpg'}?q=75&w=200`}
                         alt={product.name}
-                        // Изменено: object-cover для лучшего отображения
                         className="w-full h-full object-cover rounded-md p-1"
                       />
                     </div>
 
-                    {/* Название и артикул */}
                     <div className="flex-1 min-w-0 w-full sm:w-auto">
-                      <h3 className="text-md font-semibold text-black truncate">{product.name}</h3>
+                      <h3 className="text-md  font-semibold text-black ">{product.name}</h3>
                       <p className="text-sm text-gray-500">Артикул: {product.article}</p>
                     </div>
 
-                    {/* Мобильный блок: количество и цена. Виден всегда, но по-разному позиционируется */}
                     <div className="w-full sm:w-auto flex justify-between items-center mt-2 sm:mt-0 sm:ml-auto">
                         <div className="flex items-center bg-gray-100 rounded-md">
                           <button onClick={() => handleDecreaseQuantity(product._id)} className="w-9 h-9 flex items-center justify-center text-gray-600 hover:bg-gray-200 rounded-l-md transition-colors"><FaMinus size={12} /></button>
@@ -283,7 +214,6 @@ const Cart: React.FC = () => {
                         </div>
                     </div>
                     
-                    {/* Кнопка удаления */}
                     <button onClick={() => handleRemoveProduct(product._id)} className="text-gray-400 hover:text-red-500 transition-colors sm:ml-4"><FaTrash /></button>
                   </motion.div>
                 ))}
@@ -291,53 +221,27 @@ const Cart: React.FC = () => {
             )}
           </div>
 
-          {/* Боковая панель (оформление заказа) */}
+          {/* === Блок оформления заказа заменен на информацию для связи === */}
           {!error && cartProducts.length > 0 && (
-            // Изменено: ширина и отступы для адаптивности
             <aside className="w-full lg:w-1/3 lg:max-w-sm mt-8 lg:mt-0">
               <div className="sticky top-28 bg-white rounded-lg p-6 shadow-sm border border-gray-100">
-                <h2 className="text-xl font-bold text-black mb-6">Оформление заказа</h2>
-                <div className="grid grid-cols-1 gap-5">
-                  <input value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="Ваше имя*" className={inputStyles} />
-                  <input value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder="Номер телефона*" className={inputStyles} />
-                  
-                  <div className="flex gap-2 p-1 bg-gray-100 rounded-lg">
-                    <button onClick={() => setDeliveryMethod('delivery')} className={buttonStyles(deliveryMethod === 'delivery')}>Доставка</button>
-                    <button onClick={() => setDeliveryMethod('pickup')} className={buttonStyles(deliveryMethod === 'pickup')}>Самовывоз</button>
-                  </div>
-
-                  {deliveryMethod === 'delivery' && (
-                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} transition={{ duration: 0.3 }}>
-                      <input value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Адрес доставки*" className={inputStyles} />
-                    </motion.div>
-                  )}
-                  {deliveryMethod === 'pickup' && (
-                     <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} transition={{ duration: 0.3 }}>
-                        <div className="p-3 text-sm text-gray-800 bg-gray-100 rounded-md">Адрес: 121601, Москва, МКАД, 25-й километр, ТК КОНСТРУКТОР</div>
-                     </motion.div>
-                  )}
-
-                  <div className="flex gap-2 p-1 bg-gray-100 rounded-lg">
-                    <button onClick={() => setPaymentMethod('online')} className={buttonStyles(paymentMethod === 'online')}>Онлайн</button>
-                    <button onClick={() => setPaymentMethod('cod')} className={buttonStyles(paymentMethod === 'cod')}>Без предоплаты</button>
-                  </div>
-                  
-                  <textarea value={comment} onChange={(e) => setComment(e.target.value)} placeholder="Комментарий к заказу" className={`${inputStyles} min-h-[90px] bg-transparent`} />
-                </div>
-
-                <div className="border-t my-6"></div>
-
-                <div className="space-y-2 text-sm text-gray-600 mb-6">
-                  <div className="flex justify-between"><span>Товары ({cartProducts.length})</span><span className="font-medium text-black">{totalAmount.toLocaleString()} ₽</span></div>
-                  <div className="flex justify-between"><span>Доставка</span><span className="font-medium text-green-600">Бесплатно</span></div>
+                <h2 className="text-xl font-bold text-black mb-4">Итог</h2>
+                 <div className="border-t my-4"></div>
+                 <div className="space-y-2 text-sm text-gray-600 mb-6">
                   <div className="flex justify-between items-center pt-2">
-                    <span className="text-lg font-bold text-black">Итого</span><span className="text-xl font-extrabold text-black">{totalAmount.toLocaleString()} ₽</span>
+                    <span className="text-lg font-bold text-black">Сумма</span><span className="text-xl font-extrabold text-black">{totalAmount.toLocaleString()} ₽</span>
                   </div>
                 </div>
 
-                <button onClick={confirmOrder} disabled={isSubmitting || cartProducts.length === 0} className="w-full py-3 bg-black text-white rounded-lg text-sm font-semibold hover:bg-gray-800 transition-all duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed transform hover:scale-105 disabled:scale-100">
-                  {isSubmitting ? 'Обработка...' : (paymentMethod === 'online' ? 'Перейти к оплате' : 'Оформить заказ')}
-                </button>
+                <div className="mt-6 p-4 text-center bg-gray-100 rounded-lg">
+                  <p className="text-md font-medium text-black">Для оформления заказа, пожалуйста, свяжитесь с нами по телефону:</p>
+                  <a 
+                    href="tel:+79264513132" 
+                    className="block text-xl font-bold text-black mt-2 hover:text-gray-700 transition-colors"
+                  >
+                    +7 (926) 451-31-32
+                  </a>
+                </div>
               </div>
             </aside>
           )}
