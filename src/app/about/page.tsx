@@ -33,7 +33,7 @@ const About = () => {
             {/* Заголовок + маленькая фотография справа */}
             <div className="flex items-center justify-between gap-4 flex-wrap mb-8">
               <h2 className="md:text-6xl text-3xl font-black text-left text-black tracking-tight">
-                LumoraLight в вашем доме и офисе
+               МЫ В ВАШЕМ ДОМЕ И ОФИСЕ
               </h2>
 
               <motion.img
