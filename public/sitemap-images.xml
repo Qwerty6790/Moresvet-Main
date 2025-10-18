@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <!-- Главные изображения сайта -->
+  <url>
+    <loc>https://lumoralight.ru/</loc>
+    <image:image>
+      <image:loc>https://lumoralight.ru/images/brands/logo.webp</image:loc>
+      <image:title>LumoraLight — Интернет-магазин светильников и электрики</image:title>
+      <image:caption>Логотип магазина LumoraLight — светильники, люстры и электроустановочные изделия</image:caption>
+      <image:license>https://lumoralight.ru/privacy-policy</image:license>
+    </image:image>
+  </url>
+
+  <!-- Изображения брендов -->
+  <url>
+    <loc>https://lumoralight.ru/catalog</loc>
+    <image:image>
+      <image:loc>https://lumoralight.ru/images/brands/lightstarlogo.png</image:loc>
+      <image:title>LightStar — современные светильники и люстры</image:title>
+      <image:caption>Бренд LightStar — качественное освещение для дома и офиса</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://lumoralight.ru/images/brands/maytonilogo.png</image:loc>
+      <image:title>Maytoni — элегантные люстры и светильники</image:title>
+      <image:caption>Бренд Maytoni — изысканные люстры и светильники для интерьера</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://lumoralight.ru/images/brands/novotechlogo.png</image:loc>
+      <image:title>Novotech — современное освещение</image:title>
+      <image:caption>Бренд Novotech — инновационные решения для освещения</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://lumoralight.ru/images/brands/artelamplogo.png</image:loc>
+      <image:title>Artelamp — итальянские светильники</image:title>
+      <image:caption>Бренд Artelamp — итальянское качество и дизайн</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://lumoralight.ru/images/brands/lumionlogo.png</image:loc>
+      <image:title>Lumion — профессиональное освещение</image:title>
+      <image:caption>Бренд Lumion — профессиональные решения для освещения</image:caption>
+    </image:image>
+  </url>
+
+
+
+
+  <!-- Изображения коллекций -->
+  <url>
+    <loc>https://lumoralight.ru/catalog</loc>
+    <image:image>
+      <image:loc>https://lumoralight.ru/images/categories/osvehenycollection.png</image:loc>
+      <image:title>Коллекция освещения LumoraLight</image:title>
+      <image:caption>Широкая коллекция светильников и люстр LumoraLight</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://lumoralight.ru/images/categories/elektrustanovonyizdelycollection.png</image:loc>
+      <image:title>Электрооборудование LumoraLight</image:title>
+      <image:caption>Электроустановочные изделия и оборудование LumoraLight</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Изображения доставки -->
+  <url>
+    <loc>https://lumoralight.ru/delivery-payment</loc>
+    <image:image>
+      <image:loc>https://lumoralight.ru/images/banners/delivaryElektromosbanners.webp</image:loc>
+      <image:title>Доставка LumoraLight</image:title>
+      <image:caption>Быстрая доставка светильников и электроустановочных изделий по Москве и всей России</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Изображения для дизайнеров -->
+  <url>
+    <loc>https://lumoralight.ru/auth/designers</loc>
+    <image:image>
+      <image:loc>https://lumoralight.ru/images/banners/designersaboutbanners.png</image:loc>
+      <image:title>Специальные условия для дизайнеров</image:title>
+      <image:caption>Выгодные условия сотрудничества для дизайнеров интерьера</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://lumoralight.ru/images/banners/designersaboutbanners.png</image:loc>
+      <image:title>Дизайнеры о LumoraLight</image:title>
+      <image:caption>Отзывы дизайнеров о сотрудничестве с LumoraLight</image:caption>
+    </image:image>
+  </url>
+
+</urlset>
