@@ -1,8 +1,3 @@
-code
-Xml
-download
-content_copy
-expand_less
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
@@ -786,8 +781,4 @@ expand_less
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
-
-
-
-
 </urlset>
